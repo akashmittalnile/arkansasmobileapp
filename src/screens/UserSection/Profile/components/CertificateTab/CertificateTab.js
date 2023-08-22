@@ -1,0 +1,117 @@
+//import : react components
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  View,
+  ScrollView,
+  Switch,
+  TouchableOpacity,
+  Dimensions,
+  Text,
+  Image,
+  FlatList,
+  ActivityIndicator,
+  Alert,
+  ImageBackground,
+} from 'react-native';
+//import : custom components
+import MyText from 'components/MyText/MyText';
+import CustomLoader from 'components/CustomLoader/CustomLoader';
+//import : third parties
+import LinearGradient from 'react-native-linear-gradient';
+import Toast from 'react-native-simple-toast';
+//import : global
+import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
+//import : styles
+import {styles} from './CertificateTabStyle';
+//import : modal
+//import : redux
+import {connect, useSelector} from 'react-redux';
+import {width, height} from 'global/Constant';
+import Divider from 'components/Divider/Divider';
+import NameEnterValue from '../../../../../components/NameEnterValue/NameEnterValue';
+import MyButton from '../../../../../components/MyButton/MyButton';
+// import {WebView} from 'react-native-webview';
+
+const CertificateTab = ({certificateList}) => {
+  const renderCertificate = ({item}) => {
+    return (
+      <View style={styles.courseContainer}>
+        <View style={styles.courseSubContainer}>
+          <ImageBackground
+            source={item.certificateImg}
+            style={styles.crseImg}
+            imageStyle={{borderRadius: 10}}></ImageBackground>
+          <View style={{marginLeft: 11, width: width * 0.55}}>
+            <MyText
+              text={item.certificateName}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.LIGHT_GREY}
+              style={{}}
+            />
+            <View style={styles.middleRow}>
+              <View style={styles.ratingRow}>
+                <Image source={require('assets/images/star.png')} />
+                <MyText
+                  text={item.certificateRating}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.LIGHT_GREY}
+                  letterSpacing={0.13}
+                  style={{marginLeft: 5}}
+                />
+              </View>
+              <View style={styles.crtrRow}>
+                <Image
+                  source={require('assets/images/profile-circle.png')}
+                  // style={styles.crtrImg}
+                />
+                <MyText
+                  text={item.creatorName}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_GOLD}
+                  letterSpacing={0.13}
+                  style={{marginLeft: 10}}
+                />
+              </View>
+            </View>
+            <View style={styles.buttonsRow}>
+              <MyButton
+                text="VIEW"
+                style={{
+                  width: '35%',
+                  height: 40,
+                  marginTop: 8,
+                  backgroundColor: Colors.THEME_BROWN,
+                }}
+                onPress={item.onView}
+              />
+              <MyButton
+                text="DOWNLOAD"
+                style={{
+                  width: '50%',
+                  height: 40,
+                  marginTop: 8,
+                  marginLeft: 12,
+                  backgroundColor: Colors.THEME_BROWN,
+                }}
+                onPress={item.onDownload}
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
+  return (
+    <FlatList
+      data={certificateList}
+      style={{marginTop: 28}}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={renderCertificate}
+    />
+  );
+};
+
+export default CertificateTab;

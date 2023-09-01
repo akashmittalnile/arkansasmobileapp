@@ -43,52 +43,52 @@ const courseTypes = [
   {name: 'Technical Line Tatoo Program', id: '4'},
   {name: 'Piercing Scholl', id: '5'},
 ];
-const trendingCourses = [
-  {
-    id: '1',
-    creatorName: `Nikhil Sam`,
-    creatorImg: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`,
-    courseImg: require('assets/images/rectangle-1035.png'),
-    courseName: 'Tattoo Cover-Ups & Transformations',
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-  {
-    id: '2',
-    creatorName: `Nikhil Sam`,
-    creatorImg: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`,
-    courseImg: require('assets/images/rectangle-1035.png'),
-    courseName: 'Tattoo Cover-Ups & Transformations',
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-  {
-    id: '3',
-    creatorName: `Nikhil Sam`,
-    creatorImg: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`,
-    courseImg: require('assets/images/rectangle-1035.png'),
-    courseName: 'Tattoo Cover-Ups & Transformations',
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-];
-const topCategories = [
-  {
-    id: '1',
-    name: 'Permanent Lips Training',
-    img: require('assets/images/permanent-lips-training.png'),
-  },
-  {
-    id: '2',
-    name: 'Permanent Powder',
-    img: require('assets/images/permanent-powder.png'),
-  },
-  {
-    id: '3',
-    name: 'Permanent Eyeliner Training',
-    img: require('assets/images/permanent-eyeliner-training.png'),
-  },
-];
+// const trendingCourses = [
+//   {
+//     id: '1',
+//     creatorName: `Nikhil Sam`,
+//     creatorImg: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`,
+//     courseImg: require('assets/images/rectangle-1035.png'),
+//     courseName: 'Tattoo Cover-Ups & Transformations',
+//     courseRating: '4.7',
+//     courseFee: '399.00',
+//   },
+//   {
+//     id: '2',
+//     creatorName: `Nikhil Sam`,
+//     creatorImg: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`,
+//     courseImg: require('assets/images/rectangle-1035.png'),
+//     courseName: 'Tattoo Cover-Ups & Transformations',
+//     courseRating: '4.7',
+//     courseFee: '399.00',
+//   },
+//   {
+//     id: '3',
+//     creatorName: `Nikhil Sam`,
+//     creatorImg: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`,
+//     courseImg: require('assets/images/rectangle-1035.png'),
+//     courseName: 'Tattoo Cover-Ups & Transformations',
+//     courseRating: '4.7',
+//     courseFee: '399.00',
+//   },
+// ];
+// const topCategories = [
+//   {
+//     id: '1',
+//     name: 'Permanent Lips Training',
+//     img: require('assets/images/permanent-lips-training.png'),
+//   },
+//   {
+//     id: '2',
+//     name: 'Permanent Powder',
+//     img: require('assets/images/permanent-powder.png'),
+//   },
+//   {
+//     id: '3',
+//     name: 'Permanent Eyeliner Training',
+//     img: require('assets/images/permanent-eyeliner-training.png'),
+//   },
+// ];
 const suggestedCourses = [
   {
     id: '1',
@@ -158,16 +158,16 @@ const Home = ({navigation, dispatch}) => {
   const [searchValue, setSearchValue] = useState('');
   const [homeData, setHomeData] = useState({});
   const [selectedCourseType, setSelectedCourseType] = useState('1');
+  const [trendingCourses, setTrendingCourses] = useState([])
 
   useEffect(() => {
     getHomeData()
   }, [])
   const getHomeData = async () => {
-    const tempToken = `11|f4VaNCkBBQ4eShJgTvZrMQ1rPOpJhszszVnKiocD`
     setShowLoader(true);
     try {
-      const resp = await Service.getApiWithToken(tempToken, Service.LOGIN);
-      console.log('getHomeData resp', resp);
+      const resp = await Service.getApi(Service.HOME);
+      console.log('getHomeData resp', resp?.data);
       if (resp?.data?.status) {
         setHomeData(resp?.data?.data)
       } else {
@@ -187,8 +187,8 @@ const Home = ({navigation, dispatch}) => {
   const gotoTopCategory = () => {
     navigation.navigate(ScreenNames.TOP_CATEGORY);
   };
-  const gotoProductDetails = () => {
-    navigation.navigate(ScreenNames.PRODUCT_DETAILS);
+  const gotoProductDetails = (item) => {
+    navigation.navigate(ScreenNames.PRODUCT_DETAILS, {courseData: item});
   };
   const gotoAllProducts = () => {
     navigation.navigate(ScreenNames.ALL_PRODUCTS);
@@ -221,10 +221,89 @@ const Home = ({navigation, dispatch}) => {
       </TouchableOpacity>
     );
   };
+  // const renderCourse = ({item}) => {
+  //   return (
+  //     <TouchableOpacity
+  //       onPress={gotoProductDetails}
+  //       style={styles.courseContainer}>
+  //       <View style={styles.topRow}>
+  //         <View style={styles.topLeftRow}>
+  //           <Image source={{uri: item.creatorImg}} style={styles.crtrImg} />
+  //           <MyText
+  //             text={item.creatorName}
+  //             fontFamily="regular"
+  //             fontSize={13}
+  //             textColor={Colors.THEME_GOLD}
+  //             letterSpacing={0.13}
+  //             style={{marginLeft: 10}}
+  //           />
+  //         </View>
+  //         <View style={styles.topRightRow}>
+  //           <Image source={require('assets/images/heart.png')} />
+  //           <Image
+  //             source={require('assets/images/share.png')}
+  //             style={{marginLeft: 10}}
+  //           />
+  //         </View>
+  //       </View>
+  //       <ImageBackground source={item.courseImg} style={styles.crseImg}>
+  //         <TouchableOpacity>
+  //           <Image source={require('assets/images/play-icon.png')} />
+  //         </TouchableOpacity>
+  //       </ImageBackground>
+  //       <View style={styles.bottomRow}>
+  //         <View style={{width: '60%'}}>
+  //           <MyText
+  //             text={item.courseName}
+  //             fontFamily="regular"
+  //             fontSize={13}
+  //             textColor={Colors.LIGHT_GREY}
+  //             style={{}}
+  //           />
+  //           <View style={styles.courseNameView}>
+  //             <MyText
+  //               text={'Course Fee:'}
+  //               fontFamily="regular"
+  //               fontSize={13}
+  //               textColor={Colors.LIGHT_GREY}
+  //               letterSpacing={0.13}
+  //               style={{}}
+  //             />
+  //             <MyText
+  //               text={'$' + item.courseFee}
+  //               fontFamily="bold"
+  //               fontSize={14}
+  //               textColor={Colors.THEME_GOLD}
+  //               letterSpacing={0.14}
+  //               style={{}}
+  //             />
+  //           </View>
+  //         </View>
+  //         <View style={styles.bottomRight}>
+  //           <Image source={require('assets/images/star.png')} />
+  //           <MyText
+  //             text={item.courseRating}
+  //             fontFamily="regular"
+  //             fontSize={13}
+  //             textColor={Colors.LIGHT_GREY}
+  //             letterSpacing={0.13}
+  //             style={{marginLeft: 10}}
+  //           />
+  //         </View>
+  //       </View>
+  //       {/* <MyText
+  //         text={item.name}
+  //         fontFamily="regular"
+  //         fontSize={14}
+  //         textColor={'black'}
+  //       /> */}
+  //     </TouchableOpacity>
+  //   );
+  // };
   const renderCourse = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={gotoProductDetails}
+        onPress={() => gotoProductDetails(item)}
         style={styles.courseContainer}>
         <View style={styles.topRow}>
           <View style={styles.topLeftRow}>
@@ -254,7 +333,7 @@ const Home = ({navigation, dispatch}) => {
         <View style={styles.bottomRow}>
           <View style={{width: '60%'}}>
             <MyText
-              text={item.courseName}
+              text={item.title}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.LIGHT_GREY}
@@ -270,7 +349,7 @@ const Home = ({navigation, dispatch}) => {
                 style={{}}
               />
               <MyText
-                text={'$' + item.courseFee}
+                text={'$' + item.course_fee}
                 fontFamily="bold"
                 fontSize={14}
                 textColor={Colors.THEME_GOLD}
@@ -282,7 +361,7 @@ const Home = ({navigation, dispatch}) => {
           <View style={styles.bottomRight}>
             <Image source={require('assets/images/star.png')} />
             <MyText
-              text={item.courseRating}
+              text={item.rating}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.LIGHT_GREY}
@@ -304,7 +383,7 @@ const Home = ({navigation, dispatch}) => {
     return (
       <TouchableOpacity style={styles.productContainer}>
         <View>
-          <Image source={item.img} style={{width: '100%'}} />
+          <Image source={{uri: item.Product_image}} style={{width: '100%'}} />
           <Image
             source={require('assets/images/heart-yellow-outline.png')}
             style={styles.heartIcon}
@@ -323,7 +402,7 @@ const Home = ({navigation, dispatch}) => {
         </View>
         <View style={styles.bottomView}>
           <MyText
-            text={item.name}
+            text={item.title}
             fontFamily="regular"
             fontSize={13}
             textColor={Colors.LIGHT_GREY}
@@ -358,11 +437,12 @@ const Home = ({navigation, dispatch}) => {
     );
   };
   const renderCategory = ({item}) => {
+    console.log('renderCategory', item);
     return (
       <View style={styles.categoryContainer}>
-        <Image source={item.img} style={styles.catImg} />
+        <Image source={{uri: item.category_image}} style={styles.catImg} />
         <MyText
-          text={item.name}
+          text={item.category_name}
           fontFamily="regular"
           fontSize={13}
           textColor={Colors.LIGHT_GREY}
@@ -407,7 +487,7 @@ const Home = ({navigation, dispatch}) => {
             style={{marginTop: 25}}
           />
           <FlatList
-            data={trendingCourses}
+            data={homeData?.trending_course || []}
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{marginTop: 15}}
@@ -420,7 +500,7 @@ const Home = ({navigation, dispatch}) => {
             style={{marginTop: 21}}
           />
           <FlatList
-            data={topCategories}
+            data={homeData?.top_category || []}
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{marginTop: 15}}
@@ -434,7 +514,7 @@ const Home = ({navigation, dispatch}) => {
             style={{marginTop: 25}}
           />
           <FlatList
-            data={suggestedCourses}
+            data={homeData?.suggested_course}
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{marginTop: 15}}
@@ -448,7 +528,7 @@ const Home = ({navigation, dispatch}) => {
             style={{marginTop: 25}}
           />
           <FlatList
-            data={allProducts}
+            data={homeData?.all_product || []}
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{marginTop: 15}}
@@ -461,7 +541,7 @@ const Home = ({navigation, dispatch}) => {
             style={{marginTop: 21}}
           />
           <FlatList
-            data={topCategories}
+            data={homeData?.suggested_category || []}
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{marginTop: 15}}
@@ -475,7 +555,7 @@ const Home = ({navigation, dispatch}) => {
             style={{marginTop: 25}}
           />
           <FlatList
-            data={allProducts}
+            data={homeData?.suggested_product}
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{marginTop: 15}}

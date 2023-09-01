@@ -156,8 +156,28 @@ const Home = ({navigation, dispatch}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [homeData, setHomeData] = useState({});
   const [selectedCourseType, setSelectedCourseType] = useState('1');
 
+  useEffect(() => {
+    getHomeData()
+  }, [])
+  const getHomeData = async () => {
+    const tempToken = `11|f4VaNCkBBQ4eShJgTvZrMQ1rPOpJhszszVnKiocD`
+    setShowLoader(true);
+    try {
+      const resp = await Service.getApiWithToken(tempToken, Service.LOGIN);
+      console.log('getHomeData resp', resp);
+      if (resp?.data?.status) {
+        setHomeData(resp?.data?.data)
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getHomeData', error);
+    }
+    setShowLoader(false);
+  };
   const gotoTrendingCourses = () => {
     navigation.navigate(ScreenNames.TRENDING_COURSES);
   };

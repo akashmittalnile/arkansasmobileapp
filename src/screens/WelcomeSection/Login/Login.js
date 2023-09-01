@@ -157,6 +157,7 @@ const Login = ({navigation}) => {
                 backgroundColor: Colors.THEME_BROWN,
               }}
               onPress={signInUser}
+              // onPress={()=>{navigation.dispatch(resetIndexGoToBottomTab)}}
             />
             <View style={styles.dividerRow}>
               <Divider style={{width: '38%', borderColor: '#040706'}} />

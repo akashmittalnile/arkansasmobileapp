@@ -24,9 +24,11 @@ import Toast from 'react-native-simple-toast';
 import {useSelector, useDispatch} from 'react-redux';
 import {logOutUser, setUser} from 'src/reduxToolkit/reducer/user';
 import {useDrawerStatus} from '@react-navigation/drawer';
+import CustomLoader from '../../components/CustomLoader/CustomLoader';
 
 const CustomDrawer = ({navigation}) => {
   //variables
+  const userToken = useSelector(state => state.user.userToken);
   const dispatch = useDispatch();
   //hook : states
   const [showLoader, setShowLoader] = useState(false);
@@ -45,6 +47,29 @@ const CustomDrawer = ({navigation}) => {
   };
   const gotoAudioPlayerScreen = () => {
     navigation.navigate(ScreenNames.AUDIO_PLAYER_SCREEN);
+  };
+  const gotoWelcome = () =>
+    CommonActions.reset({
+      index: 1,
+      routes: [{name: ScreenNames.WELCOME}],
+    });
+  const logout = async () => {
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.LOGOUTS,
+      );
+      if (resp?.data?.status) {
+        closeDrawer();
+        navigation.dispatch(gotoWelcome)
+        dispatch(logOutUser());
+        await AsyncStorage.clear();
+      }
+    } catch (error) {
+      console.log('error in logout', error);
+    }
+    setShowLoader(false);
   };
   //UI
   return (
@@ -102,6 +127,7 @@ const CustomDrawer = ({navigation}) => {
           <DrawerItemList
             Title="Logout"
             image={require('assets/images/logout-sb.png')}
+            onPress={logout}
           />
         </View>
         <View style={styles.socialMediaContainer}>
@@ -142,7 +168,7 @@ const CustomDrawer = ({navigation}) => {
 
         {/* <Text style={styles.versionText}>App Version: V1.0.0.12</Text> */}
       </ScrollView>
-      <CustomLoaderLogout showLoader={showLoader} />
+      <CustomLoader text='Logging Out....' showLoader={showLoader} />
     </View>
   );
 };

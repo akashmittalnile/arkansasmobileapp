@@ -5,7 +5,7 @@ import {View, Platform, ActivityIndicator} from 'react-native';
 import {Colors} from 'global/Index';
 import MyText from 'components/MyText/MyText';
 
-const CustomLoader = ({showLoader}) => {
+const CustomLoader = ({showLoader, text = 'Loading....'}) => {
   //UI
   return (
     <>
@@ -32,7 +32,7 @@ const CustomLoader = ({showLoader}) => {
             color={Colors.WHITE}
           />
           <MyText
-            text={'Loading....'}
+            text={text}
             fontSize={16}
             fontFamily="medium"
             textColor="white"

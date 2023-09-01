@@ -13,6 +13,17 @@ export const BASE_URL = isProduction
 
 export const LOGIN = `login`;
 export const REGISTER = `register`;
+export const HOME = `home`;
+export const DETAILS = `details`;
+export const SUGGESTED_LIST = `suggested-list`;
+export const CART_LIST = `cart-list`;
+export const WISHLIST = `wishlist`;
+export const COURSE_LISTING = `course-listing`;
+export const TRENDING_COURSE = `trending-course`;
+export const VERIFY_OTP = `verify-otp`;
+export const RESEND_OTP = `resend-otp`;
+export const FORGET_PASSWORD_VERIFY = `forget-password-verify`;
+export const LOGOUTS = `logouts`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

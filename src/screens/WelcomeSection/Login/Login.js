@@ -36,11 +36,14 @@ import Divider from '../../../components/Divider/Divider';
 import TextInputWithFlag from '../../../components/TextInputWithFlag/TextInputWithFlag';
 import {CountryPicker} from 'react-native-country-codes-picker';
 import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup';
+import { Service } from '../../../global/Index';
+import Toast from 'react-native-simple-toast';
 
 const Login = ({navigation}) => {
   //variables : redux variables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fcmToken, setFcmToken] = useState('');
   const dispatch = useDispatch();
   const phoneRef = useRef(null);
   const passwordRef = useRef(null);
@@ -56,6 +59,46 @@ const Login = ({navigation}) => {
     index: 1,
     routes: [{name: ScreenNames.BOTTOM_TAB}],
   });
+  const Validation = () => {
+    if (email == '') {
+      Toast.show('Please enter Email Address', Toast.LONG);
+    } else if (password == '') {
+      Toast.show('Please enter Password', Toast.LONG);
+    }
+    return true;
+  };
+  const signInUser = async () => {
+    if (Validation()) {
+      setShowLoader(true);
+      try {
+        const signInData = new FormData();
+        signInData.append('email', emailAddress);
+        signInData.append('password', password);
+        signInData.append('fcm_token', fcmToken);
+        const resp = await Service.postApi(Service.USER_LOGIN, signInData);
+        console.log('signInUser resp', resp);
+        if (resp?.data?.status) {
+          await AsyncStorage.setItem('userToken', resp.data.access_token);
+          const jsonValue = JSON.stringify(resp.data.data);
+          console.log('sign in jsonValue', jsonValue);
+          await AsyncStorage.setItem('userInfo', jsonValue);
+          // if (requestLoactionPermission()) {
+          //   getLocation(resp.data.access_token);
+          // } else {
+          dispatch(setUserToken(resp.data.access_token));
+          dispatch(setUser(resp.data.data));
+          navigation.dispatch(resetIndexGoToBottomTab);
+          // }
+        } else {
+          // Alert.alert('', `${resp.data.message}`);
+          Toast.show(resp.data.message, Toast.SHORT);
+        }
+      } catch (error) {
+        console.log('error in signInUser', error);
+      }
+      setShowLoader(false);
+    }
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -111,9 +154,7 @@ const Login = ({navigation}) => {
                 marginBottom: 10,
                 backgroundColor: Colors.THEME_BROWN,
               }}
-              onPress={() => {
-                navigation.dispatch(resetIndexGoToBottomTab);
-              }}
+              onPress={signInUser}
             />
             <View style={styles.dividerRow}>
               <Divider style={{width: '38%', borderColor: '#040706'}} />

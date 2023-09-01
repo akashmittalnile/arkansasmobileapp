@@ -4,9 +4,13 @@ import { Alert } from 'react-native';
 //import : axios
 import axios from 'axios';
 import Toast from 'react-native-simple-toast';
+
+const isProduction = false
 //endpoint : base_url
-export const BASE_URL = ``;
-//endpoint : endpoints driver
+export const BASE_URL = isProduction ? `` : `https://nileprojects.in/arkansas/api`;
+
+export const LOGIN = `login` 
+export const REGISTER = `register` 
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

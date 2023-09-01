@@ -1,16 +1,18 @@
 //import : react components
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 //third parties
 //import : axios
 import axios from 'axios';
 import Toast from 'react-native-simple-toast';
 
-const isProduction = false
+const isProduction = false;
 //endpoint : base_url
-export const BASE_URL = isProduction ? `` : `https://nileprojects.in/arkansas/api`;
+export const BASE_URL = isProduction
+  ? ``
+  : `https://nileprojects.in/arkansas/public/api/`;
 
-export const LOGIN = `login` 
-export const REGISTER = `register` 
+export const LOGIN = `login`;
+export const REGISTER = `register`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {
@@ -118,7 +120,8 @@ export const getApiWithToken = (token, endPoint) =>
       }
     });
 //function :  post api
-export const postApi = (endPoint, data) =>
+export const postApi = (endPoint, data) => {
+  console.log('postAPI endPoint', BASE_URL + endPoint);
   axios
     .post(`${BASE_URL}${endPoint}`, data, {
       headers: {
@@ -169,7 +172,7 @@ export const postApi = (endPoint, data) =>
         console.log('error message', error.response.data.message);
       }
     });
-
+};
 //function : post api with token
 export const postApiWithToken = (token, endPoint, data) =>
   axios
@@ -177,15 +180,15 @@ export const postApiWithToken = (token, endPoint, data) =>
       headers:
         Object.keys(data).length > 0
           ? {
-            'Content-Type': 'multipart/form-data',
-            Accept: '*/*',
-            Authorization: `Bearer ${token}`,
-          }
+              'Content-Type': 'multipart/form-data',
+              Accept: '*/*',
+              Authorization: `Bearer ${token}`,
+            }
           : {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
     })
     .then(res => {
       return res;

@@ -36,6 +36,9 @@ import Divider from '../../../components/Divider/Divider';
 import TextInputWithFlag from '../../../components/TextInputWithFlag/TextInputWithFlag';
 import {CountryPicker} from 'react-native-country-codes-picker';
 import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup';
+import { Service } from '../../../global/Index';
+import Toast from 'react-native-simple-toast';
+import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 
 const Signup = ({navigation}) => {
   //variables : redux variables
@@ -44,6 +47,7 @@ const Signup = ({navigation}) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState({
     code: 'US',
     dial_code: '+1',
@@ -71,6 +75,49 @@ const Signup = ({navigation}) => {
   //function : navigation function
   const gotoLogin = () => {
     navigation.navigate(ScreenNames.LOGIN);
+  };
+  const Validation = () => {
+    if (name == '') {
+      Toast.show('Please enter Name', Toast.SHORT);
+      return false
+    } else if (email == '') {
+      Toast.show('Please enter Email Address', Toast.SHORT);
+      return false
+    } else if (password == '') {
+      Toast.show('Please enter Password', Toast.SHORT);
+      return false
+    } else if (phone == '') {
+      Toast.show('Please enter Phone Number', Toast.SHORT);
+      return false
+    } else if (password == '') {
+      Toast.show('Please enter Password', Toast.SHORT);
+      return false
+    }
+    return true;
+  };
+  const signUpUser = async () => {
+    if (!Validation()) {
+      return
+    }
+    setShowLoader(true);
+    try {
+      const formaData = new FormData();
+      formaData.append('name', name);
+      formaData.append('email', email);
+      formaData.append('phone', phone);
+      formaData.append('password', password);
+      console.log('signUpUser formaData', formaData);
+      const resp = await Service.postApi(Service.REGISTER, formaData);
+      console.log('signInUser resp', resp);
+      if (resp?.data?.status) {
+        openSuccessModal()
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in signInUser', error);
+    }
+    setShowLoader(false);
   };
   //UI
   return (
@@ -146,7 +193,8 @@ const Signup = ({navigation}) => {
                 marginBottom: 10,
                 backgroundColor: Colors.THEME_BROWN,
               }}
-              onPress={openSuccessModal}
+              // onPress={openSuccessModal}
+              onPress={signUpUser}
             />
             <View style={styles.dividerRow}>
               <Divider style={{width: '38%'}} />
@@ -226,6 +274,7 @@ const Signup = ({navigation}) => {
           onBackdropPress={() => setShow(false)}
         />
       </View>
+      <CustomLoader showLoader={showLoader} />
     </SafeAreaView>
   );
 };

@@ -38,12 +38,14 @@ import {CountryPicker} from 'react-native-country-codes-picker';
 import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup';
 import { Service } from '../../../global/Index';
 import Toast from 'react-native-simple-toast';
+import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 
 const Login = ({navigation}) => {
   //variables : redux variables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fcmToken, setFcmToken] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
   const dispatch = useDispatch();
   const phoneRef = useRef(null);
   const passwordRef = useRef(null);
@@ -72,10 +74,10 @@ const Login = ({navigation}) => {
       setShowLoader(true);
       try {
         const signInData = new FormData();
-        signInData.append('email', emailAddress);
+        signInData.append('email', email);
         signInData.append('password', password);
         signInData.append('fcm_token', fcmToken);
-        const resp = await Service.postApi(Service.USER_LOGIN, signInData);
+        const resp = await Service.postApi(Service.LOGIN, signInData);
         console.log('signInUser resp', resp);
         if (resp?.data?.status) {
           await AsyncStorage.setItem('userToken', resp.data.access_token);
@@ -199,6 +201,7 @@ const Login = ({navigation}) => {
           </ScrollView>
         </KeyboardAvoidingView>
       </View>
+      <CustomLoader showLoader={showLoader} />
     </SafeAreaView>
   );
 };

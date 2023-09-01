@@ -22,7 +22,7 @@ const MyButton = ({
   icon,
   textColor = 'white',
 }) => {
-  console.log('text textColor', text, textColor);
+  // console.log('text textColor', text, textColor);
   return (
     <TouchableOpacity
       onPress={onPress}

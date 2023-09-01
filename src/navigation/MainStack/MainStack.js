@@ -28,6 +28,7 @@ import CourseCompletedScreen from 'screens/UserSection/CourseCompletedScreen/Cou
 import McqScreen from 'screens/UserSection/McqScreen/McqScreen';
 import ProductDetails from 'screens/UserSection/ProductDetails/ProductDetails';
 import AudioPlayerScreen from 'screens/UserSection/AudioPlayerScreen/AudioPlayerScreen';
+import NoConnection from '../../screens/UserSection/NoConnection/NoConnection';
 
 const MainStack = () => {
   //variables
@@ -96,6 +97,7 @@ const MainStack = () => {
         name={ScreenNames.AUDIO_PLAYER_SCREEN}
         component={AudioPlayerScreen}
       />
+      <Stack.Screen name={ScreenNames.NO_CONNECTION} component={NoConnection} />
     </Stack.Navigator>
   );
 };

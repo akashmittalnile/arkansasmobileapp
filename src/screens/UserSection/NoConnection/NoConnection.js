@@ -13,7 +13,9 @@ import {useDispatch} from 'react-redux';
 // import {CustomToastAction} from '../../redux/actions/actions';
 import Toast from 'react-native-simple-toast';
 import MyButton from 'components/MyButton/MyButton';
+import { width } from '../../../global/Constant';
 
+// saurabh saneja 1 Aug 23, if no internet connection show this screen
 const NoConnection = ({navigation}) => {
   //variables
   const {isConnected, isInternetReachable} = useNetInfo();

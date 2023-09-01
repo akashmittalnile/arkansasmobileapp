@@ -8,6 +8,7 @@ import {Colors, Constant, ScreenNames} from 'global/Index';
 import MainStack from '../MainStack/MainStack.js';
 import CustomDrawer from './CustomDrawer';
 import {SafeAreaView} from 'react-native';
+import {useNetworkError} from '../../hooks/useNetworkError';
 
 const Drawer = () => {
   //variables
@@ -16,6 +17,8 @@ const Drawer = () => {
   const options = {
     swipeEnabled: false,
   };
+  // saurabh saneja 1 Aug 23, checking if there is internet connection
+  useNetworkError();
   //function : render function
   const renderCustomDrawer = ({navigation}) => (
     <SafeAreaView style={{flex: 1}}>

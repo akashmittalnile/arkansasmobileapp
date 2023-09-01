@@ -158,18 +158,18 @@ const Home = ({navigation, dispatch}) => {
   const [searchValue, setSearchValue] = useState('');
   const [homeData, setHomeData] = useState({});
   const [selectedCourseType, setSelectedCourseType] = useState('1');
-  const [trendingCourses, setTrendingCourses] = useState([])
+  const [trendingCourses, setTrendingCourses] = useState([]);
 
   useEffect(() => {
-    getHomeData()
-  }, [])
+    getHomeData();
+  }, []);
   const getHomeData = async () => {
     setShowLoader(true);
     try {
       const resp = await Service.getApi(Service.HOME);
       console.log('getHomeData resp', resp?.data);
       if (resp?.data?.status) {
-        setHomeData(resp?.data?.data)
+        setHomeData(resp?.data?.data);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
@@ -187,7 +187,7 @@ const Home = ({navigation, dispatch}) => {
   const gotoTopCategory = () => {
     navigation.navigate(ScreenNames.TOP_CATEGORY);
   };
-  const gotoProductDetails = (item) => {
+  const gotoProductDetails = item => {
     navigation.navigate(ScreenNames.PRODUCT_DETAILS, {courseData: item});
   };
   const gotoAllProducts = () => {
@@ -481,87 +481,159 @@ const Home = ({navigation, dispatch}) => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderCourseTypes}
           />
-          <ViewAll
-            text="Trending Courses"
-            onPress={gotoTrendingCourses}
-            style={{marginTop: 25}}
-          />
-          <FlatList
-            data={homeData?.trending_course || []}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{marginTop: 15}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderCourse}
-          />
-          <ViewAll
-            text="Top Category"
-            onPress={gotoTopCategory}
-            style={{marginTop: 21}}
-          />
-          <FlatList
-            data={homeData?.top_category || []}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{marginTop: 15}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderCategory}
-          />
-          <ViewAll
-            text="Suggested Courses"
-            onPress={gotoSuggestedCourses}
-            // onPress={gotoSuggestedProducts}
-            style={{marginTop: 25}}
-          />
-          <FlatList
-            data={homeData?.suggested_course}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{marginTop: 15}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderCourse}
-          />
-          <ViewAll
-            text="All Products"
-            onPress={gotoSuggestedCourses}
-            // onPress={gotoSuggestedProducts}
-            style={{marginTop: 25}}
-          />
-          <FlatList
-            data={homeData?.all_product || []}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{marginTop: 15}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderProduct}
-          />
-          <ViewAll
-            text="Explore Category"
-            onPress={gotoTopCategory}
-            style={{marginTop: 21}}
-          />
-          <FlatList
-            data={homeData?.suggested_category || []}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{marginTop: 15}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderCategory}
-          />
-          <ViewAll
-            text="Suggested Products"
-            onPress={gotoSuggestedCourses}
-            // onPress={gotoSuggestedProducts}
-            style={{marginTop: 25}}
-          />
-          <FlatList
-            data={homeData?.suggested_product}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{marginTop: 15}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderProduct}
-          />
+          {homeData?.trending_course?.length > 0 ? (
+            <View>
+              <ViewAll
+                text="Trending Courses"
+                onPress={gotoTrendingCourses}
+                style={{marginTop: 25}}
+              />
+              <FlatList
+                data={homeData?.trending_course || []}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{marginTop: 15}}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderCourse}
+              />
+            </View>
+          ) : (
+            <MyText
+              text={`No Trending Courses found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
+          )}
+          {homeData?.top_category?.length > 0 ? (
+            <View>
+              <ViewAll
+                text="Top Category"
+                onPress={gotoTopCategory}
+                style={{marginTop: 21}}
+              />
+              <FlatList
+                data={homeData?.top_category || []}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{marginTop: 15}}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderCategory}
+              />
+            </View>
+          ) : (
+            <MyText
+              text={`No Top Categories found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
+          )}
+          {homeData?.suggested_course?.length > 0 ? (
+            <View>
+              <ViewAll
+                text="Suggested Courses"
+                onPress={gotoSuggestedCourses}
+                // onPress={gotoSuggestedProducts}
+                style={{marginTop: 25}}
+              />
+              <FlatList
+                data={homeData?.suggested_course}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{marginTop: 15}}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderCourse}
+              />
+            </View>
+          ) : (
+            <MyText
+              text={`No Suggested Courses found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
+          )}
+          {homeData?.all_product?.length > 0 ? (
+            <View>
+              <ViewAll
+                text="All Products"
+                onPress={gotoSuggestedCourses}
+                // onPress={gotoSuggestedProducts}
+                style={{marginTop: 25}}
+              />
+              <FlatList
+                data={homeData?.all_product || []}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{marginTop: 15}}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderProduct}
+              />
+            </View>
+          ) : (
+            <MyText
+              text={`No All Products found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
+          )}
+          {homeData?.suggested_category?.length > 0 ? (
+            <View>
+              <ViewAll
+                text="Explore Category"
+                onPress={gotoTopCategory}
+                style={{marginTop: 21}}
+              />
+              <FlatList
+                data={homeData?.suggested_category || []}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{marginTop: 15}}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderCategory}
+              />
+            </View>
+          ) : (
+            <MyText
+              text={`No Explore Category found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
+          )}
+          {homeData?.suggested_product?.length > 0 ? (
+            <View>
+              <ViewAll
+                text="Suggested Products"
+                onPress={gotoSuggestedCourses}
+                // onPress={gotoSuggestedProducts}
+                style={{marginTop: 25}}
+              />
+              <FlatList
+                data={homeData?.suggested_product}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{marginTop: 15}}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderProduct}
+              />
+            </View>
+          ) : (
+            <MyText
+              text={`No Suggested Products found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
+          )}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
       </View>

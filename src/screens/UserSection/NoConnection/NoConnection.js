@@ -53,7 +53,7 @@ const NoConnection = ({navigation}) => {
         }}>
         <Image
           resizeMode="contain"
-          source={require('../../../assets/images/nonetwork.png')}
+          source={require('assets/images/nonetwork.png')}
           style={{
             width: 200,
             height: 200,

@@ -108,8 +108,9 @@ const Signup = ({navigation}) => {
       formaData.append('password', password);
       console.log('signUpUser formaData', formaData);
       const resp = await Service.postApi(Service.REGISTER, formaData);
-      console.log('signInUser resp', resp);
+      console.log('signInUser resp', resp?.data);
       if (resp?.data?.status) {
+        Toast.show(resp.data.message, Toast.SHORT);
         openSuccessModal()
       } else {
         Toast.show(resp.data.message, Toast.SHORT);

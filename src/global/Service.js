@@ -120,8 +120,7 @@ export const getApiWithToken = (token, endPoint) =>
       }
     });
 //function :  post api
-export const postApi = (endPoint, data) => {
-  console.log('postAPI endPoint', BASE_URL + endPoint);
+export const postApi = (endPoint, data) =>
   axios
     .post(`${BASE_URL}${endPoint}`, data, {
       headers: {
@@ -172,7 +171,7 @@ export const postApi = (endPoint, data) => {
         console.log('error message', error.response.data.message);
       }
     });
-};
+
 //function : post api with token
 export const postApiWithToken = (token, endPoint, data) =>
   axios

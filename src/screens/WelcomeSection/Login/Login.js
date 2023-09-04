@@ -42,8 +42,8 @@ import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 
 const Login = ({navigation}) => {
   //variables : redux variables
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('amar@gmail.com');
+  const [password, setPassword] = useState('12345678');
   const [fcmToken, setFcmToken] = useState('');
   const [showLoader, setShowLoader] = useState(false);
   const dispatch = useDispatch();
@@ -78,17 +78,17 @@ const Login = ({navigation}) => {
         signInData.append('password', password);
         signInData.append('fcm_token', fcmToken);
         const resp = await Service.postApi(Service.LOGIN, signInData);
-        console.log('signInUser resp', resp);
+        console.log('signInUser resp', resp?.data);
         if (resp?.data?.status) {
-          await AsyncStorage.setItem('userToken', resp.data.access_token);
-          const jsonValue = JSON.stringify(resp.data.data);
+          await AsyncStorage.setItem('userToken', resp.data.authorization.token);
+          const jsonValue = JSON.stringify(resp.data.user);
           console.log('sign in jsonValue', jsonValue);
           await AsyncStorage.setItem('userInfo', jsonValue);
           // if (requestLoactionPermission()) {
           //   getLocation(resp.data.access_token);
           // } else {
-          dispatch(setUserToken(resp.data.access_token));
-          dispatch(setUser(resp.data.data));
+          dispatch(setUserToken(resp.data.authorization.token));
+          dispatch(setUser(resp.data.user));
           navigation.dispatch(resetIndexGoToBottomTab);
           // }
         } else {
@@ -156,8 +156,8 @@ const Login = ({navigation}) => {
                 marginBottom: 10,
                 backgroundColor: Colors.THEME_BROWN,
               }}
-              // onPress={signInUser}
-              onPress={()=>{navigation.dispatch(resetIndexGoToBottomTab)}}
+              onPress={signInUser}
+              // onPress={()=>{navigation.dispatch(resetIndexGoToBottomTab)}}
             />
             <View style={styles.dividerRow}>
               <Divider style={{width: '38%', borderColor: '#040706'}} />

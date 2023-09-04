@@ -45,7 +45,7 @@ const ForgotPasswordOTP = ({navigation, route}) => {
 
   //function : navigation function
   const gotoForgotPasswordChange = () => {
-    navigation.navigate(ScreenNames.FORGOT_PASSWORD_CHANGE);
+    navigation.navigate(ScreenNames.FORGOT_PASSWORD_CHANGE, {email: route?.params?.email, correctOtp: firstCode + secondCode + thirdCode + forthCode});
   };
   const Validation = () => {
     if(firstCode === '' && secondCode === '' && thirdCode === '' && forthCode === ''){
@@ -55,13 +55,13 @@ const ForgotPasswordOTP = ({navigation, route}) => {
     else if (firstCode === '' || secondCode === '' || thirdCode === '' || forthCode === '') {
       Toast.show('Please enter complete Verification Code', Toast.SHORT);
       return false;
-    } else if ((firstCode + secondCode + thirdCode + forthCode) !== correctOtp) {
-      Toast.show('Verification Code is incorrect', Toast.SHORT);
-      return false;
     }
+    return true
   }
   const handleValidateOtp = async () => {
-    
+    if(!Validation()){
+      return
+    }
     setShowLoader(true);
     try {
       const postData = new FormData();

@@ -17,31 +17,22 @@ import {Colors, Constant, Images, ScreenNames} from 'global/Index';
 import {styles} from './ForgotPasswordChangeStyle';
 import {CommonActions} from '@react-navigation/native';
 import MyText from 'components/MyText/MyText';
-//third parties
-import AsyncStorage from '@react-native-async-storage/async-storage';
 //redux
 import {useDispatch} from 'react-redux';
-import {
-  setUser,
-  setUserToken,
-  setUserNotifications,
-} from 'src/reduxToolkit/reducer/user';
-import LinearGradient from 'react-native-linear-gradient';
 import MyButton from 'components/MyButton/MyButton';
 import {width} from '../../../global/Constant';
 import WelcomeHeader from 'components/WelcomeHeader/WelcomeHeader';
 import MyTextInput from 'components/MyTextInput/MyTextInput';
-import MyIconButton from 'components/MyIconButton/MyIconButton';
-import Divider from '../../../components/Divider/Divider';
-import TextInputWithFlag from '../../../components/TextInputWithFlag/TextInputWithFlag';
-import {CountryPicker} from 'react-native-country-codes-picker';
-import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup';
+import Toast from 'react-native-simple-toast';
+import CustomLoader from '../../../components/CustomLoader/CustomLoader';
+import { Service } from '../../../global/Index';
 
-const ForgotPasswordChange = ({navigation}) => {
+const ForgotPasswordChange = ({navigation, route}) => {
   //variables : redux variables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
   const dispatch = useDispatch();
   const confirmPasswordRef = useRef(null);
 
@@ -52,6 +43,45 @@ const ForgotPasswordChange = ({navigation}) => {
   });
   const gotoLogin = () => {
     navigation.dispatch(resetIndexGoToLogin);
+  };
+  const Validation = () => {
+    if(password?.trim()?.length === 0){
+      Toast.show('Please enter Password', Toast.SHORT);
+      return false;
+    }
+    else if(confirmPassword?.trim()?.length === 0){
+      Toast.show('Please enter Confirm Password', Toast.SHORT);
+      return false;
+    } else if(password !== confirmPassword){
+      Toast.show('Password and Confirm Password do not match', Toast.SHORT);
+      return false;
+    } 
+    return true
+  }
+  const changePassword = async () => {
+    if(!Validation()){
+      return
+    }
+    setShowLoader(true);
+    try {
+      const postData = new FormData();
+      postData.append('email', route?.params?.email);
+      postData.append('otp', Number(route?.params?.correctOtp));
+      postData.append('password', password);
+      postData.append('password_confirmation', confirmPassword);
+      console.log('changePassword postData', postData);
+      const resp = await Service.postApi(Service.VERIFY_OTP, postData);
+      console.log('changePassword resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.message, Toast.SHORT);
+        gotoLogin();
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in changePassword', error);
+    }
+    setShowLoader(false);
   };
   //UI
   return (
@@ -116,11 +146,12 @@ const ForgotPasswordChange = ({navigation}) => {
                 marginBottom: 10,
                 backgroundColor: Colors.THEME_BROWN,
               }}
-              onPress={gotoLogin}
+              onPress={changePassword}
             />
           </ScrollView>
         </KeyboardAvoidingView>
       </View>
+      <CustomLoader showLoader={showLoader} />
     </SafeAreaView>
   );
 };

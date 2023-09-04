@@ -247,14 +247,14 @@ const Wishlist = ({navigation, dispatch}) => {
   const renderProduct = ({item}) => {
     return (
       <View style={styles.courseContainer}>
-        <ImageBackground source={item.courseImg} style={styles.crseImg}>
+        <ImageBackground source={{uri: item.Product_image}} style={styles.crseImg}>
           {/* <TouchableOpacity>
             <Image source={require('assets/images/play-icon.png')} />
           </TouchableOpacity> */}
         </ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText
-            text={item.courseName}
+            text={item.title}
             fontFamily="regular"
             fontSize={13}
             textColor={Colors.LIGHT_GREY}
@@ -264,7 +264,7 @@ const Wishlist = ({navigation, dispatch}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={item.courseRating}
+                text={item.rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -278,7 +278,7 @@ const Wishlist = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={item.creatorName}
+                text={'Nikhil Sam'}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -289,7 +289,7 @@ const Wishlist = ({navigation, dispatch}) => {
           </View>
           <View style={styles.bottomRow}>
             <MyText
-              text={'$' + item.courseFee}
+              text={'$' + item.price}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -297,7 +297,7 @@ const Wishlist = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image source={require('assets/images/heart-selected.png')} />
+            <Image source={item.isLike ? require('assets/images/heart-selected.png') : require('assets/images/heart-yellow-outline.png')} style={{width: 14, height: 14}} />
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}
@@ -349,7 +349,8 @@ const Wishlist = ({navigation, dispatch}) => {
             />
           ) : (
             <FlatList
-              data={productList}
+              // data={productList}
+              data={productData}
               style={{marginTop: 28}}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderProduct}

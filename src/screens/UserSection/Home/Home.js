@@ -166,8 +166,8 @@ const Home = ({navigation, dispatch}) => {
   const getHomeData = async () => {
     setShowLoader(true);
     try {
-      const resp = await Service.getApi(Service.HOME);
-      console.log('getHomeData resp', resp?.data);
+      const resp = await Service.getApiWithToken(userToken, Service.HOME);
+      console.log('getHomeData resp', resp);
       if (resp?.data?.status) {
         setHomeData(resp?.data?.data);
       } else {

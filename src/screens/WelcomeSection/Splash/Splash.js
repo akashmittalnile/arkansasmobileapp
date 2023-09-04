@@ -24,7 +24,7 @@ const Splash = ({navigation}) => {
   //function : navigation function
   const resetIndexGoToUserBottomTab = CommonActions.reset({
     index: 1,
-    routes: [{name: ScreenNames.DRIVER_BOTTOM_TAB}],
+    routes: [{name: ScreenNames.BOTTOM_TAB}],
   });
   const resetIndexGoToSignInSignUp = CommonActions.reset({
     index: 1,
@@ -51,6 +51,7 @@ const Splash = ({navigation}) => {
         }
       }
       const userData = JSON.parse(userInfo);
+      console.log('userData', userData);
       if (userData) {
         dispatch(setUserToken(userToken));
         dispatch(setUser(userData));

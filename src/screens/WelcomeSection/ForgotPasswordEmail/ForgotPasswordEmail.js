@@ -16,34 +16,48 @@ import {Colors, Constant, Images, ScreenNames} from 'global/Index';
 import {styles} from './ForgotPasswordEmailStyle';
 import {CommonActions} from '@react-navigation/native';
 import MyText from 'components/MyText/MyText';
-//third parties
-import AsyncStorage from '@react-native-async-storage/async-storage';
 //redux
 import {useDispatch} from 'react-redux';
-import {
-  setUser,
-  setUserToken,
-  setUserNotifications,
-} from 'src/reduxToolkit/reducer/user';
 import LinearGradient from 'react-native-linear-gradient';
 import MyButton from 'components/MyButton/MyButton';
 import {width} from '../../../global/Constant';
 import WelcomeHeader from 'components/WelcomeHeader/WelcomeHeader';
 import MyTextInput from 'components/MyTextInput/MyTextInput';
-import MyIconButton from 'components/MyIconButton/MyIconButton';
-import Divider from '../../../components/Divider/Divider';
-import TextInputWithFlag from '../../../components/TextInputWithFlag/TextInputWithFlag';
-import {CountryPicker} from 'react-native-country-codes-picker';
-import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup';
+import Toast from 'react-native-simple-toast';
+import CustomLoader from '../../../components/CustomLoader/CustomLoader';
+import { Service } from '../../../global/Index';
 
 const ForgotPasswordEmail = ({navigation}) => {
   //variables : redux variables
   const [email, setEmail] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
   const dispatch = useDispatch();
 
   //function : navigation function
   const gotoForgotPasswordOTP = () => {
-    navigation.navigate(ScreenNames.FORGOT_PASSWORD_OTP);
+    navigation.navigate(ScreenNames.FORGOT_PASSWORD_OTP, {email});
+  };
+  const handleForgotPasswrord = async () => {
+    if (email?.trim()?.length === 0) {
+      Toast.show('Please enter Email Address', Toast.SHORT);
+      return;
+    }
+    setShowLoader(true);
+    try {
+      const postData = new FormData();
+      postData.append('email', email);
+      const resp = await Service.postApi(Service.FORGET_PASSWORD, postData);
+      console.log('handleForgotPasswrord resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.message, Toast.SHORT);
+        gotoForgotPasswordOTP();
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in handleForgotPasswrord', error);
+    }
+    setShowLoader(false);
   };
   //UI
   return (
@@ -89,10 +103,11 @@ const ForgotPasswordEmail = ({navigation}) => {
               marginBottom: 10,
               backgroundColor: Colors.THEME_BROWN,
             }}
-            onPress={gotoForgotPasswordOTP}
+            onPress={handleForgotPasswrord}
           />
         </ScrollView>
       </View>
+      <CustomLoader showLoader={showLoader} />
     </SafeAreaView>
   );
 };

@@ -22,6 +22,7 @@ export const COURSE_LISTING = `course-listing`;
 export const TRENDING_COURSE = `trending-course`;
 export const VERIFY_OTP = `verify-otp`;
 export const RESEND_OTP = `resend-otp`;
+export const FORGET_PASSWORD = `forget-password`;
 export const FORGET_PASSWORD_VERIFY = `forget-password-verify`;
 export const LOGOUT = `logout`;
 

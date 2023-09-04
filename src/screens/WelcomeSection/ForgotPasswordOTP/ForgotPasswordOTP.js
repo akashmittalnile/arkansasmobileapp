@@ -18,27 +18,16 @@ import {Colors, Constant, Images, ScreenNames} from 'global/Index';
 import {styles} from './ForgotPasswordOTPStyle';
 import {CommonActions} from '@react-navigation/native';
 import MyText from 'components/MyText/MyText';
-//third parties
-import AsyncStorage from '@react-native-async-storage/async-storage';
 //redux
 import {useDispatch} from 'react-redux';
-import {
-  setUser,
-  setUserToken,
-  setUserNotifications,
-} from 'src/reduxToolkit/reducer/user';
-import LinearGradient from 'react-native-linear-gradient';
 import MyButton from 'components/MyButton/MyButton';
 import {width} from '../../../global/Constant';
 import WelcomeHeader from 'components/WelcomeHeader/WelcomeHeader';
-import MyTextInput from 'components/MyTextInput/MyTextInput';
-import MyIconButton from 'components/MyIconButton/MyIconButton';
-import Divider from '../../../components/Divider/Divider';
-import TextInputWithFlag from '../../../components/TextInputWithFlag/TextInputWithFlag';
-import {CountryPicker} from 'react-native-country-codes-picker';
-import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup';
+import Toast from 'react-native-simple-toast';
+import CustomLoader from '../../../components/CustomLoader/CustomLoader';
+import { Service } from '../../../global/Index';
 
-const ForgotPasswordOTP = ({navigation}) => {
+const ForgotPasswordOTP = ({navigation, route}) => {
   //variables : redux variables
   const [email, setEmail] = useState('');
   const dispatch = useDispatch();
@@ -47,6 +36,7 @@ const ForgotPasswordOTP = ({navigation}) => {
   const [thirdCode, setThirdCode] = useState('');
   const [forthCode, setForthCode] = useState('');
   const [message, setMessage] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
   const firstCodeRef = useRef();
   const secondCodeRef = useRef();
   const thirdCodeRef = useRef();
@@ -55,6 +45,52 @@ const ForgotPasswordOTP = ({navigation}) => {
   //function : navigation function
   const gotoForgotPasswordChange = () => {
     navigation.navigate(ScreenNames.FORGOT_PASSWORD_CHANGE);
+  };
+  const handleValidateOtp = async () => {
+    if(firstCode === '' && secondCode === '' && thirdCode === '' && forthCode === ''){
+      Toast.show('Please enter Verification Code', Toast.SHORT);
+      return;
+    }
+    else if (firstCode === '' || secondCode === '' || thirdCode === '' || forthCode === '') {
+      Toast.show('Please enter complete Verification Code', Toast.SHORT);
+      return;
+    }
+    setShowLoader(true);
+    try {
+      const postData = new FormData();
+      postData.append('email', route?.params?.email);
+      postData.append('otp', firstCode + secondCode + thirdCode + forthCode);
+      console.log('handleValidateOtp postData', postData);
+      const resp = await Service.postApi(Service.VERIFY_OTP, postData);
+      console.log('handleValidateOtp resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.message, Toast.SHORT);
+        gotoForgotPasswordChange();
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in handleValidateOtp', error);
+    }
+    setShowLoader(false);
+  };
+  const handleResendOtp = async () => {
+    setShowLoader(true);
+    try {
+      const postData = new FormData();
+      postData.append('email', route?.params?.email);
+      console.log('handleResendOtp postData', postData);
+      const resp = await Service.postApi(Service.RESEND_OTP, postData);
+      console.log('handleResendOtp resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.message, Toast.SHORT);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in handleResendOtp', error);
+    }
+    setShowLoader(false);
   };
   //UI
   return (
@@ -89,7 +125,7 @@ const ForgotPasswordOTP = ({navigation}) => {
             style={{marginTop: 10, marginBottom: 18}}
           />
           <MyText
-            text={'dandin.shvansh@hotmail.com'}
+            text={route?.params?.email}
             fontSize={18}
             fontFamily="medium"
             textColor={Colors.LIGHT_GREY}
@@ -207,9 +243,9 @@ const ForgotPasswordOTP = ({navigation}) => {
               marginBottom: 10,
               backgroundColor: Colors.THEME_BROWN,
             }}
-            onPress={gotoForgotPasswordChange}
+            onPress={handleValidateOtp}
           />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleResendOtp} >
             <MyText
               text={'Resend Verification Code'}
               fontSize={18}
@@ -221,6 +257,7 @@ const ForgotPasswordOTP = ({navigation}) => {
           </TouchableOpacity>
         </ScrollView>
       </View>
+      <CustomLoader showLoader={showLoader} />
     </SafeAreaView>
   );
 };

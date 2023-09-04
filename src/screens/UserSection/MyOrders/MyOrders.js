@@ -153,51 +153,6 @@ const MyOrders = ({navigation, dispatch}) => {
   const [multiSliderValue, setMultiSliderValue] = useState([0, 5000]);
   const [starRating, setStarRating] = useState(3);
 
-  useEffect(() => {
-    getAllType()
-  }, [])
-  const getAllType = async () => {
-    setShowLoader(true);
-    const formdata = new FormData();
-    formdata.append("type", "1")
-    try {
-      const resp = await Service.postApiWithToken(
-        userToken,
-        Service.ALL_TYPE_LISTING,
-        formdata
-      );
-      console.log('getAllType resp', resp?.data);
-      if (resp?.data?.status) {
-      } else {
-        Toast.show(resp.data.message, Toast.SHORT);
-      }
-    } catch (error) {
-      console.log('error in getAllType', error);
-    }
-    setShowLoader(false);
-  };
-  const onLike = async () => {
-    setShowLoader(true);
-    const formdata = new FormData();
-    formdata.append("type", "1");
-    formdata.append("id", "2");
-    formdata.append("status", "1");
-    try {
-      const resp = await Service.postApiWithToken(
-        userToken,
-        Service.LIKE_OBJECT_TYPE,
-        formdata
-      );
-      console.log('onLike resp', resp?.data);
-      if (resp?.data?.status) {
-      } else {
-        Toast.show(resp.data.message, Toast.SHORT);
-      }
-    } catch (error) {
-      console.log('error in onLike', error);
-    }
-    setShowLoader(false);
-  };
   const multiSliderValuesChange = values => {
     setMultiSliderValue(values);
   };

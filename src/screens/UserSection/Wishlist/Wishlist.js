@@ -111,6 +111,8 @@ const Wishlist = ({navigation, dispatch}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [selectedTab, setSelectedTab] = useState('1');
+  const [courseData, setCourseData] = useState([]);
+  const [productData, setProductData] = useState([]);
   const [tabs, setTabs] = useState([
     {
       id: '1',
@@ -122,15 +124,64 @@ const Wishlist = ({navigation, dispatch}) => {
     },
   ]);
 
+  useEffect(() => {
+    getAllType()
+  }, [])
+  const getAllType = async (type = '1') => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append("type", type)
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ALL_TYPE_LISTING,
+        formdata
+      );
+      console.log('getAllType resp', resp?.data);
+      if (resp?.data?.status) {
+        type === '1' ? setCourseData(resp?.data?.data) : setProductData(resp?.data?.data)
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getAllType', error);
+    }
+    setShowLoader(false);
+  };
+  const onLike = async () => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append("type", "1");
+    formdata.append("id", "2");
+    formdata.append("status", "1");
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.LIKE_OBJECT_TYPE,
+        formdata
+      );
+      console.log('onLike resp', resp?.data);
+      if (resp?.data?.status) {
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in onLike', error);
+    }
+    setShowLoader(false);
+  };
+
   const changeSelectedTab = id => {
     setSelectedTab(id);
+    getAllType(id)
   };
 
   const renderCourse = ({item}) => {
     return (
       <View style={styles.courseContainer}>
         <ImageBackground
-          source={item.courseImg}
+          // source={item.courseImg}
+          source={{uri: item.certificates_image}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
           <TouchableOpacity>
@@ -139,7 +190,7 @@ const Wishlist = ({navigation, dispatch}) => {
         </ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText
-            text={item.courseName}
+            text={item.title}
             fontFamily="regular"
             fontSize={13}
             textColor={Colors.LIGHT_GREY}
@@ -149,7 +200,7 @@ const Wishlist = ({navigation, dispatch}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={item.courseRating}
+                text={item.rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -163,7 +214,7 @@ const Wishlist = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={item.creatorName}
+                text={'Max Bryant'}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -174,7 +225,7 @@ const Wishlist = ({navigation, dispatch}) => {
           </View>
           <View style={styles.bottomRow}>
             <MyText
-              text={'$' + item.courseFee}
+              text={'$' + item.course_fee}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -182,7 +233,7 @@ const Wishlist = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image source={require('assets/images/heart-selected.png')} />
+              <Image source={item.isLike ? require('assets/images/heart-selected.png') : require('assets/images/heart-yellow-outline.png')} style={{width: 14, height: 14}} />
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}
@@ -290,7 +341,8 @@ const Wishlist = ({navigation, dispatch}) => {
           </View>
           {selectedTab === '1' ? (
             <FlatList
-              data={courseList}
+              // data={courseList}
+              data={courseData}
               style={{marginTop: 28}}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderCourse}

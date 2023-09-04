@@ -60,6 +60,7 @@ const CustomDrawer = ({navigation}) => {
         userToken,
         Service.LOGOUTS,
       );
+      console.log('logout resp', resp);
       if (resp?.data?.status) {
         closeDrawer();
         navigation.dispatch(gotoWelcome)

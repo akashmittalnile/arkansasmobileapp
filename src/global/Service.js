@@ -25,6 +25,8 @@ export const RESEND_OTP = `resend-otp`;
 export const FORGET_PASSWORD = `forget-password`;
 export const FORGET_PASSWORD_VERIFY = `forget-password-verify`;
 export const LOGOUT = `logout`;
+export const ALL_TYPE_LISTING = `all-type-listing`;
+export const LIKE_OBJECT_TYPE = `like-object-type`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

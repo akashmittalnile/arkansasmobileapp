@@ -50,7 +50,6 @@ const Splash = ({navigation}) => {
           dispatch(setUserNotifications(JSON.parse(notifications)));
         }
       }
-      const userData = JSON.parse(userInfo);
       console.log('userData', userData);
       if (userData) {
         dispatch(setUserToken(userToken));

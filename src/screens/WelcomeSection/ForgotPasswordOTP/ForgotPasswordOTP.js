@@ -31,6 +31,7 @@ const ForgotPasswordOTP = ({navigation, route}) => {
   //variables : redux variables
   const [email, setEmail] = useState('');
   const dispatch = useDispatch();
+  const [correctOtp, setCorrectOtp] =  useState(route?.params?.otp)
   const [firstCode, setFirstCode] = useState('');
   const [secondCode, setSecondCode] = useState('');
   const [thirdCode, setThirdCode] = useState('');
@@ -46,15 +47,21 @@ const ForgotPasswordOTP = ({navigation, route}) => {
   const gotoForgotPasswordChange = () => {
     navigation.navigate(ScreenNames.FORGOT_PASSWORD_CHANGE);
   };
-  const handleValidateOtp = async () => {
+  const Validation = () => {
     if(firstCode === '' && secondCode === '' && thirdCode === '' && forthCode === ''){
       Toast.show('Please enter Verification Code', Toast.SHORT);
-      return;
+      return false;
     }
     else if (firstCode === '' || secondCode === '' || thirdCode === '' || forthCode === '') {
       Toast.show('Please enter complete Verification Code', Toast.SHORT);
-      return;
+      return false;
+    } else if ((firstCode + secondCode + thirdCode + forthCode) !== correctOtp) {
+      Toast.show('Verification Code is incorrect', Toast.SHORT);
+      return false;
     }
+  }
+  const handleValidateOtp = async () => {
+    
     setShowLoader(true);
     try {
       const postData = new FormData();
@@ -83,6 +90,7 @@ const ForgotPasswordOTP = ({navigation, route}) => {
       const resp = await Service.postApi(Service.RESEND_OTP, postData);
       console.log('handleResendOtp resp', resp?.data);
       if (resp?.data?.status) {
+        setCorrectOtp(resp.data.code)
         Toast.show(resp.data.message, Toast.SHORT);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);

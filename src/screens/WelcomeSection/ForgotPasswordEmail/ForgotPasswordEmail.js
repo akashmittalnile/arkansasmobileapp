@@ -34,8 +34,8 @@ const ForgotPasswordEmail = ({navigation}) => {
   const dispatch = useDispatch();
 
   //function : navigation function
-  const gotoForgotPasswordOTP = () => {
-    navigation.navigate(ScreenNames.FORGOT_PASSWORD_OTP, {email});
+  const gotoForgotPasswordOTP = (otp) => {
+    navigation.navigate(ScreenNames.FORGOT_PASSWORD_OTP, {email, otp});
   };
   const handleForgotPasswrord = async () => {
     if (email?.trim()?.length === 0) {
@@ -50,7 +50,7 @@ const ForgotPasswordEmail = ({navigation}) => {
       console.log('handleForgotPasswrord resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show(resp.data.message, Toast.SHORT);
-        gotoForgotPasswordOTP();
+        gotoForgotPasswordOTP(resp.data.message);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }

@@ -23,7 +23,7 @@ export const TRENDING_COURSE = `trending-course`;
 export const VERIFY_OTP = `verify-otp`;
 export const RESEND_OTP = `resend-otp`;
 export const FORGET_PASSWORD_VERIFY = `forget-password-verify`;
-export const LOGOUTS = `logouts`;
+export const LOGOUT = `logout`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

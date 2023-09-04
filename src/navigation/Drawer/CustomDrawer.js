@@ -58,9 +58,10 @@ const CustomDrawer = ({navigation}) => {
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        Service.LOGOUTS,
+        Service.LOGOUT,
+        {}
       );
-      console.log('logout resp', resp);
+      console.log('logout resp', resp?.data);
       if (resp?.data?.status) {
         closeDrawer();
         navigation.dispatch(gotoWelcome)

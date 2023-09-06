@@ -44,18 +44,18 @@ const BillingTab = ({cardList, deleteCard, openAddCardModal}) => {
         onPress={openAddCardModal}
       />
       {cardList?.map(item => (
-        <View key={item.id} style={[styles.cardContainer]}>
+        <View key={item.card_id} style={[styles.cardContainer]}>
           <View style={styles.cardContainerLeftRow}>
-            <Image source={item.img} style={{}} />
+            <Image source={{uri: item.card_image}} style={{height: 20, width: 20}} />
             <View style={{marginLeft: 12}}>
               <MyText
-                text={'**** **** **** ' + item.cardNum.slice(-5)}
+                text={'**** **** **** ' + item.card_number.slice(-5)}
                 fontSize={16}
                 fontFamily="medium"
                 textColor={'#261313'}
               />
               <MyText
-                text={`Expires ${item.expires}`}
+                text={`Expires ${item.valid_upto}`}
                 fontSize={14}
                 fontFamily="light"
                 textColor={Colors.LIGHT_GREY}
@@ -64,7 +64,7 @@ const BillingTab = ({cardList, deleteCard, openAddCardModal}) => {
           </View>
           <TouchableOpacity
             onPress={() => {
-              deleteCard(item.id);
+              deleteCard(item.card_id);
             }}>
             <Image source={require('assets/images/trash.png')} />
           </TouchableOpacity>

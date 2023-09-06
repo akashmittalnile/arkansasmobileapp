@@ -146,20 +146,7 @@ const Profile = ({navigation, dispatch}) => {
   // notifications tab states
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   // billing tab states
-  const [cardList, setCardList] = useState([
-    {
-      id: '1',
-      img: require('assets/images/mastercard.png'),
-      cardNum: '1111 1111 1111 5967',
-      expires: '24/22',
-    },
-    {
-      id: '2',
-      img: require('assets/images/visa.png'),
-      cardNum: '1111 1111 1111 5967',
-      expires: '24/22',
-    },
-  ]);
+  const [cardList, setCardList] = useState([]);
   const [showAddCardModal, setShowAddCardModal] = useState(false);
   const [showOrderStatusModal, setShowOrderStatusModal] = useState(false);
 
@@ -212,7 +199,9 @@ const Profile = ({navigation, dispatch}) => {
   }
   const setCertificatesTabData = (data) => {}
   const setNotificationsTabData = (data) => {}
-  const setBillingTabData = (data) => {}
+  const setBillingTabData = (data) => {
+    setCardList(data)
+  }
 
   const openAddCardModal = () => {
     setShowAddCardModal(true);

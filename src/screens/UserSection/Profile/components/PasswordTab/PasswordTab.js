@@ -40,7 +40,12 @@ const PasswordTab = ({
   setConfirmPassword,
   newPasswordRef,
   confirmPasswordRef,
+  onChangePassword
 }) => {
+  const onPressSave = async () => {
+    
+    await onChangePassword()
+  }
   return (
     <View style={{marginTop: 31}}>
       <NameEnterValue
@@ -82,6 +87,7 @@ const PasswordTab = ({
           marginBottom: 10,
           backgroundColor: Colors.THEME_GOLD,
         }}
+        onPress={onPressSave}
       />
       <MyButton
         text="CLEAR ALL"

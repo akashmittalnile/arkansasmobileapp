@@ -223,6 +223,52 @@ const Profile = ({navigation, dispatch}) => {
       getProfileData(id)
     }
   };
+  const changePasswordValidation = () => {
+    if (oldPassword?.trim()?.length === 0) {
+      Toast.show('Please enter Old Password', Toast.SHORT);
+      return false;
+    } else if (newPassword?.trim()?.length === 0) {
+      Toast.show('Please enter New Password', Toast.SHORT);
+      return false;
+    } else if (confirmPassword?.trim()?.length === 0) {
+      Toast.show('Please enter Confirm Password', Toast.SHORT);
+      return false;
+    } else if (confirmPassword !== newPassword) {
+      Toast.show('Confirm Password and New Password do not match', Toast.SHORT);
+      return false;
+    }
+    return true;
+  }
+  const onChangePassword = async () => {
+    if(!changePasswordValidation()){
+      return
+    }
+    const postData = new FormData();
+    postData.append('current_password', oldPassword);
+    postData.append('new_password', newPassword);
+    postData.append('password_confirmation', confirmPassword);
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.CHANGE_PASSWORD,
+        postData,
+      );
+      console.log('onChangePassword resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message, Toast.SHORT)
+        setOldPassword('')
+        setNewPassword('')
+        setConfirmPassword('')
+      }else{
+        Toast.show(resp?.data?.message, Toast.SHORT)
+      }
+    } catch (error) {
+      console.log('error in onChangePassword', error);
+    }
+    setShowLoader(false);
+    closeModal()
+  };
 
   const renderTab = ({item}) => {
     return (
@@ -329,6 +375,7 @@ const Profile = ({navigation, dispatch}) => {
                 setConfirmPassword={setConfirmPassword}
                 newPasswordRef={newPasswordRef}
                 confirmPasswordRef={confirmPasswordRef}
+                onChangePassword={onChangePassword}
               />
             ) : selectedTab == '3' ? (
               <CertificateTab certificateList={certificateList} />

@@ -30,14 +30,18 @@ const AddCard = ({visible, setVisibility}) => {
   const [thirdCode, setThirdCode] = useState('');
   const [forthCode, setForthCode] = useState('');
   const [message, setMessage] = useState('');
-  const [mmyy, setMmyy] = useState('');
+  const [mm, setMm] = useState('');
+  const [yy, setYy] = useState('');
   const [cvv, setCvv] = useState('');
   const [cardholdderName, setCardholdderName] = useState('');
   const firstCodeRef = useRef();
   const secondCodeRef = useRef();
   const thirdCodeRef = useRef();
   const forthCodeRef = useRef();
+  const mmRef = useRef();
+  const yyRef = useRef();
   const [isClickedSSNo, setIsClickedSSNo] = useState(false);
+  const [isClickedMMYY, setIsClickedMMYY] = useState(false);
   const navigation = useNavigation();
   //function : navigation function
   //function : modal function
@@ -45,36 +49,49 @@ const AddCard = ({visible, setVisibility}) => {
     setVisibility(false);
   };
   const addCardValidation = () => {
-    if(firstCode === '' && secondCode === '' && thirdCode === '' && forthCode === '' ){
-      Toast.show('Please enter Card Number', Toast.SHORT)
-      return false
-    } else if(firstCode?.length < 4 || secondCode?.length < 4 || thirdCode?.length < 4 || forthCode?.length < 4 ){
-      Toast.show('Please enter complete Card Number', Toast.SHORT)
-      return false
-    } else if(mmyy?.trim()?.length < 4){
-      Toast.show('Please enter month and year', Toast.SHORT)
-      return false
-    } else if(cardholdderName?.trim()?.length === 0){
-      Toast.show('Please enter Cardholder Name', Toast.SHORT)
-      return false
+    if (
+      firstCode === '' &&
+      secondCode === '' &&
+      thirdCode === '' &&
+      forthCode === ''
+    ) {
+      Toast.show('Please enter Card Number', Toast.SHORT);
+      return false;
+    } else if (
+      firstCode?.length < 4 ||
+      secondCode?.length < 4 ||
+      thirdCode?.length < 4 ||
+      forthCode?.length < 4
+    ) {
+      Toast.show('Please enter complete Card Number', Toast.SHORT);
+      return false;
+    } else if (mmyy?.trim()?.length < 4) {
+      Toast.show('Please enter month and year', Toast.SHORT);
+      return false;
+    } else if (cardholdderName?.trim()?.length === 0) {
+      Toast.show('Please enter Cardholder Name', Toast.SHORT);
+      return false;
     }
-    return true
-  }
+    return true;
+  };
   const onAddCard = async () => {
-    if(!addCardValidation()){
-      return
+    if (!addCardValidation()) {
+      return;
     }
-    const postData = new FormData()
-    postData.append('card_number', firstCode + secondCode + thirdCode + forthCode)
-    postData.append('valid_upto', mmyy)
-    postData.append('cvv', cvv)
-    postData.append('card_holder_name', cardholdderName)
+    const postData = new FormData();
+    postData.append(
+      'card_number',
+      firstCode + secondCode + thirdCode + forthCode,
+    );
+    postData.append('valid_upto', mmyy);
+    postData.append('cvv', cvv);
+    postData.append('card_holder_name', cardholdderName);
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
         Service.ADD_CARD,
-        {}
+        {},
       );
       console.log('onAddCard resp', resp?.data);
     } catch (error) {
@@ -244,16 +261,97 @@ const AddCard = ({visible, setVisibility}) => {
           )}
         </View>
         <View style={styles.mmyCvvRow}>
-          <MyTextInput
-            value={mmyy}
-            setValue={setMmyy}
-            placeholder={'MM/YYY'}
-            style={{width: '47%'}}
-            isIcon
-            icon={require('assets/images/mmyy.png')}
-            iconDefaultPosition="right"
-            maxLength={4}
-          />
+          <View style={[styles.flexRowView, {width: '47%'}]}>
+            {!isClickedMMYY ? (
+              <TouchableOpacity
+                onPress={() => setIsClickedMMYY(true)}
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginVertical: 10,
+                  paddingHorizontal: 20,
+                  marginBottom: 20,
+                  borderWidth: 1,
+                  borderColor: '#E0E0E0',
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  height: 58,
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 3,
+                  },
+                  shadowRadius: 5,
+                  shadowOpacity: 0.05,
+                  elevation: 2,
+                }}>
+                <MyText text={`MM/YY`} textColor="#8F93A0" style={{}} />
+                <Image source={require('assets/images/mmyy.png')} />
+              </TouchableOpacity>
+            ) : (
+              <>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    backgroundColor: 'white',
+                    borderRadius: 5,
+                    height: 58,
+                    width: '100%',
+                    marginBottom: 15,
+                    paddingHorizontal: 20,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 3,
+                    },
+                    shadowRadius: 5,
+                    shadowOpacity: 0.05,
+                    elevation: 2,
+                  }}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <TextInput
+                      ref={mmRef}
+                      value={mm}
+                      onChangeText={text => {
+                        setMm(text);
+                        if (text.length == 2) {
+                          yyRef.current.focus();
+                        } else {
+                          mmRef.current.focus();
+                        }
+                      }}
+                      placeholder={'MM'}
+                      // style={{width: '35%'}}
+                      iconDefaultPosition="right"
+                      keyboardType="number-pad"
+                      maxLength={2}
+                    />
+                    <Text style={{color: Colors.LIGHT_GRAY}}>/</Text>
+                    <TextInput
+                      ref={yyRef}
+                      value={yy}
+                      onChangeText={text => {
+                        setYy(text);
+                        if (text.length == 2) {
+                          Keyboard.dismiss();
+                        }
+                      }}
+                      placeholder={'YY'}
+                      // style={{width: '35%'}}
+                      iconDefaultPosition="right"
+                      keyboardType="number-pad"
+                      maxLength={2}
+                    />
+                  </View>
+                  <Image source={require('assets/images/mmyy.png')} />
+                </View>
+              </>
+            )}
+          </View>
           <MyTextInput
             value={cvv}
             setValue={setCvv}

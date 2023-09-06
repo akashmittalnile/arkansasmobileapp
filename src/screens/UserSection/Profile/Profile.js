@@ -366,6 +366,9 @@ const Profile = ({navigation, dispatch}) => {
         <AddCard
           visible={showAddCardModal}
           setVisibility={setShowAddCardModal}
+          setShowLoader={setShowLoader}
+          userToken={userToken}
+          getProfileData={getProfileData}
         />
         <OrderStatus
           visible={showOrderStatusModal}

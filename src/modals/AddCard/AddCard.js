@@ -22,8 +22,9 @@ import MyButton from '../../components/MyButton/MyButton';
 import {width} from '../../global/Constant';
 import MyTextInput from '../../components/MyTextInput/MyTextInput';
 import Toast from 'react-native-simple-toast';
+import { Service } from '../../global/Index';
 
-const AddCard = ({visible, setVisibility}) => {
+const AddCard = ({visible, setVisibility, setShowLoader, userToken, getProfileData}) => {
   //variables : navigation
   const [firstCode, setFirstCode] = useState('');
   const [secondCode, setSecondCode] = useState('');
@@ -65,8 +66,11 @@ const AddCard = ({visible, setVisibility}) => {
     ) {
       Toast.show('Please enter complete Card Number', Toast.SHORT);
       return false;
-    } else if (mmyy?.trim()?.length < 4) {
-      Toast.show('Please enter month and year', Toast.SHORT);
+    } else if (mm?.trim()?.length < 2) {
+      Toast.show('Please enter month', Toast.SHORT);
+      return false;
+    } else if (mm?.trim()?.length < 2) {
+      Toast.show('Please enter year', Toast.SHORT);
       return false;
     } else if (cardholdderName?.trim()?.length === 0) {
       Toast.show('Please enter Cardholder Name', Toast.SHORT);
@@ -83,7 +87,7 @@ const AddCard = ({visible, setVisibility}) => {
       'card_number',
       firstCode + secondCode + thirdCode + forthCode,
     );
-    postData.append('valid_upto', mmyy);
+    postData.append('valid_upto', mm + '/' + yy);
     postData.append('cvv', cvv);
     postData.append('card_holder_name', cardholdderName);
     setShowLoader(true);
@@ -91,13 +95,20 @@ const AddCard = ({visible, setVisibility}) => {
       const resp = await Service.postApiWithToken(
         userToken,
         Service.ADD_CARD,
-        {},
+        postData,
       );
       console.log('onAddCard resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message, Toast.SHORT)
+        getProfileData('5')
+      }else{
+        Toast.show(resp?.data?.message, Toast.SHORT)
+      }
     } catch (error) {
       console.log('error in onAddCard', error);
     }
     setShowLoader(false);
+    closeModal()
   };
   //UI
   return (
@@ -109,6 +120,19 @@ const AddCard = ({visible, setVisibility}) => {
         setVisibility(false);
       }}
       scrollTo={() => {}}
+      onModalWillHide={()=>{
+        setFirstCode('')
+        setSecondCode('')
+        setThirdCode('')
+        setForthCode('')
+        setMessage('')
+        setMm('')
+        setYy('')
+        setCvv('')
+        setCardholdderName('')
+        setIsClickedSSNo(false)
+        setIsClickedMMYY(false)
+      }}
       scrollOffset={1}
       propagateSwipe={true}
       coverScreen={false}
@@ -359,8 +383,9 @@ const AddCard = ({visible, setVisibility}) => {
             style={{width: '47%'}}
             isIcon
             icon={require('assets/images/cvv.png')}
+            keyboardType="number-pad"
             iconDefaultPosition="right"
-            maxLength={2}
+            maxLength={3}
           />
         </View>
         <MyTextInput
@@ -375,7 +400,8 @@ const AddCard = ({visible, setVisibility}) => {
             marginBottom: 10,
             backgroundColor: Colors.THEME_BROWN,
           }}
-          onPress={closeModal}
+          // onPress={closeModal}
+          onPress={onAddCard}
         />
       </View>
       {/* </KeyboardAvoidingView> */}

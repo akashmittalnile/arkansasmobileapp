@@ -163,6 +163,57 @@ const Profile = ({navigation, dispatch}) => {
   const [showAddCardModal, setShowAddCardModal] = useState(false);
   const [showOrderStatusModal, setShowOrderStatusModal] = useState(false);
 
+  // profile tab refs
+  const lastNameRef = useRef(null);
+  const emailRef = useRef(null);
+  const companyRef = useRef(null);
+  const professionalTitleRef = useRef(null);
+  const timezoneRef = useRef(null);
+  // password tab refs
+  const newPasswordRef = useRef(null);
+  const confirmPasswordRef = useRef(null);
+
+  useEffect(() => {
+    console.log('userToken', userToken);
+    getProfileData();
+  }, []);
+  const getProfileData = async (id = '1') => {
+    const endPoint = getEndpoint(id)
+    console.log('endPoint', endPoint);
+    setShowLoader(true);
+    try {
+      const resp = await Service.getApiWithToken(userToken, endPoint);
+      console.log('getProfileData resp', resp?.data);
+      if (resp?.data?.status) {
+        if(id === '1'){
+          setProfileTabData(resp?.data?.data)
+        } else if(id === '3'){
+          setCertificatesTabData(resp?.data?.data)
+        } else if(id === '4'){
+          setNotificationsTabData(resp?.data?.data)
+        } else if(id === '5'){
+          setBillingTabData(resp?.data?.data)
+        }
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getProfileData', error);
+    }
+    setShowLoader(false);
+  };
+  const setProfileTabData = (data) => {
+    setFirstName(data?.first_name)
+    setLastName(data?.last_name)
+    setEmail(data?.email)
+    setCompany(data?.company)
+    setProfessionalTitle(data?.professional_title)
+    setTimezone(data?.timezone)
+  }
+  const setCertificatesTabData = (data) => {}
+  const setNotificationsTabData = (data) => {}
+  const setBillingTabData = (data) => {}
+
   const openAddCardModal = () => {
     setShowAddCardModal(true);
   };
@@ -177,18 +228,11 @@ const Profile = ({navigation, dispatch}) => {
     // setSelectedCard(id);
   };
 
-  // profile tab refs
-  const lastNameRef = useRef(null);
-  const emailRef = useRef(null);
-  const companyRef = useRef(null);
-  const professionalTitleRef = useRef(null);
-  const timezoneRef = useRef(null);
-  // password tab refs
-  const newPasswordRef = useRef(null);
-  const confirmPasswordRef = useRef(null);
-
   const changeSelectedTab = id => {
     setSelectedTab(id);
+    if(id !== '2'){
+      getProfileData(id)
+    }
   };
 
   const renderTab = ({item}) => {
@@ -335,3 +379,17 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 export default connect(null, mapDispatchToProps)(Profile);
+
+const getEndpoint = (id) => {
+  let endPoint = ''
+    if(id === '1'){
+      endPoint = Service.PROFILE
+    } else if(id === '3'){
+      endPoint = Service.CERTIFICATES
+    } else if(id === '4'){
+      endPoint = Service.NOTIFICATIONS
+    } else if(id === '5'){
+      endPoint = Service.SAVE_CARD_LISTING
+    }
+    return endPoint
+}

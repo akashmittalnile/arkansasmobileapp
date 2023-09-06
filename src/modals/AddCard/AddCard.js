@@ -21,6 +21,7 @@ import Modal from 'react-native-modal';
 import MyButton from '../../components/MyButton/MyButton';
 import {width} from '../../global/Constant';
 import MyTextInput from '../../components/MyTextInput/MyTextInput';
+import Toast from 'react-native-simple-toast';
 
 const AddCard = ({visible, setVisibility}) => {
   //variables : navigation
@@ -42,6 +43,44 @@ const AddCard = ({visible, setVisibility}) => {
   //function : modal function
   const closeModal = () => {
     setVisibility(false);
+  };
+  const addCardValidation = () => {
+    if(firstCode === '' && secondCode === '' && thirdCode === '' && forthCode === '' ){
+      Toast.show('Please enter Card Number', Toast.SHORT)
+      return false
+    } else if(firstCode?.length < 4 || secondCode?.length < 4 || thirdCode?.length < 4 || forthCode?.length < 4 ){
+      Toast.show('Please enter complete Card Number', Toast.SHORT)
+      return false
+    } else if(mmyy?.trim()?.length < 4){
+      Toast.show('Please enter month and year', Toast.SHORT)
+      return false
+    } else if(cardholdderName?.trim()?.length === 0){
+      Toast.show('Please enter Cardholder Name', Toast.SHORT)
+      return false
+    }
+    return true
+  }
+  const onAddCard = async () => {
+    if(!addCardValidation()){
+      return
+    }
+    const postData = new FormData()
+    postData.append('card_number', firstCode + secondCode + thirdCode + forthCode)
+    postData.append('valid_upto', mmyy)
+    postData.append('cvv', cvv)
+    postData.append('card_holder_name', cardholdderName)
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ADD_CARD,
+        {}
+      );
+      console.log('onAddCard resp', resp?.data);
+    } catch (error) {
+      console.log('error in onAddCard', error);
+    }
+    setShowLoader(false);
   };
   //UI
   return (

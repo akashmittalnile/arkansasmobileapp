@@ -43,33 +43,46 @@ const BillingTab = ({cardList, deleteCard, openAddCardModal}) => {
         style={{marginTop: 25, marginBottom: 21}}
         onPress={openAddCardModal}
       />
-      {cardList?.map(item => (
-        <View key={item.card_id} style={[styles.cardContainer]}>
-          <View style={styles.cardContainerLeftRow}>
-            <Image source={{uri: item.card_image}} style={{height: 20, width: 20}} />
-            <View style={{marginLeft: 12}}>
-              <MyText
-                text={'**** **** **** ' + item.card_number.slice(-5)}
-                fontSize={16}
-                fontFamily="medium"
-                textColor={'#261313'}
+      {cardList?.length > 0 ? (
+        cardList?.map(item => (
+          <View key={item.card_id} style={[styles.cardContainer]}>
+            <View style={styles.cardContainerLeftRow}>
+              <Image
+                source={{uri: item.card_image}}
+                style={{height: 20, width: 20}}
               />
-              <MyText
-                text={`Expires ${item.valid_upto}`}
-                fontSize={14}
-                fontFamily="light"
-                textColor={Colors.LIGHT_GREY}
-              />
+              <View style={{marginLeft: 12}}>
+                <MyText
+                  text={'**** **** **** ' + item.card_number.slice(-5)}
+                  fontSize={16}
+                  fontFamily="medium"
+                  textColor={'#261313'}
+                />
+                <MyText
+                  text={`Expires ${item.valid_upto}`}
+                  fontSize={14}
+                  fontFamily="light"
+                  textColor={Colors.LIGHT_GREY}
+                />
+              </View>
             </View>
+            <TouchableOpacity
+              onPress={() => {
+                deleteCard(item.card_id);
+              }}>
+              <Image source={require('assets/images/trash.png')} />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              deleteCard(item.card_id);
-            }}>
-            <Image source={require('assets/images/trash.png')} />
-          </TouchableOpacity>
-        </View>
-      ))}
+        ))
+      ) : (
+        <MyText
+          text={`No saved cards found`}
+          fontSize={18}
+          fontFamily="regular"
+          textColor={Colors.THEME_BROWN}
+          style={{textAlign:'center'}}
+        />
+      )}
     </View>
   );
 };

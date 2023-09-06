@@ -103,7 +103,7 @@ const MyHeader = ({
                 letterSpacing={-0.12}
               />
               <MyText
-                text={'Katy Perry'}
+                text={`${userInfo?.first_name} ${userInfo?.last_name}`}
                 fontFamily="regular"
                 fontSize={20}
                 textColor={Colors.THEME_GOLD}

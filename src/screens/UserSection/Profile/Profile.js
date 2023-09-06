@@ -263,7 +263,7 @@ const Profile = ({navigation, dispatch}) => {
               <Image source={{uri: personImg}} style={styles.personImg} />
               <View style={{marginLeft: 17}}>
                 <MyText
-                  text={'Katy Perry'}
+                  text={`${userInfo?.first_name} ${userInfo?.last_name}`}
                   fontFamily="bold"
                   fontSize={18}
                   textColor={Colors.THEME_GOLD}
@@ -271,7 +271,7 @@ const Profile = ({navigation, dispatch}) => {
                 <View style={styles.contactRow}>
                   <Image source={require('assets/images/email-profile.png')} />
                   <MyText
-                    text={'Katty@gmail.com'}
+                    text={userInfo?.email}
                     fontFamily="regular"
                     fontSize={14}
                     textColor={Colors.LIGHT_GREY}
@@ -281,7 +281,7 @@ const Profile = ({navigation, dispatch}) => {
                 <View style={styles.contactRow}>
                   <Image source={require('assets/images/phone-profile.png')} />
                   <MyText
-                    text={'+91-7859525710'}
+                    text={`+1-${userInfo?.phone}`}
                     fontFamily="regular"
                     fontSize={14}
                     textColor={Colors.LIGHT_GREY}

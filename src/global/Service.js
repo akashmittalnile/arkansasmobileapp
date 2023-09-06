@@ -27,6 +27,14 @@ export const FORGET_PASSWORD_VERIFY = `forget-password-verify`;
 export const LOGOUT = `logout`;
 export const ALL_TYPE_LISTING = `all-type-listing`;
 export const LIKE_OBJECT_TYPE = `like-object-type`;
+export const ALL_CATEGORY = `all-category`;
+export const PROFILE = `profile`;
+export const ADD_CARD = `add-card`;
+export const DELETE_CARD = `delete-card`;
+export const SAVE_CARD_LISTING = `save-card-listing`;
+export const NOTIFICATIONS = `notifications`;
+export const CHANGE_PASSWORD = `change-password`;
+export const CERTIFICATES = `certificates`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

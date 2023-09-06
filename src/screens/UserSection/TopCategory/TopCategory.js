@@ -86,13 +86,33 @@ const TopCategory = ({navigation, dispatch}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [categoriesData, setCategoriesData] = useState([]);
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+  const getCategories = async () => {
+    setShowLoader(true);
+    try {
+      const resp = await Service.getApiWithToken(userToken, Service.ALL_CATEGORY);
+      console.log('getCategories resp', resp?.data);
+      if (resp?.data?.status) {
+        setCategoriesData(resp?.data?.data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getCategories', error);
+    }
+    setShowLoader(false);
+  };
 
   const renderCategory = ({item}) => {
     return (
       <View style={styles.categoryContainer}>
-        <Image source={item.img} style={styles.catImg} />
+        <Image source={{uri: item.category_image}} style={styles.catImg} />
         <MyText
-          text={item.name}
+          text={item.category_name}
           fontFamily="regular"
           fontSize={13}
           textAlign="center"
@@ -123,7 +143,7 @@ const TopCategory = ({navigation, dispatch}) => {
             // }}
           />
           <FlatList
-            data={topCategories}
+            data={categoriesData}
             numColumns={3}
             style={{marginTop: 37}}
             keyExtractor={(item, index) => index.toString()}

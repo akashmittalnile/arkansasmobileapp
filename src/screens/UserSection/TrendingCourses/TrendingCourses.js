@@ -110,7 +110,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
     return (
       <View style={styles.courseContainer}>
         <ImageBackground
-          source={{uri: item.certificates_image}}
+          source={{uri: item.introduction_image}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
           <TouchableOpacity>

@@ -78,6 +78,54 @@ const SuggestedCourses = ({navigation, dispatch}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [courseData, setCourseData] = useState([]);
+
+  useEffect(() => {
+    getSuggestedCourses();
+  }, []);
+  const getSuggestedCourses = async () => {
+    const postData = new FormData()
+    postData.append('type', 1)
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(userToken, Service.SUGGESTED_LIST, postData);
+      console.log('getSuggestedCourses resp', resp?.data);
+      if (resp?.data?.status) {
+        setCourseData(resp?.data?.data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getSuggestedCourses', error);
+    }
+    setShowLoader(false);
+  };
+
+  const onLike = async (type, id, status) => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append("type", type);
+    formdata.append("id", id);
+    formdata.append("status", status === '1' ? '0' : '1');
+    console.log('onLike formdata', formdata);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.LIKE_OBJECT_TYPE,
+        formdata
+      );
+      console.log('onLike resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.Message, Toast.SHORT);
+        getSuggestedCourses()
+      } else {
+        Toast.show(resp.data.Message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in onLike', error);
+    }
+    setShowLoader(false);
+  };
 
   const changeSelectedTab = id => {
     setSelectedTab(id);
@@ -87,7 +135,7 @@ const SuggestedCourses = ({navigation, dispatch}) => {
     return (
       <View style={styles.courseContainer}>
         <ImageBackground
-          source={item.courseImg}
+          source={{uri: item.introduction_image}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
           <TouchableOpacity>
@@ -96,7 +144,7 @@ const SuggestedCourses = ({navigation, dispatch}) => {
         </ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText
-            text={item.courseName}
+            text={item.title}
             fontFamily="regular"
             fontSize={13}
             textColor={Colors.LIGHT_GREY}
@@ -106,7 +154,7 @@ const SuggestedCourses = ({navigation, dispatch}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={item.courseRating}
+                text={item.rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -120,7 +168,7 @@ const SuggestedCourses = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={item.creatorName}
+                text={'Max Byrant'}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -131,7 +179,7 @@ const SuggestedCourses = ({navigation, dispatch}) => {
           </View>
           <View style={styles.bottomRow}>
             <MyText
-              text={'$' + item.courseFee}
+              text={'$' + item.course_fee}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -139,7 +187,9 @@ const SuggestedCourses = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image source={require('assets/images/heart-selected.png')} />
+            <TouchableOpacity onPress={()=>{onLike('1', item.id, item.isLike)}}>
+              <Image source={item.isLike ? require('assets/images/heart-selected.png') : require('assets/images/heart-yellow-outline.png')} />
+            </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}
@@ -172,7 +222,7 @@ const SuggestedCourses = ({navigation, dispatch}) => {
             // }}
           />
           <FlatList
-            data={courseList}
+            data={courseData}
             style={{marginTop: 28}}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderCourse}

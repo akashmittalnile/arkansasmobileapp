@@ -35,6 +35,7 @@ import Divider from 'components/Divider/Divider';
 import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import ViewAll from '../../../components/ViewAll/ViewAll';
+import {createThumbnail} from 'react-native-create-thumbnail';
 
 const courseTypes = [
   {name: 'All', id: '1'},
@@ -170,7 +171,7 @@ const Home = ({navigation, dispatch}) => {
       const resp = await Service.getApiWithToken(userToken, Service.HOME);
       console.log('getHomeData resp', resp);
       if (resp?.data?.status) {
-        setHomeData(resp?.data?.data);
+        setHomeData(generateThumb(resp?.data?.data));
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
@@ -179,6 +180,54 @@ const Home = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
+
+  const generateThumb = async data => {
+    console.log('generateThumb');
+    try {
+      data.trending_course = await Promise.all(
+        data?.trending_course?.map?.(async el => {
+          if (!el.certificates_image?.endsWith('.mp4')) {
+            return el;
+          } else {
+            const thumb = await createThumbnail({
+              url: el.certificates_image,
+              timeStamp: 1000,
+            });
+            return {
+              ...el,
+              thumb,
+            };
+          }
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+    try {
+      data.suggested_course = await Promise.all(
+        data?.suggested_course?.map?.(async el => {
+          if (!el.certificates_image?.endsWith('.mp4')) {
+            return el;
+          } else {
+            const thumb = await createThumbnail({
+              url: el.certificates_image,
+              timeStamp: 1000,
+            });
+            return {
+              ...el,
+              thumb,
+            };
+          }
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+
+    console.log('thumb data', data);
+    return data;
+  };
+
   const gotoTrendingCourses = () => {
     navigation.navigate(ScreenNames.TRENDING_COURSES);
   };

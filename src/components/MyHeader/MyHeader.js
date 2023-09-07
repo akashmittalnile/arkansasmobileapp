@@ -1,5 +1,5 @@
 //import : react components
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, TouchableOpacity, Image, Keyboard} from 'react-native';
 import {
   DrawerActions,
@@ -36,30 +36,23 @@ const MyHeader = ({
   const userInfo = useSelector(state => state.user.userInfo);
   const userToken = useSelector(state => state.user.userToken);
   const userNotifications = useSelector(state => state.user.userNotifications);
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const checkTokenExpired = async () => {
-  //       try {
-  //         // console.log('header userToken', userToken);
-  //         const resp = await Service.postApiWithToken(
-  //           userToken,
-  //           Service.CHECK_TOKEN_EXPIRY,
-  //           {},
-  //         );
-  //         if (!resp?.data?.status) {
-  //           Toast.show('Please login again', Toast.SHORT);
-  //           await AsyncStorage.clear();
-  //           dispatch(logOutUser());
-  //           navigation.dispatch(resetIndexGoToWelcome);
-  //         }
-  //       } catch (error) {
-  //         console.log('error in checkTokenExpired', error);
-  //       }
-  //     };
-  //     checkTokenExpired();
-  //     return () => {};
-  //   }, []),
-  // );
+  const [greetingMsg, setGreetingMsg] = useState('')
+
+  useEffect(() => {
+    getGreetingMessage()
+  }, [])
+
+  const getGreetingMessage = () => {
+    const now = new Date();
+    const hrs = now.getHours();
+    let msg = "";
+
+    if (hrs >= 0) msg = "Good Morning,";
+    if (hrs >= 12) msg = "Good Afternoon,";
+    if (hrs >= 16) msg = "Good Evening,";    
+    setGreetingMsg(msg)
+  }
+
   const resetIndexGoToWelcome = CommonActions.reset({
     index: 1,
     routes: [{name: ScreenNames.WELCOME}],
@@ -96,7 +89,8 @@ const MyHeader = ({
             />
             <View style={{marginLeft: 10}}>
               <MyText
-                text={'Good Afternoon,'}
+                // text={'Good Afternoon,'}
+                text={greetingMsg}
                 fontFamily="regular"
                 fontSize={12}
                 textColor="white"

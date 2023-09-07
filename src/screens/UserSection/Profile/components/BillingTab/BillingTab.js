@@ -68,7 +68,14 @@ const BillingTab = ({cardList, deleteCard, openAddCardModal}) => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                deleteCard(item.card_id);
+                Alert.alert('Delete Card', 'Are you sure you want to delee this card?', [
+                  {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                  {text: 'OK', onPress: () => deleteCard(item.card_id)},
+                ]);
               }}>
               <Image source={require('assets/images/trash.png')} />
             </TouchableOpacity>

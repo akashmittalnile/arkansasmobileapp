@@ -210,11 +210,27 @@ const Profile = ({navigation, dispatch}) => {
     setShowOrderStatusModal(true);
   };
 
-  const deleteCard = id => {
-    const cardListCopy = [...cardList];
-    const updatedData = cardListCopy.filter(el => el.id !== id);
-    setCardList([...updatedData]);
-    // setSelectedCard(id);
+  const deleteCard = async (id) => {
+    const postData = new FormData()
+    postData.append('id', id)
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.DELETE_CARD,
+        postData,
+      );
+      console.log('deleteCard resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message, Toast.SHORT)
+        getProfileData('5')
+      }else{
+        Toast.show(resp?.data?.message, Toast.SHORT)
+      }
+    } catch (error) {
+      console.log('error in deleteCard', error);
+    }
+    setShowLoader(false);
   };
 
   const changeSelectedTab = id => {

@@ -161,6 +161,7 @@ const Home = ({navigation, dispatch}) => {
   const [trendingCourses, setTrendingCourses] = useState([]);
 
   useEffect(() => {
+    console.log('userToken', userToken);
     getHomeData();
   }, []);
   const getHomeData = async () => {
@@ -612,8 +613,8 @@ const Home = ({navigation, dispatch}) => {
             <View>
               <ViewAll
                 text="Suggested Products"
-                onPress={gotoSuggestedCourses}
-                // onPress={gotoSuggestedProducts}
+                // onPress={gotoSuggestedCourses}
+                onPress={gotoSuggestedProducts}
                 style={{marginTop: 25}}
               />
               <FlatList

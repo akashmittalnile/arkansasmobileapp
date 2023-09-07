@@ -98,6 +98,8 @@ const MyOrders = ({navigation, dispatch}) => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [selectedTab, setSelectedTab] = useState('1');
+  const [selectedId, setSelectedId] = useState('1');
+  const [selectedType, setSelectedType] = useState(null);
   const [review, setReview] = useState('');
   const [tabs, setTabs] = useState([
     {
@@ -151,7 +153,7 @@ const MyOrders = ({navigation, dispatch}) => {
   const [selectedSubject, setSelectedSubject] = useState('1');
   const [selectedDateUploaded, setSelectedDateUploaded] = useState('1');
   const [multiSliderValue, setMultiSliderValue] = useState([0, 5000]);
-  const [starRating, setStarRating] = useState(3);
+  const [starRating, setStarRating] = useState(1);
 
   const multiSliderValuesChange = values => {
     setMultiSliderValue(values);
@@ -160,7 +162,9 @@ const MyOrders = ({navigation, dispatch}) => {
   const openOrdersFilterModal = () => {
     setShowOrdersFilterModal(true);
   };
-  const openReviewModal = () => {
+  const openReviewModal = (id, type) => {
+    setSelectedId(id)
+    setSelectedType(type)
     setShowReviewModal(true);
   };
 
@@ -184,6 +188,36 @@ const MyOrders = ({navigation, dispatch}) => {
 
   const gotoStartCourse = () => {
     navigation.navigate(ScreenNames.START_COURSE);
+  };
+
+  const submitReview = async () => {
+    if(review?.trim()?.length === 0){
+      Toast.show('Please enter review')
+      return
+    }
+    const postData = new FormData()
+    postData.append('id', selectedId)
+    postData.append('type', selectedType)
+    postData.append('message', review)
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.SUBMIT_REVIEW,
+        postData,
+      );
+      console.log('submitReview resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message, Toast.SHORT)
+        setStarRating(1)
+        setReview('')
+      }else{
+        Toast.show(resp?.data?.message, Toast.SHORT)
+      }
+    } catch (error) {
+      console.log('error in submitReview', error);
+    }
+    setShowLoader(false);
   };
 
   const renderCourse = ({item}) => {
@@ -272,7 +306,7 @@ const MyOrders = ({navigation, dispatch}) => {
                   marginTop: 8,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                onPress={openReviewModal}
+                onPress={()=>openReviewModal(item?.id, '1')}
               />
             ) : null}
             {/* <View style={styles.bottomRow}>
@@ -396,7 +430,7 @@ const MyOrders = ({navigation, dispatch}) => {
                   marginTop: 8,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                onPress={openReviewModal}
+                onPress={()=>openReviewModal(item?.id, '2')}
               />
             ) : null}
           </View>
@@ -498,6 +532,7 @@ const MyOrders = ({navigation, dispatch}) => {
           setStarRating={setStarRating}
           review={review}
           setReview={setReview}
+          submitReview={submitReview}
         />
       </View>
     </SafeAreaView>

@@ -35,6 +35,8 @@ export const SAVE_CARD_LISTING = `save-card-listing`;
 export const NOTIFICATIONS = `notifications`;
 export const CHANGE_PASSWORD = `change-password`;
 export const CERTIFICATES = `certificates`;
+export const SUBMIT_REVIEW = `submit-review`;
+export const OBJECT_TYPE_DETAILS = `object-type-details`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

@@ -28,6 +28,7 @@ const Review = ({
   setStarRating,
   review,
   setReview,
+  submitReview
 }) => {
   //variables : navigation
   const navigation = useNavigation();
@@ -57,6 +58,7 @@ const Review = ({
       </View>
     );
   };
+
   //UI
   return (
     <Modal
@@ -108,7 +110,7 @@ const Review = ({
             marginBottom: 10,
             backgroundColor: Colors.THEME_BROWN,
           }}
-          onPress={closeModal}
+          onPress={submitReview}
         />
       </View>
       {/* </KeyboardAvoidingView> */}

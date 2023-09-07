@@ -78,6 +78,54 @@ const SuggestedProducts = ({navigation, dispatch}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [productData, setProductData] = useState([]);
+
+  useEffect(() => {
+    getSuggestedProducts();
+  }, []);
+  const getSuggestedProducts = async () => {
+    const postData = new FormData()
+    postData.append('type', 2)
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(userToken, Service.SUGGESTED_LIST, postData);
+      console.log('getSuggestedProducts resp', resp?.data);
+      if (resp?.data?.status) {
+        setProductData(resp?.data?.data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getSuggestedProducts', error);
+    }
+    setShowLoader(false);
+  };
+
+  const onLike = async (type, id, status) => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append("type", type);
+    formdata.append("id", id);
+    formdata.append("status", status === '1' ? '0' : '1');
+    console.log('onLike formdata', formdata);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.LIKE_OBJECT_TYPE,
+        formdata
+      );
+      console.log('onLike resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.Message, Toast.SHORT);
+        getSuggestedProducts()
+      } else {
+        Toast.show(resp.data.Message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in onLike', error);
+    }
+    setShowLoader(false);
+  };
 
   const renderProduct = ({item}) => {
     return (

@@ -78,6 +78,29 @@ const TrendingCourses = ({navigation, dispatch}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [courseData, setCourseData] = useState([]);
+
+  useEffect(() => {
+    getCourses();
+  }, []);
+  const getCourses = async () => {
+    const postData = new FormData()
+    postData.append('limit', 10)
+    // postData.append('tag', '')
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(userToken, Service.TRENDING_COURSE, postData);
+      console.log('getCourses resp', resp?.data);
+      if (resp?.data?.status) {
+        setCourseData(resp?.data?.data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getCourses', error);
+    }
+    setShowLoader(false);
+  };
 
   const changeSelectedTab = id => {
     setSelectedTab(id);
@@ -87,7 +110,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
     return (
       <View style={styles.courseContainer}>
         <ImageBackground
-          source={item.courseImg}
+          source={{uri: item.certificates_image}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
           <TouchableOpacity>
@@ -96,7 +119,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
         </ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText
-            text={item.courseName}
+            text={item.title}
             fontFamily="regular"
             fontSize={13}
             textColor={Colors.LIGHT_GREY}
@@ -106,7 +129,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={item.courseRating}
+                text={item.rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -120,7 +143,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={item.creatorName}
+                text={'Max Byrant'}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -131,7 +154,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
           </View>
           <View style={styles.bottomRow}>
             <MyText
-              text={'$' + item.courseFee}
+              text={'$' + item.course_fee}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -172,10 +195,19 @@ const TrendingCourses = ({navigation, dispatch}) => {
             // }}
           />
           <FlatList
-            data={courseList}
+            data={courseData}
             style={{marginTop: 28}}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderCourse}
+            ListEmptyComponent={()=>(
+              <MyText
+              text={`No Trending Courses found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
+            )}
           />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

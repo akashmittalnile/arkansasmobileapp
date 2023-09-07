@@ -47,7 +47,7 @@ const MyHeader = ({
     const hrs = now.getHours();
     let msg = "";
 
-    if (hrs >= 0) msg = "Good Morning,";
+    if (hrs >= 0 || hr == 24) msg = "Good Morning,";
     if (hrs >= 12) msg = "Good Afternoon,";
     if (hrs >= 16) msg = "Good Evening,";    
     setGreetingMsg(msg)

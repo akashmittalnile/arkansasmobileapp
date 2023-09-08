@@ -380,7 +380,7 @@ const Home = ({navigation, dispatch}) => {
             />
           </View>
         </View>
-        <ImageBackground source={item.courseImg} style={styles.crseImg}>
+        <ImageBackground source={{uri: item?.thumb?.path}} style={styles.crseImg}>
           <TouchableOpacity>
             <Image source={require('assets/images/play-icon.png')} />
           </TouchableOpacity>

@@ -33,6 +33,7 @@ import {width, height} from 'global/Constant';
 import Divider from 'components/Divider/Divider';
 // import {WebView} from 'react-native-webview';
 import MyButton from '../../../components/MyButton/MyButton';
+import {createThumbnail} from 'react-native-create-thumbnail';
 
 const courseList = [
   {
@@ -125,21 +126,26 @@ const Wishlist = ({navigation, dispatch}) => {
   ]);
 
   useEffect(() => {
-    getAllType()
-  }, [])
+    getAllType();
+  }, []);
   const getAllType = async (type = '1') => {
     setShowLoader(true);
     const formdata = new FormData();
-    formdata.append("type", type)
+    formdata.append('type', type);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
         Service.ALL_TYPE_LISTING,
-        formdata
+        formdata,
       );
       console.log('getAllType resp', resp?.data);
       if (resp?.data?.status) {
-        type === '1' ? setCourseData(resp?.data?.data) : setProductData(resp?.data?.data)
+        if (type === '1') {
+          const updatedData = await generateThumb(resp?.data?.data)
+          setCourseData(updatedData);
+        } else {
+          setProductData(resp?.data?.data);
+        }
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
@@ -148,23 +154,46 @@ const Wishlist = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
+  const generateThumb = async data => {
+    console.log('generateThumb');
+    let updatedData = []
+    try {
+      updatedData = await Promise.all(
+        data?.map?.(async el => {
+          console.log('el.introduction_video trending', el.introduction_video);
+          const thumb = await createThumbnail({
+            url: el.introduction_video,
+            timeStamp: 1000,
+          });
+          return {
+            ...el,
+            thumb,
+          };
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+    console.log('thumb data wishlist', updatedData);
+    return updatedData;
+  };
   const onLike = async (type, id, status) => {
     setShowLoader(true);
     const formdata = new FormData();
-    formdata.append("type", type);
-    formdata.append("id", id);
-    formdata.append("status", status === '1' ? '0' : '1');
+    formdata.append('type', type);
+    formdata.append('id', id);
+    formdata.append('status', status === '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
         Service.LIKE_OBJECT_TYPE,
-        formdata
+        formdata,
       );
       console.log('onLike resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show(resp.data.Message, Toast.SHORT);
-        getAllType(type)
+        getAllType(type);
       } else {
         Toast.show(resp.data.Message, Toast.SHORT);
       }
@@ -176,7 +205,7 @@ const Wishlist = ({navigation, dispatch}) => {
 
   const changeSelectedTab = id => {
     setSelectedTab(id);
-    getAllType(id)
+    getAllType(id);
   };
 
   const renderCourse = ({item}) => {
@@ -184,7 +213,7 @@ const Wishlist = ({navigation, dispatch}) => {
       <View style={styles.courseContainer}>
         <ImageBackground
           // source={item.courseImg}
-          source={{uri: item.certificates_image}}
+          source={{uri: item?.thumb?.path}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
           <TouchableOpacity>
@@ -236,8 +265,18 @@ const Wishlist = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <TouchableOpacity onPress={()=>{onLike('1', item.id, item.isLike)}} >
-                <Image source={item.isLike ? require('assets/images/heart-selected.png') : require('assets/images/heart-yellow-outline.png')} style={{width: 14, height: 14}} />
+              <TouchableOpacity
+                onPress={() => {
+                  onLike('1', item.id, item.isLike);
+                }}>
+                <Image
+                  source={
+                    item.isLike
+                      ? require('assets/images/heart-selected.png')
+                      : require('assets/images/heart-yellow-outline.png')
+                  }
+                  style={{width: 14, height: 14}}
+                />
               </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
@@ -252,7 +291,9 @@ const Wishlist = ({navigation, dispatch}) => {
   const renderProduct = ({item}) => {
     return (
       <View style={styles.courseContainer}>
-        <ImageBackground source={{uri: item.Product_image}} style={styles.crseImg}>
+        <ImageBackground
+          source={{uri: item.Product_image}}
+          style={styles.crseImg}>
           {/* <TouchableOpacity>
             <Image source={require('assets/images/play-icon.png')} />
           </TouchableOpacity> */}
@@ -302,9 +343,19 @@ const Wishlist = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-            <TouchableOpacity onPress={()=>{onLike('2', item.id, item.isLike)}} >
-              <Image source={item.isLike ? require('assets/images/heart-selected.png') : require('assets/images/heart-yellow-outline.png')} style={{width: 14, height: 14}} />
-            </TouchableOpacity>  
+              <TouchableOpacity
+                onPress={() => {
+                  onLike('2', item.id, item.isLike);
+                }}>
+                <Image
+                  source={
+                    item.isLike
+                      ? require('assets/images/heart-selected.png')
+                      : require('assets/images/heart-yellow-outline.png')
+                  }
+                  style={{width: 14, height: 14}}
+                />
+              </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}

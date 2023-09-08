@@ -162,16 +162,20 @@ const Home = ({navigation, dispatch}) => {
   const [trendingCourses, setTrendingCourses] = useState([]);
 
   useEffect(() => {
-    console.log('userToken', userToken);
-    getHomeData();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('userToken', userToken);
+      getHomeData();
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getHomeData = async () => {
     setShowLoader(true);
     try {
       const resp = await Service.getApiWithToken(userToken, Service.HOME);
       console.log('getHomeData resp', resp);
       if (resp?.data?.status) {
-        setHomeData(generateThumb(resp?.data?.data));
+        const dataWithThumb = await generateThumb(resp?.data?.data);
+        setHomeData(dataWithThumb);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
@@ -186,18 +190,18 @@ const Home = ({navigation, dispatch}) => {
     try {
       data.trending_course = await Promise.all(
         data?.trending_course?.map?.(async el => {
-          if (!el.certificates_image?.endsWith('.mp4')) {
-            return el;
-          } else {
-            const thumb = await createThumbnail({
-              url: el.certificates_image,
-              timeStamp: 1000,
-            });
-            return {
-              ...el,
-              thumb,
-            };
+          const thumb = await createThumbnail({
+            url: el.introduction_video,
+            timeStamp: 1000,
+          });
+          for (const [key, value] of Object.entries(thumb)) {
+            console.log(`thumb ind ${key}: ${value}`);
           }
+          console.log();
+          return {
+            ...el,
+            thumb,
+          };
         }),
       );
     } catch (error) {
@@ -206,18 +210,14 @@ const Home = ({navigation, dispatch}) => {
     try {
       data.suggested_course = await Promise.all(
         data?.suggested_course?.map?.(async el => {
-          if (!el.certificates_image?.endsWith('.mp4')) {
-            return el;
-          } else {
-            const thumb = await createThumbnail({
-              url: el.certificates_image,
-              timeStamp: 1000,
-            });
-            return {
-              ...el,
-              thumb,
-            };
-          }
+          const thumb = await createThumbnail({
+            url: el.introduction_video,
+            timeStamp: 1000,
+          });
+          return {
+            ...el,
+            thumb,
+          };
         }),
       );
     } catch (error) {

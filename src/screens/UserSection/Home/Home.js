@@ -197,10 +197,6 @@ const Home = ({navigation, dispatch}) => {
             url: el.introduction_video,
             timeStamp: 1000,
           });
-          // for (const [key, value] of Object.entries(thumb)) {
-          //   console.log(`thumb ind ${key}: ${value}`);
-          // }
-          console.log();
           return {
             ...el,
             thumb,
@@ -228,9 +224,13 @@ const Home = ({navigation, dispatch}) => {
       console.error('Error generating thumbnails:', error);
     }
 
+    // console.log('trending_course_data', trending_course_data);
+    // console.log('suggested_course_data', suggested_course_data);
+    data.suggested_course = suggested_course_data
+    data.trending_course = trending_course_data
     console.log('thumb data', data);
-    const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
-    return updatedData;
+    // const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
+    return data;
   };
 
   const gotoTrendingCourses = () => {

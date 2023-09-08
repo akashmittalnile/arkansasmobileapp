@@ -187,16 +187,19 @@ const Home = ({navigation, dispatch}) => {
 
   const generateThumb = async data => {
     console.log('generateThumb');
+    let trending_course_data = []
+    let suggested_course_data = []
     try {
-      data.trending_course = await Promise.all(
+      trending_course_data = await Promise.all(
         data?.trending_course?.map?.(async el => {
+          console.log('el.introduction_video trending', el.introduction_video);
           const thumb = await createThumbnail({
             url: el.introduction_video,
             timeStamp: 1000,
           });
-          for (const [key, value] of Object.entries(thumb)) {
-            console.log(`thumb ind ${key}: ${value}`);
-          }
+          // for (const [key, value] of Object.entries(thumb)) {
+          //   console.log(`thumb ind ${key}: ${value}`);
+          // }
           console.log();
           return {
             ...el,
@@ -208,8 +211,9 @@ const Home = ({navigation, dispatch}) => {
       console.error('Error generating thumbnails:', error);
     }
     try {
-      data.suggested_course = await Promise.all(
+      suggested_course_data = await Promise.all(
         data?.suggested_course?.map?.(async el => {
+          console.log('el.introduction_video suggested', el.introduction_video);
           const thumb = await createThumbnail({
             url: el.introduction_video,
             timeStamp: 1000,
@@ -225,7 +229,8 @@ const Home = ({navigation, dispatch}) => {
     }
 
     console.log('thumb data', data);
-    return data;
+    const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
+    return updatedData;
   };
 
   const gotoTrendingCourses = () => {

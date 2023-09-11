@@ -29,6 +29,7 @@ import McqScreen from 'screens/UserSection/McqScreen/McqScreen';
 import ProductDetails from 'screens/UserSection/ProductDetails/ProductDetails';
 import AudioPlayerScreen from 'screens/UserSection/AudioPlayerScreen/AudioPlayerScreen';
 import NoConnection from '../../screens/UserSection/NoConnection/NoConnection';
+import AllReviews from 'screens/UserSection/AllReviews/AllReviews';
 
 const MainStack = () => {
   //variables
@@ -98,6 +99,7 @@ const MainStack = () => {
         component={AudioPlayerScreen}
       />
       <Stack.Screen name={ScreenNames.NO_CONNECTION} component={NoConnection} />
+      <Stack.Screen name={ScreenNames.ALL_REVIEWS} component={AllReviews} />
     </Stack.Navigator>
   );
 };

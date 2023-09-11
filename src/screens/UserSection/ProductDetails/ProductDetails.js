@@ -43,6 +43,7 @@ import Animated, {
 import AccordionItem from '../../../components/AccordionItem/AccordionItem';
 import ViewAll from '../../../components/ViewAll/ViewAll';
 import FAB_Button from '../../../components/FAB_Button/FAB_Button';
+import {createThumbnail} from 'react-native-create-thumbnail';
 
 const data = [
   {
@@ -135,7 +136,8 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       );
       console.log('getProductDetails resp', resp?.data);
       if (resp?.data?.status) {
-        setProductDetails(resp?.data?.data)
+        const data = await generateThumb(resp?.data?.data)
+        setProductDetails(data)
         // Toast.show(resp?.data?.message, Toast.SHORT)
       }else{
         Toast.show(resp?.data?.message, Toast.SHORT)
@@ -144,6 +146,21 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       console.log('error in getProductDetails', error);
     }
     setShowLoader(false);
+  };
+
+  const generateThumb = async data => {
+    console.log('generateThumb');
+    try {
+      const thumb = await createThumbnail({
+        url: data.introduction_video,
+        timeStamp: 1000,
+      });
+      data.thumb = thumb
+      console.log('generateThumb data', data);
+      return data
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
   };
 
   const changeSelectedTag = id => {
@@ -170,6 +187,10 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     );
   };
 
+  const gotoAllReviews = () => {
+    navigation.navigate(ScreenNames.ALL_REVIEWS, {id: productDetails?.id, type: '1'});
+  };
+
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -182,7 +203,8 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
           <ImageBackground
-            source={require('assets/images/rectangle-1035.png')}
+            source={{uri: productDetails?.thumb?.path}}
+            // source={require('assets/images/rectangle-1035.png')}
             style={styles.crseImg}
             imageStyle={{borderRadius: 10}}>
             <TouchableOpacity>
@@ -291,6 +313,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             text="Rating & Review"
             rating="4.7"
             reviews="400k+"
+            onPress={gotoAllReviews}
             style={{marginBottom: 17}}
           />
           {reviewsData?.map(item => (

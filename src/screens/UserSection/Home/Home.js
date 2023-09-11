@@ -176,6 +176,7 @@ const Home = ({navigation, dispatch}) => {
       if (resp?.data?.status) {
         const dataWithThumb = await generateThumb(resp?.data?.data);
         setHomeData(dataWithThumb);
+        // setHomeData(resp?.data?.data);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
@@ -187,8 +188,8 @@ const Home = ({navigation, dispatch}) => {
 
   const generateThumb = async data => {
     console.log('generateThumb');
-    let trending_course_data = []
-    let suggested_course_data = []
+    let trending_course_data = [...data?.trending_course];
+    let suggested_course_data = [...data?.suggested_course];
     try {
       trending_course_data = await Promise.all(
         data?.trending_course?.map?.(async el => {
@@ -226,8 +227,8 @@ const Home = ({navigation, dispatch}) => {
 
     // console.log('trending_course_data', trending_course_data);
     // console.log('suggested_course_data', suggested_course_data);
-    data.suggested_course = suggested_course_data
-    data.trending_course = trending_course_data
+    data.suggested_course = suggested_course_data;
+    data.trending_course = trending_course_data;
     console.log('thumb data', data);
     // const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
     return data;
@@ -363,7 +364,9 @@ const Home = ({navigation, dispatch}) => {
         style={styles.courseContainer}>
         <View style={styles.topRow}>
           <View style={styles.topLeftRow}>
-            <Image source={{uri: item.creatorImg}} style={styles.crtrImg} />
+            {item?.creatorImg ? (
+              <Image source={{uri: item?.creatorImg}} style={styles.crtrImg} />
+            ) : null}
             <MyText
               text={item.creatorName}
               fontFamily="regular"
@@ -381,11 +384,15 @@ const Home = ({navigation, dispatch}) => {
             />
           </View>
         </View>
-        <ImageBackground source={{uri: item?.thumb?.path}} style={styles.crseImg}>
-          <TouchableOpacity>
-            <Image source={require('assets/images/play-icon.png')} />
-          </TouchableOpacity>
-        </ImageBackground>
+        {item?.thumb?.path ? (
+          <ImageBackground
+            source={{uri: item?.thumb?.path}}
+            style={styles.crseImg}>
+            <TouchableOpacity>
+              <Image source={require('assets/images/play-icon.png')} />
+            </TouchableOpacity>
+          </ImageBackground>
+        ) : null}
         <View style={styles.bottomRow}>
           <View style={{width: '60%'}}>
             <MyText
@@ -439,7 +446,9 @@ const Home = ({navigation, dispatch}) => {
     return (
       <TouchableOpacity style={styles.productContainer}>
         <View>
-          <Image source={{uri: item.Product_image}} style={{width: '100%'}} />
+          {item.Product_image ? (
+            <Image source={{uri: item.Product_image}} style={{width: '100%'}} />
+          ) : null}
           <Image
             source={require('assets/images/heart-yellow-outline.png')}
             style={styles.heartIcon}
@@ -496,7 +505,9 @@ const Home = ({navigation, dispatch}) => {
     // console.log('renderCategory', item);
     return (
       <View style={styles.categoryContainer}>
-        <Image source={{uri: item.category_image}} style={styles.catImg} />
+        {item.category_image ? (
+          <Image source={{uri: item.category_image}} style={styles.catImg} />
+        ) : null}
         <MyText
           text={item.category_name}
           fontFamily="regular"

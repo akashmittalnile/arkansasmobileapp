@@ -446,8 +446,8 @@ const Home = ({navigation, dispatch}) => {
     return (
       <TouchableOpacity style={styles.productContainer}>
         <View>
-          {item.Product_image ? (
-            <Image source={{uri: item.Product_image}} style={{width: '100%'}} />
+          {item.Product_image[0] ? (
+            <Image source={{uri: item.Product_image[0]}} style={{width: '100%'}} />
           ) : null}
           <Image
             source={require('assets/images/heart-yellow-outline.png')}

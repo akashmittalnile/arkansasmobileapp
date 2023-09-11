@@ -126,8 +126,11 @@ const Wishlist = ({navigation, dispatch}) => {
   ]);
 
   useEffect(() => {
-    getAllType();
-  }, []);
+     const unsubscribe = navigation.addListener('focus', () => {
+       getAllType();
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getAllType = async (type = '1') => {
     setShowLoader(true);
     const formdata = new FormData();

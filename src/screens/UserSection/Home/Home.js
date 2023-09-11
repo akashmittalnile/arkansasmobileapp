@@ -356,6 +356,7 @@ const Home = ({navigation, dispatch}) => {
   //   );
   // };
   const renderCourse = ({item}) => {
+    console.log('item?.thumb?.path', item?.thumb?.path);
     return (
       <TouchableOpacity
         onPress={() => gotoProductDetails(item)}
@@ -492,7 +493,7 @@ const Home = ({navigation, dispatch}) => {
     );
   };
   const renderCategory = ({item}) => {
-    console.log('renderCategory', item);
+    // console.log('renderCategory', item);
     return (
       <View style={styles.categoryContainer}>
         <Image source={{uri: item.category_image}} style={styles.catImg} />

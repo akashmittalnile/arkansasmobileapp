@@ -292,10 +292,11 @@ const Wishlist = ({navigation, dispatch}) => {
     );
   };
   const renderProduct = ({item}) => {
+    console.log('wishlist item.Product_image', item.Product_image);
     return (
       <View style={styles.courseContainer}>
         <ImageBackground
-          source={{uri: item.Product_image}}
+          source={{uri: item.Product_image[0]}}
           style={styles.crseImg}>
           {/* <TouchableOpacity>
             <Image source={require('assets/images/play-icon.png')} />

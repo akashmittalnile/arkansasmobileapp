@@ -124,13 +124,15 @@ const AllReviews = ({navigation, dispatch, route}) => {
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
           <View style={{height: 37}}></View>
-          <ViewAllSub
-            text="Rating & Review"
-            rating="4.7"
-            reviews="400k+"
-            showButton={false}
-            style={{marginBottom: 17}}
-          />
+          {reviewList?.length > 0 ? (
+            <ViewAllSub
+              text="Rating & Review"
+              rating="4.7"
+              reviews="400k+"
+              showButton={false}
+              style={{marginBottom: 17}}
+            />
+          ) : null}
           {reviewList?.length > 0 ? (
             reviewList?.map(item => (
               <View key={item.id} style={styles.reviewContainer}>
@@ -158,7 +160,7 @@ const AllReviews = ({navigation, dispatch, route}) => {
             ))
           ) : (
             <MyText
-              text={`No Trending Courses found`}
+              text={`No Reviews found`}
               fontFamily="medium"
               fontSize={18}
               textColor={'#455A64'}

@@ -243,8 +243,8 @@ const Home = ({navigation, dispatch}) => {
   const gotoTopCategory = () => {
     navigation.navigate(ScreenNames.TOP_CATEGORY);
   };
-  const gotoProductDetails = item => {
-    navigation.navigate(ScreenNames.PRODUCT_DETAILS, {courseData: item});
+  const gotoProductDetails = (id, type) => {
+    navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
   };
   const gotoAllProducts = () => {
     navigation.navigate(ScreenNames.ALL_PRODUCTS);
@@ -360,7 +360,7 @@ const Home = ({navigation, dispatch}) => {
     console.log('item?.thumb?.path', item?.thumb?.path);
     return (
       <TouchableOpacity
-        onPress={() => gotoProductDetails(item)}
+        onPress={() => gotoProductDetails(item?.id, '1')}
         style={styles.courseContainer}>
         <View style={styles.topRow}>
           <View style={styles.topLeftRow}>

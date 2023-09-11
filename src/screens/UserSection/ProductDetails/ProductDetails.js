@@ -96,7 +96,7 @@ const reviewsData = [
     msg: `Perfectly packed all products received as said...but when connected with power supply it doesn't work, After some adjustments it worked perfectly felt very happy with the product. Thank you`,
   },
   {
-    id: '1',
+    id: '2',
     name: 'Annete Black',
     img: `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`,
     msg: `Perfectly packed all products received as said...but when connected with power supply it doesn't work, After some adjustments it worked perfectly felt very happy with the product. Thank you`,
@@ -108,7 +108,7 @@ const tags = [
   {name: 'Tatoos 2023', id: '3'},
   {name: 'Body Piercing', id: '4'},
 ];
-const ProductDetails = ({navigation, dispatch}) => {
+const ProductDetails = ({navigation, dispatch, route}) => {
   //variables
   const LINE_HEIGTH = 25;
   //variables : redux
@@ -116,6 +116,35 @@ const ProductDetails = ({navigation, dispatch}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [selectedTag, setSelectedTag] = useState('1');
+  const [productDetails, setProductDetails] = useState({});
+
+  useEffect(() => {
+    getProductDetails()
+  }, [])
+  const getProductDetails = async () => {
+    const postData = new FormData();
+    postData.append('type', route?.params?.type);
+    postData.append('id', route?.params?.id);
+    console.log('getProductDetails postData', postData);
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.OBJECT_TYPE_DETAILS,
+        postData,
+      );
+      console.log('getProductDetails resp', resp?.data);
+      if (resp?.data?.status) {
+        setProductDetails(resp?.data?.data)
+        // Toast.show(resp?.data?.message, Toast.SHORT)
+      }else{
+        Toast.show(resp?.data?.message, Toast.SHORT)
+      }
+    } catch (error) {
+      console.log('error in getProductDetails', error);
+    }
+    setShowLoader(false);
+  };
 
   const changeSelectedTag = id => {
     setSelectedTag(id);
@@ -124,18 +153,18 @@ const ProductDetails = ({navigation, dispatch}) => {
   const renderTags = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => changeSelectedTag(item.id)}
+        onPress={() => changeSelectedTag(item)}
         style={[
           styles.courseTypeContainer,
-          selectedTag === item.id
+          selectedTag === item
             ? {backgroundColor: Colors.THEME_BROWN}
             : null,
         ]}>
         <MyText
-          text={item.name}
+          text={item}
           fontFamily="regular"
           fontSize={14}
-          textColor={selectedTag === item.id ? Colors.THEME_GOLD : 'black'}
+          textColor={selectedTag === item ? Colors.THEME_GOLD : 'black'}
         />
       </TouchableOpacity>
     );
@@ -163,14 +192,14 @@ const ProductDetails = ({navigation, dispatch}) => {
 
           <View style={styles.topRow}>
             <MyText
-              text={'What Do You Know About Tattoos & Body Piercing?'}
+              text={productDetails?.title}
               fontFamily="regular"
               fontSize={16}
               textColor={'black'}
               style={{width: '80%'}}
             />
             <MyText
-              text={'$399.00'}
+              text={`$${productDetails?.course_fee}`}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -181,7 +210,7 @@ const ProductDetails = ({navigation, dispatch}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={'4.7'}
+                text={productDetails?.rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -195,7 +224,7 @@ const ProductDetails = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={'Max Byrant'}
+                text={productDetails?.content_creator_name}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -205,7 +234,7 @@ const ProductDetails = ({navigation, dispatch}) => {
             </View>
             <View style={styles.iconsRow}>
               <Image
-                source={require('assets/images/heart.png')}
+                source={productDetails?.isLike ? require('assets/images/heart.png') : require('assets/images/heart-selected.png')}
                 style={{height: 14, width: 14}}
               />
               <Image
@@ -216,7 +245,8 @@ const ProductDetails = ({navigation, dispatch}) => {
             <View style={styles.validDateRow}>
               <Image source={require('assets/images/myyy2.png')} />
               <MyText
-                text={`Course Valid Date: 26 Juny 2023`}
+                // text={`Course Valid Date: 26 Juny 2023`}
+                text={`Course Valid Date: ${productDetails?.valid_upto}`}
                 fontFamily="medium"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -249,7 +279,7 @@ const ProductDetails = ({navigation, dispatch}) => {
 
           <ViewAll text="Tags" showSeeAll={false} style={{marginTop: 20}} />
           <FlatList
-            data={tags}
+            data={Array.isArray(productDetails?.tags) ?  productDetails?.tags : [productDetails?.tags]}
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{marginTop: 11}}

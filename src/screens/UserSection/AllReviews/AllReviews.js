@@ -89,7 +89,7 @@ const AllReviews = ({navigation, dispatch, route}) => {
       );
       console.log('getReviewList resp', resp?.data);
       if (resp?.data?.status) {
-        setReviewList(resp?.data?.data);
+        setReviewList(resp?.data?.review_list);
         // Toast.show(resp?.data?.message, Toast.SHORT)
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
@@ -119,15 +119,17 @@ const AllReviews = ({navigation, dispatch, route}) => {
       );
       console.log('submitReview resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
         setStarRating(1);
         setReview('');
+        getReviewList()
       } else {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in submitReview', error);
     }
+    setShowReviewModal(false)
     setShowLoader(false);
   };
   const openReviewModal = () => {
@@ -143,7 +145,7 @@ const AllReviews = ({navigation, dispatch, route}) => {
         {/* <MyHeader Title="Home" isBackButton /> */}
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: '20%'}}
+          contentContainerStyle={{paddingBottom: '20%', height: '100%'}}
           style={styles.mainView}>
           <View style={{height: 37}}></View>
           {reviewList?.length > 0 ? (
@@ -162,7 +164,7 @@ const AllReviews = ({navigation, dispatch, route}) => {
                   <View style={styles.reviewTopLeftRow}>
                     <Image source={{uri: item.img}} style={styles.reviewImg} />
                     <MyText
-                      text={item.name}
+                      text={item.user_name}
                       fontFamily="medium"
                       fontSize={13}
                       textColor={Colors.LIGHT_GREY}
@@ -172,7 +174,7 @@ const AllReviews = ({navigation, dispatch, route}) => {
                   <Image source={require('assets/images/message-text.png')} />
                 </View>
                 <MyText
-                  text={item.msg}
+                  text={item.review}
                   fontFamily="medium"
                   fontSize={13}
                   textColor={Colors.LIGHT_GREY}

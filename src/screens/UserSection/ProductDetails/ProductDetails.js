@@ -44,6 +44,7 @@ import AccordionItem from '../../../components/AccordionItem/AccordionItem';
 import ViewAll from '../../../components/ViewAll/ViewAll';
 import FAB_Button from '../../../components/FAB_Button/FAB_Button';
 import {createThumbnail} from 'react-native-create-thumbnail';
+import Review from '../../../modals/Review/Review';
 
 const data = [
   {
@@ -118,6 +119,9 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const [showLoader, setShowLoader] = useState(false);
   const [selectedTag, setSelectedTag] = useState('1');
   const [productDetails, setProductDetails] = useState({});
+  const [review, setReview] = useState('');
+  const [starRating, setStarRating] = useState(1);
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
   useEffect(() => {
     getProductDetails()
@@ -189,6 +193,42 @@ const ProductDetails = ({navigation, dispatch, route}) => {
 
   const gotoAllReviews = () => {
     navigation.navigate(ScreenNames.ALL_REVIEWS, {id: productDetails?.id, type: '1'});
+  };
+
+  const submitReview = async () => {
+    if (review?.trim()?.length === 0) {
+      Toast.show('Please enter review');
+      return;
+    }
+    const postData = new FormData();
+    postData.append('id', route?.params?.id);
+    postData.append('type', route?.params?.type);
+    postData.append('comment', review);
+    postData.append('rating', starRating);
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.SUBMIT_REVIEW,
+        postData,
+      );
+      console.log('submitReview resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
+        setStarRating(1);
+        setReview('');
+      } else {
+        Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in submitReview', error);
+    }
+    setShowReviewModal(false)
+    setShowLoader(false);
+  };
+
+  const openReviewModal = () => {
+    setShowReviewModal(true);
   };
 
   //UI
@@ -316,7 +356,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             onPress={gotoAllReviews}
             style={{marginBottom: 17}}
           />
-          {reviewsData?.map(item => (
+          {/* {reviewsData?.map(item => (
             <View key={item.id} style={styles.reviewContainer}>
               <View style={styles.reviewTopRow}>
                 <View style={styles.reviewTopLeftRow}>
@@ -339,7 +379,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                 style={{marginTop: 10}}
               />
             </View>
-          ))}
+          ))} */}
           <ViewAll text="Chapter 1" style={{marginTop: 10, marginBottom: 20}} />
           <View style={styles.containerStyle}>
             <FlatList
@@ -373,9 +413,18 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               }}
             />
           </View>
-          <FAB_Button />
+          <FAB_Button onPress={openReviewModal} />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
+        <Review
+          visible={showReviewModal}
+          setVisibility={setShowReviewModal}
+          starRating={starRating}
+          setStarRating={setStarRating}
+          review={review}
+          setReview={setReview}
+          submitReview={submitReview}
+        />
       </View>
     </SafeAreaView>
   );

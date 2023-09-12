@@ -93,6 +93,10 @@ const ProceedToPayment = ({navigation, dispatch}) => {
     routes: [{name: ScreenNames.BOTTOM_TAB}],
   });
   const onConfirm = async () => {
+    if(selectedCard === ''){
+      Toast.show('Please select a card', Toast.SHORT)
+      return
+    }
     const postData = new FormData()
     postData.append('card_id', selectedCard)
     setShowLoader(true);
@@ -285,8 +289,8 @@ const ProceedToPayment = ({navigation, dispatch}) => {
               backgroundColor: Colors.THEME_BROWN,
               marginTop: 32,
             }}
-            onPress={openSuccessfulyPurchasedModal}
-            // onPress={onConfirm}
+            // onPress={openSuccessfulyPurchasedModal}
+            onPress={onConfirm}
           />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

@@ -163,7 +163,7 @@ const Wishlist = ({navigation, dispatch}) => {
     try {
       updatedData = await Promise.all(
         data?.map?.(async el => {
-          console.log('el.introduction_video trending', el.introduction_video);
+          // console.log('el.introduction_video trending', el.introduction_video);
           const thumb = await createThumbnail({
             url: el.introduction_video,
             timeStamp: 1000,

@@ -65,7 +65,31 @@ const Cart = ({navigation, dispatch}) => {
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [promoCode, setPromoCode] = useState('');
+  const [cartListData, setCartListData] = useState({});
 
+  useEffect(() => {
+    getCartList()
+  }, [])
+  const getCartList = async () => {
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.CART_LIST,
+        {},
+      );
+      console.log('getCartList resp', resp?.data);
+      if (resp?.data?.status) {
+        setCartListData(resp?.data)
+        // Toast.show(resp?.data?.message, Toast.SHORT)
+      }else{
+        Toast.show(resp?.data?.message, Toast.SHORT)
+      }
+    } catch (error) {
+      console.log('error in getCartList', error);
+    }
+    setShowLoader(false);
+  };
   const gotoPaymentScreen = () => {
     navigation.navigate(ScreenNames.PROCEED_TO_PAYMENT);
   };
@@ -74,11 +98,11 @@ const Cart = ({navigation, dispatch}) => {
     return (
       <View style={styles.courseContainer}>
         <ImageBackground
-          source={item.courseImg}
+          source={{uri: item.Product_image[0]}}
           style={styles.crseImg}></ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText
-            text={item.courseName}
+            text={item.title}
             fontFamily="regular"
             fontSize={13}
             textColor={Colors.LIGHT_GREY}
@@ -88,7 +112,7 @@ const Cart = ({navigation, dispatch}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={item.courseRating}
+                text={item.rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -102,7 +126,7 @@ const Cart = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={item.creatorName}
+                text={item.creator_name}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -113,7 +137,7 @@ const Cart = ({navigation, dispatch}) => {
           </View>
           <View style={styles.bottomRow}>
             <MyText
-              text={'$' + item.courseFee}
+              text={'$' + item.price}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -143,7 +167,7 @@ const Cart = ({navigation, dispatch}) => {
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
           <FlatList
-            data={productList}
+            data={cartListData?.data}
             style={{}}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderProduct}
@@ -175,14 +199,14 @@ const Cart = ({navigation, dispatch}) => {
           <View style={styles.summaryContainer}>
             <View style={[styles.row, {marginBottom: 10}]}>
               <MyText
-                text={`Subtotal (${2})`}
+                text={`Subtotal (${cartListData?.data?.length})`}
                 fontSize={14}
                 fontFamily="medium"
                 textColor={'#455A64'}
                 style={{}}
               />
               <MyText
-                text={`$698.00`}
+                text={`$${Number(cartListData?.sub_total).toFixed(2)}`}
                 fontSize={14}
                 fontFamily="medium"
                 textColor={'#455A64'}
@@ -198,7 +222,7 @@ const Cart = ({navigation, dispatch}) => {
                 style={{}}
               />
               <MyText
-                text={`$0`}
+                text={`$${Number(cartListData?.discount).toFixed(2)}`}
                 fontSize={14}
                 fontFamily="medium"
                 textColor={'#8F93A0'}
@@ -214,7 +238,7 @@ const Cart = ({navigation, dispatch}) => {
                 style={{}}
               />
               <MyText
-                text={`$10.00`}
+                text={`$${Number(cartListData?.shipping).toFixed(2)}`}
                 fontSize={14}
                 fontFamily="medium"
                 textColor={'#455A64'}
@@ -231,7 +255,7 @@ const Cart = ({navigation, dispatch}) => {
                 style={{}}
               />
               <MyText
-                text={`$708.00`}
+                text={`$${Number(cartListData?.total).toFixed(2)}`}
                 fontSize={18}
                 fontFamily="medium"
                 textColor={'#455A64'}

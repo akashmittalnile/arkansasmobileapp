@@ -193,7 +193,7 @@ const Home = ({navigation, dispatch}) => {
     try {
       trending_course_data = await Promise.all(
         data?.trending_course?.map?.(async el => {
-          console.log('el.introduction_video trending', el.introduction_video);
+          // console.log('el.introduction_video trending', el.introduction_video);
           const thumb = await createThumbnail({
             url: el.introduction_video,
             timeStamp: 1000,
@@ -210,7 +210,7 @@ const Home = ({navigation, dispatch}) => {
     try {
       suggested_course_data = await Promise.all(
         data?.suggested_course?.map?.(async el => {
-          console.log('el.introduction_video suggested', el.introduction_video);
+          // console.log('el.introduction_video suggested', el.introduction_video);
           const thumb = await createThumbnail({
             url: el.introduction_video,
             timeStamp: 1000,
@@ -255,6 +255,30 @@ const Home = ({navigation, dispatch}) => {
 
   const changeSelectedCourseType = id => {
     setSelectedCourseType(id);
+  };
+  const addToCart = async (object_id, object_type, cart_value) => {
+    const postData = new FormData();
+    postData.append("object_id", object_id);
+    postData.append("object_type", object_type);
+    postData.append("cart_value", cart_value);
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ADD_TO_CART,
+        postData,
+      );
+      console.log('addToCart resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message, Toast.SHORT)
+        
+      }else{
+        Toast.show(resp?.data?.message, Toast.SHORT)
+      }
+    } catch (error) {
+      console.log('error in addToCart', error);
+    }
+    setShowLoader(false);
   };
   const renderCourseTypes = ({item}) => {
     return (
@@ -357,7 +381,7 @@ const Home = ({navigation, dispatch}) => {
   //   );
   // };
   const renderCourse = ({item}) => {
-    console.log('item?.thumb?.path', item?.thumb?.path);
+    // console.log('item?.thumb?.path', item?.thumb?.path);
     return (
       <TouchableOpacity
         onPress={() => gotoProductDetails(item?.id, '1')}
@@ -490,7 +514,7 @@ const Home = ({navigation, dispatch}) => {
                 backgroundColor: Colors.THEME_BROWN,
               }}
             />
-            <TouchableOpacity style={styles.prodCartView}>
+            <TouchableOpacity onPress={()=>{addToCart(item.id, '2', item.price)}} style={styles.prodCartView}>
               <Image
                 source={require('assets/images/shopping-bag.png')}
                 style={{height: 18, width: 18}}

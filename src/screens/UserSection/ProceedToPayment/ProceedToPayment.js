@@ -238,7 +238,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                 <View style={styles.cardContainerLeftRow}>
                   <Image
                     source={
-                      item.id === selectedCard
+                      item.card_id === selectedCard
                         ? require('assets/images/selected.png')
                         : require('assets/images/not-selected.png')
                     }

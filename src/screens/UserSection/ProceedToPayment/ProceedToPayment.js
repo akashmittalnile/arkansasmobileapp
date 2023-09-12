@@ -78,7 +78,8 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       );
       console.log('getData resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.message, Toast.SHORT);
+        // show message only when no cards found
+        resp?.data?.data?.length === 0 && Toast.show(resp.data.message, Toast.SHORT);
         setScreenData(resp?.data);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);

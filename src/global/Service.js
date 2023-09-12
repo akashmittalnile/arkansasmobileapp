@@ -39,6 +39,8 @@ export const SUBMIT_REVIEW = `submit-review`;
 export const REVIEW_LIST = `review-list`;
 export const OBJECT_TYPE_DETAILS = `object-type-details`;
 export const ADD_TO_CART = `add-to-cart`;
+export const CART_DETAILS_PAYMENT = `cart-details-payment`;
+export const SAVE_ORDER = `save-order`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

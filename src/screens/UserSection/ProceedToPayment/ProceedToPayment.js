@@ -38,6 +38,7 @@ import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import ViewAll from '../../../components/ViewAll/ViewAll';
 import SuccessfulyPurchased from '../../../modals/SuccessfulyPurchased/SuccessfulyPurchased';
 import {CommonActions} from '@react-navigation/native';
+import AddCard from '../../../modals/AddCard/AddCard';
 
 const ProceedToPayment = ({navigation, dispatch}) => {
   //variables
@@ -63,9 +64,61 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       expires: '24/22',
     },
   ]);
+  const [showAddCardModal, setShowAddCardModal] = useState(false);
+  const [screenData, setScreenData] = useState({});
+  useEffect(() => {
+    getData();
+  }, []);
+  const getData = async () => {
+    setShowLoader(true);
+    try {
+      const resp = await Service.getApiWithToken(
+        userToken,
+        Service.CART_DETAILS_PAYMENT,
+      );
+      console.log('getData resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.message, Toast.SHORT);
+        setScreenData(resp?.data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getData', error);
+    }
+    setShowLoader(false);
+  };
+  const resetIndexGoToUserBottomTab = CommonActions.reset({
+    index: 1,
+    routes: [{name: ScreenNames.BOTTOM_TAB}],
+  });
+  const onConfirm = async () => {
+    const postData = new FormData()
+    postData.append('card_id', selectedCard)
+    setShowLoader(true);
+    try {
+      const resp = await Service.getApiWithToken(
+        userToken,
+        Service.SAVE_ORDER,
+      );
+      console.log('onConfirm resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.message, Toast.SHORT);
+        navigation.dispatch(resetIndexGoToUserBottomTab);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in onConfirm', error);
+    }
+    setShowLoader(false);
+  };
 
   const openSuccessfulyPurchasedModal = () => {
     setShowSuccessfulyPurchasedModal(true);
+  };
+  const openAddCardModal = () => {
+    setShowAddCardModal(true);
   };
   const resetIndexGoToMyOrders = CommonActions.reset({
     index: 1,
@@ -105,7 +158,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                 style={{}}
               />
               <MyText
-                text={`$698.00`}
+                text={`$${Number(screenData?.sub_total).toFixed(2)}`}
                 fontSize={14}
                 fontFamily="medium"
                 textColor={'#455A64'}
@@ -121,7 +174,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                 style={{}}
               />
               <MyText
-                text={`$0`}
+                text={`$${Number(screenData?.discount).toFixed(2)}`}
                 fontSize={14}
                 fontFamily="medium"
                 textColor={'#8F93A0'}
@@ -137,7 +190,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                 style={{}}
               />
               <MyText
-                text={`$10.00`}
+                text={`$${Number(screenData?.shipping).toFixed(2)}`}
                 fontSize={14}
                 fontFamily="medium"
                 textColor={'#455A64'}
@@ -154,7 +207,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                 style={{}}
               />
               <MyText
-                text={`$708.00`}
+                text={`$${Number(screenData?.total).toFixed(2)}`}
                 fontSize={18}
                 fontFamily="medium"
                 textColor={'#455A64'}
@@ -165,52 +218,63 @@ const ProceedToPayment = ({navigation, dispatch}) => {
           <ViewAll
             text="Cards"
             buttonText="Add New"
+            onPress={openAddCardModal}
             style={{marginTop: 25, marginBottom: 21}}
           />
-          {cardList?.map(item => (
-            <TouchableOpacity
-              key={item.id}
-              onPress={() => {
-                changeSelectedCard(item.id);
-              }}
-              style={[
-                styles.cardContainer,
-                item.id === selectedCard
-                  ? {borderWidth: 1, borderColor: Colors.THEME_GOLD}
-                  : null,
-              ]}>
-              <View style={styles.cardContainerLeftRow}>
-                <Image
-                  source={
-                    item.id === selectedCard
-                      ? require('assets/images/selected.png')
-                      : require('assets/images/not-selected.png')
-                  }
-                />
-                <Image source={item.img} style={{marginLeft: 15}} />
-                <View style={{marginLeft: 12}}>
-                  <MyText
-                    text={'**** **** **** ' + item.cardNum.slice(-5)}
-                    fontSize={16}
-                    fontFamily="medium"
-                    textColor={'#261313'}
-                  />
-                  <MyText
-                    text={`Expires ${item.expires}`}
-                    fontSize={14}
-                    fontFamily="light"
-                    textColor={Colors.LIGHT_GREY}
-                  />
-                </View>
-              </View>
+          {cardList?.length > 0 ? (
+            cardList?.map(item => (
               <TouchableOpacity
+                key={item.id}
                 onPress={() => {
-                  deleteCard(item.id);
-                }}>
-                <Image source={require('assets/images/trash.png')} />
+                  changeSelectedCard(item.id);
+                }}
+                style={[
+                  styles.cardContainer,
+                  item.id === selectedCard
+                    ? {borderWidth: 1, borderColor: Colors.THEME_GOLD}
+                    : null,
+                ]}>
+                <View style={styles.cardContainerLeftRow}>
+                  <Image
+                    source={
+                      item.id === selectedCard
+                        ? require('assets/images/selected.png')
+                        : require('assets/images/not-selected.png')
+                    }
+                  />
+                  <Image source={item.img} style={{marginLeft: 15}} />
+                  <View style={{marginLeft: 12}}>
+                    <MyText
+                      text={'**** **** **** ' + item.cardNum.slice(-5)}
+                      fontSize={16}
+                      fontFamily="medium"
+                      textColor={'#261313'}
+                    />
+                    <MyText
+                      text={`Expires ${item.expires}`}
+                      fontSize={14}
+                      fontFamily="light"
+                      textColor={Colors.LIGHT_GREY}
+                    />
+                  </View>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    deleteCard(item.id);
+                  }}>
+                  <Image source={require('assets/images/trash.png')} />
+                </TouchableOpacity>
               </TouchableOpacity>
-            </TouchableOpacity>
-          ))}
+            ))
+          ) : (
+            <MyText
+              text={`No Trending Courses found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
+          )}
           <MyButton
             text="CONFIRM"
             style={{
@@ -227,6 +291,13 @@ const ProceedToPayment = ({navigation, dispatch}) => {
           visible={showSuccessfulyPurchasedModal}
           setVisibility={setShowSuccessfulyPurchasedModal}
           gotoMyCourses={gotoMyCourses}
+        />
+        <AddCard
+          visible={showAddCardModal}
+          setVisibility={setShowAddCardModal}
+          setShowLoader={setShowLoader}
+          userToken={userToken}
+          callFunctionAfterAddingcard={() => {}}
         />
       </View>
     </SafeAreaView>

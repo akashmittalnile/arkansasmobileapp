@@ -420,7 +420,7 @@ const Profile = ({navigation, dispatch}) => {
           setVisibility={setShowAddCardModal}
           setShowLoader={setShowLoader}
           userToken={userToken}
-          getProfileData={getProfileData}
+          callFunctionAfterAddingcard={getProfileData}
         />
         <OrderStatus
           visible={showOrderStatusModal}

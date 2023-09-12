@@ -24,7 +24,7 @@ import MyTextInput from '../../components/MyTextInput/MyTextInput';
 import Toast from 'react-native-simple-toast';
 import { Service } from '../../global/Index';
 
-const AddCard = ({visible, setVisibility, setShowLoader, userToken, getProfileData}) => {
+const AddCard = ({visible, setVisibility, setShowLoader, userToken, callFunctionAfterAddingcard}) => {
   //variables : navigation
   const [firstCode, setFirstCode] = useState('');
   const [secondCode, setSecondCode] = useState('');
@@ -100,7 +100,7 @@ const AddCard = ({visible, setVisibility, setShowLoader, userToken, getProfileDa
       console.log('onAddCard resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show(resp?.data?.message, Toast.SHORT)
-        getProfileData('5')
+        callFunctionAfterAddingcard('5')
       }else{
         Toast.show(resp?.data?.message, Toast.SHORT)
       }

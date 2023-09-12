@@ -141,7 +141,7 @@ const Wishlist = ({navigation, dispatch}) => {
         Service.ALL_TYPE_LISTING,
         formdata,
       );
-      console.log('getAllType resp', resp?.data);
+      // console.log('getAllType resp', resp?.data);
       if (resp?.data?.status) {
         if (type === '1') {
           const updatedData = await generateThumb(resp?.data?.data)
@@ -158,7 +158,7 @@ const Wishlist = ({navigation, dispatch}) => {
     setShowLoader(false);
   };
   const generateThumb = async data => {
-    console.log('generateThumb');
+    // console.log('generateThumb');
     let updatedData = []
     try {
       updatedData = await Promise.all(
@@ -185,7 +185,7 @@ const Wishlist = ({navigation, dispatch}) => {
     const formdata = new FormData();
     formdata.append('type', type);
     formdata.append('id', id);
-    formdata.append('status', status === '1' ? '0' : '1');
+    formdata.append('status', status == '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
     try {
       const resp = await Service.postApiWithToken(

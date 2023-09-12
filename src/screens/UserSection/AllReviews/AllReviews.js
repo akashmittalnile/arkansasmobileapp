@@ -44,6 +44,7 @@ import AccordionItem from '../../../components/AccordionItem/AccordionItem';
 import ViewAll from '../../../components/ViewAll/ViewAll';
 import FAB_Button from '../../../components/FAB_Button/FAB_Button';
 import {createThumbnail} from 'react-native-create-thumbnail';
+import Review from '../../../modals/Review/Review';
 
 const reviewsData = [
   {
@@ -67,6 +68,9 @@ const AllReviews = ({navigation, dispatch, route}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [reviewList, setReviewList] = useState([]);
+  const [review, setReview] = useState('');
+  const [starRating, setStarRating] = useState(1);
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
   useEffect(() => {
     getReviewList();
@@ -85,8 +89,7 @@ const AllReviews = ({navigation, dispatch, route}) => {
       );
       console.log('getReviewList resp', resp?.data);
       if (resp?.data?.status) {
-        const data = await generateThumb(resp?.data?.data);
-        setReviewList(data);
+        setReviewList(resp?.data?.data);
         // Toast.show(resp?.data?.message, Toast.SHORT)
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
@@ -97,19 +100,38 @@ const AllReviews = ({navigation, dispatch, route}) => {
     setShowLoader(false);
   };
 
-  const generateThumb = async data => {
-    console.log('generateThumb');
-    try {
-      const thumb = await createThumbnail({
-        url: data.introduction_video,
-        timeStamp: 1000,
-      });
-      data.thumb = thumb;
-      console.log('generateThumb data', data);
-      return data;
-    } catch (error) {
-      console.error('Error generating thumbnails:', error);
+  const submitReview = async () => {
+    if (review?.trim()?.length === 0) {
+      Toast.show('Please enter review');
+      return;
     }
+    const postData = new FormData();
+    postData.append('id', route?.params?.id);
+    postData.append('type', route?.params?.type);
+    postData.append('comment', review);
+    postData.append('rating', starRating);
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.SUBMIT_REVIEW,
+        postData,
+      );
+      console.log('submitReview resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message, Toast.SHORT);
+        setStarRating(1);
+        setReview('');
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in submitReview', error);
+    }
+    setShowLoader(false);
+  };
+  const openReviewModal = () => {
+    setShowReviewModal(true);
   };
 
   //UI
@@ -168,9 +190,18 @@ const AllReviews = ({navigation, dispatch, route}) => {
             />
           )}
 
-          <FAB_Button />
+          <FAB_Button onPress={openReviewModal} />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
+        <Review
+          visible={showReviewModal}
+          setVisibility={setShowReviewModal}
+          starRating={starRating}
+          setStarRating={setStarRating}
+          review={review}
+          setReview={setReview}
+          submitReview={submitReview}
+        />
       </View>
     </SafeAreaView>
   );

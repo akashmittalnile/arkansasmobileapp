@@ -300,7 +300,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
           setVisibility={setShowAddCardModal}
           setShowLoader={setShowLoader}
           userToken={userToken}
-          callFunctionAfterAddingcard={() => {}}
+          callFunctionAfterAddingcard={getData}
         />
       </View>
     </SafeAreaView>

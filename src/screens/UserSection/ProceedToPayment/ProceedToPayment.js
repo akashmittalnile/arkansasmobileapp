@@ -49,7 +49,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
   const [showLoader, setShowLoader] = useState(false);
   const [showSuccessfulyPurchasedModal, setShowSuccessfulyPurchasedModal] =
     useState(false);
-  const [selectedCard, setSelectedCard] = useState('1');
+  const [selectedCard, setSelectedCard] = useState('');
   const [cardList, setCardList] = useState([
     {
       id: '1',
@@ -152,7 +152,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
           <View style={styles.summaryContainer}>
             <View style={[styles.row, {marginBottom: 10}]}>
               <MyText
-                text={`Subtotal (${2})`}
+                text={`Subtotal (${screenData?.order_count})`}
                 fontSize={14}
                 fontFamily="medium"
                 textColor={'#455A64'}
@@ -222,16 +222,16 @@ const ProceedToPayment = ({navigation, dispatch}) => {
             onPress={openAddCardModal}
             style={{marginTop: 25, marginBottom: 21}}
           />
-          {cardList?.length > 0 ? (
-            cardList?.map(item => (
+          {screenData?.data?.length > 0 ? (
+            screenData?.data?.map(item => (
               <TouchableOpacity
-                key={item.id}
+                key={item.card_id}
                 onPress={() => {
-                  changeSelectedCard(item.id);
+                  changeSelectedCard(item.card_id);
                 }}
                 style={[
                   styles.cardContainer,
-                  item.id === selectedCard
+                  item.card_id === selectedCard
                     ? {borderWidth: 1, borderColor: Colors.THEME_GOLD}
                     : null,
                 ]}>
@@ -243,16 +243,17 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                         : require('assets/images/not-selected.png')
                     }
                   />
-                  <Image source={item.img} style={{marginLeft: 15}} />
+                  <Image source={getCardImage(item.type)} style={{marginLeft: 15}} />
                   <View style={{marginLeft: 12}}>
                     <MyText
-                      text={'**** **** **** ' + item.cardNum.slice(-5)}
+                      text={'**** **** **** ' + item.card_number.slice(-5)}
+                      // text={item.card_number}
                       fontSize={16}
                       fontFamily="medium"
                       textColor={'#261313'}
                     />
                     <MyText
-                      text={`Expires ${item.expires}`}
+                      text={`Expires ${item.valid_upto}`}
                       fontSize={14}
                       fontFamily="light"
                       textColor={Colors.LIGHT_GREY}
@@ -309,3 +310,13 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 export default connect(null, mapDispatchToProps)(ProceedToPayment);
+
+const getCardImage = (type) => {
+  if(type === 'VISA'){
+    return require('assets/images/visa.png')
+  } else if(type === 'MASTERCARD'){
+    return require('assets/images/mastercard.png')
+  } else {
+    return require('assets/images/mastercard.png')
+  }
+}

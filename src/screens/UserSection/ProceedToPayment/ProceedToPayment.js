@@ -104,7 +104,8 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       console.log('onConfirm resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show(resp.data.message, Toast.SHORT);
-        navigation.dispatch(resetIndexGoToUserBottomTab);
+        openSuccessfulyPurchasedModal()
+        // navigation.dispatch(resetIndexGoToUserBottomTab);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
@@ -284,6 +285,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
               marginTop: 32,
             }}
             onPress={openSuccessfulyPurchasedModal}
+            // onPress={onConfirm}
           />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

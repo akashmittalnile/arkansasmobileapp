@@ -1,6 +1,6 @@
 //import : react components
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, TouchableOpacity, Image, Keyboard} from 'react-native';
+import {View, TouchableOpacity, Image, Keyboard, Platform} from 'react-native';
 import {
   DrawerActions,
   useNavigation,
@@ -102,7 +102,7 @@ const MyHeader = ({
                 fontSize={20}
                 textColor={Colors.THEME_GOLD}
                 letterSpacing={-0.2}
-                style={{marginTop: -5}}
+                style={{marginTop: Platform.OS === 'android' ? -5 : 5}}
               />
             </View>
           </View>

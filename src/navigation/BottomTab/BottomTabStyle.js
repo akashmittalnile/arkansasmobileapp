@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   navigatorStyle: {
@@ -9,5 +9,6 @@ export const styles = StyleSheet.create({
   },
   tabStyle: {
     alignItems: 'center',
+    paddingTop: Platform.OS === 'android' ? 0 : 20
   },
 });

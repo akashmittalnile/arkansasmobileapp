@@ -108,7 +108,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
         Service.SAVE_ORDER,
         postData
       );
-      console.log('onConfirm resp', resp);
+      console.log('onConfirm resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show(resp.data.message, Toast.SHORT);
         openSuccessfulyPurchasedModal()

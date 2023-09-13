@@ -161,24 +161,30 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         timeStamp: 1000,
       });
       data.thumb = thumb;
-      
-      // create thumbnails for chapter_step videos
-      const chapterData = [...data?.chapters]
-      const updatedChapterData = await Promise.all(chapterData?.map(async chapstep => {
-        if(chapstep?.type === 'video'){
-          const thumb = await createThumbnail({
-            url: chapstep?.file,
-            timeStamp: 1000,
-          });
-          return {
-            ...chapstep,
-            thumb,
-          };
-        }else{
-          return chapstep
-        }
-      }))
 
+      // create thumbnails for chapter_step videos
+      const chapterData = [...data?.chapters];
+      const updatedChapterData = await Promise.all(
+        chapterData?.map(chap =>
+           chap?.chapter_steps?.map(async chapstep => {
+            console.log('chapstep', chapstep);
+            if (chapstep?.type === 'video') {
+              const thumb = await createThumbnail({
+                url: chapstep?.file,
+                timeStamp: 1000,
+              });
+              return {
+                ...chapstep,
+                thumb,
+              };
+            } else {
+              return chapstep;
+            }
+          }),
+        ),
+      );
+
+      console.log('updatedChapterData', updatedChapterData);
       data.chapters = updatedChapterData;
       console.log('generateThumb data', data);
       return data;
@@ -471,9 +477,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                     keyExtractor={item => item.id.toString()}
                     renderItem={({item, index}) => {
                       console.log('FlatList item', item);
-                      return(
-                        <AccordionItem item={item} index={index} />
-                      )
+                      return <AccordionItem item={item} index={index} />;
                     }}
                   />
                 </View>

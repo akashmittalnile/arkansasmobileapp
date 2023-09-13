@@ -125,6 +125,18 @@ const AccordionItem = ({item, index}) => {
                 </View>
               ))
             : null}
+          {item.type === 'survey'
+            ? item.chapter_question?.map((sur, surIndex) => (
+                <View key={surIndex?.toString()}>
+                  <Text>{sur?.title}</Text>
+                  {sur?.chapter_option?.map((opt, optIndex) => (
+                    <View key={optIndex?.toString()}>
+                      <Text>{opt?.value}</Text>
+                    </View>
+                  ))}
+                </View>
+              ))
+            : null}
 
           {/* <MyText
             text={description}

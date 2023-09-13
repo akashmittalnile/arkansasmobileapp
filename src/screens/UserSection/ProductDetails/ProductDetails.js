@@ -173,6 +173,10 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                 url: chapstep?.file,
                 timeStamp: 1000,
               });
+              console.log('chapstep thumb', {
+                ...chapstep,
+                thumb,
+              });
               return {
                 ...chapstep,
                 thumb,
@@ -183,7 +187,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           }),
         ),
       );
-
+     
       console.log('updatedChapterData', updatedChapterData);
       data.chapters = updatedChapterData;
       console.log('generateThumb data', data);

@@ -27,6 +27,7 @@ export const FORGET_PASSWORD_VERIFY = `forget-password-verify`;
 export const LOGOUT = `logout`;
 export const ALL_TYPE_LISTING = `all-type-listing`;
 export const LIKE_OBJECT_TYPE = `add-wishlist`;
+export const UNLIKE_OBJECT_TYPE = `remove-wishlist`;
 export const ALL_CATEGORY = `all-category`;
 export const PROFILE = `profile`;
 export const ADD_CARD = `add-card`;

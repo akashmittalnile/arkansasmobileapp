@@ -172,7 +172,6 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   };
 
   const renderTags = ({item}) => {
-    console.log('renderTags item', item);
     return (
       <TouchableOpacity
         onPress={() => changeSelectedTag(item.id)}
@@ -230,6 +229,32 @@ const ProductDetails = ({navigation, dispatch, route}) => {
 
   const openReviewModal = () => {
     setShowReviewModal(true);
+  };
+
+  const onLike = async (type, id, status) => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append("type", type);
+    formdata.append("id", id);
+    formdata.append("status", status === '1' ? '0' : '1');
+    console.log('onLike formdata', formdata);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        status === '1' ? UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE,
+        formdata
+      );
+      console.log('onLike resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.Message, Toast.SHORT);
+        getSuggestedCourses()
+      } else {
+        Toast.show(resp.data.Message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in onLike', error);
+    }
+    setShowLoader(false);
   };
 
   //UI
@@ -296,10 +321,13 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               />
             </View>
             <View style={styles.iconsRow}>
-              <Image
-                source={productDetails?.isLike ? require('assets/images/heart.png') : require('assets/images/heart-selected.png')}
-                style={{height: 14, width: 14}}
-              />
+              {console.log('productDetails?.isLike', productDetails?.isLike)}
+              <TouchableOpacity onPress={()=>{onLike('1', productDetails.id, productDetails.isLike)}} >
+                <Image
+                  source={productDetails?.isLike ? require('assets/images/heart-selected.png') : require('assets/images/heart.png')}
+                  style={{height: 14, width: 14}}
+                />
+              </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10, height: 14, width: 14}}
@@ -352,7 +380,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           <View style={{height: 37}}></View>
           <ViewAllSub
             text="Rating & Review"
-            rating="4.7"
+            rating={productDetails?.rating}
             reviews="400k+"
             onPress={gotoAllReviews}
             style={{marginBottom: 17}}

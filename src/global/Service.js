@@ -221,6 +221,7 @@ export const postApiWithToken = (token, endPoint, data) =>
       return res;
     })
     .catch(error => {
+      console.log('error', error);
       if (error?.response?.status === 422) {
         // Alert.alert('', `${error.response.data.message}`);
         Toast.show(error.response.data.message, Toast.SHORT);

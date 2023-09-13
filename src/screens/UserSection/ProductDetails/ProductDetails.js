@@ -172,6 +172,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   };
 
   const renderTags = ({item}) => {
+    console.log('renderTags item', item);
     return (
       <TouchableOpacity
         onPress={() => changeSelectedTag(item.id)}
@@ -341,7 +342,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
 
           <ViewAll text="Tags" showSeeAll={false} style={{marginTop: 20}} />
           <FlatList
-            data={Array.isArray(productDetails?.tags) ?  productDetails?.tags : [productDetails?.tags]}
+            data={productDetails?.tags}
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{marginTop: 11}}

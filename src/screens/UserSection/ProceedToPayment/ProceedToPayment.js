@@ -100,13 +100,15 @@ const ProceedToPayment = ({navigation, dispatch}) => {
     }
     const postData = new FormData()
     postData.append('card_id', selectedCard)
+    console.log('onConfirm postData', postData);
     setShowLoader(true);
     try {
-      const resp = await Service.getApiWithToken(
+      const resp = await Service.postApiWithToken(
         userToken,
         Service.SAVE_ORDER,
+        postData
       );
-      console.log('onConfirm resp', resp?.data);
+      console.log('onConfirm resp', resp);
       if (resp?.data?.status) {
         Toast.show(resp.data.message, Toast.SHORT);
         openSuccessfulyPurchasedModal()

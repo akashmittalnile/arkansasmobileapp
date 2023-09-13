@@ -108,7 +108,7 @@ const AccordionItem = ({item, index}) => {
             setBodySectionHeight(event.nativeEvent.layout.height);
           }}>
             {item.type === 'video' ? 
-            <Image source={{uri: index?.thumb?.path}} style={{height: 50, width: 50}} />
+            <Image source={{uri: item?.thumb?.path}} style={{height: 50, width: 50}} />
             :null}
           {/* <MyText
             text={description}

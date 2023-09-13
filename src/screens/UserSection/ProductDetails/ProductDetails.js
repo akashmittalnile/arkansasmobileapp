@@ -190,10 +190,6 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         }),
       );
 
-      console.log(
-        'updatedChapterData type',
-        updatedChapterData[0]?.chapter_steps[0],
-      );
       console.log('updatedChapterData', updatedChapterData);
       data.chapters = updatedChapterData;
       console.log('generateThumb data', data);

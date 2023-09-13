@@ -24,7 +24,9 @@ import {styles} from './AccordionItemStyle';
 import MyText from '../MyText/MyText';
 import {Colors} from '../../global/Index';
 
-const AccordionItem = ({num, time, title, description}) => {
+// const AccordionItem = ({num, time, title, description}) => {
+const AccordionItem = ({item, index}) => {
+  console.log('AccordionItem item', item?.type ,item);
   const shareValue = useSharedValue(0);
   const [bodySectionHeight, setBodySectionHeight] = useState(0);
   const bodyHeight = useAnimatedStyle(() => ({
@@ -66,7 +68,7 @@ const AccordionItem = ({num, time, title, description}) => {
         <View style={styles.leftRow}>
           <View style={styles.numView}>
             <MyText
-              text={num}
+              text={index + 1}
               fontFamily="regular"
               fontSize={13}
               textColor={'black'}
@@ -74,22 +76,24 @@ const AccordionItem = ({num, time, title, description}) => {
           </View>
           <View style={{marginLeft: 10}}>
             <MyText
-              text={title}
+              text={item.title}
               fontFamily="medium"
               // fontSize={14}
               fontSize={16}
               textColor={Colors.LIGHT_GREY}
             />
-            <View style={styles.timerRow}>
-              <Image source={require('assets/images/clock.png')} />
-              <MyText
-                text={time}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.LIGHT_GREY}
-                style={{marginLeft: 5}}
-              />
-            </View>
+            {item.type === 'video' ? (
+              <View style={styles.timerRow}>
+                <Image source={require('assets/images/clock.png')} />
+                <MyText
+                  text={'15:00'}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.LIGHT_GREY}
+                  style={{marginLeft: 5}}
+                />
+              </View>
+            ) : null}
           </View>
         </View>
         <Animated.View style={iconStyle}>
@@ -103,13 +107,16 @@ const AccordionItem = ({num, time, title, description}) => {
           onLayout={event => {
             setBodySectionHeight(event.nativeEvent.layout.height);
           }}>
-          <MyText
+            {item.type === 'video' ? 
+            <Image source={{uri: index?.thumb?.path}} style={{height: 50, width: 50}} />
+            :null}
+          {/* <MyText
             text={description}
             fontFamily="regular"
             fontSize={13}
             textColor={Colors.LIGHT_GREY}
             style={{}}
-          />
+          /> */}
         </View>
       </Animated.View>
     </View>

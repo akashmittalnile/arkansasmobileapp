@@ -122,10 +122,11 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const [review, setReview] = useState('');
   const [starRating, setStarRating] = useState(1);
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showModal, setShowModal] = useState({isVisible: false, data: null});
 
   useEffect(() => {
-    getProductDetails()
-  }, [])
+    getProductDetails();
+  }, []);
   const getProductDetails = async () => {
     const postData = new FormData();
     postData.append('type', route?.params?.type);
@@ -140,11 +141,11 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       );
       console.log('getProductDetails resp', resp?.data);
       if (resp?.data?.status) {
-        const data = await generateThumb(resp?.data?.data)
-        setProductDetails(data)
+        const data = await generateThumb(resp?.data?.data);
+        setProductDetails(data);
         // Toast.show(resp?.data?.message, Toast.SHORT)
-      }else{
-        Toast.show(resp?.data?.message, Toast.SHORT)
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in getProductDetails', error);
@@ -159,9 +160,28 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         url: data.introduction_video,
         timeStamp: 1000,
       });
-      data.thumb = thumb
+      data.thumb = thumb;
+      
+      // create thumbnails for chapter_step videos
+      const chapterData = [...data?.chapters]
+      const updatedChapterData = await Promise.all(chapterData?.map(async chapstep => {
+        if(chapstep?.type === 'video'){
+          const thumb = await createThumbnail({
+            url: chapstep?.file,
+            timeStamp: 1000,
+          });
+          return {
+            ...chapstep,
+            thumb,
+          };
+        }else{
+          return chapstep
+        }
+      }))
+
+      data.chapters = updatedChapterData;
       console.log('generateThumb data', data);
-      return data
+      return data;
     } catch (error) {
       console.error('Error generating thumbnails:', error);
     }
@@ -192,7 +212,10 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   };
 
   const gotoAllReviews = () => {
-    navigation.navigate(ScreenNames.ALL_REVIEWS, {id: productDetails?.id, type: '1'});
+    navigation.navigate(ScreenNames.ALL_REVIEWS, {
+      id: productDetails?.id,
+      type: '1',
+    });
   };
 
   const submitReview = async () => {
@@ -223,7 +246,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     } catch (error) {
       console.log('error in submitReview', error);
     }
-    setShowReviewModal(false)
+    setShowReviewModal(false);
     setShowLoader(false);
   };
 
@@ -234,20 +257,20 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const onLike = async (type, id, status) => {
     setShowLoader(true);
     const formdata = new FormData();
-    formdata.append("type", type);
-    formdata.append("id", id);
-    formdata.append("status", status === '1' ? '0' : '1');
+    formdata.append('type', type);
+    formdata.append('id', id);
+    formdata.append('status', status === '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
         status === '1' ? UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE,
-        formdata
+        formdata,
       );
       console.log('onLike resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show(resp.data.Message, Toast.SHORT);
-        getSuggestedCourses()
+        getSuggestedCourses();
       } else {
         Toast.show(resp.data.Message, Toast.SHORT);
       }
@@ -255,6 +278,12 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       console.log('error in onLike', error);
     }
     setShowLoader(false);
+  };
+  const toggleModal = state => {
+    setShowModal({
+      isVisible: state.isVisible,
+      data: state.data,
+    });
   };
 
   //UI
@@ -322,9 +351,16 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             </View>
             <View style={styles.iconsRow}>
               {console.log('productDetails?.isLike', productDetails?.isLike)}
-              <TouchableOpacity onPress={()=>{onLike('1', productDetails.id, productDetails.isLike)}} >
+              <TouchableOpacity
+                onPress={() => {
+                  onLike('1', productDetails.id, productDetails.isLike);
+                }}>
                 <Image
-                  source={productDetails?.isLike ? require('assets/images/heart-selected.png') : require('assets/images/heart.png')}
+                  source={
+                    productDetails?.isLike
+                      ? require('assets/images/heart-selected.png')
+                      : require('assets/images/heart.png')
+                  }
                   style={{height: 14, width: 14}}
                 />
               </TouchableOpacity>
@@ -333,6 +369,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                 style={{marginLeft: 10, height: 14, width: 14}}
               />
             </View>
+
             <View style={styles.validDateRow}>
               <Image source={require('assets/images/myyy2.png')} />
               <MyText
@@ -345,6 +382,14 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               />
             </View>
           </View>
+          {showModal.isVisible ? (
+            <VideoModel
+              isVisible={showModal.isVisible}
+              toggleModal={toggleModal}
+              videoDetail={{...showModal?.data, url: showModal?.data?.file}}
+              {...props}
+            />
+          ) : null}
           <View style={styles.bottomRow}>
             <View style={styles.chaptersRow}>
               <Image source={require('assets/images/chapter-icon.png')} />
@@ -409,21 +454,31 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               />
             </View>
           ))} */}
-          <ViewAll text="Chapter 1" style={{marginTop: 10, marginBottom: 20}} />
-          <View style={styles.containerStyle}>
-            <FlatList
-              data={data}
-              keyExtractor={item => item.id.toString()}
-              renderItem={({item}) => (
-                <AccordionItem
-                  num={item.id}
-                  time={item.time}
-                  title={item.title}
-                  description={item.description}
+          {productDetails?.chapters
+            ?.filter(el => el?.chapter_steps?.length > 0)
+            ?.map((chap, index) => (
+              <>
+                <ViewAll
+                  key={index?.toString()}
+                  text={`Chapter ${index + 1}`}
+                  style={{marginTop: 10, marginBottom: 20}}
                 />
-              )}
-            />
-          </View>
+                <View
+                  // key={chapstepindex?.toString()}
+                  style={styles.containerStyle}>
+                  <FlatList
+                    data={chap?.chapter_steps}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({item, index}) => {
+                      console.log('FlatList item', item);
+                      return(
+                        <AccordionItem item={item} index={index} />
+                      )
+                    }}
+                  />
+                </View>
+              </>
+            ))}
           <View style={styles.buttonsRow}>
             <MyButton
               text="Add to Cart"

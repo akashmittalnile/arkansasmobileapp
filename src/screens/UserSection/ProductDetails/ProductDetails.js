@@ -185,7 +185,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           text={item?.name}
           fontFamily="regular"
           fontSize={14}
-          textColor={selectedTag === item ? Colors.THEME_GOLD : 'black'}
+          textColor={selectedTag === item.id ? Colors.THEME_GOLD : 'black'}
         />
       </TouchableOpacity>
     );

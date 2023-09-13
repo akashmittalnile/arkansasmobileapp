@@ -174,15 +174,15 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const renderTags = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => changeSelectedTag(item)}
+        onPress={() => changeSelectedTag(item.id)}
         style={[
           styles.courseTypeContainer,
-          selectedTag === item
+          selectedTag === item?.id
             ? {backgroundColor: Colors.THEME_BROWN}
             : null,
         ]}>
         <MyText
-          text={item}
+          text={item?.name}
           fontFamily="regular"
           fontSize={14}
           textColor={selectedTag === item ? Colors.THEME_GOLD : 'black'}

@@ -26,7 +26,7 @@ import {Colors} from '../../global/Index';
 
 // const AccordionItem = ({num, time, title, description}) => {
 const AccordionItem = ({item, index}) => {
-  console.log('AccordionItem item', item?.type ,item);
+  console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
   const [bodySectionHeight, setBodySectionHeight] = useState(0);
   const bodyHeight = useAnimatedStyle(() => ({
@@ -107,9 +107,25 @@ const AccordionItem = ({item, index}) => {
           onLayout={event => {
             setBodySectionHeight(event.nativeEvent.layout.height);
           }}>
-            {item.type === 'video' ? 
-            <Image source={{uri: item?.thumb?.path}} style={{height: 50, width: 50}} />
-            :null}
+          {item.type === 'video' ? (
+            <Image
+              source={{uri: item?.thumb?.path}}
+              style={{height: 50, width: 50}}
+            />
+          ) : null}
+          {item.type === 'quiz'
+            ? item.chapter_question?.map((ques, queIndex) => (
+                <View key={queIndex?.toString()}>
+                  <Text>{ques?.title}</Text>
+                  {ques?.chapter_option?.map((opt, optIndex) => (
+                    <View key={optIndex?.toString()}>
+                      <Text>{opt?.value}</Text>
+                    </View>
+                  ))}
+                </View>
+              ))
+            : null}
+
           {/* <MyText
             text={description}
             fontFamily="regular"

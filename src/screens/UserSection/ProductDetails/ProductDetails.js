@@ -166,7 +166,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       const chapterData = [...data?.chapters];
       const updatedChapterData = await Promise.all(
         chapterData?.map(async chap => {
-          const returned =  chap?.chapter_steps?.map(async chapstep => {
+          const returned = chap?.chapter_steps?.map(async chapstep => {
             console.log('chapstep', chapstep);
             if (chapstep?.type === 'video') {
               const thumb = await createThumbnail({
@@ -186,11 +186,14 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             }
           });
           console.log('chap inside', chap);
-          return ({...chap, chapter_steps: returned})
+          return {...chap, chapter_steps: returned};
         }),
       );
 
-      console.log('updatedChapterData type', updatedChapterData[0]);
+      console.log(
+        'updatedChapterData type',
+        updatedChapterData[0]?.chapter_steps[0],
+      );
       console.log('updatedChapterData', updatedChapterData);
       data.chapters = updatedChapterData;
       console.log('generateThumb data', data);

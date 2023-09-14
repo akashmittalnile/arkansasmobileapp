@@ -139,9 +139,13 @@ const AccordionItem = ({item, index}) => {
               ))
             : null}
           {item.type === 'pdf' ? (
-            <View style={{flex: 1, alignItems:'center'}} >
+            <View style={{flex: 1, alignItems: 'center'}}>
               <Pdf
                 source={{uri: item?.file}}
+                horizontal
+                renderActivityIndicator={() => {
+                  <ActivityIndicator color="black" size="large" />;
+                }}
                 trustAllCerts={false}
                 onLoadComplete={(numberOfPages, filePath) => {
                   console.log(`Number of pages: ${numberOfPages}`);

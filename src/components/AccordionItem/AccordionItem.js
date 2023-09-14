@@ -139,23 +139,25 @@ const AccordionItem = ({item, index}) => {
               ))
             : null}
           {item.type === 'pdf' ? (
-            <Pdf
-              source={{uri: item?.file}}
-              trustAllCerts={false}
-              onLoadComplete={(numberOfPages, filePath) => {
-                console.log(`Number of pages: ${numberOfPages}`);
-              }}
-              onPageChanged={(page, numberOfPages) => {
-                console.log(`Current page: ${page}`);
-              }}
-              onError={error => {
-                console.log(error);
-              }}
-              onPressLink={uri => {
-                console.log(`Link pressed: ${uri}`);
-              }}
-              style={styles.pdf}
-            />
+            <View style={{flex: 1, alignItems:'center'}} >
+              <Pdf
+                source={{uri: item?.file}}
+                trustAllCerts={false}
+                onLoadComplete={(numberOfPages, filePath) => {
+                  console.log(`Number of pages: ${numberOfPages}`);
+                }}
+                onPageChanged={(page, numberOfPages) => {
+                  console.log(`Current page: ${page}`);
+                }}
+                onError={error => {
+                  console.log(error);
+                }}
+                onPressLink={uri => {
+                  console.log(`Link pressed: ${uri}`);
+                }}
+                style={styles.pdf}
+              />
+            </View>
           ) : null}
 
           {/* <MyText

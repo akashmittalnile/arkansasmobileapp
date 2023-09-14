@@ -383,6 +383,8 @@ PODS:
     - React-Core
   - react-native-date-picker (4.2.13):
     - React-Core
+  - react-native-document-picker (9.0.1):
+    - React-Core
   - react-native-netinfo (9.4.1):
     - React-Core
   - react-native-orientation-locker (1.5.0):
@@ -617,6 +619,7 @@ DEPENDENCIES:
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-create-thumbnail (from `../node_modules/react-native-create-thumbnail`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker`)
   - react-native-pdf (from `../node_modules/react-native-pdf`)
@@ -722,6 +725,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-create-thumbnail"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-orientation-locker:
@@ -827,6 +832,7 @@ SPEC CHECKSUMS:
   react-native-blob-util: af2dc91365bfde33f61389cbd0c692af9a4a97cb
   react-native-create-thumbnail: e022bcdcba8a0b4529a50d3fa1a832ec921be39d
   react-native-date-picker: 04e866ba4e7857f83abd504ad42e787f0f02ae00
+  react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-orientation-locker: 851f6510d8046ea2f14aa169b1e01fcd309a94ba
   react-native-pdf: 7c0e91ada997bac8bac3bb5bea5b6b81f5a3caae

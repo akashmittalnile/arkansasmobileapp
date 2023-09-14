@@ -22,17 +22,60 @@ import Animated, {
 } from 'react-native-reanimated';
 import {styles} from './AccordionItemStyle';
 import MyText from '../MyText/MyText';
-import {Colors} from '../../global/Index';
+import {Colors, MyIcon} from '../../global/Index';
 import Pdf from 'react-native-pdf';
+import DocumentPicker from 'react-native-document-picker';
+import Toast from 'react-native-simple-toast';
+import MyButton from '../MyButton/MyButton';
+import { width } from '../../global/Constant';
 
 // const AccordionItem = ({num, time, title, description}) => {
-const AccordionItem = ({item, index}) => {
+const AccordionItem = ({
+  item,
+  index,
+  document1,
+  setDocument1,
+  uploadDocument,
+}) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
   const [bodySectionHeight, setBodySectionHeight] = useState(0);
   const bodyHeight = useAnimatedStyle(() => ({
     height: interpolate(shareValue.value, [0, 1], [0, bodySectionHeight]),
   }));
+
+  const openDocument = async () => {
+    try {
+      const resp = await DocumentPicker.pickSingle({
+        // type: [DocumentPicker.types.allFiles],
+        type: [
+          DocumentPicker.types.images,
+          DocumentPicker.types.pdf,
+          DocumentPicker.types.doc,
+          DocumentPicker.types.docx,
+        ],
+      });
+      // if size is greater than 1 mb, reupload image
+      if (resp.size > 10 * 1024 * 1024) {
+        Toast.show(
+          'Assignment document size exceeds 10 MB, please upload smaller assignment document',
+          Toast.LONG,
+        );
+        return;
+      }
+      if (resp.type === `image/webp`) {
+        Toast.show(
+          'Webp image format not allowed, please select another image',
+          Toast.LONG,
+        );
+        return;
+      }
+      console.log('setValue', resp);
+      setDocument1(resp);
+    } catch (error) {
+      console.log('error in openDocument', error);
+    }
+  };
 
   const iconStyle = useAnimatedStyle(() => {
     return {
@@ -160,6 +203,45 @@ const AccordionItem = ({item, index}) => {
                   console.log(`Link pressed: ${uri}`);
                 }}
                 style={styles.pdf}
+              />
+            </View>
+          ) : null}
+          {item.type === 'assignment' ? (
+            <View style={styles.midImage}>
+              {document1 == '' ? (
+                <View style={styles.imageViewStyle}>
+                  <TouchableOpacity
+                    onPress={openDocument}
+                    style={styles.addButtonStyle}>
+                    <MyIcon.AntDesign
+                      name="plus"
+                      color={Colors.THEME_GREEN}
+                      size={24}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={styles.imageViewStyle}>
+                  <MyText text="Uploaded documet" />
+                  <TouchableOpacity
+                    onPress={() => setDocument1('')}
+                    style={styles.deleteButtonStyle}>
+                    <MyIcon.MaterialIcons
+                      name="delete"
+                      color={Colors.RED}
+                      size={24}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+              <MyButton
+                text="Upload"
+                style={{
+                  width: width * 0.9,
+                  marginBottom: 10,
+                  backgroundColor: Colors.THEME_BROWN,
+                }}
+                onPress={()=>uploadDocument(item.id)}
               />
             </View>
           ) : null}

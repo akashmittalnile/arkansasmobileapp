@@ -123,6 +123,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const [starRating, setStarRating] = useState(1);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
+  const [document1, setDocument1] = useState('');
 
   useEffect(() => {
     getProductDetails();
@@ -298,6 +299,42 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     });
   };
 
+  const documentValidation = () => {
+    if (document1 == '') {
+      Toast.show('Please select assignment file', Toast.SHORT)
+    } else {
+      return true
+    };
+  };
+  const uploadDocument = async (chapter_step_id) => {
+    if (documentValidation()) {
+      setShowLoader(true);
+      try {
+        const postData = new FormData();
+        postData.append('chapter_step_id', chapter_step_id);
+        postData.append('file', {
+          name: document1.name,
+          type: document1.type,
+          uri: document1.uri,
+        });
+        console.log('uploadDocument postData', postData);
+        const resp = await Service.postApiWithToken(
+          userToken,
+          Service.ASSIGNMENT_UPLOAD_FILE,
+          postData,
+        );
+        console.log('uploadDocument resp', resp?.data);
+        if (resp.data.status) {
+          Toast.show(resp.data.message, Toast.SHORT)
+        } else {
+          Toast.show(resp.data.message, Toast.SHORT)
+        }
+      } catch (error) {
+        console.log('error in uploadDocument', error);
+      }
+      setShowLoader(false);
+    }
+  };  
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -406,7 +443,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             <View style={styles.chaptersRow}>
               <Image source={require('assets/images/chapter-icon.png')} />
               <MyText
-                text={`3 Chapters`}
+                text={`${productDetails?.chapter_count} Chapters`}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -416,7 +453,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             <View style={styles.quizRow}>
               <Image source={require('assets/images/quiz-icon.png')} />
               <MyText
-                text={`200+ Quiz Questions `}
+                text={`${productDetails?.chapter_quiz_count} Quiz Questions `}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -438,7 +475,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           <ViewAllSub
             text="Rating & Review"
             rating={productDetails?.rating}
-            reviews="400k+"
+            reviews={productDetails?.review_count}
             onPress={gotoAllReviews}
             style={{marginBottom: 17}}
           />
@@ -482,8 +519,8 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                     data={chap?.chapter_steps}
                     keyExtractor={item => item.id.toString()}
                     renderItem={({item, index}) => {
-                      console.log('FlatList item', item);
-                      return <AccordionItem item={item} index={index} />;
+                      // console.log('FlatList item', item);
+                      return <AccordionItem item={item} index={index} document1={document1} setDocument1={setDocument1} uploadDocument={uploadDocument} />;
                     }}
                   />
                 </View>

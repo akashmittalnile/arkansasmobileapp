@@ -34,6 +34,7 @@
     "react-native-country-codes-picker": "^2.3.3",
     "react-native-create-thumbnail": "^1.6.4",
     "react-native-date-picker": "^4.2.13",
+    "react-native-document-picker": "^9.0.1",
     "react-native-gesture-handler": "^2.12.0",
     "react-native-gradle-plugin": "^0.71.19",
     "react-native-linear-gradient": "^2.7.3",

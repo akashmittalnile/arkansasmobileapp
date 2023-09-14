@@ -15,6 +15,7 @@ import {
   setUser,
   setUserToken,
   setUserNotifications,
+  setCartCount
 } from 'src/reduxToolkit/reducer/user';
 import SafeView from '../../../components/SafeView/SafeView';
 
@@ -45,9 +46,13 @@ const Splash = ({navigation}) => {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userInfo) {
         const notifications = await AsyncStorage.getItem('userNotifications');
+        const cartCount = await AsyncStorage.getItem('cartCount');
         // console.log('User notifications', notifications);
         if (notifications) {
           dispatch(setUserNotifications(JSON.parse(notifications)));
+        }
+        if (cartCount) {
+          dispatch(setCartCount(JSON.parse(cartCount)));
         }
       }
       const userData = JSON.parse(userInfo);

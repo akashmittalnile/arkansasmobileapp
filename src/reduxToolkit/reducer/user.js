@@ -4,6 +4,7 @@ const initialState = {
   userInfo: {},
   userToken: '',
   userNotifications: [],
+  cartCount: '',
 };
 const user = createSlice({
   name: 'user',
@@ -25,6 +26,12 @@ const user = createSlice({
       return {
         ...state,
         userNotifications: payload,
+      };
+    },
+    setCartCount(state, {payload}) {
+      return {
+        ...state,
+        cartCount: payload,
       };
     },
     logOutUser(state, {payload}) {

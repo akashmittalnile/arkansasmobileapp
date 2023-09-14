@@ -36,6 +36,10 @@ import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import ViewAll from '../../../components/ViewAll/ViewAll';
 import {createThumbnail} from 'react-native-create-thumbnail';
+import {
+  setUserNotifications,
+  setCartCount
+} from 'src/reduxToolkit/reducer/user';
 
 const courseTypes = [
   {name: 'All', id: '1'},
@@ -156,6 +160,7 @@ const Home = ({navigation, dispatch}) => {
   const userToken = useSelector(state => state.user.userToken);
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
+  const [showLoader2, setShowLoader2] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [homeData, setHomeData] = useState({});
   const [selectedCourseType, setSelectedCourseType] = useState('1');
@@ -163,8 +168,9 @@ const Home = ({navigation, dispatch}) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      console.log('userToken', userToken);
+      // console.log('userToken', userToken);
       getHomeData();
+      getCartCount();
     });
     return unsubscribe;
   }, [navigation]);
@@ -172,7 +178,7 @@ const Home = ({navigation, dispatch}) => {
     setShowLoader(true);
     try {
       const resp = await Service.getApiWithToken(userToken, Service.HOME);
-      console.log('getHomeData resp', resp);
+      console.log('getHomeData resp', resp?.data);
       if (resp?.data?.status) {
         const dataWithThumb = await generateThumb(resp?.data?.data);
         setHomeData(dataWithThumb);
@@ -182,6 +188,21 @@ const Home = ({navigation, dispatch}) => {
       }
     } catch (error) {
       console.log('error in getHomeData', error);
+    }
+    setShowLoader(false);
+  };
+  const getCartCount = async () => {
+    setShowLoader(true);
+    try {
+      const resp = await Service.getApiWithToken(userToken, Service.CART_COUNT);
+      console.log('getCartCount resp', resp);
+      // if (resp?.data?.status) {
+      //   dispatch(setCartCount(resp?.data?.data))
+      // } else {
+      //   Toast.show(resp.data.message, Toast.SHORT);
+      // }
+    } catch (error) {
+      console.log('error in getCartCount', error);
     }
     setShowLoader(false);
   };
@@ -726,7 +747,7 @@ const Home = ({navigation, dispatch}) => {
             />
           )}
         </ScrollView>
-        <CustomLoader showLoader={showLoader} />
+        <CustomLoader showLoader={showLoader || showLoader2} />
       </View>
     </SafeAreaView>
   );

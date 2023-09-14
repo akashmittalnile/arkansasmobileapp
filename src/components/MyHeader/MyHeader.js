@@ -31,8 +31,7 @@ const MyHeader = ({
   //variables
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  // const cartItems = useSelector(state => state.cart.cartItems);
-  const cartItems = {};
+  const cartCount = useSelector(state => state.user.cartCount);
   const userInfo = useSelector(state => state.user.userInfo);
   const userToken = useSelector(state => state.user.userToken);
   const userNotifications = useSelector(state => state.user.userNotifications);
@@ -153,10 +152,9 @@ const MyHeader = ({
         ) : null}
         {IsCartIcon ? (
           <TouchableOpacity onPress={gotoCart}>
-            {Object.keys(typeof cartItems === 'object' ? cartItems : {})
-              .length > 0 ? (
+            {cartCount !== '' ? (
               <View style={styles.cartNumView}>
-                <MyText text={1} fontSize={10} textColor="white" />
+                <MyText text={cartCount} fontSize={10} textColor="white" />
               </View>
             ) : null}
             <Image source={require('assets/images/cart.png')} />

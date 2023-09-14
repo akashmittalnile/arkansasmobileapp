@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {height, width} from '../../global/Constant';
 
 export const styles = StyleSheet.create({
   containerStyle: {
@@ -55,5 +56,10 @@ export const styles = StyleSheet.create({
   timerRow: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  pdf: {
+    flex: 1,
+    width: width,
+    height: height,
   },
 });

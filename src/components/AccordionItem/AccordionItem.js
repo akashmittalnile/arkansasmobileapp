@@ -23,10 +23,11 @@ import Animated, {
 import {styles} from './AccordionItemStyle';
 import MyText from '../MyText/MyText';
 import {Colors} from '../../global/Index';
+import Pdf from 'react-native-pdf';
 
 // const AccordionItem = ({num, time, title, description}) => {
 const AccordionItem = ({item, index}) => {
-  console.log('AccordionItem item', item?.type, item);
+  // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
   const [bodySectionHeight, setBodySectionHeight] = useState(0);
   const bodyHeight = useAnimatedStyle(() => ({
@@ -137,6 +138,25 @@ const AccordionItem = ({item, index}) => {
                 </View>
               ))
             : null}
+          {item.type === 'pdf' ? (
+            <Pdf
+              source={{uri: item?.file}}
+              trustAllCerts={false}
+              onLoadComplete={(numberOfPages, filePath) => {
+                console.log(`Number of pages: ${numberOfPages}`);
+              }}
+              onPageChanged={(page, numberOfPages) => {
+                console.log(`Current page: ${page}`);
+              }}
+              onError={error => {
+                console.log(error);
+              }}
+              onPressLink={uri => {
+                console.log(`Link pressed: ${uri}`);
+              }}
+              style={styles.pdf}
+            />
+          ) : null}
 
           {/* <MyText
             text={description}

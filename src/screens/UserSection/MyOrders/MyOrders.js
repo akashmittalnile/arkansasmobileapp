@@ -154,6 +154,42 @@ const MyOrders = ({navigation, dispatch}) => {
   const [selectedDateUploaded, setSelectedDateUploaded] = useState('1');
   const [multiSliderValue, setMultiSliderValue] = useState([0, 5000]);
   const [starRating, setStarRating] = useState(1);
+  const [courseData, setCourseData] = useState([]);
+  const [productData, setProductData] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getMyOrders();
+   });
+   return unsubscribe;
+ }, [navigation]);
+ const getMyOrders = async (type = '1') => {
+   setShowLoader(true);
+   const formdata = new FormData();
+   formdata.append('type', type);
+   try {
+     const resp = await Service.postApiWithToken(
+       userToken,
+       Service.MY_ORDER,
+       formdata,
+     );
+     console.log('getMyOrders resp', resp?.data);
+     if (resp?.data?.status) {
+       if (type === '1') {
+        //  const updatedData = await generateThumb(resp?.data?.data)
+        //  setCourseData(updatedData);
+         setCourseData(resp?.data?.data);
+       } else {
+         setProductData(resp?.data?.data);
+       }
+     } else {
+       Toast.show(resp.data.message, Toast.SHORT);
+     }
+   } catch (error) {
+     console.log('error in getMyOrders', error);
+   }
+   setShowLoader(false);
+ };
 
   const multiSliderValuesChange = values => {
     setMultiSliderValue(values);

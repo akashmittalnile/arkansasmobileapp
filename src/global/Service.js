@@ -44,6 +44,7 @@ export const CART_DETAILS_PAYMENT = `cart-details-payment`;
 export const SAVE_ORDER = `save-order`;
 export const CART_COUNT = `cart-count`;
 export const ASSIGNMENT_UPLOAD_FILE = `assignment-upload-file`;
+export const MY_ORDER = `my-order`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

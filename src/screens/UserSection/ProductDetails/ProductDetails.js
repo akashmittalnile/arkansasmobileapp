@@ -326,6 +326,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         console.log('uploadDocument resp', resp?.data);
         if (resp.data.status) {
           Toast.show(resp.data.message, Toast.SHORT)
+          setDocument1('')
         } else {
           Toast.show(resp.data.message, Toast.SHORT)
         }
@@ -595,7 +596,7 @@ const ViewAllSub = ({
             style={{marginLeft: 5}}
           />
           <MyText
-            text={'(' + reviews + ')'}
+            text={' (' + reviews + ')'}
             fontSize={13}
             fontFamily="regular"
             textColor={Colors.LIGHT_GREY}

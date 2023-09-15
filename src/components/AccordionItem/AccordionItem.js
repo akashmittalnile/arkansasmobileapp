@@ -107,7 +107,7 @@ const AccordionItem = ({
   const showVideo = (file) => {
     setShowModal({
       isVisible: true,
-      data: file,
+      data: {file},
     });
   }
 

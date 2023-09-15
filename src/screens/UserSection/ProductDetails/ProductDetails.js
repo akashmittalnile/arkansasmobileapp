@@ -446,7 +446,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             <VideoModal
               isVisible={showModal.isVisible}
               toggleModal={toggleModal}
-              videoDetail={{ url: showModal?.file}}
+              videoDetail={{ ...showModal?.data, url: showModal?.data?.file }}
               // {...props}
             />
           ) : null}

@@ -88,4 +88,18 @@ export const styles = StyleSheet.create({
     width: 50,
     borderRadius: 50 / 2,
   },
+  buttonsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 10
+  },
+  crseImg: {
+    overflow:'hidden',
+    height: 167,
+    width: width * 0.8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf:'center',
+  },
 });

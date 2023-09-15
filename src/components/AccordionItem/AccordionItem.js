@@ -27,7 +27,7 @@ import Pdf from 'react-native-pdf';
 import DocumentPicker from 'react-native-document-picker';
 import Toast from 'react-native-simple-toast';
 import MyButton from '../MyButton/MyButton';
-import { width } from '../../global/Constant';
+import {width} from '../../global/Constant';
 
 // const AccordionItem = ({num, time, title, description}) => {
 const AccordionItem = ({
@@ -152,10 +152,16 @@ const AccordionItem = ({
             setBodySectionHeight(event.nativeEvent.layout.height);
           }}>
           {item.type === 'video' ? (
-            <Image
-              source={{uri: item?.thumb?.path}}
-              style={{height: 50, width: 50}}
-            />
+            <>
+              <ImageBackground
+                source={{uri: item?.thumb?.path}}
+                imageStyle={{borderRadius: 10}}
+                style={styles.crseImg}>
+                <TouchableOpacity>
+                  <Image source={require('assets/images/play-icon.png')} />
+                </TouchableOpacity>
+              </ImageBackground>
+            </>
           ) : null}
           {item.type === 'quiz'
             ? item.chapter_question?.map((ques, queIndex) => (
@@ -241,10 +247,33 @@ const AccordionItem = ({
                   marginBottom: 10,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                onPress={()=>uploadDocument(item.id)}
+                onPress={() => uploadDocument(item.id)}
               />
             </View>
           ) : null}
+
+          <View
+            style={[
+              styles.buttonsRow,
+              Platform.OS === 'ios' ? {paddingTop: 16} : null,
+            ]}>
+            <MyButton
+              text="Mark Incomplete"
+              style={{
+                width: '48%',
+                height: 50,
+                backgroundColor: Colors.THEME_BROWN,
+              }}
+            />
+            <MyButton
+              text="Continue"
+              style={{
+                width: '48%',
+                height: 50,
+                backgroundColor: Colors.THEME_GOLD,
+              }}
+            />
+          </View>
 
           {/* <MyText
             text={description}

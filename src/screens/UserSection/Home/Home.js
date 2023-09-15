@@ -168,7 +168,7 @@ const Home = ({navigation, dispatch}) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      // console.log('userToken', userToken);
+      console.log('userToken', userToken);
       getHomeData();
       getCartCount();
     });

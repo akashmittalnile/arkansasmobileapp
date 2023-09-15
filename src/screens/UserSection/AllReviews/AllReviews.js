@@ -150,7 +150,7 @@ const AllReviews = ({navigation, dispatch, route}) => {
           <View style={{height: 37}}></View>
           {reviewList?.length > 0 ? (
             <ViewAllSub
-              text="Rating & Review"
+              text="Ratings & Reviews"
               rating="4.7"
               reviews="400k+"
               showButton={false}

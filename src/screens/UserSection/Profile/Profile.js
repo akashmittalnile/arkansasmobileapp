@@ -66,14 +66,14 @@ const Profile = ({navigation, dispatch}) => {
       id: '3',
       name: 'Certificates',
     },
-    {
-      id: '4',
-      name: 'Notifications',
-    },
-    {
-      id: '5',
-      name: 'Billing',
-    },
+    // {
+    //   id: '4',
+    //   name: 'Notifications',
+    // },
+    // {
+    //   id: '5',
+    //   name: 'Billing',
+    // },
     {
       id: '6',
       name: 'Order History',
@@ -395,18 +395,21 @@ const Profile = ({navigation, dispatch}) => {
               />
             ) : selectedTab == '3' ? (
               <CertificateTab certificateList={certificateList} />
-            ) : selectedTab == '4' ? (
-              <NotificationsTab
-                notificationsEnabled={notificationsEnabled}
-                setNotificationsEnabled={setNotificationsEnabled}
-              />
-            ) : selectedTab == '5' ? (
-              <BillingTab
-                cardList={cardList}
-                deleteCard={deleteCard}
-                openAddCardModal={openAddCardModal}
-              />
-            ) : selectedTab == '6' ? (
+            ) 
+            // : selectedTab == '4' ? (
+            //   <NotificationsTab
+            //     notificationsEnabled={notificationsEnabled}
+            //     setNotificationsEnabled={setNotificationsEnabled}
+            //   />
+            // ) 
+            // : selectedTab == '5' ? (
+            //   <BillingTab
+            //     cardList={cardList}
+            //     deleteCard={deleteCard}
+            //     openAddCardModal={openAddCardModal}
+            //   />
+            // ) 
+            : selectedTab == '6' ? (
               <OrderHistoryTab
                 orderHistoryData={orderHistoryData}
                 viewDetails={viewDetails}

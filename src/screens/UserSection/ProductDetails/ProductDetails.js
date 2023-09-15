@@ -474,7 +474,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           />
           <View style={{height: 37}}></View>
           <ViewAllSub
-            text="Rating & Review"
+            text="Ratings & Reviews"
             rating={productDetails?.rating}
             reviews={productDetails?.review_count}
             onPress={gotoAllReviews}

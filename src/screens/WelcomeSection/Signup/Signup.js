@@ -188,7 +188,7 @@ const Signup = ({navigation}) => {
               secureTextEntry
             />
             <MyButton
-              text="NEXT"
+              text="SIGN UP"
               style={{
                 width: width * 0.9,
                 marginBottom: 10,
@@ -197,7 +197,7 @@ const Signup = ({navigation}) => {
               // onPress={openSuccessModal}
               onPress={signUpUser}
             />
-            <View style={styles.dividerRow}>
+            {/* <View style={styles.dividerRow}>
               <Divider style={{width: '38%'}} />
               <View style={styles.orBox}>
                 <MyText
@@ -222,10 +222,10 @@ const Signup = ({navigation}) => {
               style={{width: width * 0.9}}
               isIcon
               icon={require('assets/images/google.png')}
-            />
+            /> */}
             <TouchableOpacity onPress={gotoLogin} style={styles.alreadyView}>
               <MyText
-                text={'Already have an account?'}
+                text={'Already have an account? '}
                 fontSize={13}
                 fontFamily="medium"
                 textColor={Colors.LIGHT_GREY}

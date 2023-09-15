@@ -150,7 +150,7 @@ const Login = ({navigation}) => {
               />
             </TouchableOpacity>
             <MyButton
-              text="NEXT"
+              text="SIGN IN"
               style={{
                 width: width * 0.9,
                 marginBottom: 10,
@@ -159,7 +159,7 @@ const Login = ({navigation}) => {
               onPress={signInUser}
               // onPress={()=>{navigation.dispatch(resetIndexGoToBottomTab)}}
             />
-            <View style={styles.dividerRow}>
+            {/* <View style={styles.dividerRow}>
               <Divider style={{width: '38%', borderColor: '#040706'}} />
               <View style={styles.orBox}>
                 <MyText
@@ -184,10 +184,10 @@ const Login = ({navigation}) => {
               style={{width: width * 0.9}}
               isIcon
               icon={require('assets/images/google.png')}
-            />
+            /> */}
             <TouchableOpacity onPress={gotoSignUp} style={styles.alreadyView}>
               <MyText
-                text={`Don't have an account?`}
+                text={`Don't have an account? `}
                 fontSize={13}
                 fontFamily="medium"
                 textColor={Colors.LIGHT_GREY}

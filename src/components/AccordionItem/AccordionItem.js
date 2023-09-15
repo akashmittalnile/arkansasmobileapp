@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   Alert,
   ImageBackground,
+  Linking,
 } from 'react-native';
 import Animated, {
   interpolate,
@@ -111,6 +112,12 @@ const AccordionItem = ({
     });
   }
 
+  const openPdfInBrowser = (file) => {
+    console.log('openPdfInBrowser', file);
+    const link = `https://docs.google.com/viewerng/viewer?url=${file}`
+    Linking.openURL(link)
+  }
+
   return (
     <View style={styles.subContainer}>
       <TouchableOpacity
@@ -200,6 +207,9 @@ const AccordionItem = ({
             : null}
           {item.type === 'pdf' ? (
             <View style={{flex: 1, alignItems: 'center'}}>
+              <TouchableOpacity onPress={()=>{openPdfInBrowser(item?.file)}}>
+                <MyText text='View Pdf' />
+              </TouchableOpacity>
               <Pdf
                 source={{uri: item?.file}}
                 horizontal

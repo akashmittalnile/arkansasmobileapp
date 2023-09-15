@@ -95,11 +95,9 @@ export const styles = StyleSheet.create({
     marginTop: 10
   },
   crseImg: {
-    overflow:'hidden',
     height: 167,
     width: width * 0.8,
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf:'center',
   },
 });

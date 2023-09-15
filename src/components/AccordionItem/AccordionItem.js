@@ -36,6 +36,7 @@ const AccordionItem = ({
   document1,
   setDocument1,
   uploadDocument,
+  setShowModal,
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -103,6 +104,13 @@ const AccordionItem = ({
     }
   };
 
+  const showVideo = (file) => {
+    setShowModal({
+      isVisible: true,
+      data: file,
+    });
+  }
+
   return (
     <View style={styles.subContainer}>
       <TouchableOpacity
@@ -152,16 +160,19 @@ const AccordionItem = ({
             setBodySectionHeight(event.nativeEvent.layout.height);
           }}>
           {item.type === 'video' ? (
-            <>
+            <View>
               <ImageBackground
                 source={{uri: item?.thumb?.path}}
                 imageStyle={{borderRadius: 10}}
                 style={styles.crseImg}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    showVideo(item?.file);
+                  }}>
                   <Image source={require('assets/images/play-icon.png')} />
                 </TouchableOpacity>
               </ImageBackground>
-            </>
+            </View>
           ) : null}
           {item.type === 'quiz'
             ? item.chapter_question?.map((ques, queIndex) => (

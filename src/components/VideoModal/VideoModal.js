@@ -12,7 +12,7 @@
  import VideoPlayer from 'react-native-video-controls';
  import Orientation from 'react-native-orientation-locker';
  import Modal from 'react-native-modal';
- export const VideoModal = props => {
+ const VideoModal = props => {
    const [screenState, setScreenState] = useState({
      fullScreen: false,
      Width_Layout: '',
@@ -137,6 +137,8 @@
      </Modal>
    );
  };
+
+ export default VideoModal
  
  const styles = StyleSheet.create({
    ModalOutsideContainer: {

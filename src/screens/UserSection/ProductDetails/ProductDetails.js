@@ -45,6 +45,7 @@ import ViewAll from '../../../components/ViewAll/ViewAll';
 import FAB_Button from '../../../components/FAB_Button/FAB_Button';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import Review from '../../../modals/Review/Review';
+import VideoModal from '../../../components/VideoModal/VideoModal';
 
 const data = [
   {
@@ -442,11 +443,11 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             </View>
           </View>
           {showModal.isVisible ? (
-            <VideoModel
+            <VideoModal
               isVisible={showModal.isVisible}
               toggleModal={toggleModal}
-              videoDetail={{...showModal?.data, url: showModal?.data?.file}}
-              {...props}
+              videoDetail={{ url: showModal?.file}}
+              // {...props}
             />
           ) : null}
           <View style={styles.bottomRow}>
@@ -537,6 +538,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                           document1={document1}
                           setDocument1={setDocument1}
                           uploadDocument={uploadDocument}
+                          setShowModal={setShowModal}
                         />
                       );
                     }}

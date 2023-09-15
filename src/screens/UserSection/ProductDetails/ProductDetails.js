@@ -167,25 +167,27 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       const chapterData = [...data?.chapters];
       const updatedChapterData = await Promise.all(
         chapterData?.map(async chap => {
-          const returned = await Promise.all( chap?.chapter_steps?.map(async chapstep => {
-            console.log('chapstep', chapstep);
-            if (chapstep?.type === 'video') {
-              const thumb = await createThumbnail({
-                url: chapstep?.file,
-                timeStamp: 1000,
-              });
-              console.log('chapstep thumb', {
-                ...chapstep,
-                thumb,
-              });
-              return {
-                ...chapstep,
-                thumb,
-              };
-            } else {
-              return chapstep;
-            }
-          }))
+          const returned = await Promise.all(
+            chap?.chapter_steps?.map(async chapstep => {
+              console.log('chapstep', chapstep);
+              if (chapstep?.type === 'video') {
+                const thumb = await createThumbnail({
+                  url: chapstep?.file,
+                  timeStamp: 1000,
+                });
+                console.log('chapstep thumb', {
+                  ...chapstep,
+                  thumb,
+                });
+                return {
+                  ...chapstep,
+                  thumb,
+                };
+              } else {
+                return chapstep;
+              }
+            }),
+          );
           console.log('chap inside', {...chap, chapter_steps: returned});
           return {...chap, chapter_steps: returned};
         }),
@@ -301,12 +303,12 @@ const ProductDetails = ({navigation, dispatch, route}) => {
 
   const documentValidation = () => {
     if (document1 == '') {
-      Toast.show('Please select assignment file', Toast.SHORT)
+      Toast.show('Please select assignment file', Toast.SHORT);
     } else {
-      return true
-    };
+      return true;
+    }
   };
-  const uploadDocument = async (chapter_step_id) => {
+  const uploadDocument = async chapter_step_id => {
     if (documentValidation()) {
       setShowLoader(true);
       try {
@@ -325,17 +327,17 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         );
         console.log('uploadDocument resp', resp?.data);
         if (resp.data.status) {
-          Toast.show(resp.data.message, Toast.SHORT)
-          setDocument1('')
+          Toast.show(resp.data.message, Toast.SHORT);
+          setDocument1('');
         } else {
-          Toast.show(resp.data.message, Toast.SHORT)
+          Toast.show(resp.data.message, Toast.SHORT);
         }
       } catch (error) {
         console.log('error in uploadDocument', error);
       }
       setShowLoader(false);
     }
-  };  
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -373,6 +375,13 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               style={{}}
             />
           </View>
+          <MyText
+            text={productDetails?.description}
+            fontFamily="regular"
+            fontSize={16}
+            textColor={'black'}
+            style={{width: '80%'}}
+          />
           <View style={styles.middleRow}>
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
@@ -521,13 +530,21 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                     keyExtractor={item => item.id.toString()}
                     renderItem={({item, index}) => {
                       // console.log('FlatList item', item);
-                      return <AccordionItem item={item} index={index} document1={document1} setDocument1={setDocument1} uploadDocument={uploadDocument} />;
+                      return (
+                        <AccordionItem
+                          item={item}
+                          index={index}
+                          document1={document1}
+                          setDocument1={setDocument1}
+                          uploadDocument={uploadDocument}
+                        />
+                      );
                     }}
                   />
                 </View>
               </>
             ))}
-          <View style={styles.buttonsRow}>
+          {/* <View style={styles.buttonsRow}>
             <MyButton
               text="Add to Cart"
               style={{
@@ -544,7 +561,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                 backgroundColor: Colors.THEME_GOLD,
               }}
             />
-          </View>
+          </View> */}
           <FAB_Button onPress={openReviewModal} />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

@@ -132,7 +132,8 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const getProductDetails = async () => {
     const postData = new FormData();
     postData.append('type', route?.params?.type);
-    postData.append('id', route?.params?.id);
+    // postData.append('id', route?.params?.id);
+    postData.append('id', 3);
     console.log('getProductDetails postData', postData);
     setShowLoader(true);
     try {
@@ -303,8 +304,8 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   };
   const deleteDocument = id => {
     const documentsCopy = [...documents];
-    documentsCopy?.filter(el => el.id !== id);
-    setDocuments([...documentsCopy]);
+    const updatedData = documentsCopy?.filter(el => el.id !== id);
+    setDocuments([...updatedData]);
   };
   const documentValidation = (chapter_step_id) => {
     if (documents.find(el => el.id === chapter_step_id)) {

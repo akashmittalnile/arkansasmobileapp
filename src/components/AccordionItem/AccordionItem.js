@@ -252,7 +252,7 @@ const AccordionItem = ({
                   />
                 ) : null}
                 <View style={styles.dropImgView}>
-                  {item?.file !== '' ? (
+                  {!isFileEmpty(item?.file) ? (
                     <View style={styles.pdfContainer}>
                       <Image source={require('assets/images/pdf-icon.png')} />
                       <MyText
@@ -266,15 +266,22 @@ const AccordionItem = ({
                       />
                     </View>
                   ) : !documents?.find(el => el?.id === item?.id) ? (
-                    <TouchableOpacity onPress={() => openDocument(item.id)}>
-                      <MyText
-                        text={'Select File Here'}
-                        fontFamily="medium"
-                        fontSize={18}
-                        textColor={Colors.DARK_GREY}
-                        style={{marginBottom: 40}}
-                      />
-                    </TouchableOpacity>
+                    <>
+                      <TouchableOpacity onPress={() => openDocument(item.id)}>
+                        <MyText
+                          text={'Select File Here'}
+                          fontFamily="medium"
+                          fontSize={18}
+                          textColor={Colors.DARK_GREY}
+                          style={{marginBottom: 40}}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => uploadDocument(item.id)}>
+                        <Image
+                          source={require('assets/images/upload-file.png')}
+                        />
+                      </TouchableOpacity>
+                    </>
                   ) : (
                     <>
                       <View style={styles.pdfContainer}>
@@ -303,11 +310,6 @@ const AccordionItem = ({
                           />
                         </TouchableOpacity>
                       </View>
-                      <TouchableOpacity onPress={() => uploadDocument(item.id)}>
-                        <Image
-                          source={require('assets/images/upload-file.png')}
-                        />
-                      </TouchableOpacity>
                     </>
                   )}
                 </View>
@@ -389,3 +391,11 @@ const AccordionItem = ({
 };
 
 export default AccordionItem;
+
+const isFileEmpty = file => {
+  if (file === '' || file === null) {
+    return true;
+  } else {
+    return false;
+  }
+};

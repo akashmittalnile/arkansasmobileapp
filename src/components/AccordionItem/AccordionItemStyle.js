@@ -78,7 +78,6 @@ export const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 5,
     right: 5,
-    top: 5,
   },
   addButtonStyle: {
     backgroundColor: Colors.WHITE,

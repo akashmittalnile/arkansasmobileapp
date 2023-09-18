@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {height, width} from '../../global/Constant';
-import { Colors } from '../../global/Index';
+import {Colors} from '../../global/Index';
 
 export const styles = StyleSheet.create({
   containerStyle: {
@@ -92,12 +92,48 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 10
+    marginTop: 10,
   },
   crseImg: {
     height: 167,
     width: width * 0.8,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  assignmentContainer: {
+    paddingHorizontal: 22,
+    paddingTop: 34,
+    alignItems: 'center',
+  },
+  dropImgView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 42,
+    borderRadius: 10,
+    backgroundColor: Colors.SCREEN_BG,
+    width: '90%',
+  },
+  pdfContainer: {
+    width: '90%',
+    backgroundColor: 'white',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 0.05,
+    elevation: 2,
+  },
+  pdfLeftRow: {
+    // width: '90%',
+    flexDirection: 'row',
     alignItems: 'center',
   },
 });

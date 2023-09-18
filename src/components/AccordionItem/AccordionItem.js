@@ -240,43 +240,116 @@ const AccordionItem = ({
             </View>
           ) : null}
           {item.type === 'assignment' ? (
-            <View style={styles.midImage}>
-              {!documents?.find(el => el?.id === item?.id) ? (
-                <View style={styles.imageViewStyle}>
-                  <TouchableOpacity
-                    onPress={() => openDocument(item.id)}
-                    style={styles.addButtonStyle}>
-                    <MyIcon.AntDesign
-                      name="plus"
-                      color={Colors.THEME_GREEN}
-                      size={24}
-                    />
-                  </TouchableOpacity>
+            <>
+              <View style={styles.assignmentContainer}>
+                {item?.file == '' ? (
+                  <MyText
+                    text={'Upload Your File'}
+                    fontFamily="medium"
+                    fontSize={24}
+                    textColor={'black'}
+                    style={{marginBottom: 41}}
+                  />
+                ) : null}
+                <View style={styles.dropImgView}>
+                  {item?.file !== '' ? (
+                    <View style={styles.pdfContainer}>
+                      <Image source={require('assets/images/pdf-icon.png')} />
+                      <MyText
+                        text={
+                          documents?.find(el => el?.id === item?.id)?.resp?.name
+                        }
+                        textColor={Colors.LIGHT_GREY}
+                        fontSise={13}
+                        fontFamily="regular"
+                        style={{marginLeft: 10, width: '85%'}}
+                      />
+                    </View>
+                  ) : !documents?.find(el => el?.id === item?.id) ? (
+                    <TouchableOpacity onPress={() => openDocument(item.id)}>
+                      <MyText
+                        text={'Select File Here'}
+                        fontFamily="medium"
+                        fontSize={18}
+                        textColor={Colors.DARK_GREY}
+                        style={{marginBottom: 40}}
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <>
+                      <View style={styles.pdfContainer}>
+                        <View style={styles.pdfLeftRow}>
+                          <Image
+                            source={require('assets/images/pdf-icon.png')}
+                          />
+                          <MyText
+                            text={
+                              documents?.find(el => el?.id === item?.id)?.resp
+                                ?.name
+                            }
+                            textColor={Colors.LIGHT_GREY}
+                            fontSise={13}
+                            fontFamily="regular"
+                            style={{marginLeft: 10, width: '85%'}}
+                          />
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => deleteDocument(item.id)}
+                          style={styles.deleteButtonStyle}>
+                          <MyIcon.MaterialIcons
+                            name="delete"
+                            color={Colors.RED}
+                            size={24}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <TouchableOpacity onPress={() => uploadDocument(item.id)}>
+                        <Image
+                          source={require('assets/images/upload-file.png')}
+                        />
+                      </TouchableOpacity>
+                    </>
+                  )}
                 </View>
-              ) : (
-                <View style={styles.imageViewStyle}>
-                  <MyText text="Uploaded documet" />
-                  <TouchableOpacity
-                    onPress={() => deleteDocument(item.id)}
-                    style={styles.deleteButtonStyle}>
-                    <MyIcon.MaterialIcons
-                      name="delete"
-                      color={Colors.RED}
-                      size={24}
-                    />
-                  </TouchableOpacity>
-                </View>
-              )}
-              <MyButton
-                text="Upload File"
-                style={{
-                  width: width * 0.9,
-                  marginBottom: 10,
-                  backgroundColor: Colors.THEME_BROWN,
-                }}
-                onPress={() => uploadDocument(item.id)}
-              />
-            </View>
+              </View>
+              {/* <View style={styles.midImage}>
+                {!documents?.find(el => el?.id === item?.id) ? (
+                  <View style={styles.imageViewStyle}>
+                    <TouchableOpacity
+                      onPress={() => openDocument(item.id)}
+                      style={styles.addButtonStyle}>
+                      <MyIcon.AntDesign
+                        name="plus"
+                        color={Colors.THEME_GREEN}
+                        size={24}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View style={styles.imageViewStyle}>
+                    <MyText text="Uploaded documet" />
+                    <TouchableOpacity
+                      onPress={() => deleteDocument(item.id)}
+                      style={styles.deleteButtonStyle}>
+                      <MyIcon.MaterialIcons
+                        name="delete"
+                        color={Colors.RED}
+                        size={24}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                <MyButton
+                  text="Upload File"
+                  style={{
+                    width: width * 0.9,
+                    marginBottom: 10,
+                    backgroundColor: Colors.THEME_BROWN,
+                  }}
+                  onPress={() => uploadDocument(item.id)}
+                />
+              </View> */}
+            </>
           ) : null}
 
           <View

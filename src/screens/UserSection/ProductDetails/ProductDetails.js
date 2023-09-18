@@ -337,6 +337,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         if (resp.data.status) {
           Toast.show(resp.data.message, Toast.SHORT);
           deleteDocument(item?.id)
+          getProductDetails();
         } else {
           Toast.show(resp.data.message, Toast.SHORT);
         }

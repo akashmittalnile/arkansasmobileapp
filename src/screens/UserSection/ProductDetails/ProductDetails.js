@@ -307,7 +307,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     const updatedData = documentsCopy?.filter(el => el.id !== id);
     setDocuments([...updatedData]);
   };
-  const documentValidation = (chapter_step_id) => {
+  const documentValidation = chapter_step_id => {
     if (documents.find(el => el.id === chapter_step_id)) {
       return true;
     } else {
@@ -318,7 +318,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const uploadDocument = async chapter_step_id => {
     console.log('uploadDocument called', documents);
     if (documentValidation(chapter_step_id)) {
-      const documentWithId = documents.find(el => el.id === chapter_step_id)
+      const documentWithId = documents.find(el => el.id === chapter_step_id);
       setShowLoader(true);
       try {
         const postData = new FormData();
@@ -337,7 +337,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         console.log('uploadDocument resp', resp?.data);
         if (resp.data.status) {
           Toast.show(resp.data.message, Toast.SHORT);
-          deleteDocument(item?.id)
+          deleteDocument(item?.id);
           getProductDetails();
         } else {
           Toast.show(resp.data.message, Toast.SHORT);
@@ -454,7 +454,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             <VideoModal
               isVisible={showModal.isVisible}
               toggleModal={toggleModal}
-              videoDetail={{ ...showModal?.data, url: showModal?.data?.file }}
+              videoDetail={{...showModal?.data, url: showModal?.data?.file}}
               // {...props}
             />
           ) : null}
@@ -489,14 +489,6 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             style={{marginTop: 11}}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderTags}
-          />
-          <View style={{height: 37}}></View>
-          <ViewAllSub
-            text="Ratings & Reviews"
-            rating={productDetails?.rating}
-            reviews={productDetails?.review_count}
-            onPress={gotoAllReviews}
-            style={{marginBottom: 17}}
           />
           {/* {reviewsData?.map(item => (
             <View key={item.id} style={styles.reviewContainer}>
@@ -555,24 +547,14 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                 </View>
               </>
             ))}
-          {/* <View style={styles.buttonsRow}>
-            <MyButton
-              text="Add to Cart"
-              style={{
-                width: '48%',
-                height: 50,
-                backgroundColor: Colors.THEME_BROWN,
-              }}
-            />
-            <MyButton
-              text="Buy Now"
-              style={{
-                width: '48%',
-                height: 50,
-                backgroundColor: Colors.THEME_GOLD,
-              }}
-            />
-          </View> */}
+          <View style={{height: 37}}></View>
+          <ViewAllSub
+            text="Ratings & Reviews"
+            rating={productDetails?.rating}
+            reviews={productDetails?.review_count}
+            onPress={gotoAllReviews}
+            style={{marginBottom: 17}}
+          />
           <FAB_Button onPress={openReviewModal} />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

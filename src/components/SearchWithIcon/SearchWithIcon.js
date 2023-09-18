@@ -12,6 +12,7 @@ const SearchWithIcon = ({
   placeholderTextColor = '#8F93A0',
   value,
   setValue,
+  onChangeText,
   icon = <MyIcon.AntDesign name="search1" color={Colors.WHITE} size={24} />,
   onPress = () => {},
   style = {},
@@ -21,7 +22,7 @@ const SearchWithIcon = ({
     <View style={{...styles.searchContainer, ...style}}>
       <TextInput
         value={value}
-        onChangeText={text => setValue(text)}
+        onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={placeholderTextColor}
         style={styles.inputStyle}

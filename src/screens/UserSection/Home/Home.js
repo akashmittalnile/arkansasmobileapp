@@ -409,11 +409,11 @@ const Home = ({navigation, dispatch}) => {
         style={styles.courseContainer}>
         <View style={styles.topRow}>
           <View style={styles.topLeftRow}>
-            {item?.creatorImg ? (
-              <Image source={{uri: item?.creatorImg}} style={styles.crtrImg} />
+            {item?.content_creator_image ? (
+              <Image source={{uri: item?.content_creator_image}} style={styles.crtrImg} />
             ) : null}
             <MyText
-              text={item.creatorName}
+              text={item.content_creator_name}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.THEME_GOLD}

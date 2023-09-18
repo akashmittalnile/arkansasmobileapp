@@ -87,6 +87,7 @@ const TopCategory = ({navigation, dispatch}) => {
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [categoriesData, setCategoriesData] = useState([]);
+  const [filteredcategoryData, setFilteredcategoryData] = useState([]);
 
   useEffect(() => {
     getCategories();
@@ -94,10 +95,14 @@ const TopCategory = ({navigation, dispatch}) => {
   const getCategories = async () => {
     setShowLoader(true);
     try {
-      const resp = await Service.getApiWithToken(userToken, Service.ALL_CATEGORY);
+      const resp = await Service.getApiWithToken(
+        userToken,
+        Service.ALL_CATEGORY,
+      );
       console.log('getCategories resp', resp?.data);
       if (resp?.data?.status) {
         setCategoriesData(resp?.data?.data);
+        setFilteredcategoryData(resp?.data?.data);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
@@ -121,6 +126,21 @@ const TopCategory = ({navigation, dispatch}) => {
       </View>
     );
   };
+  const filterCategoriesByName = text => {
+    const data = categoriesData?.filter(el => {
+      const formattedCategoryName = el.category_name
+        ?.toString()
+        ?.trim()
+        ?.toLowerCase();
+      const formattedText = text?.toString()?.trim()?.toLowerCase();
+      if (formattedCategoryName?.includes(formattedText)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    setFilteredcategoryData([...data]);
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -136,19 +156,36 @@ const TopCategory = ({navigation, dispatch}) => {
             setValue={setSearchValue}
             icon={<Image source={require('assets/images/yellow-seach.png')} />}
             placeholder="Search Category"
+            onChangeText={text => {
+              setSearchValue(text);
+              filterCategoriesByName(text);
+            }}
             // style={{
             //   width: Constant.width - 40,
             //   alignSelf: 'center',
             //   marginTop: -25,
             // }}
           />
-          <FlatList
-            data={categoriesData}
-            numColumns={3}
-            style={{marginTop: 37}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderCategory}
-          />
+          {filteredcategoryData?.length > 0 ? (
+            <FlatList
+              data={filteredcategoryData}
+              numColumns={3}
+              style={{marginTop: 37}}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderCategory}
+            />
+          ) : (
+            <View style={{alignItems: 'center', marginTop: 20}}>
+              <Image source={require('assets/images/no-data.png')} />
+              <MyText
+                text={'No data found!'}
+                fontFamily="medium"
+                fontSize={40}
+                textAlign="center"
+                textColor={'black'}
+              />
+            </View>
+          )}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
       </View>

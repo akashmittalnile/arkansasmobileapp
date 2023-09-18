@@ -307,28 +307,25 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     setDocuments([...documentsCopy]);
   };
   const documentValidation = (chapter_step_id) => {
-    if(Array.isArray(documents) && documents?.length === 0){
-      Toast.show('Please select assignment file', Toast.SHORT);
-      return false;
-    } else if (documents.find(el => el.id === chapter_step_id)) {
-      Toast.show('Please select assignment file', Toast.SHORT);
-      return false;
-    } else {
+    if (documents.find(el => el.id === chapter_step_id)) {
       return true;
+    } else {
+      Toast.show('Please select assignment file', Toast.SHORT);
+      return false;
     }
   };
   const uploadDocument = async chapter_step_id => {
-    // console.log('uploadDocument called', documents);
-    // return
+    console.log('uploadDocument called', documents);
     if (documentValidation(chapter_step_id)) {
+      const documentWithId = documents.find(el => el.id === chapter_step_id)
       setShowLoader(true);
       try {
         const postData = new FormData();
         postData.append('chapter_step_id', chapter_step_id);
         postData.append('file', {
-          name: documents.name,
-          type: documents.type,
-          uri: documents.uri,
+          name: documentWithId?.resp?.name,
+          type: documentWithId?.resp?.type,
+          uri: documentWithId?.resp?.uri,
         });
         console.log('uploadDocument postData', postData);
         const resp = await Service.postApiWithToken(

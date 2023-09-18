@@ -132,8 +132,8 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const getProductDetails = async () => {
     const postData = new FormData();
     postData.append('type', route?.params?.type);
-    // postData.append('id', route?.params?.id);
-    postData.append('id', 3);
+    postData.append('id', route?.params?.id);
+    // postData.append('id', 3);
     console.log('getProductDetails postData', postData);
     setShowLoader(true);
     try {

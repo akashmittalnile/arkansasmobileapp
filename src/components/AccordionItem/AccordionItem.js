@@ -252,7 +252,7 @@ const AccordionItem = ({
                   />
                 ) : null}
                 <View style={styles.dropImgView}>
-                  {!isFileEmpty(item?.file) ? (
+                  {wasFileSubmitted(item?.file) ? (
                     <View style={styles.pdfContainer}>
                       <Image source={require('assets/images/pdf-icon.png')} />
                       <MyText
@@ -265,7 +265,7 @@ const AccordionItem = ({
                         style={{marginLeft: 10, width: '85%'}}
                       />
                     </View>
-                  ) : !documents?.find(el => el?.id === item?.id) ? (
+                  ) : !isLocalFileSelected(documents, item) ? (
                     <>
                       <TouchableOpacity onPress={() => openDocument(item.id)}>
                         <MyText
@@ -392,10 +392,13 @@ const AccordionItem = ({
 
 export default AccordionItem;
 
-const isFileEmpty = file => {
+const wasFileSubmitted = file => {
   if (file === '' || file === null) {
-    return true;
-  } else {
     return false;
+  } else {
+    return true;
   }
+};
+const isLocalFileSelected = (documents, item) => {
+  return documents?.find(el => el?.id === item?.id)
 };

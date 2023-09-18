@@ -103,6 +103,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingTop: 34,
     alignItems: 'center',
+    marginBottom: 10
   },
   dropImgView: {
     alignItems: 'center',

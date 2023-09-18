@@ -122,41 +122,53 @@ const AccordionItem = ({
   };
 
   return (
-    <View style={styles.subContainer}>
+    <View
+      style={[
+        styles.subContainer,
+        item.type === 'video' ? {backgroundColor: Colors.THEME_BROWN} : null,
+      ]}>
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.btnStyle}
         onPress={toggleButton}>
         <View style={styles.leftRow}>
-          <View style={styles.numView}>
-            <MyText
-              text={index + 1}
-              fontFamily="regular"
-              fontSize={13}
-              textColor={'black'}
-            />
+          <View style={styles.leftSubRow}>
+            <View style={styles.numView}>
+              <MyText
+                text={index + 1}
+                fontFamily="regular"
+                fontSize={13}
+                textColor={'black'}
+              />
+            </View>
+            <View style={{marginLeft: 10}}>
+              <MyText
+                text={item.title}
+                fontFamily="medium"
+                // fontSize={14}
+                fontSize={16}
+                textColor={item.type === 'video' ? 'white' : Colors.LIGHT_GREY}
+              />
+              {item.type === 'video' ? (
+                <View style={styles.timerRow}>
+                  <Image source={require('assets/images/clock.png')} />
+                  <MyText
+                    text={'15:00'}
+                    fontFamily="regular"
+                    fontSize={13}
+                    textColor={'white'}
+                    style={{marginLeft: 5}}
+                  />
+                </View>
+              ) : null}
+            </View>
           </View>
-          <View style={{marginLeft: 10}}>
-            <MyText
-              text={item.title}
-              fontFamily="medium"
-              // fontSize={14}
-              fontSize={16}
-              textColor={Colors.LIGHT_GREY}
+          {item.type === 'video' ? (
+            <Image
+              source={require('assets/images/tick-circle-white.png')}
+              style={{}}
             />
-            {item.type === 'video' ? (
-              <View style={styles.timerRow}>
-                <Image source={require('assets/images/clock.png')} />
-                <MyText
-                  text={'15:00'}
-                  fontFamily="regular"
-                  fontSize={13}
-                  textColor={Colors.LIGHT_GREY}
-                  style={{marginLeft: 5}}
-                />
-              </View>
-            ) : null}
-          </View>
+          ) : null}
         </View>
         <Animated.View style={iconStyle}>
           <Image source={require('assets/images/arrow-down.png')} />
@@ -400,5 +412,5 @@ const wasFileSubmitted = file => {
   }
 };
 const isLocalFileSelected = (documents, item) => {
-  return documents?.find(el => el?.id === item?.id)
+  return documents?.find(el => el?.id === item?.id);
 };

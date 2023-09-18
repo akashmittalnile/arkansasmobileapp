@@ -53,6 +53,13 @@ export const styles = StyleSheet.create({
   leftRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent:'space-between',
+    width:'80%'
+  },
+  leftSubRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent:'space-between'
   },
   timerRow: {
     flexDirection: 'row',

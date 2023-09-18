@@ -124,7 +124,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const [starRating, setStarRating] = useState(1);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
-  const [document1, setDocument1] = useState('');
+  const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
     getProductDetails();
@@ -301,24 +301,34 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       data: state.data,
     });
   };
-
-  const documentValidation = () => {
-    if (document1 == '') {
+  const deleteDocument = id => {
+    const documentsCopy = [...documents];
+    documentsCopy?.filter(el => el.id !== id);
+    setDocuments([...documentsCopy]);
+  };
+  const documentValidation = (chapter_step_id) => {
+    if(Array.isArray(documents) && documents?.length === 0){
       Toast.show('Please select assignment file', Toast.SHORT);
+      return false;
+    } else if (documents.find(el => el.id === chapter_step_id)) {
+      Toast.show('Please select assignment file', Toast.SHORT);
+      return false;
     } else {
       return true;
     }
   };
   const uploadDocument = async chapter_step_id => {
-    if (documentValidation()) {
+    // console.log('uploadDocument called', documents);
+    // return
+    if (documentValidation(chapter_step_id)) {
       setShowLoader(true);
       try {
         const postData = new FormData();
         postData.append('chapter_step_id', chapter_step_id);
         postData.append('file', {
-          name: document1.name,
-          type: document1.type,
-          uri: document1.uri,
+          name: documents.name,
+          type: documents.type,
+          uri: documents.uri,
         });
         console.log('uploadDocument postData', postData);
         const resp = await Service.postApiWithToken(
@@ -329,7 +339,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         console.log('uploadDocument resp', resp?.data);
         if (resp.data.status) {
           Toast.show(resp.data.message, Toast.SHORT);
-          setDocument1('');
+          deleteDocument(item?.id)
         } else {
           Toast.show(resp.data.message, Toast.SHORT);
         }
@@ -410,7 +420,6 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               />
             </View>
             <View style={styles.iconsRow}>
-              {console.log('productDetails?.isLike', productDetails?.isLike)}
               <TouchableOpacity
                 onPress={() => {
                   onLike('1', productDetails.id, productDetails.isLike);
@@ -535,9 +544,10 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                         <AccordionItem
                           item={item}
                           index={index}
-                          document1={document1}
-                          setDocument1={setDocument1}
+                          documents={documents}
+                          setDocuments={setDocuments}
                           uploadDocument={uploadDocument}
+                          deleteDocument={deleteDocument}
                           setShowModal={setShowModal}
                         />
                       );

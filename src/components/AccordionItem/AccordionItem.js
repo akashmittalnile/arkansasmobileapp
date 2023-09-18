@@ -34,9 +34,10 @@ import {width} from '../../global/Constant';
 const AccordionItem = ({
   item,
   index,
-  document1,
-  setDocument1,
+  documents,
+  setDocuments,
   uploadDocument,
+  deleteDocument,
   setShowModal,
 }) => {
   // console.log('AccordionItem item', item?.type, item);
@@ -46,7 +47,7 @@ const AccordionItem = ({
     height: interpolate(shareValue.value, [0, 1], [0, bodySectionHeight]),
   }));
 
-  const openDocument = async () => {
+  const openDocument = async id => {
     try {
       const resp = await DocumentPicker.pickSingle({
         // type: [DocumentPicker.types.allFiles],
@@ -73,7 +74,9 @@ const AccordionItem = ({
         return;
       }
       console.log('setValue', resp);
-      setDocument1(resp);
+      const documentsCopy = [...documents];
+      documentsCopy.push({resp, id});
+      setDocuments([...documentsCopy]);
     } catch (error) {
       console.log('error in openDocument', error);
     }
@@ -105,18 +108,18 @@ const AccordionItem = ({
     }
   };
 
-  const showVideo = (file) => {
+  const showVideo = file => {
     setShowModal({
       isVisible: true,
       data: {file},
     });
-  }
+  };
 
-  const openPdfInBrowser = (file) => {
+  const openPdfInBrowser = file => {
     console.log('openPdfInBrowser', file);
-    const link = `https://docs.google.com/viewerng/viewer?url=${file}`
-    Linking.openURL(link)
-  }
+    const link = `https://docs.google.com/viewerng/viewer?url=${file}`;
+    Linking.openURL(link);
+  };
 
   return (
     <View style={styles.subContainer}>
@@ -207,8 +210,11 @@ const AccordionItem = ({
             : null}
           {item.type === 'pdf' ? (
             <View style={{flex: 1, alignItems: 'center'}}>
-              <TouchableOpacity onPress={()=>{openPdfInBrowser(item?.file)}}>
-                <MyText text='View Pdf' />
+              <TouchableOpacity
+                onPress={() => {
+                  openPdfInBrowser(item?.file);
+                }}>
+                <MyText text="View Pdf" />
               </TouchableOpacity>
               <Pdf
                 source={{uri: item?.file}}
@@ -235,10 +241,10 @@ const AccordionItem = ({
           ) : null}
           {item.type === 'assignment' ? (
             <View style={styles.midImage}>
-              {document1 == '' ? (
+              {!documents?.find(el => el?.id === item?.id) ? (
                 <View style={styles.imageViewStyle}>
                   <TouchableOpacity
-                    onPress={openDocument}
+                    onPress={() => openDocument(item.id)}
                     style={styles.addButtonStyle}>
                     <MyIcon.AntDesign
                       name="plus"
@@ -251,7 +257,7 @@ const AccordionItem = ({
                 <View style={styles.imageViewStyle}>
                   <MyText text="Uploaded documet" />
                   <TouchableOpacity
-                    onPress={() => setDocument1('')}
+                    onPress={() => deleteDocument(item.id)}
                     style={styles.deleteButtonStyle}>
                     <MyIcon.MaterialIcons
                       name="delete"
@@ -262,7 +268,7 @@ const AccordionItem = ({
                 </View>
               )}
               <MyButton
-                text="Upload"
+                text="Upload File"
                 style={{
                   width: width * 0.9,
                   marginBottom: 10,

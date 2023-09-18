@@ -192,7 +192,7 @@ const Home = ({navigation, dispatch}) => {
     setShowLoader(false);
   };
   const getCartCount = async () => {
-    setShowLoader(true);
+    setShowLoader2(true);
     try {
       const resp = await Service.getApiWithToken(userToken, Service.CART_COUNT);
       console.log('getCartCount resp', resp);
@@ -204,7 +204,7 @@ const Home = ({navigation, dispatch}) => {
     } catch (error) {
       console.log('error in getCartCount', error);
     }
-    setShowLoader(false);
+    setShowLoader2(false);
   };
 
   const generateThumb = async data => {

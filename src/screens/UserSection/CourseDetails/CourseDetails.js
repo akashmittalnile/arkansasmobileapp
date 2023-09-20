@@ -573,6 +573,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                           deleteDocument={deleteDocument}
                           setShowModal={setShowModal}
                           markAsCompleted={markAsCompleted}
+                          allChapterSteps={chap?.chapter_steps}
                         />
                       );
                     }}

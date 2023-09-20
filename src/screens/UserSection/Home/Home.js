@@ -163,7 +163,7 @@ const Home = ({navigation, dispatch}) => {
   const [showLoader2, setShowLoader2] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [homeData, setHomeData] = useState({});
-  const [selectedCourseType, setSelectedCourseType] = useState('1');
+  const [selectedTag, setSelectedTag] = useState('1');
   const [trendingCourses, setTrendingCourses] = useState([]);
 
   useEffect(() => {
@@ -277,8 +277,8 @@ const Home = ({navigation, dispatch}) => {
     navigation.navigate(ScreenNames.SUGGESTED_PRODUCTS);
   };
 
-  const changeSelectedCourseType = id => {
-    setSelectedCourseType(id);
+  const changeSelectedTag = id => {
+    setSelectedTag(id);
   };
   const addToCart = async (object_id, object_type, cart_value) => {
     const postData = new FormData();
@@ -307,10 +307,10 @@ const Home = ({navigation, dispatch}) => {
   const renderTags = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => changeSelectedCourseType(item.id)}
+        onPress={() => changeSelectedTag(item.id)}
         style={[
           styles.courseTypeContainer,
-          selectedCourseType === item.id
+          selectedTag === item.id
             ? {backgroundColor: Colors.THEME_BROWN}
             : null,
         ]}>
@@ -319,7 +319,7 @@ const Home = ({navigation, dispatch}) => {
           fontFamily="regular"
           fontSize={14}
           textColor={
-            selectedCourseType === item.id ? Colors.THEME_GOLD : 'black'
+            selectedTag === item.id ? Colors.THEME_GOLD : 'black'
           }
         />
       </TouchableOpacity>

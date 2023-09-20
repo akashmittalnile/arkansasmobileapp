@@ -392,13 +392,15 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             />
           ) : null}
 
-          <MyText
-            text={productDetails?.description}
-            fontFamily="regular"
-            fontSize={13}
-            textColor={Colors.LIGHT_GREY}
-            style={{width: '100%', marginTop: 17}}
-          />
+          {productDetails?.description ? (
+            <MyText
+              text={productDetails?.description}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.LIGHT_GREY}
+              style={{width: '100%', marginTop: 17}}
+            />
+          ) : null}
 
           <ViewAll text="Tags" showSeeAll={false} style={{marginTop: 20}} />
           {productDetails?.tags?.length > 0 ? (

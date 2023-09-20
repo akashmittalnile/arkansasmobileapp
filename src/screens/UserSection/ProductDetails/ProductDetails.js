@@ -232,20 +232,22 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     const formdata = new FormData();
     formdata.append('type', type);
     formdata.append('id', id);
-    formdata.append('status', status === '1' ? '0' : '1');
+    formdata.append('status', status == '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
+    const endPoint = status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE
+    console.log('onLike endPoint', endPoint);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        status === '1' ? UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE,
+        endPoint,
         formdata,
       );
       console.log('onLike resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.Message, Toast.SHORT);
-        getSuggestedCourses();
+        Toast.show(resp.data.message, Toast.SHORT);
+        getProductDetails();
       } else {
-        Toast.show(resp.data.Message, Toast.SHORT);
+        Toast.show(resp.data.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in onLike', error);
@@ -365,11 +367,11 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             <View style={styles.iconsRow}>
               <TouchableOpacity
                 onPress={() => {
-                  onLike('1', productDetails.id, productDetails.isLike);
+                  onLike('2', productDetails.id, productDetails.isWishlist);
                 }}>
                 <Image
                   source={
-                    productDetails?.isLike
+                    productDetails?.isWishlist
                       ? require('assets/images/heart-selected.png')
                       : require('assets/images/heart.png')
                   }

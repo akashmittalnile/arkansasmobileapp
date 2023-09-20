@@ -385,13 +385,6 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               style={{}}
             />
           </View>
-          <MyText
-            text={productDetails?.description}
-            fontFamily="regular"
-            fontSize={16}
-            textColor={'black'}
-            style={{width: '80%'}}
-          />
           <View style={styles.middleRow}>
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
@@ -437,18 +430,17 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                 style={{marginLeft: 10, height: 14, width: 14}}
               />
             </View>
-
-            <View style={styles.validDateRow}>
-              <Image source={require('assets/images/myyy2.png')} />
-              <MyText
-                // text={`Course Valid Date: 26 Juny 2023`}
-                text={`Course Valid Date: ${productDetails?.valid_upto}`}
-                fontFamily="medium"
-                fontSize={13}
-                textColor={Colors.LIGHT_GREY}
-                style={{marginLeft: 5}}
-              />
-            </View>
+          </View>
+          <View style={styles.validDateRow}>
+            <Image source={require('assets/images/myyy2.png')} />
+            <MyText
+              // text={`Course Valid Date: 26 Juny 2023`}
+              text={`Course Valid Date: ${productDetails?.valid_upto}`}
+              fontFamily="medium"
+              fontSize={13}
+              textColor={Colors.LIGHT_GREY}
+              style={{marginLeft: 5}}
+            />
           </View>
           {showModal.isVisible ? (
             <VideoModal
@@ -480,6 +472,13 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               />
             </View>
           </View>
+          <MyText
+            text={productDetails?.description}
+            fontFamily="regular"
+            fontSize={13}
+            textColor={Colors.LIGHT_GREY}
+            style={{width: '100%', marginTop: 17}}
+          />
 
           <ViewAll text="Tags" showSeeAll={false} style={{marginTop: 20}} />
           <FlatList

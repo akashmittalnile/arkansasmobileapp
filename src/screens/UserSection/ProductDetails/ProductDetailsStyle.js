@@ -83,7 +83,8 @@ export const styles = StyleSheet.create({
   validDateRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 16,
+    marginTop: 7
+    // marginLeft: 16,
   },
   viewAllContainer: {
     flexDirection: 'row',

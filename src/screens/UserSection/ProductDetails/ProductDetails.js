@@ -43,7 +43,6 @@ import Animated, {
 import AccordionItem from '../../../components/AccordionItem/AccordionItem';
 import ViewAll from '../../../components/ViewAll/ViewAll';
 import FAB_Button from '../../../components/FAB_Button/FAB_Button';
-import {createThumbnail} from 'react-native-create-thumbnail';
 import Review from '../../../modals/Review/Review';
 import VideoModal from '../../../components/VideoModal/VideoModal';
 
@@ -142,10 +141,9 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         Service.OBJECT_TYPE_DETAILS,
         postData,
       );
-      console.log('getProductDetails resp', resp?.data);
+      console.log('getProductDetails resp', resp?.data?.data);
       if (resp?.data?.status) {
-        // const data = await generateThumb(resp?.data?.data);
-        // setProductDetails(data);
+        setProductDetails(resp?.data?.data);
         // Toast.show(resp?.data?.message, Toast.SHORT)
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
@@ -154,54 +152,6 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       console.log('error in getProductDetails', error);
     }
     setShowLoader(false);
-  };
-
-  const generateThumb = async data => {
-    console.log('generateThumb');
-    try {
-      const thumb = await createThumbnail({
-        url: data.introduction_video,
-        timeStamp: 1000,
-      });
-      data.thumb = thumb;
-
-      // create thumbnails for chapter_step videos
-      const chapterData = [...data?.chapters];
-      const updatedChapterData = await Promise.all(
-        chapterData?.map(async chap => {
-          const returned = await Promise.all(
-            chap?.chapter_steps?.map(async chapstep => {
-              console.log('chapstep', chapstep);
-              if (chapstep?.type === 'video') {
-                const thumb = await createThumbnail({
-                  url: chapstep?.file,
-                  timeStamp: 1000,
-                });
-                console.log('chapstep thumb', {
-                  ...chapstep,
-                  thumb,
-                });
-                return {
-                  ...chapstep,
-                  thumb,
-                };
-              } else {
-                return chapstep;
-              }
-            }),
-          );
-          console.log('chap inside', {...chap, chapter_steps: returned});
-          return {...chap, chapter_steps: returned};
-        }),
-      );
-
-      console.log('updatedChapterData', updatedChapterData);
-      data.chapters = updatedChapterData;
-      console.log('generateThumb data', data);
-      return data;
-    } catch (error) {
-      console.error('Error generating thumbnails:', error);
-    }
   };
 
   const changeSelectedTag = id => {
@@ -354,20 +304,16 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       <StatusBar backgroundColor={Colors.THEME_BROWN} />
       <View style={styles.container}>
         <MyHeader Title="Product Details" isBackButton />
-        {/* <MyHeader Title="Home" isBackButton /> */}
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
-          <ImageBackground
-            source={{uri: productDetails?.thumb?.path}}
-            // source={require('assets/images/rectangle-1035.png')}
-            style={styles.crseImg}
-            imageStyle={{borderRadius: 10}}>
-            <TouchableOpacity>
-              <Image source={require('assets/images/play-icon.png')} />
-            </TouchableOpacity>
-          </ImageBackground>
+          {productDetails.Product_image[0] ? (
+            <ImageBackground
+              source={{uri: productDetails.Product_image[0]}}
+              style={styles.crseImg}
+              imageStyle={{borderRadius: 10}}></ImageBackground>
+          ) : null}
 
           <View style={styles.topRow}>
             <MyText
@@ -378,7 +324,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               style={{width: '80%'}}
             />
             <MyText
-              text={`$${productDetails?.course_fee}`}
+              text={`$${productDetails?.price}`}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -403,7 +349,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={productDetails?.content_creator_name}
+                text={productDetails?.creator_name}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -431,17 +377,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               />
             </View>
           </View>
-          <View style={styles.validDateRow}>
-            <Image source={require('assets/images/myyy2.png')} />
-            <MyText
-              // text={`Course Valid Date: 26 Juny 2023`}
-              text={`Course Valid Date: ${productDetails?.valid_upto}`}
-              fontFamily="medium"
-              fontSize={13}
-              textColor={Colors.LIGHT_GREY}
-              style={{marginLeft: 5}}
-            />
-          </View>
+
           {showModal.isVisible ? (
             <VideoModal
               isVisible={showModal.isVisible}
@@ -450,28 +386,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               // {...props}
             />
           ) : null}
-          <View style={styles.bottomRow}>
-            <View style={styles.chaptersRow}>
-              <Image source={require('assets/images/chapter-icon.png')} />
-              <MyText
-                text={`${productDetails?.chapter_count} Chapters`}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.LIGHT_GREY}
-                style={{marginLeft: 5}}
-              />
-            </View>
-            <View style={styles.quizRow}>
-              <Image source={require('assets/images/quiz-icon.png')} />
-              <MyText
-                text={`${productDetails?.chapter_quiz_count} Quiz Questions `}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.LIGHT_GREY}
-                style={{marginLeft: 5}}
-              />
-            </View>
-          </View>
+
           <MyText
             text={productDetails?.description}
             fontFamily="regular"
@@ -481,14 +396,24 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           />
 
           <ViewAll text="Tags" showSeeAll={false} style={{marginTop: 20}} />
-          <FlatList
-            data={productDetails?.tags}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{marginTop: 11}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderTags}
-          />
+          {productDetails?.tags?.length > 0 ? (
+            <FlatList
+              data={productDetails?.tags}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{marginTop: 11}}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderTags}
+            />
+          ) : (
+            <MyText
+              text={'No Tags found!'}
+              fontFamily="medium"
+              fontSize={18}
+              textAlign="center"
+              textColor={'black'}
+            />
+          )}
           {/* {reviewsData?.map(item => (
             <View key={item.id} style={styles.reviewContainer}>
               <View style={styles.reviewTopRow}>
@@ -513,39 +438,6 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               />
             </View>
           ))} */}
-          {productDetails?.chapters
-            ?.filter(el => el?.chapter_steps?.length > 0)
-            ?.map((chap, index) => (
-              <>
-                <ViewAll
-                  key={index?.toString()}
-                  text={`Chapter ${index + 1}`}
-                  style={{marginTop: 10, marginBottom: 20}}
-                />
-                <View
-                  // key={chapstepindex?.toString()}
-                  style={styles.containerStyle}>
-                  <FlatList
-                    data={chap?.chapter_steps}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({item, index}) => {
-                      // console.log('FlatList item', item);
-                      return (
-                        <AccordionItem
-                          item={item}
-                          index={index}
-                          documents={documents}
-                          setDocuments={setDocuments}
-                          uploadDocument={uploadDocument}
-                          deleteDocument={deleteDocument}
-                          setShowModal={setShowModal}
-                        />
-                      );
-                    }}
-                  />
-                </View>
-              </>
-            ))}
           <View style={{height: 37}}></View>
           <ViewAllSub
             text="Ratings & Reviews"

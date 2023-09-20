@@ -481,14 +481,24 @@ const CourseDetails = ({navigation, dispatch, route}) => {
           />
 
           <ViewAll text="Tags" showSeeAll={false} style={{marginTop: 20}} />
-          <FlatList
-            data={productDetails?.tags}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{marginTop: 11}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderTags}
-          />
+          {productDetails?.tags?.length > 0 ? (
+            <FlatList
+              data={productDetails?.tags}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{marginTop: 11}}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderTags}
+            />
+          ) : (
+            <MyText
+              text={'No Tags found!'}
+              fontFamily="medium"
+              fontSize={18}
+              textAlign="center"
+              textColor={'black'}
+            />
+          )}
           {/* {reviewsData?.map(item => (
             <View key={item.id} style={styles.reviewContainer}>
               <View style={styles.reviewTopRow}>

@@ -61,30 +61,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
-  bottomRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  chaptersRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  quizRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 22,
-  },
   iconsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 16,
-  },
-  validDateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 7
-    // marginLeft: 16,
   },
   viewAllContainer: {
     flexDirection: 'row',

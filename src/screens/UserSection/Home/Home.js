@@ -673,7 +673,7 @@ const Home = ({navigation, dispatch}) => {
             <View>
               <ViewAll
                 text="All Products"
-                onPress={gotoSuggestedCourses}
+                onPress={gotoAllProducts}
                 // onPress={gotoSuggestedProducts}
                 style={{marginTop: 25}}
               />

@@ -78,18 +78,45 @@ const AllProducts = ({navigation, dispatch}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [productData, setProductData] = useState([]);
 
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+  const getAllProducts = async () => {
+    const postData = new FormData();
+    postData.append('type', 2);
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ALL_TYPE_LISTING,
+        postData,
+      );
+      console.log('getAllProducts resp', resp?.data);
+      if (resp?.data?.status) {
+        setProductData(resp?.data?.data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getAllProducts', error);
+    }
+    setShowLoader(false);
+  };
   const renderProduct = ({item}) => {
     return (
       <View style={styles.courseContainer}>
-        <ImageBackground source={item.courseImg} style={styles.crseImg}>
+        <ImageBackground
+          source={{uri: item?.Product_image[0]}}
+          style={styles.crseImg}>
           {/* <TouchableOpacity>
             <Image source={require('assets/images/play-icon.png')} />
           </TouchableOpacity> */}
         </ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText
-            text={item.courseName}
+            text={item.title}
             fontFamily="regular"
             fontSize={13}
             textColor={Colors.LIGHT_GREY}
@@ -99,7 +126,7 @@ const AllProducts = ({navigation, dispatch}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={item.courseRating}
+                text={item.rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -113,7 +140,7 @@ const AllProducts = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={item.creatorName}
+                text={item.creator_name}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -124,7 +151,7 @@ const AllProducts = ({navigation, dispatch}) => {
           </View>
           <View style={styles.bottomRow}>
             <MyText
-              text={'$' + item.courseFee}
+              text={'$' + item.price}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -132,7 +159,13 @@ const AllProducts = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image source={require('assets/images/heart-selected.png')} />
+              <Image
+                source={
+                  item?.isLike
+                    ? require('assets/images/heart-selected.png')
+                    : require('assets/images/heart.png')
+                }
+              />
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}
@@ -166,7 +199,7 @@ const AllProducts = ({navigation, dispatch}) => {
           />
 
           <FlatList
-            data={productList}
+            data={productData || []}
             style={{marginTop: 28}}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderProduct}

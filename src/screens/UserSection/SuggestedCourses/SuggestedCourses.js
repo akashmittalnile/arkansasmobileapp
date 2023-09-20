@@ -116,10 +116,10 @@ const SuggestedCourses = ({navigation, dispatch}) => {
       );
       console.log('onLike resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.Message, Toast.SHORT);
+        Toast.show(resp.data.message, Toast.SHORT);
         getSuggestedCourses()
       } else {
-        Toast.show(resp.data.Message, Toast.SHORT);
+        Toast.show(resp.data.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in onLike', error);

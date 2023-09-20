@@ -25,7 +25,7 @@ import Toast from 'react-native-simple-toast';
 //import : global
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
 //import : styles
-import {styles} from './ProductDetailsStyle';
+import {styles} from './CourseDetailsStyle';
 //import : modal
 //import : redux
 import {connect, useSelector} from 'react-redux';
@@ -111,7 +111,7 @@ const tags = [
   {name: 'Tatoos 2023', id: '3'},
   {name: 'Body Piercing', id: '4'},
 ];
-const ProductDetails = ({navigation, dispatch, route}) => {
+const CourseDetails = ({navigation, dispatch, route}) => {
   //variables
   const LINE_HEIGTH = 25;
   //variables : redux
@@ -144,8 +144,8 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       );
       console.log('getProductDetails resp', resp?.data);
       if (resp?.data?.status) {
-        // const data = await generateThumb(resp?.data?.data);
-        // setProductDetails(data);
+        const data = await generateThumb(resp?.data?.data);
+        setProductDetails(data);
         // Toast.show(resp?.data?.message, Toast.SHORT)
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
@@ -353,7 +353,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     <SafeAreaView style={{flex: 1}}>
       <StatusBar backgroundColor={Colors.THEME_BROWN} />
       <View style={styles.container}>
-        <MyHeader Title="Product Details" isBackButton />
+        <MyHeader Title="Course Details" isBackButton />
         {/* <MyHeader Title="Home" isBackButton /> */}
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -573,7 +573,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
 const mapDispatchToProps = dispatch => ({
   dispatch,
 });
-export default connect(null, mapDispatchToProps)(ProductDetails);
+export default connect(null, mapDispatchToProps)(CourseDetails);
 
 const ViewAllSub = ({
   text,

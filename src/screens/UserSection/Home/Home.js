@@ -264,6 +264,9 @@ const Home = ({navigation, dispatch}) => {
   const gotoTopCategory = () => {
     navigation.navigate(ScreenNames.TOP_CATEGORY);
   };
+  const gotoCourseDetails = (id, type) => {
+    navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
+  };
   const gotoProductDetails = (id, type) => {
     navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
   };
@@ -405,7 +408,7 @@ const Home = ({navigation, dispatch}) => {
     // console.log('item?.thumb?.path', item?.thumb?.path);
     return (
       <TouchableOpacity
-        onPress={() => gotoProductDetails(item?.id, '1')}
+        onPress={() => gotoCourseDetails(item?.id, '1')}
         style={styles.courseContainer}>
         <View style={styles.topRow}>
           <View style={styles.topLeftRow}>
@@ -489,7 +492,7 @@ const Home = ({navigation, dispatch}) => {
   };
   const renderProduct = ({item}) => {
     return (
-      <TouchableOpacity style={styles.productContainer}>
+      <TouchableOpacity onPress={() => gotoProductDetails(item?.id, '2')} style={styles.productContainer}>
         <View>
           {item.Product_image[0] ? (
             <Image source={{uri: item.Product_image[0]}} style={{width: (width - 40) * 0.42, height: 136}} />

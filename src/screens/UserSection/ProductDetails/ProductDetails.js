@@ -146,8 +146,10 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       console.log('getProductDetails resp', resp?.data?.data);
       if (resp?.data?.status) {
         setProductDetails(resp?.data?.data);
-        const sliData = resp?.data?.data?.Product_image?.map(el => ({slider: el}))
-        setSliderData([...sliData])
+        const sliData = resp?.data?.data?.Product_image?.map(el => ({
+          slider: el,
+        }));
+        setSliderData([...sliData]);
         // Toast.show(resp?.data?.message, Toast.SHORT)
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
@@ -417,38 +419,52 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               textColor={'black'}
             />
           )}
-          {/* {reviewsData?.map(item => (
-            <View key={item.id} style={styles.reviewContainer}>
-              <View style={styles.reviewTopRow}>
-                <View style={styles.reviewTopLeftRow}>
-                  <Image source={{uri: item.img}} style={styles.reviewImg} />
-                  <MyText
-                    text={item.name}
-                    fontFamily="medium"
-                    fontSize={13}
-                    textColor={Colors.LIGHT_GREY}
-                    style={{marginLeft: 10}}
-                  />
-                </View>
-                <Image source={require('assets/images/message-text.png')} />
-              </View>
-              <MyText
-                text={item.msg}
-                fontFamily="medium"
-                fontSize={13}
-                textColor={Colors.LIGHT_GREY}
-                style={{marginTop: 10}}
-              />
-            </View>
-          ))} */}
           <View style={{height: 37}}></View>
           <ViewAllSub
             text="Ratings & Reviews"
             rating={productDetails?.rating}
             reviews={productDetails?.review_count}
             onPress={gotoAllReviews}
+            showButton={productDetails?.review?.length > 0}
             style={{marginBottom: 17}}
           />
+          {productDetails?.review?.length > 0 ? (
+            productDetails?.review?.map((item, index) => (
+              <View key={item.index?.toString()} style={styles.reviewContainer}>
+                <View style={styles.reviewTopRow}>
+                  <View style={styles.reviewTopLeftRow}>
+                    <Image
+                      source={{uri: item?.profile_image}}
+                      style={styles.reviewImg}
+                    />
+                    <MyText
+                      text={`${item.first_name} ${item.last_name}`}
+                      fontFamily="medium"
+                      fontSize={13}
+                      textColor={Colors.LIGHT_GREY}
+                      style={{marginLeft: 10}}
+                    />
+                  </View>
+                  <Image source={require('assets/images/message-text.png')} />
+                </View>
+                <MyText
+                  text={item.review}
+                  fontFamily="medium"
+                  fontSize={13}
+                  textColor={Colors.LIGHT_GREY}
+                  style={{marginTop: 10}}
+                />
+              </View>
+            ))
+          ) : (
+            <MyText
+              text={'No Reviews found!'}
+              fontFamily="medium"
+              fontSize={18}
+              textAlign="center"
+              textColor={'black'}
+            />
+          )}
           <FAB_Button onPress={openReviewModal} />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
@@ -477,6 +493,7 @@ const ViewAllSub = ({
   onPress,
   style = {},
   buttonText = 'See All',
+  showButton = true,
 }) => {
   return (
     <View style={[styles.viewAllContainer, style]}>
@@ -508,14 +525,16 @@ const ViewAllSub = ({
           />
         </View>
       </View>
-      <TouchableOpacity onPress={onPress} style={styles.viewAll}>
-        <MyText
-          text={buttonText}
-          fontFamily="regular"
-          fontSize={13}
-          textColor={Colors.THEME_GOLD}
-        />
-      </TouchableOpacity>
+      {showButton ? (
+        <TouchableOpacity onPress={onPress} style={styles.viewAll}>
+          <MyText
+            text={buttonText}
+            fontFamily="regular"
+            fontSize={13}
+            textColor={Colors.THEME_GOLD}
+          />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };

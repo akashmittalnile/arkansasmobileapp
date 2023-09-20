@@ -109,9 +109,9 @@ const AllProducts = ({navigation, dispatch}) => {
     const formdata = new FormData();
     formdata.append('type', type);
     formdata.append('id', id);
-    formdata.append('status', status === '1' ? '0' : '1');
+    formdata.append('status', status == '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
-    const endPoint = status === '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE
+    const endPoint = status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE
     console.log('onLike endPoint', endPoint);
     try {
       const resp = await Service.postApiWithToken(
@@ -188,11 +188,11 @@ const AllProducts = ({navigation, dispatch}) => {
             <View style={styles.iconsRow}>
               <TouchableOpacity
                 onPress={() => {
-                  onLike('2', item.id, item?.isLike);
+                  onLike('2', item.id, item?.isWishlist);
                 }}>
                 <Image
                   source={
-                    item?.isLike
+                    item?.isWishlist
                       ? require('assets/images/heart-selected.png')
                       : require('assets/images/heart.png')
                   }

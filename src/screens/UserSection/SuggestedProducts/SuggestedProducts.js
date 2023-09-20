@@ -104,22 +104,24 @@ const SuggestedProducts = ({navigation, dispatch}) => {
   const onLike = async (type, id, status) => {
     setShowLoader(true);
     const formdata = new FormData();
-    formdata.append("type", type);
-    formdata.append("id", id);
-    formdata.append("status", status === '1' ? '0' : '1');
+    formdata.append('type', type);
+    formdata.append('id', id);
+    formdata.append('status', status == '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
+    const endPoint = status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE
+    console.log('onLike endPoint', endPoint);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        Service.LIKE_OBJECT_TYPE,
-        formdata
+        endPoint,
+        formdata,
       );
       console.log('onLike resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.Message, Toast.SHORT);
-        getSuggestedProducts()
+        Toast.show(resp.data.message, Toast.SHORT);
+        getSuggestedProducts();
       } else {
-        Toast.show(resp.data.Message, Toast.SHORT);
+        Toast.show(resp.data.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in onLike', error);
@@ -177,7 +179,18 @@ const SuggestedProducts = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image source={require('assets/images/heart-selected.png')} />
+            <TouchableOpacity
+                onPress={() => {
+                  onLike('2', item.id, item?.isWishlist);
+                }}>
+                <Image
+                  source={
+                    item?.isWishlist
+                      ? require('assets/images/heart-selected.png')
+                      : require('assets/images/heart.png')
+                  }
+                />
+              </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}

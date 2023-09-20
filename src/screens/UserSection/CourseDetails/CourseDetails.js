@@ -548,11 +548,11 @@ const CourseDetails = ({navigation, dispatch, route}) => {
           ))} */}
           {productDetails?.chapters
             ?.filter(el => el?.chapter_steps?.length > 0)
-            ?.map((chap, index) => (
+            ?.map((chap, chapindex) => (
               <>
                 <ViewAll
-                  key={index?.toString()}
-                  text={`Chapter ${index + 1}`}
+                  key={chapindex?.toString()}
+                  text={`Chapter ${chapindex + 1}`}
                   style={{marginTop: 10, marginBottom: 20}}
                 />
                 <View
@@ -567,6 +567,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                         <AccordionItem
                           item={item}
                           index={index}
+                          chapindex={chapindex}
                           documents={documents}
                           setDocuments={setDocuments}
                           uploadDocument={uploadDocument}

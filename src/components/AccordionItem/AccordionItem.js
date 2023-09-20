@@ -41,6 +41,7 @@ const AccordionItem = ({
   setShowModal,
   markAsCompleted,
   allChapterSteps,
+  chapindex,
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -142,6 +143,11 @@ const AccordionItem = ({
     return false;
   };
 
+  const getPreviousStepName = item => {
+    const index = allChapterSteps.findIndex(el => el.id == item.id);
+    return allChapterSteps[index - 1]?.title;
+  };
+
   return (
     <View
       style={[
@@ -203,13 +209,24 @@ const AccordionItem = ({
             setBodySectionHeight(event.nativeEvent.layout.height);
           }}>
           {!isPrerequisiteCompleted(item) ? (
-            <View>
+            <View style={{backgroundColor: Colors.SCREEN_BG, width:'80%', padding: 20, marginTop: 20}} >
               <MyText
-                text={'Please complete previous step first'}
+                text={'Prerequisite(s) have yet not been completed!'}
                 fontFamily="medium"
                 fontSize={24}
                 textColor={'black'}
-                style={{marginBottom: 41}}
+                textAlign="center"
+                style={{marginBottom: 20}}
+              />
+              <MyText
+                text={`To move forward, please complete all prerequisites in Chapter ${
+                  chapindex + 1
+                }: ${getPreviousStepName(item)}`}
+                fontFamily="regular"
+                fontSize={18}
+                textColor={'black'}
+                textAlign="center"
+                style={{}}
               />
             </View>
           ) : (
@@ -333,7 +350,7 @@ const AccordionItem = ({
                           </TouchableOpacity>
                         </>
                       ) : (
-                        <View style={{alignItems:'center'}} >
+                        <View style={{alignItems: 'center'}}>
                           <View style={styles.pdfContainer}>
                             <View style={styles.pdfLeftRow}>
                               <Image
@@ -361,7 +378,8 @@ const AccordionItem = ({
                             </TouchableOpacity>
                           </View>
                           <TouchableOpacity
-                            onPress={() => uploadDocument(item.id)} style={{marginTop: 10}} >
+                            onPress={() => uploadDocument(item.id)}
+                            style={{marginTop: 10}}>
                             <Image
                               source={require('assets/images/upload-file.png')}
                             />
@@ -461,8 +479,8 @@ const isLocalFileSelected = (documents, item) => {
 };
 
 const showMarkCompleteButton = item => {
-  if(item.type === 'quiz' || item.type === 'survey'){
-    return false
+  if (item.type === 'quiz' || item.type === 'survey') {
+    return false;
   }
   return false;
 };

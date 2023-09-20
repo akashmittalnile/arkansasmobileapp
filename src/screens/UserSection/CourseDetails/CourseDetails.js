@@ -296,7 +296,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
     }
     setShowLoader(false);
   };
-  const markAsCompleted = async (chapter_step_id) => {
+  const markAsCompleted = async chapter_step_id => {
     setShowLoader(true);
     const formdata = new FormData();
     formdata.append('chapter_step_id', chapter_step_id);
@@ -437,11 +437,11 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             <View style={styles.iconsRow}>
               <TouchableOpacity
                 onPress={() => {
-                  onLike('1', productDetails.id, productDetails.isLike);
+                  onLike('1', productDetails.id, productDetails.isWishlist);
                 }}>
                 <Image
                   source={
-                    productDetails?.isLike
+                    productDetails?.isWishlist
                       ? require('assets/images/heart-selected.png')
                       : require('assets/images/heart.png')
                   }
@@ -589,6 +589,43 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             onPress={gotoAllReviews}
             style={{marginBottom: 17}}
           />
+          {productDetails?.review?.length > 0 ? (
+            productDetails?.review?.map((item, index) => (
+              <View key={item.index?.toString()} style={styles.reviewContainer}>
+                <View style={styles.reviewTopRow}>
+                  <View style={styles.reviewTopLeftRow}>
+                    <Image
+                      source={{uri: item?.profile_image}}
+                      style={styles.reviewImg}
+                    />
+                    <MyText
+                      text={`${item.first_name} ${item.last_name}`}
+                      fontFamily="medium"
+                      fontSize={13}
+                      textColor={Colors.LIGHT_GREY}
+                      style={{marginLeft: 10}}
+                    />
+                  </View>
+                  <Image source={require('assets/images/message-text.png')} />
+                </View>
+                <MyText
+                  text={item.review}
+                  fontFamily="medium"
+                  fontSize={13}
+                  textColor={Colors.LIGHT_GREY}
+                  style={{marginTop: 10}}
+                />
+              </View>
+            ))
+          ) : (
+            <MyText
+              text={'No Reviews found!'}
+              fontFamily="medium"
+              fontSize={18}
+              textAlign="center"
+              textColor={'black'}
+            />
+          )}
           <FAB_Button onPress={openReviewModal} />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

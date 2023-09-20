@@ -130,14 +130,11 @@ const SuggestedProducts = ({navigation, dispatch}) => {
   const renderProduct = ({item}) => {
     return (
       <View style={styles.courseContainer}>
-        <ImageBackground source={item.courseImg} style={styles.crseImg}>
-          {/* <TouchableOpacity>
-            <Image source={require('assets/images/play-icon.png')} />
-          </TouchableOpacity> */}
+        <ImageBackground source={{uri: item?.Product_image[0]}} style={styles.crseImg}>
         </ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText
-            text={item.courseName}
+            text={item.title}
             fontFamily="regular"
             fontSize={13}
             textColor={Colors.LIGHT_GREY}
@@ -147,7 +144,7 @@ const SuggestedProducts = ({navigation, dispatch}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={item.courseRating}
+                text={item.rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -161,7 +158,7 @@ const SuggestedProducts = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={item.creatorName}
+                text={item.creator_name}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -172,7 +169,7 @@ const SuggestedProducts = ({navigation, dispatch}) => {
           </View>
           <View style={styles.bottomRow}>
             <MyText
-              text={'$' + item.courseFee}
+              text={'$' + item.price}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -214,7 +211,7 @@ const SuggestedProducts = ({navigation, dispatch}) => {
           />
 
           <FlatList
-            data={productList}
+            data={productData || []}
             style={{marginTop: 28}}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderProduct}

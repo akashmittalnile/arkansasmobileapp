@@ -403,30 +403,30 @@ const AccordionItem = ({
               </View> */}
                 </>
               ) : null}
+
+              {showMarkCompleteButton(item) ? (
+                <View
+                  style={[
+                    styles.buttonsRow,
+                    Platform.OS === 'ios' ? {paddingTop: 16} : null,
+                  ]}>
+                  <MyButton
+                    text="Mark as complete"
+                    onPress={() => markAsCompleted(item.id)}
+                    style={[
+                      {
+                        width: '100%',
+                        height: 50,
+                        backgroundColor: Colors.THEME_BROWN,
+                        marginTop: 10,
+                      },
+                      Platform.OS === 'ios' ? {paddingTop: 16} : null,
+                    ]}
+                  />
+                </View>
+              ) : null}
             </>
           )}
-
-          {isPrerequisiteCompleted(item) && showMarkCompleteButton(item) ? (
-            <View
-              style={[
-                styles.buttonsRow,
-                Platform.OS === 'ios' ? {paddingTop: 16} : null,
-              ]}>
-              <MyButton
-                text="Mark as complete"
-                onPress={() => markAsCompleted(item.id)}
-                style={[
-                  {
-                    width: '100%',
-                    height: 50,
-                    backgroundColor: Colors.THEME_BROWN,
-                    marginTop: 10,
-                  },
-                  Platform.OS === 'ios' ? {paddingTop: 16} : null,
-                ]}
-              />
-            </View>
-          ) : null}
 
           {/* <MyText
             text={description}
@@ -455,11 +455,8 @@ const isLocalFileSelected = (documents, item) => {
 };
 
 const showMarkCompleteButton = item => {
-  if(item.type === 'quiz' || item.type === 'survey'){
-    return false
-  }
-  if (item.is_completed == '0') {
-    return true;
+  if (item.type === 'quiz' || item.type === 'survey') {
+    return false;
   }
   return false;
 };

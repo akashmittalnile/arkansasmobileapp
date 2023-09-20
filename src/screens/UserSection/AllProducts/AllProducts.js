@@ -104,6 +104,33 @@ const AllProducts = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
+  const onLike = async (type, id, status) => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append('type', type);
+    formdata.append('id', id);
+    formdata.append('status', status === '1' ? '0' : '1');
+    console.log('onLike formdata', formdata);
+    const endPoint = status === '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE
+    console.log('onLike endPoint', endPoint);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        endPoint,
+        formdata,
+      );
+      console.log('onLike resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.Message, Toast.SHORT);
+        getAllProducts();
+      } else {
+        Toast.show(resp.data.Message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in onLike', error);
+    }
+    setShowLoader(false);
+  };
   const renderProduct = ({item}) => {
     return (
       <View style={styles.courseContainer}>
@@ -159,13 +186,18 @@ const AllProducts = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image
-                source={
-                  item?.isLike
-                    ? require('assets/images/heart-selected.png')
-                    : require('assets/images/heart.png')
-                }
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  onLike('2', item.id, item?.isLike);
+                }}>
+                <Image
+                  source={
+                    item?.isLike
+                      ? require('assets/images/heart-selected.png')
+                      : require('assets/images/heart.png')
+                  }
+                />
+              </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}

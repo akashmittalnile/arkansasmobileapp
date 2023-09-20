@@ -304,7 +304,7 @@ const Home = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
-  const renderCourseTypes = ({item}) => {
+  const renderTags = ({item}) => {
     return (
       <TouchableOpacity
         onPress={() => changeSelectedCourseType(item.id)}
@@ -589,12 +589,12 @@ const Home = ({navigation, dispatch}) => {
             // }}
           />
           <FlatList
-            data={courseTypes}
+            data={homeData?.all_tags || []}
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{marginTop: 11}}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={renderCourseTypes}
+            renderItem={renderTags}
           />
           {homeData?.trending_course?.length > 0 ? (
             <View>

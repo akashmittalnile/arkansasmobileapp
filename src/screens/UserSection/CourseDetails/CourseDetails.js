@@ -287,12 +287,35 @@ const CourseDetails = ({navigation, dispatch, route}) => {
       console.log('onLike resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show(resp.data.message, Toast.SHORT);
-        getSuggestedCourses();
+        getProductDetails();
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in onLike', error);
+    }
+    setShowLoader(false);
+  };
+  const markAsCompleted = async (chapter_step_id) => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append('chapter_step_id', chapter_step_id);
+    console.log('markAsCompleted formdata', formdata);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.MARK_AS_COMPLETE,
+        formdata,
+      );
+      console.log('markAsCompleted resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.message, Toast.SHORT);
+        getProductDetails();
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in markAsCompleted', error);
     }
     setShowLoader(false);
   };
@@ -549,6 +572,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                           uploadDocument={uploadDocument}
                           deleteDocument={deleteDocument}
                           setShowModal={setShowModal}
+                          markAsCompleted={markAsCompleted}
                         />
                       );
                     }}

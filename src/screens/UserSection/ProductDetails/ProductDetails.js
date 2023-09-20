@@ -469,6 +469,24 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               textColor={'black'}
             />
           )}
+          <View style={styles.buttonsRow}>
+            <MyButton
+              text="Add to Cart"
+              style={{
+                width: '48%',
+                height: 50,
+                backgroundColor: Colors.THEME_BROWN,
+              }}
+            />
+            <MyButton
+              text="Buy Now"
+              style={{
+                width: '48%',
+                height: 50,
+                backgroundColor: Colors.THEME_GOLD,
+              }}
+            />
+          </View>
           <FAB_Button onPress={openReviewModal} />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

@@ -39,6 +39,7 @@ const AccordionItem = ({
   uploadDocument,
   deleteDocument,
   setShowModal,
+  markAsCompleted
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -366,28 +367,27 @@ const AccordionItem = ({
             </>
           ) : null}
 
-          <View
-            style={[
-              styles.buttonsRow,
-              Platform.OS === 'ios' ? {paddingTop: 16} : null,
-            ]}>
-            <MyButton
-              text="Mark Incomplete"
-              style={{
-                width: '48%',
-                height: 50,
-                backgroundColor: Colors.THEME_BROWN,
-              }}
-            />
-            <MyButton
-              text="Continue"
-              style={{
-                width: '48%',
-                height: 50,
-                backgroundColor: Colors.THEME_GOLD,
-              }}
-            />
-          </View>
+          {showMarkCompleteButton(item) ? (
+            <View
+              style={[
+                styles.buttonsRow,
+                Platform.OS === 'ios' ? {paddingTop: 16} : null,
+              ]}>
+              <MyButton
+                text="Mark as complete"
+                onPress={() => markAsCompleted(item.id)}
+                style={[
+                  {
+                    width: '100%',
+                    height: 50,
+                    backgroundColor: Colors.THEME_BROWN,
+                    marginTop: 10,
+                  },
+                  Platform.OS === 'ios' ? {paddingTop: 16} : null,
+                ]}
+              />
+            </View>
+          ) : null}
 
           {/* <MyText
             text={description}
@@ -414,3 +414,10 @@ const wasFileSubmitted = file => {
 const isLocalFileSelected = (documents, item) => {
   return documents?.find(el => el?.id === item?.id);
 };
+
+const showMarkCompleteButton = (item) => {
+  if(item.is_completed == '0' && (item.type !== 'quiz')){
+    return true
+  }
+  return false
+}

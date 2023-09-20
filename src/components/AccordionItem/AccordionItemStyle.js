@@ -97,7 +97,6 @@ export const styles = StyleSheet.create({
   buttonsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     marginTop: 10,
   },
   crseImg: {

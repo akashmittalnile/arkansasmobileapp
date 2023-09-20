@@ -45,6 +45,7 @@ import ViewAll from '../../../components/ViewAll/ViewAll';
 import FAB_Button from '../../../components/FAB_Button/FAB_Button';
 import Review from '../../../modals/Review/Review';
 import VideoModal from '../../../components/VideoModal/VideoModal';
+import Carousel from '../../../components/Carousel/Carousel';
 
 const data = [
   {
@@ -119,6 +120,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const [showLoader, setShowLoader] = useState(false);
   const [selectedTag, setSelectedTag] = useState('1');
   const [productDetails, setProductDetails] = useState({});
+  const [sliderData, setSliderData] = useState([]);
   const [review, setReview] = useState('');
   const [starRating, setStarRating] = useState(1);
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -144,6 +146,8 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       console.log('getProductDetails resp', resp?.data?.data);
       if (resp?.data?.status) {
         setProductDetails(resp?.data?.data);
+        const sliData = resp?.data?.data?.Product_image?.map(el => ({slider: el}))
+        setSliderData([...sliData])
         // Toast.show(resp?.data?.message, Toast.SHORT)
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
@@ -308,11 +312,10 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
-          {productDetails.Product_image[0] ? (
-            <ImageBackground
-              source={{uri: productDetails.Product_image[0]}}
-              style={styles.crseImg}
-              imageStyle={{borderRadius: 10}}></ImageBackground>
+          {typeof productDetails === 'object' ? (
+            sliderData?.length > 0 ? (
+              <Carousel data={sliderData} />
+            ) : null
           ) : null}
 
           <View style={styles.topRow}>

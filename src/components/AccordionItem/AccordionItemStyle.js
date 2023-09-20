@@ -41,6 +41,8 @@ export const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     paddingBottom: 20,
+    alignItems:'center',
+    width:'100%'
   },
   numView: {
     height: 31,
@@ -53,13 +55,13 @@ export const styles = StyleSheet.create({
   leftRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'space-between',
-    width:'80%'
+    justifyContent: 'space-between',
+    width: '80%',
   },
   leftSubRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'space-between'
+    justifyContent: 'space-between',
   },
   timerRow: {
     flexDirection: 'row',
@@ -109,7 +111,9 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingTop: 34,
     alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 10,
+    width: width * 0.9,
+    alignItems:'center',
   },
   dropImgView: {
     alignItems: 'center',

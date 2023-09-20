@@ -333,7 +333,7 @@ const AccordionItem = ({
                           </TouchableOpacity>
                         </>
                       ) : (
-                        <>
+                        <View style={{alignItems:'center'}} >
                           <View style={styles.pdfContainer}>
                             <View style={styles.pdfLeftRow}>
                               <Image
@@ -360,7 +360,13 @@ const AccordionItem = ({
                               />
                             </TouchableOpacity>
                           </View>
-                        </>
+                          <TouchableOpacity
+                            onPress={() => uploadDocument(item.id)} style={{marginTop: 10}} >
+                            <Image
+                              source={require('assets/images/upload-file.png')}
+                            />
+                          </TouchableOpacity>
+                        </View>
                       )}
                     </View>
                   </View>

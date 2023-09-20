@@ -406,7 +406,7 @@ const AccordionItem = ({
             </>
           )}
 
-          {showMarkCompleteButton(item) ? (
+          {isPrerequisiteCompleted(item) && showMarkCompleteButton(item) ? (
             <View
               style={[
                 styles.buttonsRow,

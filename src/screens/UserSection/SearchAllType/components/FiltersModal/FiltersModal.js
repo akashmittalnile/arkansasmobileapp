@@ -40,8 +40,8 @@ const FiltersModal = ({
   TempSelectedProductCategries,
   setTempSelectedProductCategries,
   priceFilterValues,
-  selectedPriceFilter,
-  setSelectedPriceFilterValues
+  tempSelectedPriceFilter,
+  setTempSelectedPriceFilter,
 }) => {
   //function : modal function
   const closeModal = () => {
@@ -151,11 +151,11 @@ const FiltersModal = ({
             />
             {priceFilterValues?.map((el, index) => (
               <TouchableWithoutFeedback
-                onPress={() => selectedPriceFilter(el?.id)}>
+                onPress={() => setTempSelectedPriceFilter(el?.id)}>
                 <View style={styles.statusView}>
                   <Image
                     source={
-                      selectedPriceFilter === el?.id
+                      tempSelectedPriceFilter === el?.id
                         ? require('assets/images/radio-button-selected.png')
                         : require('assets/images/radio-button.png')
                     }

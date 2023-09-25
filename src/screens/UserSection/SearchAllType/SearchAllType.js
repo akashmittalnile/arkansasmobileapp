@@ -141,7 +141,7 @@ const SearchAllType = ({navigation, dispatch}) => {
       name: 'Low to High',
     },
   ]);
-  const [selectedPriceFilter, setSelectedPriceFilterValues] = useState(null);
+  const [tempSelectedPriceFilter, setTempSelectedPriceFilter] = useState('');
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -467,8 +467,8 @@ const SearchAllType = ({navigation, dispatch}) => {
           TempSelectedProductCategries={TempSelectedProductCategries}
           setTempSelectedProductCategries={setTempSelectedProductCategries}
           priceFilterValues={priceFilterValues}
-          selectedPriceFilter={selectedPriceFilter}
-          setSelectedPriceFilterValues={setSelectedPriceFilterValues}
+          tempSelectedPriceFilter={tempSelectedPriceFilter}
+          setTempSelectedPriceFilter={setTempSelectedPriceFilter}
         />
       </View>
     </SafeAreaView>

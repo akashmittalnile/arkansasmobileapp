@@ -24,10 +24,6 @@ import MyButton from '../../../../../components/MyButton/MyButton';
 const FiltersModal = ({
   visible,
   setVisibility,
-  selectedStatus,
-  setSelectedStatus,
-  selectedOption,
-  setSelectedOption,
 
   tabs,
   courseCategries,

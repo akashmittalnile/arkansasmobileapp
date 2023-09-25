@@ -117,6 +117,7 @@ const FiltersModal = ({
               <TouchableWithoutFeedback
                 onPress={() => {
                   setTemporarySelectedTab(el?.id);
+                  // on change type, remove older select category data
                   if (temporarySelectedTab !== el?.id) {
                     temporarySelectedTab == '1'
                       ? setTempSelectedCourseCategries([])

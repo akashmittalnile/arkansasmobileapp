@@ -79,6 +79,7 @@ const FiltersModal = ({
     return data?.map(el => ({label: el.name, value: el.name}));
   };
   const addRating = value => {
+    // if clicked on already selected rating, remove it
     if (tempSelectedRatingValues?.includes(value)) {
       let tempSelectedRatingValuesCopy = [...tempSelectedRatingValues];
       tempSelectedRatingValuesCopy = tempSelectedRatingValuesCopy.filter(
@@ -86,6 +87,7 @@ const FiltersModal = ({
       );
       setTempSelectedRatingValues([...tempSelectedRatingValuesCopy]);
     } else {
+      // if clicked on unselected rating, add it
       const tempSelectedRatingValuesCopy = [...tempSelectedRatingValues];
       tempSelectedRatingValuesCopy.push(value);
       setTempSelectedRatingValues([...tempSelectedRatingValuesCopy]);

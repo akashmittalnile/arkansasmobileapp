@@ -77,17 +77,19 @@ const FiltersModal = ({
       temporarySelectedTab === '1' ? courseCategries : productCategries;
     return data?.map(el => ({label: el.name, value: el.name}));
   };
-  const addRating = (value) => {
-    if(tempSelectedRatingValues?.includes(value)){
-      let tempSelectedRatingValuesCopy = [...tempSelectedRatingValues]
-      tempSelectedRatingValuesCopy = tempSelectedRatingValuesCopy.filter(el => el !== value)
-      setTempSelectedRatingValues([...tempSelectedRatingValuesCopy])
-    }else{
-      const tempSelectedRatingValuesCopy = [...tempSelectedRatingValues]
-      tempSelectedRatingValuesCopy.push(value)
-      setTempSelectedRatingValues([...tempSelectedRatingValuesCopy])
+  const addRating = value => {
+    if (tempSelectedRatingValues?.includes(value)) {
+      let tempSelectedRatingValuesCopy = [...tempSelectedRatingValues];
+      tempSelectedRatingValuesCopy = tempSelectedRatingValuesCopy.filter(
+        el => el !== value,
+      );
+      setTempSelectedRatingValues([...tempSelectedRatingValuesCopy]);
+    } else {
+      const tempSelectedRatingValuesCopy = [...tempSelectedRatingValues];
+      tempSelectedRatingValuesCopy.push(value);
+      setTempSelectedRatingValues([...tempSelectedRatingValuesCopy]);
     }
-  }
+  };
   //UI
   return (
     <Modal
@@ -113,7 +115,14 @@ const FiltersModal = ({
             />
             {tabs?.map((el, index) => (
               <TouchableWithoutFeedback
-                onPress={() => setTemporarySelectedTab(el?.id)}>
+                onPress={() => {
+                  setTemporarySelectedTab(el?.id);
+                  if (temporarySelectedTab !== el?.id) {
+                    temporarySelectedTab == '1'
+                      ? setTempSelectedCourseCategries([])
+                      : setTempSelectedProductCategries([]);
+                  }
+                }}>
                 <View style={styles.statusView}>
                   <Image
                     source={
@@ -194,8 +203,7 @@ const FiltersModal = ({
               marginTop={40}
             />
             {allRatingValues?.map(el => (
-              <TouchableWithoutFeedback
-                onPress={() => addRating(el)}>
+              <TouchableWithoutFeedback onPress={() => addRating(el)}>
                 <View style={styles.statusView}>
                   <Image
                     source={

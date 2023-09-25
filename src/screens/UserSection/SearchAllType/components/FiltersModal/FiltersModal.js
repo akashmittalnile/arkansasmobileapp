@@ -39,6 +39,9 @@ const FiltersModal = ({
   setTempSelectedCourseCategries,
   TempSelectedProductCategries,
   setTempSelectedProductCategries,
+  priceFilterValues,
+  selectedPriceFilter,
+  setSelectedPriceFilterValues
 }) => {
   //function : modal function
   const closeModal = () => {
@@ -114,6 +117,14 @@ const FiltersModal = ({
                 </View>
               </TouchableWithoutFeedback>
             ))}
+            <MyText
+              text={'Choose Category'}
+              textColor={Colors.DARK_GREY}
+              fontSize={16}
+              fontFamily="medium"
+              marginBottom={10}
+              marginTop={20}
+            />
             <Dropdown
               // data={developerData}
               data={getCatDropdownData()}
@@ -137,6 +148,43 @@ const FiltersModal = ({
               fontFamily="medium"
               marginBottom={10}
               marginTop={20}
+            />
+            <MyText
+              text={'Select Price Filter'}
+              textColor={Colors.DARK_GREY}
+              fontSize={16}
+              fontFamily="medium"
+              marginBottom={10}
+              marginTop={40}
+            />
+            {priceFilterValues?.map((el, index) => (
+              <TouchableWithoutFeedback
+                onPress={() => selectedPriceFilter(el?.id)}>
+                <View style={styles.statusView}>
+                  <Image
+                    source={
+                      selectedPriceFilter === el?.id
+                        ? require('assets/images/radio-button-selected.png')
+                        : require('assets/images/radio-button.png')
+                    }
+                    style={styles.radioButton}
+                  />
+                  <MyText
+                    text={el?.name}
+                    textColor={Colors.DARK_GREY}
+                    fontSize={14}
+                    marginLeft={10}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            ))}
+            <MyText
+              text={'Select Price Filter'}
+              textColor={Colors.DARK_GREY}
+              fontSize={16}
+              fontFamily="medium"
+              marginBottom={10}
+              marginTop={40}
             />
             <TouchableWithoutFeedback onPress={() => setSelectedOption('Buy')}>
               <View style={styles.statusView}>

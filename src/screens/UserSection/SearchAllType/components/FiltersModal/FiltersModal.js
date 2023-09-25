@@ -19,6 +19,7 @@ import Toast from 'react-native-simple-toast';
 //styles
 import {styles} from './FiltersModalStyle';
 import Dropdown from '../../../../../components/Dropdown/Dropdown';
+import MyButton from '../../../../../components/MyButton/MyButton';
 
 const FiltersModal = ({
   visible,
@@ -167,7 +168,7 @@ const FiltersModal = ({
                   : setTempSelectedProductCategries
               }
               placeholder={`Select Categories`}
-              style={{marginBottom: 10}}
+              style={{marginBottom: 0}}
             />
             <MyText
               text={'Select Price Filter'}
@@ -175,7 +176,7 @@ const FiltersModal = ({
               fontSize={16}
               fontFamily="medium"
               marginBottom={10}
-              marginTop={40}
+              marginTop={27}
             />
             {priceFilterValues?.map((el, index) => (
               <TouchableWithoutFeedback
@@ -204,7 +205,7 @@ const FiltersModal = ({
               fontSize={16}
               fontFamily="medium"
               marginBottom={10}
-              marginTop={40}
+              marginTop={27}
             />
             {allRatingValues?.map(el => (
               <TouchableWithoutFeedback onPress={() => addRating(el)}>
@@ -227,16 +228,17 @@ const FiltersModal = ({
               </TouchableWithoutFeedback>
             ))}
 
-            <TouchableOpacity
-              onPress={closeModal}
-              style={styles.buttonContainer}>
-              <MyText
-                text="Apply"
-                textColor={Colors.WHITE}
-                fontSize={14}
-                fontFamily="medium"
-              />
-            </TouchableOpacity>
+            <MyButton
+              text="Apply"
+              style={{
+                width: '90%',
+                alignSelf:'center',
+                marginTop: 41,
+                marginBottom: 10,
+                backgroundColor: Colors.THEME_GOLD,
+              }}
+              onPress={() => {}}
+            />
             <TouchableOpacity style={styles.resetButton}>
               <MyText
                 text="Reset"

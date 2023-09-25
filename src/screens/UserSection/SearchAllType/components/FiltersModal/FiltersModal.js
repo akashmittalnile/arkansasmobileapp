@@ -72,7 +72,7 @@ const FiltersModal = ({
       </View>
     );
   };
-  const getCatDropdownData = () => {
+  const getCategoryDropdownData = () => {
     const data =
       temporarySelectedTab === '1' ? courseCategries : productCategries;
     return data?.map(el => ({label: el.name, value: el.name}));
@@ -142,7 +142,7 @@ const FiltersModal = ({
             />
             <Dropdown
               // data={developerData}
-              data={getCatDropdownData()}
+              data={getCategoryDropdownData()}
               value={
                 temporarySelectedTab == '1'
                   ? tempSelectedCourseCategries

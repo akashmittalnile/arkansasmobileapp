@@ -117,7 +117,9 @@ const SearchAllType = ({navigation, dispatch}) => {
   const [courseData, setCourseData] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [courseCategries, setCourseCategries] = useState([]);
+  const [tempSelectedCourseCategries, setTempSelectedCourseCategries] = useState([]);
   const [productCategries, setProductCategries] = useState([]);
+  const [TempSelectedProductCategries, setTempSelectedProductCategries] = useState([]);
   const [productData, setProductData] = useState([]);
   const [tabs, setTabs] = useState([
     {
@@ -449,6 +451,10 @@ const SearchAllType = ({navigation, dispatch}) => {
           setSelectedTab={setSelectedTab}
           temporarySelectedTab={temporarySelectedTab}
           setTemporarySelectedTab={setTemporarySelectedTab}
+          tempSelectedCourseCategries={tempSelectedCourseCategries}
+          setTempSelectedCourseCategries={setTempSelectedCourseCategries}
+          TempSelectedProductCategries={TempSelectedProductCategries}
+          setTempSelectedProductCategries={setTempSelectedProductCategries}
         />
       </View>
     </SafeAreaView>

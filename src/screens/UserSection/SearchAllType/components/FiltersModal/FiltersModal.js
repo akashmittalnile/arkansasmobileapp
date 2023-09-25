@@ -18,6 +18,7 @@ import moment from 'moment';
 import Toast from 'react-native-simple-toast';
 //styles
 import {styles} from './FiltersModalStyle';
+import Dropdown from '../../../../../components/Dropdown/Dropdown';
 
 const FiltersModal = ({
   visible,
@@ -34,6 +35,10 @@ const FiltersModal = ({
   setSelectedTab,
   temporarySelectedTab,
   setTemporarySelectedTab,
+  tempSelectedCourseCategries,
+  setTempSelectedCourseCategries,
+  TempSelectedProductCategries,
+  setTempSelectedProductCategries,
 }) => {
   //function : modal function
   const closeModal = () => {
@@ -61,14 +66,18 @@ const FiltersModal = ({
       </View>
     );
   };
+  const getCatDropdownData = () => {
+    const data = temporarySelectedTab === '1' ? courseCategries : productCategries;
+    return data?.map(el => ({label: el.name, value: el.name}));
+  };
   //UI
   return (
     <Modal
       visible={visible}
       onRequestClose={closeModal}
       animationType="fade"
-      onShow={()=>{
-        setTemporarySelectedTab(selectedTab)
+      onShow={() => {
+        setTemporarySelectedTab(selectedTab);
       }}
       transparent>
       <View style={styles.container}>
@@ -84,27 +93,43 @@ const FiltersModal = ({
               marginBottom={10}
               marginTop={40}
             />
-            {tabs?.map((el, index) => 
-            <TouchableWithoutFeedback
-              onPress={() => setTemporarySelectedTab(el?.id)}>
-              <View style={styles.statusView}>
-                <Image
-                  source={
-                    temporarySelectedTab === el?.id
-                      ? require('assets/images/radio-button-selected.png')
-                      : require('assets/images/radio-button.png')
-                  }
-                  style={styles.radioButton}
-                />
-                <MyText
-                  text={el?.name}
-                  textColor={Colors.DARK_GREY}
-                  fontSize={14}
-                  marginLeft={10}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            )}
+            {tabs?.map((el, index) => (
+              <TouchableWithoutFeedback
+                onPress={() => setTemporarySelectedTab(el?.id)}>
+                <View style={styles.statusView}>
+                  <Image
+                    source={
+                      temporarySelectedTab === el?.id
+                        ? require('assets/images/radio-button-selected.png')
+                        : require('assets/images/radio-button.png')
+                    }
+                    style={styles.radioButton}
+                  />
+                  <MyText
+                    text={el?.name}
+                    textColor={Colors.DARK_GREY}
+                    fontSize={14}
+                    marginLeft={10}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            ))}
+            <Dropdown
+              // data={developerData}
+              data={getCatDropdownData()}
+              value={
+                temporarySelectedTab == '1'
+                  ? tempSelectedCourseCategries
+                  : TempSelectedProductCategries
+              }
+              setValue={
+                temporarySelectedTab == '1'
+                  ? setTempSelectedCourseCategries
+                  : setTempSelectedProductCategries
+              }
+              placeholder={`Select Categories`}
+              style={{marginBottom: 10}}
+            />
             <MyText
               text={'Choose Option'}
               textColor={Colors.DARK_GREY}

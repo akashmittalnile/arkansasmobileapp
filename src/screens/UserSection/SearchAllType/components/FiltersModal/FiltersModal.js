@@ -20,6 +20,7 @@ import Toast from 'react-native-simple-toast';
 import {styles} from './FiltersModalStyle';
 import Dropdown from '../../../../../components/Dropdown/Dropdown';
 import MyButton from '../../../../../components/MyButton/MyButton';
+import MyMultiSelect from '../../../../../components/MyMultiSelect/MyMultiSelect';
 
 const FiltersModal = ({
   visible,
@@ -150,7 +151,22 @@ const FiltersModal = ({
               marginBottom={10}
               marginTop={20}
             />
-            <Dropdown
+            <MyMultiSelect
+              data={getCategoryDropdownData()}
+              value={
+                temporarySelectedTab == '1'
+                  ? tempSelectedCourseCategries
+                  : TempSelectedProductCategries
+              }
+              setValue={
+                temporarySelectedTab == '1'
+                  ? setTempSelectedCourseCategries
+                  : setTempSelectedProductCategries
+              }
+              placeholder={'Select Categories'}
+              style={{marginBottom: 0}}
+            />
+            {/* <Dropdown
               // data={developerData}
               data={getCategoryDropdownData()}
               value={
@@ -165,7 +181,7 @@ const FiltersModal = ({
               }
               placeholder={`Select Categories`}
               style={{marginBottom: 0}}
-            />
+            /> */}
             <MyText
               text={'Select Price Filter'}
               textColor={Colors.DARK_GREY}

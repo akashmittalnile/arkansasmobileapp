@@ -119,7 +119,7 @@ const FiltersModal = ({
                   setTemporarySelectedTab(el?.id);
                   // on change type, remove older select category data
                   if (temporarySelectedTab !== el?.id) {
-                    temporarySelectedTab == '1'
+                    el?.id == '2'
                       ? setTempSelectedCourseCategries([])
                       : setTempSelectedProductCategries([]);
                   }

@@ -142,14 +142,6 @@ const FiltersModal = ({
               style={{marginBottom: 10}}
             />
             <MyText
-              text={'Choose Option'}
-              textColor={Colors.DARK_GREY}
-              fontSize={16}
-              fontFamily="medium"
-              marginBottom={10}
-              marginTop={20}
-            />
-            <MyText
               text={'Select Price Filter'}
               textColor={Colors.DARK_GREY}
               fontSize={16}

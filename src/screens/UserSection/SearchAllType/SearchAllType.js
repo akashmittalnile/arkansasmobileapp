@@ -164,10 +164,10 @@ const SearchAllType = ({navigation, dispatch}) => {
       if (resp?.data?.status) {
         if (type === '1') {
           setCourseCategries(resp?.data?.category?.filter(el => el.type == '1'))
+          setProductCategries(resp?.data?.category?.filter(el => el.type == '2'))
           const updatedData = await generateThumb(resp?.data?.data);
           setCourseData(updatedData);
         } else {
-          setProductCategries(resp?.data?.category?.filter(el => el.type == '2'))
           setProductData(resp?.data?.data);
         }
       } else {

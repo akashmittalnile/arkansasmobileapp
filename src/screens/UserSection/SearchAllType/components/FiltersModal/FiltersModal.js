@@ -73,6 +73,7 @@ const FiltersModal = ({
     );
   };
   const getCategoryDropdownData = () => {
+    // console.log('getCategoryDropdownData', temporarySelectedTab);
     const data =
       temporarySelectedTab === '1' ? courseCategries : productCategries;
     return data?.map(el => ({label: el.name, value: el.name}));

@@ -142,6 +142,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     },
   ]);
   const [tempSelectedPriceFilter, setTempSelectedPriceFilter] = useState('');
+  const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -469,6 +470,8 @@ const SearchAllType = ({navigation, dispatch}) => {
           priceFilterValues={priceFilterValues}
           tempSelectedPriceFilter={tempSelectedPriceFilter}
           setTempSelectedPriceFilter={setTempSelectedPriceFilter}
+          tempSelectedRatingValues={tempSelectedRatingValues}
+          setTempSelectedRatingValues={setTempSelectedRatingValues}
         />
       </View>
     </SafeAreaView>

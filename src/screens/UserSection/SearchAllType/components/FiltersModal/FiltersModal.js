@@ -42,8 +42,11 @@ const FiltersModal = ({
   priceFilterValues,
   tempSelectedPriceFilter,
   setTempSelectedPriceFilter,
+  tempSelectedRatingValues,
+  setTempSelectedRatingValues,
 }) => {
   //function : modal function
+  const [allRatingValues] = useState(['1', '2', '3', '4', '5']);
   const closeModal = () => {
     setVisibility(false);
   };
@@ -70,9 +73,21 @@ const FiltersModal = ({
     );
   };
   const getCatDropdownData = () => {
-    const data = temporarySelectedTab === '1' ? courseCategries : productCategries;
+    const data =
+      temporarySelectedTab === '1' ? courseCategries : productCategries;
     return data?.map(el => ({label: el.name, value: el.name}));
   };
+  const addRating = (value) => {
+    if(tempSelectedRatingValues?.includes(value)){
+      let tempSelectedRatingValuesCopy = [...tempSelectedRatingValues]
+      tempSelectedRatingValuesCopy = tempSelectedRatingValuesCopy.filter(el => el !== value)
+      setTempSelectedRatingValues([...tempSelectedRatingValuesCopy])
+    }else{
+      const tempSelectedRatingValuesCopy = [...tempSelectedRatingValues]
+      tempSelectedRatingValuesCopy.push(value)
+      setTempSelectedRatingValues([...tempSelectedRatingValuesCopy])
+    }
+  }
   //UI
   return (
     <Modal
@@ -171,68 +186,34 @@ const FiltersModal = ({
               </TouchableWithoutFeedback>
             ))}
             <MyText
-              text={'Select Price Filter'}
+              text={'Select Rating Filter'}
               textColor={Colors.DARK_GREY}
               fontSize={16}
               fontFamily="medium"
               marginBottom={10}
               marginTop={40}
             />
-            <TouchableWithoutFeedback onPress={() => setSelectedOption('Buy')}>
-              <View style={styles.statusView}>
-                <Image
-                  source={
-                    selectedOption === 'Buy'
-                      ? require('assets/images/checkbox-selected.png')
-                      : require('assets/images/checkbox.png')
-                  }
-                  style={styles.radioButton}
-                />
-                <MyText
-                  text={'Buy'}
-                  textColor={Colors.DARK_GREY}
-                  fontSize={14}
-                  marginLeft={10}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => setSelectedOption('Sell')}>
-              <View style={styles.statusView}>
-                <Image
-                  source={
-                    selectedOption === 'Sell'
-                      ? require('assets/images/checkbox-selected.png')
-                      : require('assets/images/checkbox.png')
-                  }
-                  style={styles.radioButton}
-                />
-                <MyText
-                  text={'Sell'}
-                  textColor={Colors.DARK_GREY}
-                  fontSize={14}
-                  marginLeft={10}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback
-              onPress={() => setSelectedOption('Option')}>
-              <View style={styles.statusView}>
-                <Image
-                  source={
-                    selectedOption === 'Option'
-                      ? require('assets/images/checkbox-selected.png')
-                      : require('assets/images/checkbox.png')
-                  }
-                  style={styles.radioButton}
-                />
-                <MyText
-                  text={'Option'}
-                  textColor={Colors.DARK_GREY}
-                  fontSize={14}
-                  marginLeft={10}
-                />
-              </View>
-            </TouchableWithoutFeedback>
+            {allRatingValues?.map(el => (
+              <TouchableWithoutFeedback
+                onPress={() => addRating(el)}>
+                <View style={styles.statusView}>
+                  <Image
+                    source={
+                      tempSelectedRatingValues.includes(el)
+                        ? require('assets/images/checkbox-selected.png')
+                        : require('assets/images/checkbox.png')
+                    }
+                    style={styles.radioButton}
+                  />
+                  <MyText
+                    text={el}
+                    textColor={Colors.DARK_GREY}
+                    fontSize={14}
+                    marginLeft={10}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            ))}
 
             <TouchableOpacity
               onPress={closeModal}

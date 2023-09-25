@@ -40,6 +40,7 @@ import {
   setUserNotifications,
   setCartCount
 } from 'src/reduxToolkit/reducer/user';
+import SearchWithIconDummy from '../../../components/SearchWithIconDummy/SearchWithIconDummy';
 
 const courseTypes = [
   {name: 'All', id: '1'},
@@ -255,6 +256,9 @@ const Home = ({navigation, dispatch}) => {
     return data;
   };
 
+  const gotoSearchAllType = () => {
+    navigation.navigate(ScreenNames.SEACRCH_ALL_TYPE);
+  };
   const gotoTrendingCourses = () => {
     navigation.navigate(ScreenNames.TRENDING_COURSES);
   };
@@ -577,16 +581,10 @@ const Home = ({navigation, dispatch}) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
-          <SearchWithIcon
-            value={searchValue}
-            setValue={setSearchValue}
+          <SearchWithIconDummy
             icon={<Image source={require('assets/images/yellow-seach.png')} />}
             placeholder="Search by course, creator or product name"
-            // style={{
-            //   width: Constant.width - 40,
-            //   alignSelf: 'center',
-            //   marginTop: -25,
-            // }}
+            onPress={gotoSearchAllType}
           />
           <FlatList
             data={homeData?.all_tags || []}

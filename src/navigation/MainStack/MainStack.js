@@ -31,6 +31,7 @@ import CourseDetails from 'screens/UserSection/CourseDetails/CourseDetails';
 import AudioPlayerScreen from 'screens/UserSection/AudioPlayerScreen/AudioPlayerScreen';
 import NoConnection from '../../screens/UserSection/NoConnection/NoConnection';
 import AllReviews from 'screens/UserSection/AllReviews/AllReviews';
+import SearchAllType from 'screens/UserSection/SearchAllType/SearchAllType';
 
 const MainStack = () => {
   //variables
@@ -105,6 +106,7 @@ const MainStack = () => {
       />
       <Stack.Screen name={ScreenNames.NO_CONNECTION} component={NoConnection} />
       <Stack.Screen name={ScreenNames.ALL_REVIEWS} component={AllReviews} />
+      <Stack.Screen name={ScreenNames.SEACRCH_ALL_TYPE} component={SearchAllType} />
     </Stack.Navigator>
   );
 };

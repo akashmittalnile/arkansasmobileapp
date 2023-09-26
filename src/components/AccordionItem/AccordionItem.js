@@ -266,7 +266,7 @@ const AccordionItem = ({
                     />
                   </View>
                 ) : item?.is_completed === '1' ? (
-                  <View>
+                  <View style={{alignItems:'center'}}>
                     <MyText
                       text={'Tuesday, May 23, 2013 12:53 PM'}
                       fontFamily="medium"
@@ -283,7 +283,7 @@ const AccordionItem = ({
                     />
                   </View>
                 ) : (
-                  <View>
+                  <View style={{alignItems:'center'}} >
                     <MyText
                       text={'Whoops'}
                       fontFamily="medium"
@@ -310,7 +310,7 @@ const AccordionItem = ({
                       fontFamily="medium"
                       fontSize={20}
                       textColor={'black'}
-                      style={{}}
+                      style={{marginBottom: 10}}
                     />
                     <MyButton
                       text="Retake Quiz"

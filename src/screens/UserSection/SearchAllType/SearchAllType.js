@@ -160,11 +160,14 @@ const SearchAllType = ({navigation, dispatch}) => {
         Service.ALL_TYPE_LISTING,
         formdata,
       );
-      // console.log('getAllType resp', resp?.data);
+      console.log('getAllType resp', resp?.data);
       if (resp?.data?.status) {
         if (type === '1') {
-          setCourseCategries(resp?.data?.category?.filter(el => el.type == '1'))
-          setProductCategries(resp?.data?.category?.filter(el => el.type == '2'))
+          // only set categories data if getting it from api
+          if(resp?.data?.category){
+            setCourseCategries(resp?.data?.category?.filter(el => el.type == '1'))
+            setProductCategries(resp?.data?.category?.filter(el => el.type == '2'))
+          }
           const updatedData = await generateThumb(resp?.data?.data);
           setCourseData(updatedData);
         } else {

@@ -44,7 +44,7 @@ const FiltersModal = ({
   setTempSelectedRatingValues,
 }) => {
   //function : modal function
-  const [allRatingValues] = useState(['1', '2', '3', '4', '5']);
+  const [allRatingValues] = useState(['5', '4', '3', '2']);
   const closeModal = () => {
     setVisibility(false);
   };
@@ -231,7 +231,7 @@ const FiltersModal = ({
                     style={styles.radioButton}
                   />
                   <MyText
-                    text={el}
+                    text={`${el} and more`}
                     textColor={Colors.DARK_GREY}
                     fontSize={14}
                     marginLeft={10}
@@ -244,7 +244,7 @@ const FiltersModal = ({
               text="Apply"
               style={{
                 width: '90%',
-                alignSelf:'center',
+                alignSelf: 'center',
                 marginTop: 41,
                 marginBottom: 10,
                 backgroundColor: Colors.THEME_GOLD,

@@ -209,7 +209,13 @@ const AccordionItem = ({
             setBodySectionHeight(event.nativeEvent.layout.height);
           }}>
           {!isPrerequisiteCompleted(item) ? (
-            <View style={{backgroundColor: Colors.SCREEN_BG, width:'80%', padding: 20, marginTop: 20}} >
+            <View
+              style={{
+                backgroundColor: Colors.SCREEN_BG,
+                width: '80%',
+                padding: 20,
+                marginTop: 20,
+              }}>
               <MyText
                 text={'Prerequisite(s) have yet not been completed!'}
                 fontFamily="medium"
@@ -246,18 +252,78 @@ const AccordionItem = ({
                   </ImageBackground>
                 </View>
               ) : null}
-              {item.type === 'quiz'
-                ? item.chapter_question?.map((ques, queIndex) => (
-                    <View key={queIndex?.toString()}>
-                      <Text>{ques?.title}</Text>
-                      {ques?.chapter_option?.map((opt, optIndex) => (
-                        <View key={optIndex?.toString()}>
-                          <Text>{opt?.value}</Text>
-                        </View>
-                      ))}
-                    </View>
-                  ))
-                : null}
+              {item.type === 'quiz' ? (
+                item?.is_completed === '0' ? (
+                  <View>
+                    <MyButton
+                      text="Start Quiz"
+                      style={{
+                        width: width * 0.9,
+                        marginBottom: 10,
+                        backgroundColor: Colors.THEME_BROWN,
+                      }}
+                      onPress={() => {}}
+                    />
+                  </View>
+                ) : item?.is_completed === '1' ? (
+                  <View>
+                    <MyText
+                      text={'Tuesday, May 23, 2013 12:53 PM'}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={'black'}
+                      style={{marginBottom: 10}}
+                    />
+                    <MyText
+                      text={'40% (0% required to pass)'}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={'black'}
+                      style={{}}
+                    />
+                  </View>
+                ) : (
+                  <View>
+                    <MyText
+                      text={'Whoops'}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={'black'}
+                      style={{marginBottom: 10}}
+                    />
+                    <MyText
+                      text={'You failed this quiz with a score of'}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={'black'}
+                      style={{}}
+                    />
+                    <MyText
+                      text={'22%'}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={'black'}
+                      style={{}}
+                    />
+                    <MyText
+                      text={'You need 85% to pass'}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={'black'}
+                      style={{}}
+                    />
+                    <MyButton
+                      text="Retake Quiz"
+                      style={{
+                        width: width * 0.9,
+                        marginBottom: 10,
+                        backgroundColor: Colors.THEME_BROWN,
+                      }}
+                      onPress={() => {}}
+                    />
+                  </View>
+                )
+              ) : null}
               {item.type === 'survey'
                 ? item.chapter_question?.map((sur, surIndex) => (
                     <View key={surIndex?.toString()}>

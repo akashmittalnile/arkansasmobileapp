@@ -123,6 +123,10 @@ const AccordionItem = ({
     const link = `https://docs.google.com/viewerng/viewer?url=${file}`;
     Linking.openURL(link);
   };
+  const openQuizInBrowser = link => {
+    console.log('openPdfInBrowser', link);
+    Linking.openURL(link);
+  };
 
   const isPrerequisiteCompleted = item => {
     // if first chapter step, ignore its prerequisite
@@ -262,11 +266,13 @@ const AccordionItem = ({
                         marginBottom: 10,
                         backgroundColor: Colors.THEME_BROWN,
                       }}
-                      onPress={() => {}}
+                      onPress={() => {
+                        openQuizInBrowser(item?.quiz_url);
+                      }}
                     />
                   </View>
                 ) : item?.is_completed === '1' ? (
-                  <View style={{alignItems:'center'}}>
+                  <View style={{alignItems: 'center'}}>
                     <MyText
                       text={'Tuesday, May 23, 2013 12:53 PM'}
                       fontFamily="medium"
@@ -283,7 +289,7 @@ const AccordionItem = ({
                     />
                   </View>
                 ) : (
-                  <View style={{alignItems:'center'}} >
+                  <View style={{alignItems: 'center'}}>
                     <MyText
                       text={'Whoops'}
                       fontFamily="medium"
@@ -320,6 +326,13 @@ const AccordionItem = ({
                         backgroundColor: Colors.THEME_BROWN,
                       }}
                       onPress={() => {}}
+                    />
+                    <MyText
+                      text={'You answered 2 out of 9 questions correctly'}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={'black'}
+                      style={{marginTop: 10}}
                     />
                   </View>
                 )

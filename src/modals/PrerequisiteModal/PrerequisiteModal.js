@@ -55,9 +55,9 @@ const PrerequisiteModal = ({
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> */}
       <View style={styles.modalContent}>
-        <Image source={require('assets/images/tick-circle.png')} />
+        <Image source={require('assets/images/prereq-not-completed.png')} />
         <MyText
-          text="Successfully Purchased!"
+          text="Prerequisite(s) have not yet been completed!"
           textColor={Colors.THEME_GOLD}
           fontSize={24}
           fontFamily="medium"
@@ -73,13 +73,13 @@ const PrerequisiteModal = ({
           style={{marginBottom: 20}}
         />
         <MyButton
-          text="MY COURSES"
+          text="OK, GOT IT"
           style={{
             width: width * 0.9,
             marginBottom: 10,
             backgroundColor: Colors.THEME_BROWN,
           }}
-          onPress={() => {}}
+          onPress={closeModal}
         />
       </View>
       {/* </KeyboardAvoidingView> */}

@@ -101,7 +101,7 @@ const AccordionItem = ({
     // if prerequisite not completed, show prerequisite modal
     if (!isPrerequisiteCompleted(item)) {
       setShowPrerequisiteModal(true);
-      setShowPrerequisiteModal(`${chapindex + 1}: ${getPreviousStepName(item)}`)
+      setPrerequisiteModalText(String(chapindex + 1) + ': ' +getPreviousStepName(item))
       return;
     }
 

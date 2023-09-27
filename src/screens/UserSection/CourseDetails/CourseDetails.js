@@ -46,6 +46,8 @@ import FAB_Button from '../../../components/FAB_Button/FAB_Button';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import Review from '../../../modals/Review/Review';
 import VideoModal from '../../../components/VideoModal/VideoModal';
+import Modal from 'react-native-modal';
+import PrerequisiteModal from '../../../modals/PrerequisiteModal/PrerequisiteModal';
 
 const data = [
   {
@@ -125,6 +127,8 @@ const CourseDetails = ({navigation, dispatch, route}) => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
   const [documents, setDocuments] = useState([]);
+  const [showPrerequisiteModal, setShowPrerequisiteModal] = useState(false);
+  const [prerequisiteModalText, setPrerequisiteModalText] = useState('');
 
   useEffect(() => {
     getProductDetails();
@@ -576,6 +580,8 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                           setShowModal={setShowModal}
                           markAsCompleted={markAsCompleted}
                           allChapterSteps={chap?.chapter_steps}
+                          setShowPrerequisiteModal={setShowPrerequisiteModal}
+                          setPrerequisiteModalText={setPrerequisiteModalText}
                         />
                       );
                     }}
@@ -639,6 +645,12 @@ const CourseDetails = ({navigation, dispatch, route}) => {
           review={review}
           setReview={setReview}
           submitReview={submitReview}
+        />
+        <PrerequisiteModal
+          visible={showPrerequisiteModal}
+          setVisibility={setShowPrerequisiteModal}
+          prerequisiteModalText={prerequisiteModalText}
+          setPrerequisiteModalText={setPrerequisiteModalText}
         />
       </View>
     </SafeAreaView>

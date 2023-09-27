@@ -42,6 +42,8 @@ const AccordionItem = ({
   markAsCompleted,
   allChapterSteps,
   chapindex,
+  setShowPrerequisiteModal,
+  setPrerequisiteModalText
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -95,7 +97,14 @@ const AccordionItem = ({
     };
   });
 
-  const toggleButton = () => {
+  const toggleButton = item => {
+    // if prerequisite not completed, show prerequisite modal
+    if (!isPrerequisiteCompleted(item)) {
+      setShowPrerequisiteModal(true);
+      setShowPrerequisiteModal(`${chapindex + 1}: ${getPreviousStepName(item)}`)
+      return;
+    }
+
     if (shareValue.value === 0) {
       shareValue.value = withTiming(1, {
         // duration: 500,
@@ -163,7 +172,7 @@ const AccordionItem = ({
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.btnStyle}
-        onPress={toggleButton}>
+        onPress={() => toggleButton(item)}>
         <View style={styles.leftRow}>
           <View style={styles.leftSubRow}>
             <View style={styles.numView}>

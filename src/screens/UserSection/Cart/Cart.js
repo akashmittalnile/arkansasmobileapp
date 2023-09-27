@@ -68,8 +68,8 @@ const Cart = ({navigation, dispatch}) => {
   const [cartListData, setCartListData] = useState({});
 
   useEffect(() => {
-    getCartList()
-  }, [])
+    getCartList();
+  }, []);
   const getCartList = async () => {
     setShowLoader(true);
     try {
@@ -80,10 +80,10 @@ const Cart = ({navigation, dispatch}) => {
       );
       console.log('getCartList resp', resp?.data);
       if (resp?.data?.status) {
-        setCartListData(resp?.data)
+        setCartListData(resp?.data);
         // Toast.show(resp?.data?.message, Toast.SHORT)
-      }else{
-        Toast.show(resp?.data?.message, Toast.SHORT)
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in getCartList', error);
@@ -92,6 +92,37 @@ const Cart = ({navigation, dispatch}) => {
   };
   const gotoPaymentScreen = () => {
     navigation.navigate(ScreenNames.PROCEED_TO_PAYMENT);
+  };
+
+  const changeQuantity = async (item, change) => {
+    console.log('changeQuantity', change);
+    // return
+    const oldQuantity = Number(item?.quantity);
+    const isRemoveProduct = oldQuantity === 1 && change === 'minus'
+    const newQuantity = change === 'minus' ? oldQuantity - 1 : oldQuantity + 1;
+    setShowLoader(true);
+    const postData = new FormData();
+    postData.append('cart_id', item?.id);
+    postData.append('quantity', newQuantity);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.UPDATE_PRODUCT_QUANTITY,
+        postData,
+      );
+      console.log('changeQuantity resp', resp?.data);
+      if (resp?.data?.status) {
+        if(isRemoveProduct){
+          Toast.show(resp?.data?.message, Toast.SHORT)
+        }
+        getCartList();
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in changeQuantity', error);
+    }
+    setShowLoader(false);
   };
 
   const renderProduct = ({item}) => {
@@ -152,6 +183,31 @@ const Cart = ({navigation, dispatch}) => {
               />
             </View> */}
           </View>
+          {item?.type === '2' ? (
+            <View style={styles.quantityRow}>
+              <TouchableOpacity
+                onPress={() => {
+                  changeQuantity(item, 'minus');
+                }}>
+                <Image source={require('assets/images/minus.png')} />
+              </TouchableOpacity>
+              <View style={styles.quantityView}>
+                <MyText
+                  text={item?.quantity}
+                  fontFamily="regular"
+                  fontSize={12}
+                  textColor={'black'}
+                  style={{}}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  changeQuantity(item, 'add');
+                }}>
+                <Image source={require('assets/images/add.png')} />
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
       </View>
     );

@@ -131,4 +131,20 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  quantityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 13.5,
+  },
+  quantityView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: 18,
+    marginHorizontal: 4,
+    borderRadius: 5,
+    borderColor: '#ECECEC',
+    borderWidth: 1
+  },
 });

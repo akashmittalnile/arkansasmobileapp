@@ -144,13 +144,13 @@ const Cart = ({navigation, dispatch}) => {
               letterSpacing={0.14}
               style={{}}
             />
-            <View style={styles.iconsRow}>
+            {/* <View style={styles.iconsRow}>
               <Image source={require('assets/images/heart-selected.png')} />
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}
               />
-            </View>
+            </View> */}
           </View>
         </View>
       </View>

@@ -181,6 +181,37 @@ const SearchAllType = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
+  const getAllTypeWithFilter = async (type = '1') => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append('type', type);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ALL_TYPE_LISTING,
+        formdata,
+      );
+      console.log('getAllType resp', resp?.data);
+      if (resp?.data?.status) {
+        if (type === '1') {
+          // only set categories data if getting it from api
+          if(resp?.data?.category){
+            setCourseCategries(resp?.data?.category?.filter(el => el.type == '1'))
+            setProductCategries(resp?.data?.category?.filter(el => el.type == '2'))
+          }
+          const updatedData = await generateThumb(resp?.data?.data);
+          setCourseData(updatedData);
+        } else {
+          setProductData(resp?.data?.data);
+        }
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getAllType', error);
+    }
+    setShowLoader(false);
+  };
   const generateThumb = async data => {
     // console.log('generateThumb');
     let updatedData = [];
@@ -238,6 +269,10 @@ const SearchAllType = ({navigation, dispatch}) => {
   const openFilterModal = () => {
     setShowFilterModal(true);
   };
+
+  const applyFilters = () => {
+    getAllTypeWithFilter()
+  }
 
   const renderCourse = ({item}) => {
     return (
@@ -475,6 +510,7 @@ const SearchAllType = ({navigation, dispatch}) => {
           setTempSelectedPriceFilter={setTempSelectedPriceFilter}
           tempSelectedRatingValues={tempSelectedRatingValues}
           setTempSelectedRatingValues={setTempSelectedRatingValues}
+          applyFilters={applyFilters}
         />
       </View>
     </SafeAreaView>

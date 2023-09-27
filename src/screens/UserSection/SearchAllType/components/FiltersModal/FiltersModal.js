@@ -42,6 +42,7 @@ const FiltersModal = ({
   setTempSelectedPriceFilter,
   tempSelectedRatingValues,
   setTempSelectedRatingValues,
+  applyFilters,
 }) => {
   //function : modal function
   const [allRatingValues] = useState(['5', '4', '3', '2']);

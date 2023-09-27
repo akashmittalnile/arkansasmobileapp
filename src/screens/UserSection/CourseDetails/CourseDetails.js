@@ -142,7 +142,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
         Service.OBJECT_TYPE_DETAILS,
         postData,
       );
-      console.log('getProductDetails resp', resp?.data);
+      console.log('getProductDetails resp', JSON.stringify(resp?.data));
       if (resp?.data?.status) {
         const data = await generateThumb(resp?.data?.data);
         setProductDetails(data);
@@ -553,6 +553,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                 <ViewAll
                   key={chapindex?.toString()}
                   text={`Chapter ${chapindex + 1}`}
+                  showSeeAll={false}
                   style={{marginTop: 10, marginBottom: 20}}
                 />
                 <View

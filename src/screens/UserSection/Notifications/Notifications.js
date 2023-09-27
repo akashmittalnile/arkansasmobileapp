@@ -188,7 +188,7 @@ const Notifications = ({navigation, dispatch}) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
-          {notificationsData?.length === 0 ? (
+          {notificationsData?.length > 0 ? (
             notificationsData?.map(item => {
               return (
                 <View style={styles.notiContainer}>

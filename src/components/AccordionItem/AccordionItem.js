@@ -558,8 +558,8 @@ const isLocalFileSelected = (documents, item) => {
 };
 
 const showMarkCompleteButton = item => {
-  if (item.type === 'quiz' || item.type === 'survey') {
-    return false;
+  if (item.type === 'video'  || item.type === 'pdf' ) {
+    return true;
   }
   return false;
 };

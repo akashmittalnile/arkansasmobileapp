@@ -317,39 +317,64 @@ const AccordionItem = ({
                     />
                   </View>
                 ) : (
-                  <View style={{alignItems: 'center'}}>
+                  <ImageBackground
+                    source={require('assets/images/quiz-bg.png')}
+                    style={{
+                      borderRadius: 30,
+                      overflow: 'hidden',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}
+                    resizeMode="stretch"
+                    imageStyle={{alignItems: 'center'}}>
                     <MyText
-                      text={'Whoops'}
-                      fontFamily="medium"
-                      fontSize={20}
-                      textColor={'black'}
-                      style={{marginBottom: 10}}
+                      text={'Whoops!'}
+                      fontFamily="semiBold"
+                      fontSize={30}
+                      textColor={'white'}
+                      style={{marginBottom: 10, paddingTop: 45}}
                     />
                     <MyText
                       text={'You failed this quiz with a score of'}
                       fontFamily="medium"
                       fontSize={20}
-                      textColor={'black'}
+                      textColor={'white'}
                       style={{}}
                     />
-                    <MyText
-                      text={'22%'}
-                      fontFamily="medium"
-                      fontSize={20}
-                      textColor={'black'}
-                      style={{}}
-                    />
+                    <View style={{alignItems: 'center', marginVertical: 25}}>
+                      <View style={styles.whiteCircle3}>
+                        <View style={styles.whiteCircle2}>
+                          <View style={styles.whiteCircle}>
+                            <MyText
+                              text={'22%'}
+                              fontFamily="bold"
+                              fontSize={29}
+                              textColor={'white'}
+                              style={{}}
+                            />
+                            <MyText
+                              text={'Your Score'}
+                              fontFamily="regular"
+                              fontSize={14}
+                              textColor={'black'}
+                              style={{}}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
                     <MyText
                       text={'You need 85% to pass'}
-                      fontFamily="medium"
-                      fontSize={20}
-                      textColor={'black'}
-                      style={{marginBottom: 10}}
+                      fontFamily="semiBold"
+                      fontSize={22}
+                      textColor={'white'}
+                      style={{marginBottom: 25}}
                     />
                     <MyButton
                       text="Retake Quiz"
+                      isWhite
                       style={{
-                        width: width * 0.9,
+                        width: width * 0.6,
                         marginBottom: 10,
                         backgroundColor: Colors.THEME_BROWN,
                       }}
@@ -359,10 +384,11 @@ const AccordionItem = ({
                       text={'You answered 2 out of 9 questions correctly'}
                       fontFamily="medium"
                       fontSize={20}
-                      textColor={'black'}
-                      style={{marginTop: 10}}
+                      textAlign="center"
+                      textColor={'white'}
+                      style={{marginTop: 10, paddingBottom: 45}}
                     />
-                  </View>
+                  </ImageBackground>
                 )
               ) : null}
               {item.type === 'survey'

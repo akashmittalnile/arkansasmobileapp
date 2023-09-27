@@ -146,4 +146,28 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  whiteCircle: {
+    borderRadius: 57.75 * 2 / 2,
+    width: 57.75 * 2,
+    height: 57.75 * 2,
+    backgroundColor: '#E0B220',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  whiteCircle2: {
+    borderRadius: 70 * 2 / 2,
+    width: 70 * 2,
+    height: 70 * 2,
+    backgroundColor: '#462626',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  whiteCircle3: {
+    borderRadius: 63 * 2 / 2,
+    width: 63 * 2,
+    height: 63 * 2,
+    backgroundColor: '#653C3C',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

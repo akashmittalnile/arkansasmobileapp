@@ -249,7 +249,7 @@ const Wishlist = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={'Max Bryant'}
+                text={item?.content_creator_name}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}
@@ -328,7 +328,7 @@ const Wishlist = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={'Nikhil Sam'}
+                text={item?.creator_name}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}

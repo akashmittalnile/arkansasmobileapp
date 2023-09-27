@@ -143,7 +143,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={'Max Byrant'}
+                text={item?.content_creator_name}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}

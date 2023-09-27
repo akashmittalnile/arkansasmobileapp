@@ -38,7 +38,7 @@ import ViewAll from '../../../components/ViewAll/ViewAll';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import {
   setUserNotifications,
-  setCartCount
+  setCartCount,
 } from 'src/reduxToolkit/reducer/user';
 import SearchWithIconDummy from '../../../components/SearchWithIconDummy/SearchWithIconDummy';
 
@@ -286,9 +286,9 @@ const Home = ({navigation, dispatch}) => {
   };
   const addToCart = async (object_id, object_type, cart_value) => {
     const postData = new FormData();
-    postData.append("object_id", object_id);
-    postData.append("object_type", object_type);
-    postData.append("cart_value", cart_value);
+    postData.append('object_id', object_id);
+    postData.append('object_type', object_type);
+    postData.append('cart_value', cart_value);
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
@@ -298,10 +298,9 @@ const Home = ({navigation, dispatch}) => {
       );
       console.log('addToCart resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message, Toast.SHORT)
-        
-      }else{
-        Toast.show(resp?.data?.message, Toast.SHORT)
+        Toast.show(resp?.data?.message, Toast.SHORT);
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in addToCart', error);
@@ -322,9 +321,7 @@ const Home = ({navigation, dispatch}) => {
           text={item.name}
           fontFamily="regular"
           fontSize={14}
-          textColor={
-            selectedTag === item.id ? Colors.THEME_GOLD : 'black'
-          }
+          textColor={selectedTag === item.id ? Colors.THEME_GOLD : 'black'}
         />
       </TouchableOpacity>
     );
@@ -417,7 +414,10 @@ const Home = ({navigation, dispatch}) => {
         <View style={styles.topRow}>
           <View style={styles.topLeftRow}>
             {item?.content_creator_image ? (
-              <Image source={{uri: item?.content_creator_image}} style={styles.crtrImg} />
+              <Image
+                source={{uri: item?.content_creator_image}}
+                style={styles.crtrImg}
+              />
             ) : null}
             <MyText
               text={item.content_creator_name}
@@ -496,10 +496,15 @@ const Home = ({navigation, dispatch}) => {
   };
   const renderProduct = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => gotoProductDetails(item?.id, '2')} style={styles.productContainer}>
+      <TouchableOpacity
+        onPress={() => gotoProductDetails(item?.id, '2')}
+        style={styles.productContainer}>
         <View>
           {item.Product_image[0] ? (
-            <Image source={{uri: item.Product_image[0]}} style={{width: (width - 40) * 0.42, height: 136}} />
+            <Image
+              source={{uri: item.Product_image[0]}}
+              style={{width: (width - 40) * 0.42, height: 136}}
+            />
           ) : null}
           <Image
             source={require('assets/images/heart-yellow-outline.png')}
@@ -542,7 +547,11 @@ const Home = ({navigation, dispatch}) => {
                 backgroundColor: Colors.THEME_BROWN,
               }}
             />
-            <TouchableOpacity onPress={()=>{addToCart(item.id, '2', item.price)}} style={styles.prodCartView}>
+            <TouchableOpacity
+              onPress={() => {
+                addToCart(item.id, '2', item.price);
+              }}
+              style={styles.prodCartView}>
               <Image
                 source={require('assets/images/shopping-bag.png')}
                 style={{height: 18, width: 18}}
@@ -619,15 +628,15 @@ const Home = ({navigation, dispatch}) => {
               style={{textAlign: 'center', marginTop: 20}}
             />
           )}
-          {homeData?.top_category?.length > 0 ? (
+          {homeData?.course_category?.length > 0 ? (
             <View>
               <ViewAll
-                text="Top Category"
+                text="Browse Courses by categories"
                 onPress={gotoTopCategory}
                 style={{marginTop: 21}}
               />
               <FlatList
-                data={homeData?.top_category || []}
+                data={homeData?.course_category || []}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 style={{marginTop: 15}}
@@ -637,7 +646,7 @@ const Home = ({navigation, dispatch}) => {
             </View>
           ) : (
             <MyText
-              text={`No Top Categories found`}
+              text={`No Categories found`}
               fontFamily="medium"
               fontSize={18}
               textColor={'#455A64'}
@@ -696,15 +705,15 @@ const Home = ({navigation, dispatch}) => {
               style={{textAlign: 'center', marginTop: 20}}
             />
           )}
-          {homeData?.suggested_category?.length > 0 ? (
+          {homeData?.product_category?.length > 0 ? (
             <View>
               <ViewAll
-                text="Explore Category"
+                text="Browse Products by Categories"
                 onPress={gotoTopCategory}
                 style={{marginTop: 21}}
               />
               <FlatList
-                data={homeData?.suggested_category || []}
+                data={homeData?.product_category || []}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 style={{marginTop: 15}}
@@ -714,7 +723,7 @@ const Home = ({navigation, dispatch}) => {
             </View>
           ) : (
             <MyText
-              text={`No Explore Category found`}
+              text={`No Categories found`}
               fontFamily="medium"
               fontSize={18}
               textColor={'#455A64'}

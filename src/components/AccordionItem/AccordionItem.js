@@ -156,7 +156,9 @@ const AccordionItem = ({
     <View
       style={[
         styles.subContainer,
-        item.type === 'video' ? {backgroundColor: Colors.THEME_BROWN} : null,
+        item?.is_completed === '1'
+          ? {backgroundColor: Colors.THEME_BROWN}
+          : null,
       ]}>
       <TouchableOpacity
         activeOpacity={0.7}
@@ -178,7 +180,7 @@ const AccordionItem = ({
                 fontFamily="medium"
                 // fontSize={14}
                 fontSize={16}
-                textColor={item.type === 'video' ? 'white' : Colors.LIGHT_GREY}
+                textColor={getTextColor(item?.is_completed)}
               />
               {item.type === 'video' ? (
                 <View style={styles.timerRow}>
@@ -187,7 +189,7 @@ const AccordionItem = ({
                     text={'15:00'}
                     fontFamily="regular"
                     fontSize={13}
-                    textColor={'white'}
+                    textColor={getTextColor(item?.is_completed)}
                     style={{marginLeft: 5}}
                   />
                 </View>
@@ -277,14 +279,14 @@ const AccordionItem = ({
                       text={'Tuesday, May 23, 2013 12:53 PM'}
                       fontFamily="medium"
                       fontSize={20}
-                      textColor={'black'}
+                      textColor={getTextColor(item.is_completed, true)}
                       style={{marginBottom: 10}}
                     />
                     <MyText
                       text={'40% (0% required to pass)'}
                       fontFamily="medium"
                       fontSize={20}
-                      textColor={'black'}
+                      textColor={getTextColor(item.is_completed, true)}
                       style={{}}
                     />
                   </View>
@@ -558,8 +560,14 @@ const isLocalFileSelected = (documents, item) => {
 };
 
 const showMarkCompleteButton = item => {
-  if (item.type === 'video'  || item.type === 'pdf' ) {
+  if (item.type === 'video' || item.type === 'pdf') {
     return true;
   }
   return false;
 };
+
+
+const getTextColor = (is_completed, isDarkColor = false) => {
+  const darkColor = isDarkColor ? Colors.THEME_BROWN : Colors.LIGHT_GREY
+  return is_completed === '1' ? 'white' : Colors.LIGHT_GREY
+}

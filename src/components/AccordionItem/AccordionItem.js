@@ -204,7 +204,13 @@ const AccordionItem = ({
           ) : null}
         </View>
         <Animated.View style={iconStyle}>
-          <Image source={require('assets/images/arrow-down.png')} />
+          <Image
+            source={
+              item?.is_completed === '1'
+                ? require('assets/images/arrow-down-white.png')
+                : require('assets/images/arrow-down.png')
+            }
+          />
         </Animated.View>
       </TouchableOpacity>
 
@@ -353,13 +359,31 @@ const AccordionItem = ({
                 : null}
               {item.type === 'pdf' ? (
                 <View style={{flex: 1, alignItems: 'center'}}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      openPdfInBrowser(item?.file);
-                    }}>
-                    <MyText text="View Pdf" />
-                  </TouchableOpacity>
-                  <Pdf
+                  <View style={styles.pdfContainer}>
+                    <Image source={require('assets/images/pdf-icon.png')} />
+                    <TouchableOpacity
+                      onPress={() => {
+                        openPdfInBrowser(item?.file);
+                      }}>
+                      <MyText
+                        text={item.filename}
+                        textColor={Colors.LIGHT_GREY}
+                        fontSise={13}
+                        fontFamily="regular"
+                        style={{marginLeft: 10, width: '85%'}}
+                      />
+                    </TouchableOpacity>
+                    {/* <MyText
+                      text={
+                        documents?.find(el => el?.id === item?.id)?.resp?.name
+                      }
+                      textColor={Colors.LIGHT_GREY}
+                      fontSise={13}
+                      fontFamily="regular"
+                      style={{marginLeft: 10, width: '85%'}}
+                    /> */}
+                  </View>
+                  {/* <Pdf
                     source={{uri: item?.file}}
                     horizontal
                     renderActivityIndicator={() => {
@@ -379,7 +403,7 @@ const AccordionItem = ({
                       console.log(`Link pressed: ${uri}`);
                     }}
                     style={styles.pdf}
-                  />
+                  /> */}
                 </View>
               ) : null}
               {item.type === 'assignment' ? (
@@ -560,7 +584,10 @@ const isLocalFileSelected = (documents, item) => {
 };
 
 const showMarkCompleteButton = item => {
-  if (item.type === 'video' || item.type === 'pdf') {
+  if (
+    item?.is_completed === '0' &&
+    (item.type === 'video' || item.type === 'pdf')
+  ) {
     return true;
   }
   return false;

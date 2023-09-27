@@ -129,9 +129,9 @@ const AccordionItem = ({
   };
 
   const isPrerequisiteCompleted = item => {
-    // if first chapter step, ignore its prerequisite
+    // if first chapter step of first chapter, ignore its prerequisite (return true)
     const isFirstStep = allChapterSteps[0]?.id === item.id;
-    if (isFirstStep) {
+    if (isFirstStep && chapindex === 0) {
       return true;
     }
     // if this step doesn't require previous step completed, return true
@@ -566,8 +566,7 @@ const showMarkCompleteButton = item => {
   return false;
 };
 
-
 const getTextColor = (is_completed, isDarkColor = false) => {
-  const darkColor = isDarkColor ? Colors.THEME_BROWN : Colors.LIGHT_GREY
-  return is_completed === '1' ? 'white' : Colors.LIGHT_GREY
-}
+  const darkColor = isDarkColor ? Colors.THEME_BROWN : Colors.LIGHT_GREY;
+  return is_completed === '1' ? 'white' : darkColor;
+};

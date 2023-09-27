@@ -43,7 +43,7 @@ const AccordionItem = ({
   allChapterSteps,
   chapindex,
   setShowPrerequisiteModal,
-  setPrerequisiteModalText
+  setPrerequisiteModalText,
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -101,7 +101,9 @@ const AccordionItem = ({
     // if prerequisite not completed, show prerequisite modal
     if (!isPrerequisiteCompleted(item)) {
       setShowPrerequisiteModal(true);
-      setPrerequisiteModalText(String(chapindex + 1) + ': ' +getPreviousStepName(item))
+      setPrerequisiteModalText(
+        String(chapindex + 1) + ': ' + getPreviousStepName(item),
+      );
       return;
     }
 
@@ -275,12 +277,21 @@ const AccordionItem = ({
               ) : null}
               {item.type === 'quiz' ? (
                 item?.is_completed === '0' ? (
-                  <View>
+                  <View style={{alignItems: 'center'}}>
+                    <Image source={require('assets/images/quiz-info.png')} />
+                    <MyText
+                      text={`Please complete the Quiz in which the questions will be related to the sections you have completed till now.`}
+                      textColor={Colors.LIGHT_GREY}
+                      fontSize={18}
+                      fontFamily="regular"
+                      textAlign="center"
+                      style={{marginBottom: 20}}
+                    />
                     <MyButton
                       text="Start Quiz"
                       style={{
-                        width: width * 0.9,
-                        marginBottom: 10,
+                        width: width * 0.4,
+                        height: 46,
                         backgroundColor: Colors.THEME_BROWN,
                       }}
                       onPress={() => {

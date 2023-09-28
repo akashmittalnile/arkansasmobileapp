@@ -179,7 +179,7 @@ const Home = ({navigation, dispatch}) => {
     setShowLoader(true);
     try {
       const resp = await Service.getApiWithToken(userToken, Service.HOME);
-      console.log('getHomeData resp', resp?.data);
+      console.log('getHomeData resp', JSON.stringify(resp?.data));
       if (resp?.data?.status) {
         const dataWithThumb = await generateThumb(resp?.data?.data);
         setHomeData(dataWithThumb);

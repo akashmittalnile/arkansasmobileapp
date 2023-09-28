@@ -364,7 +364,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
         console.log('uploadDocument resp', resp?.data);
         if (resp.data.status) {
           Toast.show(resp.data.message, Toast.SHORT);
-          deleteDocument(item?.id);
+          deleteDocument(chapter_step_id);
           getProductDetails();
         } else {
           Toast.show(resp.data.message, Toast.SHORT);

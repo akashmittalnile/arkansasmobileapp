@@ -432,15 +432,6 @@ const AccordionItem = ({
               {item.type === 'assignment' ? (
                 <>
                   <View style={styles.assignmentContainer}>
-                    {item?.file == '' ? (
-                      <MyText
-                        text={'Upload Your File'}
-                        fontFamily="medium"
-                        fontSize={24}
-                        textColor={'black'}
-                        style={{marginBottom: 41}}
-                      />
-                    ) : null}
                     <View style={styles.dropImgView}>
                       {wasFileSubmitted(item?.file) ? (
                         <View style={styles.pdfContainer}>
@@ -458,60 +449,96 @@ const AccordionItem = ({
                             style={{marginLeft: 10, width: '85%'}}
                           />
                         </View>
-                      ) : !isLocalFileSelected(documents, item) ? (
-                        <>
-                          <TouchableOpacity
-                            onPress={() => openDocument(item.id)}>
-                            <MyText
-                              text={'Select File Here'}
-                              fontFamily="medium"
-                              fontSize={18}
-                              textColor={Colors.DARK_GREY}
-                              style={{marginBottom: 40}}
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            onPress={() => uploadDocument(item.id)}>
-                            <Image
-                              source={require('assets/images/upload-file.png')}
-                            />
-                          </TouchableOpacity>
-                        </>
                       ) : (
-                        <View style={{alignItems: 'center'}}>
-                          <View style={styles.pdfContainer}>
-                            <View style={styles.pdfLeftRow}>
-                              <Image
-                                source={require('assets/images/pdf-icon.png')}
-                              />
-                              <MyText
-                                text={
-                                  documents?.find(el => el?.id === item?.id)
-                                    ?.resp?.name
-                                }
-                                textColor={Colors.LIGHT_GREY}
-                                fontSise={13}
-                                fontFamily="regular"
-                                style={{marginLeft: 10, width: '85%'}}
-                              />
-                            </View>
+                        <View style={{width: '100%', alignItems: 'center'}}>
+                          <MyText
+                            text={`Upload your file`}
+                            textColor={Colors.THEME_BROWN}
+                            fontSize={18}
+                            fontFamily="medium"
+                            textAlign="center"
+                            style={{marginBottom: 20}}
+                          />
+                          <MyText
+                            text={`pdf, doc, docx, xlsx. Max. 1 file are allowed`}
+                            textColor={'#4F5168'}
+                            fontSize={12}
+                            fontFamily="regular"
+                            textAlign="center"
+                            style={{marginBottom: 9}}
+                          />
+                          <MyText
+                            text={`Size: 5 MB`}
+                            textColor={'#4F5168'}
+                            fontSize={12}
+                            fontFamily="regular"
+                            textAlign="center"
+                            style={{marginBottom: 20}}
+                          />
+                          <View style={styles.chooseFileRow}>
                             <TouchableOpacity
-                              onPress={() => deleteDocument(item.id)}
-                              style={styles.deleteButtonStyle}>
-                              <MyIcon.MaterialIcons
-                                name="delete"
-                                color={Colors.RED}
-                                size={24}
+                              onPress={() => openDocument(item.id)}
+                              style={styles.chooseFileBtn}>
+                              <MyText
+                                text={`Choose File`}
+                                textColor={'#4F5168'}
+                                fontSize={12}
+                                fontFamily="regular"
+                                textAlign="center"
                               />
                             </TouchableOpacity>
+                            {isLocalFileSelected(documents, item) ? (
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                  width: '100%',
+                                }}>
+                                <MyText
+                                  text={
+                                    documents?.find(el => el?.id === item?.id)
+                                      ?.resp?.name
+                                  }
+                                  textColor={'#4F5168'}
+                                  fontSize={11}
+                                  fontFamily="regular"
+                                  textAlign="center"
+                                  style={{marginLeft: 15, width: '85%'}}
+                                />
+                                <TouchableOpacity
+                                  onPress={() => deleteDocument(item.id)}
+                                  style={styles.deleteButtonStyle}>
+                                  <MyIcon.MaterialIcons
+                                    name="delete"
+                                    color={Colors.RED}
+                                    size={24}
+                                  />
+                                </TouchableOpacity>
+                              </View>
+                            ) : (
+                              <MyText
+                                text={`No file chosen`}
+                                textColor={'#4F5168'}
+                                fontSize={11}
+                                fontFamily="regular"
+                                textAlign="center"
+                                style={{marginLeft: 15}}
+                              />
+                            )}
                           </View>
-                          <TouchableOpacity
-                            onPress={() => uploadDocument(item.id)}
-                            style={{marginTop: 10}}>
-                            <Image
-                              source={require('assets/images/upload-file.png')}
+                          {isLocalFileSelected(documents, item) ? (
+                            <MyButton
+                              text="Upload file"
+                              style={{
+                                width: width * 0.4,
+                                height: 46,
+                                marginTop: 10,
+                                backgroundColor: Colors.THEME_BROWN,
+                              }}
+                              onPress={() => uploadDocument(item.id)}
                             />
-                          </TouchableOpacity>
+                          ) : null}
                         </View>
                       )}
                     </View>

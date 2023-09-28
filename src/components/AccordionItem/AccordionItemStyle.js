@@ -41,8 +41,8 @@ export const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     paddingBottom: 20,
-    alignItems:'center',
-    width:'100%'
+    alignItems: 'center',
+    width: '100%',
   },
   numView: {
     height: 31,
@@ -146,7 +146,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   whiteCircle: {
-    borderRadius: 57.75 * 2 / 2,
+    borderRadius: (57.75 * 2) / 2,
     width: 57.75 * 2,
     height: 57.75 * 2,
     backgroundColor: '#E0B220',
@@ -154,7 +154,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   whiteCircle2: {
-    borderRadius: 70 * 2 / 2,
+    borderRadius: (70 * 2) / 2,
     width: 70 * 2,
     height: 70 * 2,
     backgroundColor: '#462626',
@@ -162,11 +162,29 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   whiteCircle3: {
-    borderRadius: 63 * 2 / 2,
+    borderRadius: (63 * 2) / 2,
     width: 63 * 2,
     height: 63 * 2,
     backgroundColor: '#653C3C',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  chooseFileRow: {
+    flexDirection: 'row',
+    alignItems:'center',
+    backgroundColor: 'white',
+    width: '100%',
+    borderColor: '#ECECEC',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  chooseFileBtn: {
+    backgroundColor: '#ECECEC',
+    paddingVertical: 10,
+    // paddingHorizontal: 20,
+    width: '40%',
+    borderRadius: 5,
   },
 });

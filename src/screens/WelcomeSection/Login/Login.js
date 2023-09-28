@@ -42,8 +42,8 @@ import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 
 const Login = ({navigation}) => {
   //variables : redux variables
-  const [email, setEmail] = useState('amar@gmail.com');
-  const [password, setPassword] = useState('12345678');
+  const [email, setEmail] = useState('ssuser6@gmail.com');
+  const [password, setPassword] = useState('123456');
   const [fcmToken, setFcmToken] = useState('');
   const [showLoader, setShowLoader] = useState(false);
   const dispatch = useDispatch();

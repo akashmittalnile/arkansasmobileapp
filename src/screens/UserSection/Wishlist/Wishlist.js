@@ -210,10 +210,16 @@ const Wishlist = ({navigation, dispatch}) => {
     setSelectedTab(id);
     getAllType(id);
   };
+  const gotoCourseDetails = (id, type) => {
+    navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
+  };
+  const gotoProductDetails = (id, type) => {
+    navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
+  };
 
   const renderCourse = ({item}) => {
     return (
-      <View style={styles.courseContainer}>
+      <TouchableOpacity onPress={() => gotoCourseDetails(item?.id, '1')} style={styles.courseContainer}>
         <ImageBackground
           // source={item.courseImg}
           source={{uri: item?.thumb?.path}}
@@ -288,13 +294,13 @@ const Wishlist = ({navigation, dispatch}) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   const renderProduct = ({item}) => {
     console.log('wishlist item.Product_image', item.Product_image);
     return (
-      <View style={styles.courseContainer}>
+      <TouchableOpacity onPress={() => gotoProductDetails(item?.id, '2')} style={styles.courseContainer}>
         <ImageBackground
           source={{uri: item.Product_image[0]}}
           style={styles.crseImg}>
@@ -367,7 +373,7 @@ const Wishlist = ({navigation, dispatch}) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   //UI

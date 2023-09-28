@@ -93,12 +93,42 @@ const Cart = ({navigation, dispatch}) => {
   const gotoPaymentScreen = () => {
     navigation.navigate(ScreenNames.PROCEED_TO_PAYMENT);
   };
-
-  const changeQuantity = async (item, change) => {
-    console.log('changeQuantity', change);
+  const changeQuantity = (item, change) => {
+    const oldQuantity = Number(item?.quantity);
+    const isRemoveProduct = oldQuantity === 1 && change === 'minus';
+    if (isRemoveProduct) {
+      removeFromCart(item?.id);
+    } else {
+      updateQuantity(item, change);
+    }
+  };
+  const removeFromCart = async id => {
+    console.log('removeFromCart');
+    setShowLoader(true);
+    const postData = new FormData();
+    postData.append('cart_id', id);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.REMOVE_CART,
+        postData,
+      );
+      console.log('removeFromCart resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message, Toast.SHORT);
+        getCartList();
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in removeFromCart', error);
+    }
+    setShowLoader(false);
+  };
+  const updateQuantity = async (item, change) => {
+    console.log('updateQuantity', change);
     // return
     const oldQuantity = Number(item?.quantity);
-    const isRemoveProduct = oldQuantity === 1 && change === 'minus'
     const newQuantity = change === 'minus' ? oldQuantity - 1 : oldQuantity + 1;
     setShowLoader(true);
     const postData = new FormData();
@@ -110,17 +140,15 @@ const Cart = ({navigation, dispatch}) => {
         Service.UPDATE_PRODUCT_QUANTITY,
         postData,
       );
-      console.log('changeQuantity resp', resp?.data);
+      console.log('updateQuantity resp', resp?.data);
       if (resp?.data?.status) {
-        if(isRemoveProduct){
-          Toast.show(resp?.data?.message, Toast.SHORT)
-        }
+        // Toast.show(resp?.data?.message, Toast.SHORT);
         getCartList();
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
       }
     } catch (error) {
-      console.log('error in changeQuantity', error);
+      console.log('error in updateQuantity', error);
     }
     setShowLoader(false);
   };

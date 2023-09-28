@@ -21,7 +21,7 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import {styles} from './AccordionItemStyle';
+import {styles} from './AccordionItem_OldStyle';
 import MyText from '../MyText/MyText';
 import {Colors, MyIcon} from '../../global/Index';
 import Pdf from 'react-native-pdf';
@@ -31,7 +31,7 @@ import MyButton from '../MyButton/MyButton';
 import {width} from '../../global/Constant';
 
 // const AccordionItem = ({num, time, title, description}) => {
-const AccordionItem = ({
+const AccordionItem_Old = ({
   item,
   index,
   documents,
@@ -556,7 +556,7 @@ const AccordionItem = ({
   );
 };
 
-export default AccordionItem;
+export default AccordionItem_Old;
 
 const wasFileSubmitted = file => {
   if (file === '' || file === null) {

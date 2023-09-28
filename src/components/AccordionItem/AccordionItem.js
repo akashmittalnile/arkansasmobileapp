@@ -439,10 +439,7 @@ const AccordionItem = ({
                             source={require('assets/images/pdf-icon.png')}
                           />
                           <MyText
-                            text={
-                              documents?.find(el => el?.id === item?.id)?.resp
-                                ?.name
-                            }
+                            text={item?.filename}
                             textColor={Colors.LIGHT_GREY}
                             fontSise={13}
                             fontFamily="regular"
@@ -475,48 +472,19 @@ const AccordionItem = ({
                             textAlign="center"
                             style={{marginBottom: 20}}
                           />
-                          <View style={styles.chooseFileRow}>
-                            <TouchableOpacity
-                              onPress={() => openDocument(item.id)}
-                              style={styles.chooseFileBtn}>
-                              <MyText
-                                text={`Choose File`}
-                                textColor={'#4F5168'}
-                                fontSize={12}
-                                fontFamily="regular"
-                                textAlign="center"
-                              />
-                            </TouchableOpacity>
-                            {isLocalFileSelected(documents, item) ? (
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  justifyContent: 'space-between',
-                                  width: '100%',
-                                }}>
+                          {!isLocalFileSelected(documents, item) ? (
+                            <View style={styles.chooseFileRow}>
+                              <TouchableOpacity
+                                onPress={() => openDocument(item.id)}
+                                style={styles.chooseFileBtn}>
                                 <MyText
-                                  text={
-                                    documents?.find(el => el?.id === item?.id)
-                                      ?.resp?.name
-                                  }
+                                  text={`Choose File`}
                                   textColor={'#4F5168'}
-                                  fontSize={11}
+                                  fontSize={12}
                                   fontFamily="regular"
                                   textAlign="center"
-                                  style={{marginLeft: 15, width: '85%'}}
                                 />
-                                <TouchableOpacity
-                                  onPress={() => deleteDocument(item.id)}
-                                  style={styles.deleteButtonStyle}>
-                                  <MyIcon.MaterialIcons
-                                    name="delete"
-                                    color={Colors.RED}
-                                    size={24}
-                                  />
-                                </TouchableOpacity>
-                              </View>
-                            ) : (
+                              </TouchableOpacity>
                               <MyText
                                 text={`No file chosen`}
                                 textColor={'#4F5168'}
@@ -525,8 +493,27 @@ const AccordionItem = ({
                                 textAlign="center"
                                 style={{marginLeft: 15}}
                               />
-                            )}
-                          </View>
+                            </View>
+                          ) : (
+                            <View style={styles.selectedFileRow}>
+                              <MyText
+                                text={
+                                  documents?.find(el => el?.id === item?.id)
+                                    ?.resp?.name
+                                }
+                                textColor={Colors.LIGHT_GREY}
+                                fontSise={13}
+                                fontFamily="regular"
+                                style={{marginLeft: 10, width: '85%'}}
+                              />
+                              <TouchableOpacity
+                                onPress={() => deleteDocument(item.id)} >
+                                <Image
+                                  source={require('assets/images/trash.png')}
+                                />
+                              </TouchableOpacity>
+                            </View>
+                          )}
                           {isLocalFileSelected(documents, item) ? (
                             <MyButton
                               text="Upload file"

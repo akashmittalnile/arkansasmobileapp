@@ -417,14 +417,14 @@ const AccordionItem = ({
                     onPress={() => {
                       openPdfInBrowser(item?.file);
                     }}
-                    style={{width: '100%'}}>
+                    style={{width: '85%'}}>
                     <MyText
                       text={item.filename}
                       numberOfLines={2}
                       textColor={Colors.LIGHT_GREY}
                       fontSise={13}
                       fontFamily="regular"
-                      style={{marginLeft: 10, width: '85%'}}
+                      style={{marginLeft: 10, width: '100%'}}
                     />
                   </TouchableOpacity>
                 </View>

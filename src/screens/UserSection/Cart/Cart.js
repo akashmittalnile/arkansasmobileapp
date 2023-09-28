@@ -256,24 +256,26 @@ const Cart = ({navigation, dispatch}) => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderProduct}
           />
-          <View style={styles.applyCouponRow}>
-            <TextInput
-              value={promoCode}
-              placeholder="Promo Code"
-              placeholderTextColor="#C0C0C0"
-              onChangeText={value => setPromoCode(value)}
-              style={styles.promoInput}
-            />
-            <TouchableOpacity style={styles.applyButton}>
-              <MyText
-                text={'Apply'}
-                fontFamily="regular"
-                fontSize={14}
-                textColor={Colors.THEME_GOLD}
-                style={{}}
+          {cartListData?.data?.length > 0 ? (
+            <View style={styles.applyCouponRow}>
+              <TextInput
+                value={promoCode}
+                placeholder="Promo Code"
+                placeholderTextColor="#C0C0C0"
+                onChangeText={value => setPromoCode(value)}
+                style={styles.promoInput}
               />
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity style={styles.applyButton}>
+                <MyText
+                  text={'Apply'}
+                  fontFamily="regular"
+                  fontSize={14}
+                  textColor={Colors.THEME_GOLD}
+                  style={{}}
+                />
+              </TouchableOpacity>
+            </View>
+          ) : null}
 
           <ViewAll
             text="Order Summary"

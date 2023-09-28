@@ -44,6 +44,7 @@ const AccordionItem = ({
   chapindex,
   setShowPrerequisiteModal,
   setPrerequisiteModalText,
+  prevChapterSteps
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -101,8 +102,9 @@ const AccordionItem = ({
     // if prerequisite not completed, show prerequisite modal
     if (!isPrerequisiteCompleted(item)) {
       setShowPrerequisiteModal(true);
+      // chapindex name
       setPrerequisiteModalText(
-        String(chapindex + 1) + ': ' + getPreviousStepName(item),
+        String(chapindex) + ': ',
       );
       return;
     }
@@ -140,22 +142,27 @@ const AccordionItem = ({
   };
 
   const isPrerequisiteCompleted = item => {
-    // if first chapter step of first chapter, ignore its prerequisite (return true)
-    const isFirstStep = allChapterSteps[0]?.id === item.id;
-    if (isFirstStep && chapindex === 0) {
+    // if first chapter, there is no chapter before it, so previous chapter prerequities are completed
+    if (chapindex === 0) {
       return true;
     }
-    // if this step doesn't require previous step completed, return true
-    if (item?.prerequisite == '0') {
-      return true;
+    const prevChapIncompletedPrereq = prevChapterSteps?.find(el => el?.prerequisite === '1' && el?.is_completed === '0')
+    if(prevChapIncompletedPrereq){
+      return false
+    }else{
+      return true
     }
-    const index = allChapterSteps.findIndex(el => el.id == item.id);
-    const isPreviousStepComplete =
-      allChapterSteps[index - 1]?.is_completed === '1';
-    if (isPreviousStepComplete) {
-      return true;
-    }
-    return false;
+    // // if this step doesn't require previous step completed, return true
+    // if (item?.prerequisite == '0') {
+    //   return true;
+    // }
+    // const index = allChapterSteps.findIndex(el => el.id == item.id);
+    // const isPreviousStepComplete =
+    //   allChapterSteps[index - 1]?.is_completed === '1';
+    // if (isPreviousStepComplete) {
+    //   return true;
+    // }
+    // return false;
   };
 
   const getPreviousStepName = item => {

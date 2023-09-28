@@ -416,7 +416,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={productDetails?.rating}
+                text={productDetails?.avg_rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}
@@ -579,6 +579,12 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                           deleteDocument={deleteDocument}
                           setShowModal={setShowModal}
                           markAsCompleted={markAsCompleted}
+                          prevChapterSteps={
+                            chapindex === 0
+                              ? []
+                              : productDetails?.chapters[chapindex - 1]
+                                  ?.chapter_steps
+                          }
                           allChapterSteps={chap?.chapter_steps}
                           setShowPrerequisiteModal={setShowPrerequisiteModal}
                           setPrerequisiteModalText={setPrerequisiteModalText}

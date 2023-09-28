@@ -201,7 +201,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
 
       console.log('updatedChapterData', updatedChapterData);
       data.chapters = updatedChapterData;
-      console.log('generateThumb data', data);
+      console.log('generateThumb data', JSON.stringify(data));
       return data;
     } catch (error) {
       console.error('Error generating thumbnails:', error);

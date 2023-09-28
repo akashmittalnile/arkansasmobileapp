@@ -44,7 +44,7 @@ const AccordionItem = ({
   chapindex,
   setShowPrerequisiteModal,
   setPrerequisiteModalText,
-  prevChapterSteps
+  prevChapterSteps,
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -103,9 +103,7 @@ const AccordionItem = ({
     if (!isPrerequisiteCompleted(item)) {
       setShowPrerequisiteModal(true);
       // chapindex name
-      setPrerequisiteModalText(
-        String(chapindex) + ': ',
-      );
+      setPrerequisiteModalText(String(chapindex) + ': ');
       return;
     }
 
@@ -146,11 +144,13 @@ const AccordionItem = ({
     if (chapindex === 0) {
       return true;
     }
-    const prevChapIncompletedPrereq = prevChapterSteps?.find(el => el?.prerequisite === '1' && el?.is_completed === '0')
-    if(prevChapIncompletedPrereq){
-      return false
-    }else{
-      return true
+    const prevChapIncompletedPrereq = prevChapterSteps?.find(
+      el => el?.prerequisite === '1' && el?.is_completed === '0',
+    );
+    if (prevChapIncompletedPrereq) {
+      return false;
+    } else {
+      return true;
     }
     // // if this step doesn't require previous step completed, return true
     // if (item?.prerequisite == '0') {
@@ -411,52 +411,22 @@ const AccordionItem = ({
                   ))
                 : null}
               {item.type === 'pdf' ? (
-                <View style={{flex: 1, alignItems: 'center'}}>
-                  <View style={styles.pdfContainer}>
-                    <Image source={require('assets/images/pdf-icon.png')} />
-                    <TouchableOpacity
-                      onPress={() => {
-                        openPdfInBrowser(item?.file);
-                      }}>
-                      <MyText
-                        text={item.filename}
-                        textColor={Colors.LIGHT_GREY}
-                        fontSise={13}
-                        fontFamily="regular"
-                        style={{marginLeft: 10, width: '85%'}}
-                      />
-                    </TouchableOpacity>
-                    {/* <MyText
-                      text={
-                        documents?.find(el => el?.id === item?.id)?.resp?.name
-                      }
+                <View style={styles.pdfContainer}>
+                  <Image source={require('assets/images/pdf-icon.png')} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      openPdfInBrowser(item?.file);
+                    }}
+                    style={{width: '100%'}}>
+                    <MyText
+                      text={item.filename}
+                      numberOfLines={2}
                       textColor={Colors.LIGHT_GREY}
                       fontSise={13}
                       fontFamily="regular"
                       style={{marginLeft: 10, width: '85%'}}
-                    /> */}
-                  </View>
-                  {/* <Pdf
-                    source={{uri: item?.file}}
-                    horizontal
-                    renderActivityIndicator={() => {
-                      <ActivityIndicator color="black" size="large" />;
-                    }}
-                    trustAllCerts={false}
-                    onLoadComplete={(numberOfPages, filePath) => {
-                      console.log(`Number of pages: ${numberOfPages}`);
-                    }}
-                    onPageChanged={(page, numberOfPages) => {
-                      console.log(`Current page: ${page}`);
-                    }}
-                    onError={error => {
-                      console.log(error);
-                    }}
-                    onPressLink={uri => {
-                      console.log(`Link pressed: ${uri}`);
-                    }}
-                    style={styles.pdf}
-                  /> */}
+                    />
+                  </TouchableOpacity>
                 </View>
               ) : null}
               {item.type === 'assignment' ? (
@@ -546,43 +516,6 @@ const AccordionItem = ({
                       )}
                     </View>
                   </View>
-                  {/* <View style={styles.midImage}>
-                {!documents?.find(el => el?.id === item?.id) ? (
-                  <View style={styles.imageViewStyle}>
-                    <TouchableOpacity
-                      onPress={() => openDocument(item.id)}
-                      style={styles.addButtonStyle}>
-                      <MyIcon.AntDesign
-                        name="plus"
-                        color={Colors.THEME_GREEN}
-                        size={24}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <View style={styles.imageViewStyle}>
-                    <MyText text="Uploaded documet" />
-                    <TouchableOpacity
-                      onPress={() => deleteDocument(item.id)}
-                      style={styles.deleteButtonStyle}>
-                      <MyIcon.MaterialIcons
-                        name="delete"
-                        color={Colors.RED}
-                        size={24}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                )}
-                <MyButton
-                  text="Upload File"
-                  style={{
-                    width: width * 0.9,
-                    marginBottom: 10,
-                    backgroundColor: Colors.THEME_BROWN,
-                  }}
-                  onPress={() => uploadDocument(item.id)}
-                />
-              </View> */}
                 </>
               ) : null}
             </>
@@ -599,8 +532,8 @@ const AccordionItem = ({
                 onPress={() => markAsCompleted(item.id)}
                 style={[
                   {
-                    width: '100%',
-                    height: 50,
+                    width: '40%',
+                    height: 46,
                     backgroundColor: Colors.THEME_BROWN,
                     marginTop: 10,
                   },

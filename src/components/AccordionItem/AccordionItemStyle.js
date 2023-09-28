@@ -129,8 +129,8 @@ export const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+    // justifyContent: 'space-between',
+    // marginBottom: 10,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {

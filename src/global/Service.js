@@ -48,6 +48,7 @@ export const MY_ORDER = `my-order`;
 export const MARK_AS_COMPLETE = `mark-as-complete`;
 export const UPDATE_PRODUCT_QUANTITY = `update-product-quantity`;
 export const REMOVE_CART = `remove-cart`;
+export const MAKE_PAYMENT = `make-payment`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

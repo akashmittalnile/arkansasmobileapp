@@ -244,8 +244,12 @@ const SearchAllType = ({navigation, dispatch}) => {
   const openFilterModal = () => {
     setShowFilterModal(true);
   };
-
+  const setOriginalValues = () => {
+    setSelectedTab(temporarySelectedTab)
+    
+  }
   const applyFilters = async () => {
+    setOriginalValues()
     const postData = new FormData();
     postData.append('type', temporarySelectedTab);
     let catIds = [];

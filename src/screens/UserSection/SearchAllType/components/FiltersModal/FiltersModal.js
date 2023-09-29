@@ -45,7 +45,7 @@ const FiltersModal = ({
   applyFilters,
 }) => {
   //function : modal function
-  const [allRatingValues] = useState(['5', '4', '3', '2']);
+  const [allRatingValues] = useState(['4', '3', '2', '1']);
   const closeModal = () => {
     setVisibility(false);
   };
@@ -193,7 +193,13 @@ const FiltersModal = ({
             />
             {priceFilterValues?.map((el, index) => (
               <TouchableWithoutFeedback
-                onPress={() => setTempSelectedPriceFilter(el?.id)}>
+                onPress={() => {
+                  if (tempSelectedPriceFilter === el?.id) {
+                    setTempSelectedPriceFilter('');
+                  } else {
+                    setTempSelectedPriceFilter(el?.id);
+                  }
+                }}>
                 <View style={styles.statusView}>
                   <Image
                     source={
@@ -250,7 +256,7 @@ const FiltersModal = ({
                 marginBottom: 10,
                 backgroundColor: Colors.THEME_GOLD,
               }}
-              onPress={() => {}}
+              onPress={applyFilters}
             />
             <TouchableOpacity style={styles.resetButton}>
               <MyText

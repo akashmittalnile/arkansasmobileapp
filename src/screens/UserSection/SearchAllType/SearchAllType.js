@@ -117,9 +117,11 @@ const SearchAllType = ({navigation, dispatch}) => {
   const [courseData, setCourseData] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [courseCategries, setCourseCategries] = useState([]);
-  const [tempSelectedCourseCategries, setTempSelectedCourseCategries] = useState([]);
+  const [tempSelectedCourseCategries, setTempSelectedCourseCategries] =
+    useState([]);
   const [productCategries, setProductCategries] = useState([]);
-  const [TempSelectedProductCategries, setTempSelectedProductCategries] = useState([]);
+  const [TempSelectedProductCategries, setTempSelectedProductCategries] =
+    useState([]);
   const [productData, setProductData] = useState([]);
   const [tabs, setTabs] = useState([
     {
@@ -164,9 +166,13 @@ const SearchAllType = ({navigation, dispatch}) => {
       if (resp?.data?.status) {
         if (type === '1') {
           // only set categories data if getting it from api
-          if(resp?.data?.category){
-            setCourseCategries(resp?.data?.category?.filter(el => el.type == '1'))
-            setProductCategries(resp?.data?.category?.filter(el => el.type == '2'))
+          if (resp?.data?.category) {
+            setCourseCategries(
+              resp?.data?.category?.filter(el => el.type == '1'),
+            );
+            setProductCategries(
+              resp?.data?.category?.filter(el => el.type == '2'),
+            );
           }
           const updatedData = await generateThumb(resp?.data?.data);
           setCourseData(updatedData);
@@ -195,9 +201,13 @@ const SearchAllType = ({navigation, dispatch}) => {
       if (resp?.data?.status) {
         if (type === '1') {
           // only set categories data if getting it from api
-          if(resp?.data?.category){
-            setCourseCategries(resp?.data?.category?.filter(el => el.type == '1'))
-            setProductCategries(resp?.data?.category?.filter(el => el.type == '2'))
+          if (resp?.data?.category) {
+            setCourseCategries(
+              resp?.data?.category?.filter(el => el.type == '1'),
+            );
+            setProductCategries(
+              resp?.data?.category?.filter(el => el.type == '2'),
+            );
           }
           const updatedData = await generateThumb(resp?.data?.data);
           setCourseData(updatedData);
@@ -270,9 +280,63 @@ const SearchAllType = ({navigation, dispatch}) => {
     setShowFilterModal(true);
   };
 
-  const applyFilters = () => {
-    getAllTypeWithFilter()
-  }
+  const applyFilters = async () => {
+    console.log(
+      'tempSelectedCourseCategries',
+      courseCategries
+        ?.filter(el => tempSelectedCourseCategries?.includes(el?.name))
+        ?.map(el => el?.id),
+    );
+    // return
+    const postData = new FormData();
+    postData.append('type', temporarySelectedTab);
+    let catIds = [];
+    if (temporarySelectedTab === '1') {
+      catIds = courseCategries
+        ?.filter(el => tempSelectedCourseCategries?.includes(el?.name))
+        ?.map(el => el?.id);
+    } else {
+      catIds = productCategries
+        ?.filter(el => TempSelectedProductCategries?.includes(el?.name))
+        ?.map(el => el?.id);
+    }
+    if (catIds?.length > 0) {
+      postData.append('category', catIds[0]);
+    }
+    if (tempSelectedPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (tempSelectedRatingValues?.length > 0) {
+      tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    console.log('applyFilters postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ALL_TYPE_LISTING,
+        postData,
+      );
+      console.log('applyFilters resp', resp?.data);
+      if (resp?.data?.status) {
+        if(temporarySelectedTab !== selectedTab){
+          setSelectedTab(temporarySelectedTab)
+        }
+        setShowFilterModal(false);
+        if (temporarySelectedTab === '1') {
+          const updatedData = await generateThumb(resp?.data?.data);
+          setCourseData(updatedData);
+        } else {
+          setProductData(resp?.data?.data);
+        }
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
 
   const renderCourse = ({item}) => {
     return (

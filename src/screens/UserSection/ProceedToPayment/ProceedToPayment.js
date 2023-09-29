@@ -87,6 +87,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
         userToken,
         Service.CART_DETAILS_PAYMENT,
       );
+      console.log('getData userToken', userToken);
       console.log('getData resp', resp?.data);
       if (resp?.data?.status) {
         // show message only when no cards found
@@ -116,13 +117,14 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       Toast.show('Please complete card details', Toast.SHORT);
       return;
     }
-    setShowLoader(true);
+    // setShowLoader(true);
     try {
       console.log('card', card);
       const res = await createToken({card, type: 'Card'});
       console.log('res', res);
       const myData = new FormData();
       myData.append('stripeToken', res.token.id);
+      return
       myData.append('appointment_id', route.params.appointmentId);
       const resp = await Service.postApiWithToken(
         userToken,
@@ -376,7 +378,8 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                 marginTop: 32,
               }}
               // onPress={openSuccessfulyPurchasedModal}
-              onPress={onConfirm}
+              // onPress={onConfirm}
+              onPress={handlePayClick}
             />
           </ScrollView>
         </StripeContainer>

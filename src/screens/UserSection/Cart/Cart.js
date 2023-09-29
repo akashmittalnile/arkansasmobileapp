@@ -250,115 +250,130 @@ const Cart = ({navigation, dispatch}) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
-          <FlatList
-            data={cartListData?.data}
-            style={{}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderProduct}
-          />
-          {cartListData?.data?.length > 0 ? (
-            <View style={styles.applyCouponRow}>
-              <TextInput
-                value={promoCode}
-                placeholder="Promo Code"
-                placeholderTextColor="#C0C0C0"
-                onChangeText={value => setPromoCode(value)}
-                style={styles.promoInput}
+          {cartListData?.data?.length === 0 ? (
+            <View style={{alignItems: 'center', marginTop: 50}}>
+              <Image source={require('assets/images/no-data.png')} />
+              <MyText
+                text={'Your cart is empty'}
+                fontFamily="medium"
+                fontSize={40}
+                textAlign="center"
+                textColor={'black'}
               />
-              <TouchableOpacity style={styles.applyButton}>
-                <MyText
-                  text={'Apply'}
-                  fontFamily="regular"
-                  fontSize={14}
-                  textColor={Colors.THEME_GOLD}
-                  style={{}}
-                />
-              </TouchableOpacity>
             </View>
-          ) : null}
+          ) : (
+            <View>
+              <FlatList
+                data={cartListData?.data}
+                style={{}}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderProduct}
+              />
+              {cartListData?.data?.length > 0 ? (
+                <View style={styles.applyCouponRow}>
+                  <TextInput
+                    value={promoCode}
+                    placeholder="Promo Code"
+                    placeholderTextColor="#C0C0C0"
+                    onChangeText={value => setPromoCode(value)}
+                    style={styles.promoInput}
+                  />
+                  <TouchableOpacity style={styles.applyButton}>
+                    <MyText
+                      text={'Apply'}
+                      fontFamily="regular"
+                      fontSize={14}
+                      textColor={Colors.THEME_GOLD}
+                      style={{}}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : null}
 
-          <ViewAll
-            text="Order Summary"
-            showSeeAll={false}
-            style={{marginTop: 41}}
-          />
-          <View style={styles.summaryContainer}>
-            <View style={[styles.row, {marginBottom: 10}]}>
-              <MyText
-                text={`Subtotal (${cartListData?.data?.length})`}
-                fontSize={14}
-                fontFamily="medium"
-                textColor={'#455A64'}
-                style={{}}
+              <ViewAll
+                text="Order Summary"
+                showSeeAll={false}
+                style={{marginTop: 41}}
               />
-              <MyText
-                text={`$${Number(cartListData?.sub_total).toFixed(2)}`}
-                fontSize={14}
-                fontFamily="medium"
-                textColor={'#455A64'}
-                style={{}}
+              <View style={styles.summaryContainer}>
+                <View style={[styles.row, {marginBottom: 10}]}>
+                  <MyText
+                    text={`Subtotal (${cartListData?.data?.length})`}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#455A64'}
+                    style={{}}
+                  />
+                  <MyText
+                    text={`$${Number(cartListData?.sub_total).toFixed(2)}`}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#455A64'}
+                    style={{}}
+                  />
+                </View>
+                <View style={[styles.row, {marginBottom: 10}]}>
+                  <MyText
+                    text={`Discount`}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#8F93A0'}
+                    style={{}}
+                  />
+                  <MyText
+                    text={`$${Number(cartListData?.discount).toFixed(2)}`}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#8F93A0'}
+                    style={{}}
+                  />
+                </View>
+                <View style={[styles.row, {marginBottom: 19}]}>
+                  <MyText
+                    text={`Shipping`}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#455A64'}
+                    style={{}}
+                  />
+                  <MyText
+                    text={`$${Number(cartListData?.shipping).toFixed(2)}`}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#455A64'}
+                    style={{}}
+                  />
+                </View>
+                <Divider style={{borderColor: '#E0E0E0'}} />
+                <View style={[styles.row, {marginTop: 14}]}>
+                  <MyText
+                    text={`Total`}
+                    fontSize={18}
+                    fontFamily="medium"
+                    textColor={'#455A64'}
+                    style={{}}
+                  />
+                  <MyText
+                    text={`$${Number(cartListData?.total).toFixed(2)}`}
+                    fontSize={18}
+                    fontFamily="medium"
+                    textColor={'#455A64'}
+                    style={{}}
+                  />
+                </View>
+              </View>
+              <MyButton
+                text="PROCEED TO PAYMENT"
+                style={{
+                  width: width * 0.9,
+                  marginBottom: 10,
+                  backgroundColor: Colors.THEME_BROWN,
+                  marginTop: 32,
+                }}
+                onPress={gotoPaymentScreen}
               />
             </View>
-            <View style={[styles.row, {marginBottom: 10}]}>
-              <MyText
-                text={`Discount`}
-                fontSize={14}
-                fontFamily="medium"
-                textColor={'#8F93A0'}
-                style={{}}
-              />
-              <MyText
-                text={`$${Number(cartListData?.discount).toFixed(2)}`}
-                fontSize={14}
-                fontFamily="medium"
-                textColor={'#8F93A0'}
-                style={{}}
-              />
-            </View>
-            <View style={[styles.row, {marginBottom: 19}]}>
-              <MyText
-                text={`Shipping`}
-                fontSize={14}
-                fontFamily="medium"
-                textColor={'#455A64'}
-                style={{}}
-              />
-              <MyText
-                text={`$${Number(cartListData?.shipping).toFixed(2)}`}
-                fontSize={14}
-                fontFamily="medium"
-                textColor={'#455A64'}
-                style={{}}
-              />
-            </View>
-            <Divider style={{borderColor: '#E0E0E0'}} />
-            <View style={[styles.row, {marginTop: 14}]}>
-              <MyText
-                text={`Total`}
-                fontSize={18}
-                fontFamily="medium"
-                textColor={'#455A64'}
-                style={{}}
-              />
-              <MyText
-                text={`$${Number(cartListData?.total).toFixed(2)}`}
-                fontSize={18}
-                fontFamily="medium"
-                textColor={'#455A64'}
-                style={{}}
-              />
-            </View>
-          </View>
-          <MyButton
-            text="PROCEED TO PAYMENT"
-            style={{
-              width: width * 0.9,
-              marginBottom: 10,
-              backgroundColor: Colors.THEME_BROWN,
-              marginTop: 32,
-            }}
-            onPress={gotoPaymentScreen}
-          />
+          )}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
       </View>

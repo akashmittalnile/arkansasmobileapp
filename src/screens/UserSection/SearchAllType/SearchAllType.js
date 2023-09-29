@@ -117,9 +117,11 @@ const SearchAllType = ({navigation, dispatch}) => {
   const [courseData, setCourseData] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [courseCategries, setCourseCategries] = useState([]);
+  const [selectedCourseCategries, setSelectedCourseCategries] = useState([]);
   const [tempSelectedCourseCategries, setTempSelectedCourseCategries] =
     useState([]);
   const [productCategries, setProductCategries] = useState([]);
+  const [selectedProductCategries, setSelectedProductCategries] = useState([]);
   const [TempSelectedProductCategries, setTempSelectedProductCategries] =
     useState([]);
   const [productData, setProductData] = useState([]);
@@ -144,6 +146,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     },
   ]);
   const [tempSelectedPriceFilter, setTempSelectedPriceFilter] = useState('');
+  const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
 
   useEffect(() => {
@@ -245,11 +248,13 @@ const SearchAllType = ({navigation, dispatch}) => {
     setShowFilterModal(true);
   };
   const setOriginalValues = () => {
-    setSelectedTab(temporarySelectedTab)
-    
-  }
+    setSelectedTab(temporarySelectedTab);
+    setSelectedCourseCategries(tempSelectedCourseCategries);
+    setSelectedProductCategries(TempSelectedProductCategries);
+    setSelectedPriceFilter(tempSelectedPriceFilter);
+  };
   const applyFilters = async () => {
-    setOriginalValues()
+    setOriginalValues();
     const postData = new FormData();
     postData.append('type', temporarySelectedTab);
     let catIds = [];
@@ -281,8 +286,8 @@ const SearchAllType = ({navigation, dispatch}) => {
       );
       console.log('applyFilters resp', resp?.data);
       if (resp?.data?.status) {
-        if(temporarySelectedTab !== selectedTab){
-          setSelectedTab(temporarySelectedTab)
+        if (temporarySelectedTab !== selectedTab) {
+          setSelectedTab(temporarySelectedTab);
         }
         setShowFilterModal(false);
         if (temporarySelectedTab === '1') {
@@ -459,6 +464,40 @@ const SearchAllType = ({navigation, dispatch}) => {
       </View>
     );
   };
+  const ShowSelectedFilters = () => {
+    return (
+      <View>
+        {selectedTab === '1'
+          ? selectedCourseCategries?.map(el => (
+              <MyText
+                text={el}
+                fontFamily="regular"
+                fontSize={13}
+                textColor={Colors.THEME_BROWN}
+              />
+            ))
+          : selectedProductCategries?.map(el => (
+              <MyText
+                text={el}
+                fontFamily="regular"
+                fontSize={13}
+                textColor={Colors.THEME_BROWN}
+              />
+            ))}
+        {selectedPriceFilter !== '' ? (
+          <MyText
+            text={
+              priceFilterValues?.find(el => el.id === selectedPriceFilter)?.name
+            }
+            fontFamily="regular"
+            fontSize={13}
+            textColor={Colors.THEME_BROWN}
+          />
+        ) : null}
+      </View>
+    );
+  };
+
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -498,6 +537,7 @@ const SearchAllType = ({navigation, dispatch}) => {
               textColor={Colors.THEME_BROWN}
             />
           </TouchableOpacity>
+          <ShowSelectedFilters />
           {selectedTab === '1' ? (
             <FlatList
               // data={courseList}

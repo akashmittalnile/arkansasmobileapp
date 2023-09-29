@@ -147,6 +147,7 @@ const SearchAllType = ({navigation, dispatch}) => {
   ]);
   const [tempSelectedPriceFilter, setTempSelectedPriceFilter] = useState('');
   const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
+  const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
 
   useEffect(() => {
@@ -252,6 +253,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     setSelectedCourseCategries(tempSelectedCourseCategries);
     setSelectedProductCategries(TempSelectedProductCategries);
     setSelectedPriceFilter(tempSelectedPriceFilter);
+    setSelectedRatingValues(tempSelectedRatingValues);
   };
   const applyFilters = async () => {
     setOriginalValues();
@@ -478,6 +480,7 @@ const SearchAllType = ({navigation, dispatch}) => {
             ))
           : selectedProductCategries?.map(el => (
               <MyText
+                key={el}
                 text={el}
                 fontFamily="regular"
                 fontSize={13}
@@ -494,6 +497,17 @@ const SearchAllType = ({navigation, dispatch}) => {
             textColor={Colors.THEME_BROWN}
           />
         ) : null}
+        {selectedRatingValues?.length > 0
+          ? selectedRatingValues?.map(el => (
+              <MyText
+                key={el}
+                text={`${el} and more`}
+                fontFamily="regular"
+                fontSize={13}
+                textColor={Colors.THEME_BROWN}
+              />
+            ))
+          : null}
       </View>
     );
   };

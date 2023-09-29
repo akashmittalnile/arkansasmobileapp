@@ -34,6 +34,12 @@ const user = createSlice({
         cartCount: payload,
       };
     },
+    clearCart(state, {payload}) {
+      return {
+        ...state,
+        cartCount: '',
+      };
+    },
     logOutUser(state, {payload}) {
       return {
         userInfo: {},

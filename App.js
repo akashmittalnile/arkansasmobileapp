@@ -19,6 +19,7 @@ import Drawer from './src/navigation/Drawer/Drawer';
 //import : redux
 import {Provider} from 'react-redux';
 import {store} from 'src/reduxToolkit/store/store';
+import {StripeProvider} from '@stripe/stripe-react-native';
 
 const App = () => {
   //function
@@ -26,14 +27,20 @@ const App = () => {
   //hook : useEffect
   //UI
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Drawer />
-        {/* <SafeAreaView style={{flex: 1}}>
+    <StripeProvider
+      publishableKey="pk_test_4sjCZIFhfIeMDj3bpJsFapZf"
+      urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+      merchantIdentifier="merchant.com.{{YOUR_APP_NAME}}" // required for Apple Pay
+    >
+      <Provider store={store}>
+        <NavigationContainer>
+          <Drawer />
+          {/* <SafeAreaView style={{flex: 1}}>
           <StatusBar backgroundColor={Colors.THEME_BROWN} />
         </SafeAreaView> */}
-      </NavigationContainer>
-    </Provider>
+        </NavigationContainer>
+      </Provider>
+    </StripeProvider>
   );
 };
 export default App;

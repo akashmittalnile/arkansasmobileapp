@@ -211,7 +211,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     } catch (error) {
       console.error('Error generating thumbnails:', error);
     }
-    console.log('thumb data wishlist', updatedData);
+    console.log('thumb data SearchAllType', updatedData);
     return updatedData;
   };
   const onLike = async (type, id, status) => {
@@ -303,6 +303,89 @@ const SearchAllType = ({navigation, dispatch}) => {
       }
     } catch (error) {
       console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
+  const removeFilter = async (filterType, item) => {
+    let remainingSelectedCategories =
+      selectedTab === '1'
+        ? selectedCourseCategries
+        : TempSelectedProductCategries;
+    console.log('selectedCourseCategries', selectedCourseCategries, item);
+    if (filterType === 'cat') {
+      if (selectedTab === '1') {
+        remainingSelectedCategories = selectedCourseCategries?.filter(
+          el => el !== item,
+        );
+        setSelectedCourseCategries([...remainingSelectedCategories]);
+        setTempSelectedCourseCategries([...remainingSelectedCategories]);
+      } else {
+        remainingSelectedCategories = TempSelectedProductCategries?.filter(
+          el => el !== item,
+        );
+        setSelectedProductCategries([...remainingSelectedCategories]);
+        setTempSelectedProductCategries([...remainingSelectedCategories]);
+      }
+    }
+    const remainingPriceFilter = '';
+    if (filterType === 'price') {
+      setTempSelectedPriceFilter('');
+      setSelectedPriceFilter('')
+    }
+    let remainingselectedRatingValues = [...selectedRatingValues]
+    if (filterType === 'rating') {
+      remainingselectedRatingValues = selectedRatingValues?.filter(el => el !== item)
+      setSelectedRatingValues(remainingselectedRatingValues)
+      setTempSelectedRatingValues(remainingselectedRatingValues)
+    }
+    selectedRatingValues
+    // priceFilterValues?.find(el => el.id === selectedPriceFilter);
+    const postData = new FormData();
+    postData.append('type', temporarySelectedTab);
+    let catIds = [];
+    if (temporarySelectedTab === '1') {
+      catIds = courseCategries
+        ?.filter(el => remainingSelectedCategories?.includes(el?.name))
+        ?.map(el => el?.id);
+    } else {
+      catIds = productCategries
+        ?.filter(el => remainingSelectedCategories?.includes(el?.name))
+        ?.map(el => el?.id);
+    }
+    if (catIds?.length > 0) {
+      postData.append('category', catIds[0]);
+    }
+    if (remainingPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (remainingselectedRatingValues?.length > 0) {
+      remainingselectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    console.log('removeFilter postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ALL_TYPE_LISTING,
+        postData,
+      );
+      console.log('removeFilter resp', resp?.data);
+      if (resp?.data?.status) {
+        if (temporarySelectedTab !== selectedTab) {
+          setSelectedTab(temporarySelectedTab);
+        }
+        setShowFilterModal(false);
+        if (temporarySelectedTab === '1') {
+          const updatedData = await generateThumb(resp?.data?.data);
+          setCourseData(updatedData);
+        } else {
+          setProductData(resp?.data?.data);
+        }
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in removeFilter', error);
     }
     setShowLoader(false);
   };
@@ -469,43 +552,92 @@ const SearchAllType = ({navigation, dispatch}) => {
   const ShowSelectedFilters = () => {
     return (
       <View>
-        {selectedTab === '1'
-          ? selectedCourseCategries?.map(el => (
-              <MyText
-                text={el}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.THEME_BROWN}
-              />
-            ))
-          : selectedProductCategries?.map(el => (
-              <MyText
-                key={el}
-                text={el}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.THEME_BROWN}
-              />
-            ))}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}>
+          {selectedTab === '1'
+            ? selectedCourseCategries?.map(el => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginRight: 10,
+                  }}>
+                  <MyText
+                    text={el}
+                    fontFamily="regular"
+                    fontSize={13}
+                    textColor={Colors.THEME_BROWN}
+                  />
+                  <TouchableOpacity onPress={() => removeFilter('cat', el)}>
+                    <Image source={require('assets/images/trash.png')} />
+                  </TouchableOpacity>
+                </View>
+              ))
+            : selectedProductCategries?.map(el => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginRight: 10,
+                  }}>
+                  <MyText
+                    key={el}
+                    text={el}
+                    fontFamily="regular"
+                    fontSize={13}
+                    textColor={Colors.THEME_BROWN}
+                  />
+                  <TouchableOpacity onPress={() => removeFilter('cat', el)}>
+                    <Image source={require('assets/images/trash.png')} />
+                  </TouchableOpacity>
+                </View>
+              ))}
+        </View>
         {selectedPriceFilter !== '' ? (
-          <MyText
-            text={
-              priceFilterValues?.find(el => el.id === selectedPriceFilter)?.name
-            }
-            fontFamily="regular"
-            fontSize={13}
-            textColor={Colors.THEME_BROWN}
-          />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginRight: 10,
+            }}>
+            <MyText
+              text={
+                priceFilterValues?.find(el => el.id === selectedPriceFilter)
+                  ?.name
+              }
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+            />
+            <TouchableOpacity
+              onPress={() => removeFilter('price', selectedPriceFilter)}>
+              <Image source={require('assets/images/trash.png')} />
+            </TouchableOpacity>
+          </View>
         ) : null}
         {selectedRatingValues?.length > 0
           ? selectedRatingValues?.map(el => (
-              <MyText
-                key={el}
-                text={`${el} and more`}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.THEME_BROWN}
-              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginRight: 10,
+                }}>
+                <MyText
+                  key={el}
+                  text={`${el} and more`}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_BROWN}
+                />
+                <TouchableOpacity onPress={() => removeFilter('rating', el)}>
+                  <Image source={require('assets/images/trash.png')} />
+                </TouchableOpacity>
+              </View>
             ))
           : null}
       </View>

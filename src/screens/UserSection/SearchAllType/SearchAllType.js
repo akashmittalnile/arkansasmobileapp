@@ -35,6 +35,7 @@ import Divider from 'components/Divider/Divider';
 import MyButton from '../../../components/MyButton/MyButton';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import FiltersModal from './components/FiltersModal/FiltersModal';
+import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 
 const courseList = [
   {
@@ -115,6 +116,7 @@ const SearchAllType = ({navigation, dispatch}) => {
   const [selectedTab, setSelectedTab] = useState('1');
   const [temporarySelectedTab, setTemporarySelectedTab] = useState('1');
   const [courseData, setCourseData] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [courseCategries, setCourseCategries] = useState([]);
   const [selectedCourseCategries, setSelectedCourseCategries] = useState([]);
@@ -248,6 +250,8 @@ const SearchAllType = ({navigation, dispatch}) => {
   const openFilterModal = () => {
     setShowFilterModal(true);
   };
+  // setOriginalValues will set values for selected filters based on temporary selected filters
+  // since we use dont use temporary filter values to show selected filter values on screen
   const setOriginalValues = () => {
     setSelectedTab(temporarySelectedTab);
     setSelectedCourseCategries(tempSelectedCourseCategries);
@@ -255,7 +259,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     setSelectedPriceFilter(tempSelectedPriceFilter);
     setSelectedRatingValues(tempSelectedRatingValues);
   };
-  const applyFilters = async () => {
+  const applyFilters = async (searchParam = '') => {
     setOriginalValues();
     const postData = new FormData();
     postData.append('type', temporarySelectedTab);
@@ -277,6 +281,22 @@ const SearchAllType = ({navigation, dispatch}) => {
     }
     if (tempSelectedRatingValues?.length > 0) {
       tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    const isSearchTermExists = searchParam?.toString()?.trim()?.length > 0;
+    const isSearchValueExists = searchValue?.toString()?.trim()?.length > 0;
+    console.log(
+      'isSearchTermExists, isSearchValueExists',
+      isSearchTermExists,
+      isSearchValueExists,
+    );
+    console.log('searchTerm', searchParam);
+    console.log('searchValue', searchValue);
+    if (isSearchTermExists || isSearchValueExists) {
+      if (isSearchTermExists) {
+        postData.append('title', searchParam?.toString()?.trim());
+      } else {
+        postData.append('title', searchValue?.toString()?.trim());
+      }
     }
     console.log('applyFilters postData', JSON.stringify(postData));
     setShowLoader(true);
@@ -330,15 +350,17 @@ const SearchAllType = ({navigation, dispatch}) => {
     const remainingPriceFilter = '';
     if (filterType === 'price') {
       setTempSelectedPriceFilter('');
-      setSelectedPriceFilter('')
+      setSelectedPriceFilter('');
     }
-    let remainingselectedRatingValues = [...selectedRatingValues]
+    let remainingselectedRatingValues = [...selectedRatingValues];
     if (filterType === 'rating') {
-      remainingselectedRatingValues = selectedRatingValues?.filter(el => el !== item)
-      setSelectedRatingValues(remainingselectedRatingValues)
-      setTempSelectedRatingValues(remainingselectedRatingValues)
+      remainingselectedRatingValues = selectedRatingValues?.filter(
+        el => el !== item,
+      );
+      setSelectedRatingValues(remainingselectedRatingValues);
+      setTempSelectedRatingValues(remainingselectedRatingValues);
     }
-    selectedRatingValues
+    selectedRatingValues;
     // priceFilterValues?.find(el => el.id === selectedPriceFilter);
     const postData = new FormData();
     postData.append('type', temporarySelectedTab);
@@ -559,8 +581,9 @@ const SearchAllType = ({navigation, dispatch}) => {
             flexWrap: 'wrap',
           }}>
           {selectedTab === '1'
-            ? selectedCourseCategries?.map(el => (
+            ? selectedCourseCategries?.map((el, index) => (
                 <View
+                  key={index?.toString()}
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -577,8 +600,9 @@ const SearchAllType = ({navigation, dispatch}) => {
                   </TouchableOpacity>
                 </View>
               ))
-            : selectedProductCategries?.map(el => (
+            : selectedProductCategries?.map((el, index) => (
                 <View
+                  key={index?.toString()}
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -620,8 +644,9 @@ const SearchAllType = ({navigation, dispatch}) => {
           </View>
         ) : null}
         {selectedRatingValues?.length > 0
-          ? selectedRatingValues?.map(el => (
+          ? selectedRatingValues?.map((el, index) => (
               <View
+                key={index?.toString()}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -675,6 +700,16 @@ const SearchAllType = ({navigation, dispatch}) => {
               </TouchableOpacity>
             ))}
           </View>
+          <SearchWithIcon
+            placeholder="Search by title"
+            value={searchValue}
+            onChangeText={e => {
+              console.log('SearchWithIcon',e);
+              setSearchValue(e);
+              applyFilters(e);
+            }}
+            style={{marginTop: 10}}
+          />
           <TouchableOpacity onPress={openFilterModal}>
             <MyText
               text={'Filter'}
@@ -689,7 +724,7 @@ const SearchAllType = ({navigation, dispatch}) => {
               // data={courseList}
               data={courseData}
               style={{marginTop: 28}}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(_, index) => index.toString()}
               renderItem={renderCourse}
             />
           ) : (

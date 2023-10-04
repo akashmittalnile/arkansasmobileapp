@@ -256,7 +256,7 @@ const FiltersModal = ({
                 marginBottom: 10,
                 backgroundColor: Colors.THEME_GOLD,
               }}
-              onPress={applyFilters}
+              onPress={() => applyFilters()}
             />
             <TouchableOpacity style={styles.resetButton}>
               <MyText

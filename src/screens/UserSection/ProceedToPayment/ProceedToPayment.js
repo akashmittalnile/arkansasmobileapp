@@ -112,9 +112,13 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       console.log('card', card);
       const res = await createToken({card, type: 'Card'});
       console.log('res stripe', res);
-      if(res?.error){
-        Toast.show(res?.error?.message, Toast.SHORT);
-        return
+      if (res?.error) {
+        if (res?.error?.message) {
+          Toast.show(res?.error?.message, Toast.SHORT);
+        } else {
+          Toast.show('Card details incorrect', Toast.SHORT);
+        }
+        return;
       }
       const myData = new FormData();
       myData.append('stripeToken', res?.token?.id);
@@ -163,7 +167,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       );
       console.log('onConfirm resp', resp?.data);
       if (resp?.data?.status) {
-        handlePayClick(resp?.data?.order_id, resp?.data?.total_amount)
+        handlePayClick(resp?.data?.order_id, resp?.data?.total_amount);
         // Toast.show(resp.data.message, Toast.SHORT);
         // openSuccessfulyPurchasedModal();
         // navigation.dispatch(resetIndexGoToUserBottomTab);

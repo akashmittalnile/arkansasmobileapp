@@ -130,8 +130,8 @@ const FiltersModal = ({
                   <Image
                     source={
                       temporarySelectedTab === el?.id
-                        ? require('assets/images/radio-button-selected.png')
-                        : require('assets/images/radio-button.png')
+                        ? require('assets/images/selected-2.png')
+                        : require('assets/images/not-selected.png')
                     }
                     style={styles.radioButton}
                   />
@@ -204,8 +204,8 @@ const FiltersModal = ({
                   <Image
                     source={
                       tempSelectedPriceFilter === el?.id
-                        ? require('assets/images/radio-button-selected.png')
-                        : require('assets/images/radio-button.png')
+                        ? require('assets/images/selected-2.png')
+                        : require('assets/images/not-selected.png')
                     }
                     style={styles.radioButton}
                   />

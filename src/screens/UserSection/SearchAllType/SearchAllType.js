@@ -300,7 +300,7 @@ const SearchAllType = ({navigation, dispatch}) => {
       ) {
         postData.append('title', searchParam?.toString()?.trim());
       } else {
-        // checking searchParam state first, because it updates fast. On calling applyFilters function from inside filter modal, searchParam is not passed, so using searchValue in else part
+        // preferring to check searchParam first, because it has the most recent search value fast. But it is not always passed, in else case using searchValue
         if (isSearchTermExists) {
           postData.append('title', searchParam?.toString()?.trim());
         } else {

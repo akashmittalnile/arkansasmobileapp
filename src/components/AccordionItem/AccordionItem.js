@@ -316,14 +316,16 @@ const AccordionItem = ({
                       style={{marginBottom: 10}}
                     />
                     <MyText
-                      text={'40% (0% required to pass)'}
+                      text={`${
+                        (item?.marks_obtained / item?.marks_out_of) * 100
+                      }% (0% required to pass)`}
                       fontFamily="medium"
                       fontSize={20}
                       textColor={getTextColor(item.is_completed, true)}
                       style={{}}
                     />
                   </View>
-                ) : (
+                ) : item?.is_completed === '2' ? (
                   <ImageBackground
                     source={require('assets/images/quiz-bg.png')}
                     style={{
@@ -396,7 +398,7 @@ const AccordionItem = ({
                       style={{marginTop: 10, paddingBottom: 45}}
                     />
                   </ImageBackground>
-                )
+                ) : null
               ) : null}
               {item.type === 'survey'
                 ? item.chapter_question?.map((sur, surIndex) => (
@@ -507,7 +509,7 @@ const AccordionItem = ({
                                 style={{marginLeft: 10, width: '85%'}}
                               />
                               <TouchableOpacity
-                                onPress={() => deleteDocument(item.id)} >
+                                onPress={() => deleteDocument(item.id)}>
                                 <Image
                                   source={require('assets/images/trash.png')}
                                 />

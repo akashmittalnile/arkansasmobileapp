@@ -157,7 +157,12 @@ const Cart = ({navigation, dispatch}) => {
     return (
       <View style={styles.courseContainer}>
         <ImageBackground
-          source={{uri: item.Product_image[0]}}
+          source={{
+            uri:
+              item?.type == '1'
+                ? item?.content_creator_image
+                : item.Product_image[0],
+          }}
           style={styles.crseImg}></ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText
@@ -235,7 +240,16 @@ const Cart = ({navigation, dispatch}) => {
                 <Image source={require('assets/images/add.png')} />
               </TouchableOpacity>
             </View>
-          ) : null}
+          ) : (
+            <View style={styles.quantityRow}>
+              <TouchableOpacity
+                onPress={() => {
+                  changeQuantity(item, 'minus');
+                }}>
+                <Image source={require('assets/images/trash.png')} />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </View>
     );

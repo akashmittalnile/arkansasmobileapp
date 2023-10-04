@@ -130,7 +130,7 @@ const SearchAllType = ({navigation, dispatch}) => {
   const [tabs, setTabs] = useState([
     {
       id: '1',
-      name: 'Course',
+      name: 'Courses',
     },
     {
       id: '2',
@@ -339,7 +339,7 @@ const SearchAllType = ({navigation, dispatch}) => {
   const resetFilter = async () => {
     setShowFilterModal(false);
     // emptying all filter states and calling getAllType
-    setSearchValue('')
+    setSearchValue('');
     setSelectedTab('1');
     setTemporarySelectedTab('1');
     setSelectedCourseCategries([]);
@@ -740,21 +740,51 @@ const SearchAllType = ({navigation, dispatch}) => {
           />
           <ShowSelectedFilters />
           {selectedTab === '1' ? (
-            <FlatList
-              // data={courseList}
-              data={courseData}
-              style={{marginTop: 28}}
-              keyExtractor={(_, index) => index.toString()}
-              renderItem={renderCourse}
-            />
+            <>
+              {courseData?.length > 0 ? (
+                <FlatList
+                  // data={courseList}
+                  data={courseData}
+                  style={{marginTop: 28}}
+                  keyExtractor={(_, index) => index.toString()}
+                  renderItem={renderCourse}
+                />
+              ) : (
+                <View style={{alignItems: 'center', marginTop: 50}}>
+                  <Image source={require('assets/images/no-data.png')} />
+                  <MyText
+                    text={'No courses found'}
+                    fontFamily="medium"
+                    fontSize={40}
+                    textAlign="center"
+                    textColor={'black'}
+                  />
+                </View>
+              )}
+            </>
           ) : (
-            <FlatList
-              // data={productList}
-              data={productData}
-              style={{marginTop: 28}}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={renderProduct}
-            />
+            <>
+              {productData?.length > 0 ? (
+                <FlatList
+                  // data={productList}
+                  data={productData}
+                  style={{marginTop: 28}}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={renderProduct}
+                />
+              ) : (
+                <View style={{alignItems: 'center', marginTop: 50}}>
+                  <Image source={require('assets/images/no-data.png')} />
+                  <MyText
+                    text={'No Products found'}
+                    fontFamily="medium"
+                    fontSize={40}
+                    textAlign="center"
+                    textColor={'black'}
+                  />
+                </View>
+              )}
+            </>
           )}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

@@ -293,7 +293,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     console.log('searchTerm', searchParam);
     console.log('searchValue', searchValue);
     if (isSearchTermExists || isSearchValueExists) {
-      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)   
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)
       if (
         searchValue?.toString()?.trim()?.length === 1 &&
         searchParam?.toString()?.trim()?.length === 0
@@ -335,6 +335,21 @@ const SearchAllType = ({navigation, dispatch}) => {
       console.log('error in applyFilters', error);
     }
     setShowLoader(false);
+  };
+  const resetFilter = async () => {
+    // emptying all filter states and calling getAllType
+    setSelectedTab('1');
+    setTemporarySelectedTab('1');
+    setSelectedCourseCategries([]);
+    setTempSelectedCourseCategries([]);
+    setSelectedProductCategries([]);
+    setTempSelectedProductCategries([]);
+    setSelectedPriceFilter('');
+    setTempSelectedPriceFilter('');
+    setSelectedRatingValues([]);
+    setTempSelectedRatingValues([]);
+    await getAllType();
+    setShowFilterModal;
   };
   const removeFilter = async (filterType, item) => {
     let remainingSelectedCategories =
@@ -768,6 +783,7 @@ const SearchAllType = ({navigation, dispatch}) => {
           tempSelectedRatingValues={tempSelectedRatingValues}
           setTempSelectedRatingValues={setTempSelectedRatingValues}
           applyFilters={applyFilters}
+          resetFilter={resetFilter}
         />
       </View>
     </SafeAreaView>

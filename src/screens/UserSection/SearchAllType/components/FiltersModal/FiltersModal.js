@@ -43,6 +43,7 @@ const FiltersModal = ({
   tempSelectedRatingValues,
   setTempSelectedRatingValues,
   applyFilters,
+  resetFilter,
 }) => {
   //function : modal function
   const [allRatingValues] = useState(['4', '3', '2', '1']);
@@ -258,7 +259,7 @@ const FiltersModal = ({
               }}
               onPress={() => applyFilters()}
             />
-            <TouchableOpacity style={styles.resetButton}>
+            <TouchableOpacity onPress={resetFilter} style={styles.resetButton}>
               <MyText
                 text="Reset"
                 textColor={Colors.DARK_GREY}

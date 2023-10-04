@@ -14,7 +14,7 @@ const MyTextInput = ({
   placeholder,
   fontSize = 14,
   secureTextEntry = false,
-  placeholderTextColor = Colors.LIGHT_GRAY,
+  placeholderTextColor = '#C0C0C0',
   borderColor = '#E0E0E0',
   keyboardType = 'default',
   onSubmitEditing,
@@ -85,7 +85,7 @@ const MyTextInput = ({
           height: 58,
           fontSize: fontSize,
           // color: '#455A64',
-          color: Colors.THEME_GRAY,
+          color: Colors.LIGHT_GREY,
           ...textInputstyle,
         }}
       />

@@ -734,16 +734,10 @@ const SearchAllType = ({navigation, dispatch}) => {
               setSearchValue(e);
               applyFilters(e);
             }}
+            onPress={openFilterModal}
+            icon={<Image source={require('assets/images/filter.png')} />}
             style={{marginTop: 10}}
           />
-          <TouchableOpacity onPress={openFilterModal}>
-            <MyText
-              text={'Filter'}
-              fontFamily="regular"
-              fontSize={13}
-              textColor={Colors.THEME_BROWN}
-            />
-          </TouchableOpacity>
           <ShowSelectedFilters />
           {selectedTab === '1' ? (
             <FlatList

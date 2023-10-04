@@ -153,7 +153,7 @@ const Cart = ({navigation, dispatch}) => {
     setShowLoader(false);
   };
 
-  const renderProduct = ({item}) => {
+  const renderItem = ({item}) => {
     return (
       <View style={styles.courseContainer}>
         <ImageBackground
@@ -281,7 +281,7 @@ const Cart = ({navigation, dispatch}) => {
                 data={cartListData?.data}
                 style={{}}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={renderProduct}
+                renderItem={renderItem}
               />
               {cartListData?.data?.length > 0 ? (
                 <View style={styles.applyCouponRow}>

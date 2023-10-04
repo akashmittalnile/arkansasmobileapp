@@ -65,7 +65,7 @@ const SuccessfulyPurchased = ({visible, setVisibility, gotoMyCourses}) => {
           style={{marginBottom: 20}}
         />
         <MyButton
-          text="MY COURSES"
+          text="MY ORDERS"
           style={{
             width: width * 0.9,
             marginBottom: 10,

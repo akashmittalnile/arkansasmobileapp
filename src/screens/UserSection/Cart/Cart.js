@@ -326,7 +326,7 @@ const Cart = ({navigation, dispatch}) => {
                     style={{}}
                   />
                 </View>
-                <View style={[styles.row, {marginBottom: 10}]}>
+                <View style={[styles.row, {marginBottom: 19}]}>
                   <MyText
                     text={`Discount`}
                     fontSize={14}
@@ -342,7 +342,7 @@ const Cart = ({navigation, dispatch}) => {
                     style={{}}
                   />
                 </View>
-                <View style={[styles.row, {marginBottom: 19}]}>
+                {/* <View style={[styles.row, {marginBottom: 19}]}>
                   <MyText
                     text={`Shipping`}
                     fontSize={14}
@@ -357,7 +357,7 @@ const Cart = ({navigation, dispatch}) => {
                     textColor={'#455A64'}
                     style={{}}
                   />
-                </View>
+                </View> */}
                 <Divider style={{borderColor: '#E0E0E0'}} />
                 <View style={[styles.row, {marginTop: 14}]}>
                   <MyText

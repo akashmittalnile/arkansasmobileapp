@@ -232,7 +232,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                   style={{}}
                 />
               </View>
-              <View style={[styles.row, {marginBottom: 10}]}>
+              <View style={[styles.row, {marginBottom: 19}]}>
                 <MyText
                   text={`Discount`}
                   fontSize={14}
@@ -248,7 +248,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                   style={{}}
                 />
               </View>
-              <View style={[styles.row, {marginBottom: 19}]}>
+              {/* <View style={[styles.row, {marginBottom: 19}]}>
                 <MyText
                   text={`Shipping`}
                   fontSize={14}
@@ -263,7 +263,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                   textColor={'#455A64'}
                   style={{}}
                 />
-              </View>
+              </View> */}
               <Divider style={{borderColor: '#E0E0E0'}} />
               <View style={[styles.row, {marginTop: 14}]}>
                 <MyText
@@ -283,10 +283,11 @@ const ProceedToPayment = ({navigation, dispatch}) => {
               </View>
             </View>
             <ViewAll
-              text="Cards"
-              buttonText="Add New"
-              onPress={openAddCardModal}
-              style={{marginTop: 25, marginBottom: 21}}
+              text="Please enter card details"
+              showSeeAll={false}
+              // buttonText="Add New"
+              // onPress={openAddCardModal}
+              style={{justifyContent: 'center', marginTop: 25, marginBottom: 21}}
             />
             <CardField
               accessible={true}
@@ -296,9 +297,8 @@ const ProceedToPayment = ({navigation, dispatch}) => {
               }}
               cardStyle={{
                 borderRadius: 20,
-                // backgroundColor: '#a9bcd6',
-                backgroundColor: '#7294c2',
-                borderColor: Colors.BLACK,
+                backgroundColor: 'white',
+                borderColor: Colors.THEME_GOLD,
                 borderWidth: 1,
                 textColor: Colors.BLACK,
                 placeholderColor: '#c9c9c9',
@@ -319,7 +319,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                 console.log('focusField', focusedField);
               }}
             />
-            {screenData?.data?.length > 0 ? (
+            {/* {screenData?.data?.length > 0 ? (
               screenData?.data?.map(item => (
                 <TouchableOpacity
                   key={item.card_id}
@@ -376,7 +376,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                 textColor={'#455A64'}
                 style={{textAlign: 'center', marginTop: 20}}
               />
-            )}
+            )} */}
             <MyButton
               text="CONFIRM"
               style={{

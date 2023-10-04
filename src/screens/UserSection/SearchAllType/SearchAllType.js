@@ -339,6 +339,7 @@ const SearchAllType = ({navigation, dispatch}) => {
   const resetFilter = async () => {
     setShowFilterModal(false);
     // emptying all filter states and calling getAllType
+    setSearchValue('')
     setSelectedTab('1');
     setTemporarySelectedTab('1');
     setSelectedCourseCategries([]);

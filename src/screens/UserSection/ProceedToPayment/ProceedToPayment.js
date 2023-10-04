@@ -106,7 +106,41 @@ const ProceedToPayment = ({navigation, dispatch}) => {
     index: 1,
     routes: [{name: ScreenNames.BOTTOM_TAB}],
   });
-  const handlePayClick = async () => {
+  const handlePayClick = async (order_id, total_amount) => {
+    // setShowLoader(true);
+    try {
+      console.log('card', card);
+      const res = await createToken({card, type: 'Card'});
+      console.log('res stripe', res);
+      if(res?.error){
+        Toast.show(res?.error?.message, Toast.SHORT);
+        return
+      }
+      const myData = new FormData();
+      myData.append('stripeToken', res?.token?.id);
+      myData.append('order_id', order_id);
+      myData.append('total_amount', total_amount);
+      console.log('handlePayClick postData', myData);
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.MAKE_PAYMENT,
+        myData,
+      );
+      console.log('handlePayClick postData', myData);
+      if (resp?.data?.status) {
+        setMadePayment(true);
+        Toast.show(resp?.data?.message, Toast.SHORT);
+        openSuccessfulyPurchasedModal();
+        dispatch(clearCart());
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in handlePayClick', error);
+    }
+    // setShowLoader(false);
+  };
+  const onConfirm = async () => {
     if (madePayment) {
       Toast.show('You have already made payment', Toast.SHORT);
       return;
@@ -117,39 +151,8 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       Toast.show('Please complete card details', Toast.SHORT);
       return;
     }
-    // setShowLoader(true);
-    try {
-      console.log('card', card);
-      const res = await createToken({card, type: 'Card'});
-      console.log('res', res);
-      const myData = new FormData();
-      myData.append('stripeToken', res.token.id);
-      return
-      myData.append('appointment_id', route.params.appointmentId);
-      const resp = await Service.postApiWithToken(
-        userToken,
-        Service.MAKE_PAYMENT,
-        myData,
-      );
-      if (resp.data.status) {
-        setMadePayment(true);
-        Toast.show(resp.data.message, Toast.SHORT);
-        dispatch(clearCart());
-      } else {
-        Toast.show(resp.data.message, Toast.SHORT);
-      }
-    } catch (error) {
-      console.log('error in handlePayClick', error);
-    }
-    setShowLoader(false);
-  };
-  const onConfirm = async () => {
-    if (selectedCard === '') {
-      Toast.show('Please select a card', Toast.SHORT);
-      return;
-    }
     const postData = new FormData();
-    postData.append('card_id', selectedCard);
+    postData.append('card_id', 5);
     console.log('onConfirm postData', postData);
     setShowLoader(true);
     try {
@@ -160,8 +163,9 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       );
       console.log('onConfirm resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.message, Toast.SHORT);
-        openSuccessfulyPurchasedModal();
+        handlePayClick(resp?.data?.order_id, resp?.data?.total_amount)
+        // Toast.show(resp.data.message, Toast.SHORT);
+        // openSuccessfulyPurchasedModal();
         // navigation.dispatch(resetIndexGoToUserBottomTab);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
@@ -378,8 +382,8 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                 marginTop: 32,
               }}
               // onPress={openSuccessfulyPurchasedModal}
-              // onPress={onConfirm}
-              onPress={handlePayClick}
+              onPress={onConfirm}
+              // onPress={handlePayClick}
             />
           </ScrollView>
         </StripeContainer>

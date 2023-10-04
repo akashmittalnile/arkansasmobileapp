@@ -49,7 +49,7 @@ const user = createSlice({
   },
 });
 
-export const {setUserToken, setUser, setUserNotifications, logOutUser} = user.actions;
+export const {setUserToken, setUser, setUserNotifications, logOutUser, clearCart} = user.actions;
 const userReducer = user.reducer;
 
 export default userReducer;

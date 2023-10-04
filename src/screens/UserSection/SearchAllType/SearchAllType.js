@@ -260,6 +260,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     setSelectedRatingValues(tempSelectedRatingValues);
   };
   const applyFilters = async (searchParam = '') => {
+    // searchParam is passed to this function because search state takes time to update, and searchParam would reflect latest value of whats typed
     setOriginalValues();
     const postData = new FormData();
     postData.append('type', temporarySelectedTab);
@@ -292,10 +293,19 @@ const SearchAllType = ({navigation, dispatch}) => {
     console.log('searchTerm', searchParam);
     console.log('searchValue', searchValue);
     if (isSearchTermExists || isSearchValueExists) {
-      if (isSearchTermExists) {
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)   
+      if (
+        searchValue?.toString()?.trim()?.length === 1 &&
+        searchParam?.toString()?.trim()?.length === 0
+      ) {
         postData.append('title', searchParam?.toString()?.trim());
       } else {
-        postData.append('title', searchValue?.toString()?.trim());
+        // checking searchParam state first, because it updates fast. On calling applyFilters function from inside filter modal, searchParam is not passed, so using searchValue in else part
+        if (isSearchTermExists) {
+          postData.append('title', searchParam?.toString()?.trim());
+        } else {
+          postData.append('title', searchValue?.toString()?.trim());
+        }
       }
     }
     console.log('applyFilters postData', JSON.stringify(postData));
@@ -704,7 +714,7 @@ const SearchAllType = ({navigation, dispatch}) => {
             placeholder="Search by title"
             value={searchValue}
             onChangeText={e => {
-              console.log('SearchWithIcon',e);
+              console.log('SearchWithIcon', e);
               setSearchValue(e);
               applyFilters(e);
             }}

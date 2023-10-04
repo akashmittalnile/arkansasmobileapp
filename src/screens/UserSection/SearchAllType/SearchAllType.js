@@ -337,6 +337,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     setShowLoader(false);
   };
   const resetFilter = async () => {
+    setShowFilterModal(false);
     // emptying all filter states and calling getAllType
     setSelectedTab('1');
     setTemporarySelectedTab('1');
@@ -349,7 +350,6 @@ const SearchAllType = ({navigation, dispatch}) => {
     setSelectedRatingValues([]);
     setTempSelectedRatingValues([]);
     await getAllType();
-    setShowFilterModal;
   };
   const removeFilter = async (filterType, item) => {
     let remainingSelectedCategories =

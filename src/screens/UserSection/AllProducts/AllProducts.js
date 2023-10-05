@@ -152,7 +152,7 @@ const AllProducts = ({navigation, dispatch}) => {
       ?.filter(el => TempSelectedProductCategries?.includes(el?.name))
       ?.map(el => el?.id);
     if (catIds?.length > 0) {
-      postData.append('category', catIds[0]);
+      catIds?.map(el => postData.append('category[]', el));
     }
     if (tempSelectedPriceFilter !== '') {
       postData.append('price', tempSelectedPriceFilter);
@@ -218,7 +218,7 @@ const AllProducts = ({navigation, dispatch}) => {
       ?.filter(el => TempSelectedProductCategries?.includes(el?.name))
       ?.map(el => el?.id);
     if (catIds?.length > 0) {
-      postData.append('category', catIds[0]);
+      catIds?.map(el => postData.append('category[]', el));
     }
     if (tempSelectedPriceFilter !== '') {
       postData.append('price', tempSelectedPriceFilter);
@@ -314,7 +314,7 @@ const AllProducts = ({navigation, dispatch}) => {
       ?.filter(el => remainingSelectedCategories?.includes(el?.name))
       ?.map(el => el?.id);
     if (catIds?.length > 0) {
-      postData.append('category', catIds[0]);
+      catIds?.map(el => postData.append('category', el));
     }
     if (remainingPriceFilter !== '') {
       postData.append('price', tempSelectedPriceFilter);
@@ -449,41 +449,68 @@ const AllProducts = ({navigation, dispatch}) => {
   };
   const ShowSelectedFilters = () => {
     return (
-      <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-          }}>
-          {selectedProductCategries?.map((el, index) => (
-            <View
-              key={index?.toString()}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginRight: 10,
-              }}>
-              <MyText
-                key={el}
-                text={el}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.THEME_BROWN}
-              />
-              <TouchableOpacity onPress={() => removeFilter('cat', el)}>
-                <Image source={require('assets/images/trash.png')} />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
+      <ScrollView
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+        contentContainerStyle={{
+          minHeight: height * 0,
+          maxHeight: height * 0.5,
+        }}>
+        {selectedProductCategries?.length > 0 ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+            }}>
+            <MyText
+              text={'Categorie(s): '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            {selectedProductCategries?.map((el, index) => (
+              <View
+                key={index?.toString()}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginRight: 10,
+                  marginTop: 10,
+                }}>
+                <MyText
+                  key={el}
+                  text={el}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_BROWN}
+                />
+                <TouchableOpacity onPress={() => removeFilter('cat', el)}>
+                  <Image source={require('assets/images/cancelfilter.png')} />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        ) : null}
         {selectedPriceFilter !== '' ? (
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginRight: 10,
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
             }}>
+            <MyText
+              text={'Price: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
             <MyText
               text={
                 priceFilterValues?.find(el => el.id === selectedPriceFilter)
@@ -495,7 +522,7 @@ const AllProducts = ({navigation, dispatch}) => {
             />
             <TouchableOpacity
               onPress={() => removeFilter('price', selectedPriceFilter)}>
-              <Image source={require('assets/images/trash.png')} />
+              <Image source={require('assets/images/cancelfilter.png')} />
             </TouchableOpacity>
           </View>
         ) : null}
@@ -506,8 +533,17 @@ const AllProducts = ({navigation, dispatch}) => {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  marginRight: 10,
+                  backgroundColor: '#ede5ca',
+                  marginRight: 'auto',
+                  marginTop: 10,
                 }}>
+                <MyText
+                  text={'Rating: '}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_BROWN}
+                  style={{}}
+                />
                 <MyText
                   key={el}
                   text={`${el} and more`}
@@ -516,12 +552,12 @@ const AllProducts = ({navigation, dispatch}) => {
                   textColor={Colors.THEME_BROWN}
                 />
                 <TouchableOpacity onPress={() => removeFilter('rating', el)}>
-                  <Image source={require('assets/images/trash.png')} />
+                  <Image source={require('assets/images/cancelfilter.png')} />
                 </TouchableOpacity>
               </View>
             ))
           : null}
-      </View>
+      </ScrollView>
     );
   };
   //UI

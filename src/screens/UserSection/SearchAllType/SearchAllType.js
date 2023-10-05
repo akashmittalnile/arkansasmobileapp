@@ -283,7 +283,7 @@ const SearchAllType = ({navigation, dispatch}) => {
         ?.map(el => el?.id);
     }
     if (catIds?.length > 0) {
-      postData.append('category', catIds[0]);
+      catIds?.map(el => postData.append('category[]', el));
     }
     if (tempSelectedPriceFilter !== '') {
       postData.append('price', tempSelectedPriceFilter);
@@ -367,7 +367,7 @@ const SearchAllType = ({navigation, dispatch}) => {
         ?.map(el => el?.id);
     }
     if (catIds?.length > 0) {
-      postData.append('category', catIds[0]);
+      catIds?.map(el => postData.append('category[]', el));
     }
     if (tempSelectedPriceFilter !== '') {
       postData.append('price', tempSelectedPriceFilter);
@@ -490,7 +490,7 @@ const SearchAllType = ({navigation, dispatch}) => {
         ?.map(el => el?.id);
     }
     if (catIds?.length > 0) {
-      postData.append('category', catIds[0]);
+      catIds?.map(el => postData.append('category[]', el));
     }
     if (remainingPriceFilter !== '') {
       postData.append('price', tempSelectedPriceFilter);

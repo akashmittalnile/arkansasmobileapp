@@ -45,6 +45,8 @@ const AccordionItem = ({
   setShowPrerequisiteModal,
   setPrerequisiteModalText,
   prevChapterSteps,
+  isPurchased,
+  setShowNotPurchasedModal
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -99,6 +101,11 @@ const AccordionItem = ({
   });
 
   const toggleButton = item => {
+    // if course is not purchased, show CourseNotPurchasedModal modal
+    if (!isPurchased) {
+      setShowNotPurchasedModal(true);
+      return;
+    }
     // if prerequisite not completed, show prerequisite modal
     if (!isPrerequisiteCompleted(item)) {
       setShowPrerequisiteModal(true);
@@ -141,11 +148,11 @@ const AccordionItem = ({
 
   const isPrerequisiteCompleted = item => {
     // if first chapter, there is no chapter before it, so previous chapter prerequities are completed
-    if (chapindex === 0) {
+    if (chapindex == 0) {
       return true;
     }
     const prevChapIncompletedPrereq = prevChapterSteps?.find(
-      el => el?.prerequisite === '1' && el?.is_completed === '0',
+      el => el?.prerequisite == '1' && el?.is_completed == '0',
     );
     if (prevChapIncompletedPrereq) {
       return false;
@@ -174,7 +181,7 @@ const AccordionItem = ({
     <View
       style={[
         styles.subContainer,
-        item?.is_completed === '1'
+        item?.is_completed == '1'
           ? {backgroundColor: Colors.THEME_BROWN}
           : null,
       ]}>
@@ -224,7 +231,7 @@ const AccordionItem = ({
         <Animated.View style={iconStyle}>
           <Image
             source={
-              item?.is_completed === '1'
+              item?.is_completed == '1'
                 ? require('assets/images/arrow-down-white.png')
                 : require('assets/images/arrow-down.png')
             }
@@ -283,7 +290,7 @@ const AccordionItem = ({
                 </View>
               ) : null}
               {item.type === 'quiz' ? (
-                item?.is_completed === '0' ? (
+                item?.is_completed == '0' ? (
                   <View style={{alignItems: 'center'}}>
                     <Image source={require('assets/images/quiz-info.png')} />
                     <MyText
@@ -306,7 +313,7 @@ const AccordionItem = ({
                       }}
                     />
                   </View>
-                ) : item?.is_completed === '1' ? (
+                ) : item?.is_completed == '1' ? (
                   <View style={{alignItems: 'center'}}>
                     <MyText
                       text={'Tuesday, May 23, 2013 12:53 PM'}
@@ -325,7 +332,7 @@ const AccordionItem = ({
                       style={{}}
                     />
                   </View>
-                ) : item?.is_completed === '2' ? (
+                ) : item?.is_completed == '2' ? (
                   <ImageBackground
                     source={require('assets/images/quiz-bg.png')}
                     style={{
@@ -587,7 +594,7 @@ const isLocalFileSelected = (documents, item) => {
 
 const showMarkCompleteButton = item => {
   if (
-    item?.is_completed === '0' &&
+    item?.is_completed == '0' &&
     (item.type === 'video' || item.type === 'pdf')
   ) {
     return true;
@@ -597,5 +604,5 @@ const showMarkCompleteButton = item => {
 
 const getTextColor = (is_completed, isDarkColor = false) => {
   const darkColor = isDarkColor ? Colors.THEME_BROWN : Colors.LIGHT_GREY;
-  return is_completed === '1' ? 'white' : darkColor;
+  return is_completed == '1' ? 'white' : darkColor;
 };

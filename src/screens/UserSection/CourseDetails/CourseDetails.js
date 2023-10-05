@@ -48,6 +48,7 @@ import Review from '../../../modals/Review/Review';
 import VideoModal from '../../../components/VideoModal/VideoModal';
 import Modal from 'react-native-modal';
 import PrerequisiteModal from '../../../modals/PrerequisiteModal/PrerequisiteModal';
+import CourseNotPurshasedModal from '../../../modals/CourseNotPurchasedModal/CourseNotPurshasedModal';
 
 const data = [
   {
@@ -129,6 +130,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
   const [documents, setDocuments] = useState([]);
   const [showPrerequisiteModal, setShowPrerequisiteModal] = useState(false);
   const [prerequisiteModalText, setPrerequisiteModalText] = useState('');
+  const [showNotPurchasedModal, setShowNotPurchasedModal] = useState(false);
 
   useEffect(() => {
     getProductDetails();
@@ -611,6 +613,8 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                           allChapterSteps={chap?.chapter_steps}
                           setShowPrerequisiteModal={setShowPrerequisiteModal}
                           setPrerequisiteModalText={setPrerequisiteModalText}
+                          isPurchased={productDetails?.isPurchased}
+                          setShowNotPurchasedModal={setShowNotPurchasedModal}
                         />
                       );
                     }}
@@ -703,6 +707,10 @@ const CourseDetails = ({navigation, dispatch, route}) => {
           setVisibility={setShowPrerequisiteModal}
           prerequisiteModalText={prerequisiteModalText}
           setPrerequisiteModalText={setPrerequisiteModalText}
+        />
+        <CourseNotPurshasedModal
+          visible={showNotPurchasedModal}
+          setVisibility={setShowNotPurchasedModal}
         />
       </View>
     </SafeAreaView>

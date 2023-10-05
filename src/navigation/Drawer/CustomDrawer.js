@@ -54,6 +54,9 @@ const CustomDrawer = ({navigation}) => {
   const gotoAllProducts = () => {
     navigation.navigate(ScreenNames.ALL_PRODUCTS);
   };
+  const gotoMyOrders = () => {
+    navigation.navigate(ScreenNames.MY_ORDERS);
+  };
   const gotoWelcome = () =>
     CommonActions.reset({
       index: 1,
@@ -114,6 +117,7 @@ const CustomDrawer = ({navigation}) => {
           <DrawerItemList
             Title="My Courses"
             image={require('assets/images/my-courses-sb.png')}
+            onPress={gotoMyOrders}
           />
           <DrawerItemList
             Title="Arkansas Courses"
@@ -122,7 +126,7 @@ const CustomDrawer = ({navigation}) => {
           />
           <DrawerItemList
             Title="Products"
-            image={require('assets/images/my-courses-sb.png')}
+            image={require('assets/images/products-img.png')}
             onPress={gotoAllProducts}
           />
           <DrawerItemList

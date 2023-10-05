@@ -89,7 +89,7 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
     // postData.append('tag', '')
     setShowLoader(true);
     try {
-      const resp = await Service.getApiWithToken(
+      const resp = await Service.postApiWithToken(
         userToken,
         Service.SPECIAL_COURSES,
         {},

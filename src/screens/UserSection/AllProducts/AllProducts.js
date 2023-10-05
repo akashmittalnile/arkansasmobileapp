@@ -34,6 +34,7 @@ import Divider from 'components/Divider/Divider';
 // import {WebView} from 'react-native-webview';
 import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
+import ProductFiltersModal from './components/ProductFiltersModal/ProductFiltersModal';
 
 const productList = [
   {
@@ -79,7 +80,25 @@ const AllProducts = ({navigation, dispatch}) => {
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [productData, setProductData] = useState([]);
-
+  const [selectedProductCategries, setSelectedProductCategries] = useState([]);
+  const [productCategries, setProductCategries] = useState([]);
+  const [TempSelectedProductCategries, setTempSelectedProductCategries] =
+    useState([]);
+  const [priceFilterValues, setPriceFilterValues] = useState([
+    {
+      id: '1',
+      name: 'High to Low',
+    },
+    {
+      id: '2',
+      name: 'Low to High',
+    },
+  ]);
+  const [tempSelectedPriceFilter, setTempSelectedPriceFilter] = useState('');
+  const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
+  const [selectedRatingValues, setSelectedRatingValues] = useState([]);
+  const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
+  const [showFilterModal, setShowFilterModal] = useState(false);
   useEffect(() => {
     getAllProducts();
   }, []);
@@ -96,11 +115,160 @@ const AllProducts = ({navigation, dispatch}) => {
       console.log('getAllProducts resp', resp?.data);
       if (resp?.data?.status) {
         setProductData(resp?.data?.data);
+        if (resp?.data?.category) {
+          setProductCategries(
+            resp?.data?.category?.filter(el => el.type == '2'),
+          );
+        }
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in getAllProducts', error);
+    }
+    setShowLoader(false);
+  };
+  const openFilterModal = () => {
+    setShowFilterModal(true);
+  };
+  // setOriginalValues will set values for selected filters based on temporary selected filters
+  // since we use dont use temporary filter values to show selected filter values on screen
+  const setOriginalValues = () => {
+    setSelectedProductCategries(TempSelectedProductCategries);
+    setSelectedPriceFilter(tempSelectedPriceFilter);
+    setSelectedRatingValues(tempSelectedRatingValues);
+  };
+  const applyFilters = async (searchParam = '') => {
+    // searchParam is passed to this function because search state takes time to update, and searchParam would reflect latest value of whats typed
+    setOriginalValues();
+    const postData = new FormData();
+    postData.append('type', 2);
+    let catIds = [];
+    catIds = productCategries
+      ?.filter(el => TempSelectedProductCategries?.includes(el?.name))
+      ?.map(el => el?.id);
+
+    if (catIds?.length > 0) {
+      postData.append('category', catIds[0]);
+    }
+    if (tempSelectedPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (tempSelectedRatingValues?.length > 0) {
+      tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    const isSearchTermExists = searchParam?.toString()?.trim()?.length > 0;
+    const isSearchValueExists = searchValue?.toString()?.trim()?.length > 0;
+    console.log(
+      'isSearchTermExists, isSearchValueExists',
+      isSearchTermExists,
+      isSearchValueExists,
+    );
+    console.log('searchTerm', searchParam);
+    console.log('searchValue', searchValue);
+    if (isSearchTermExists || isSearchValueExists) {
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)
+      if (
+        searchValue?.toString()?.trim()?.length === 1 &&
+        searchParam?.toString()?.trim()?.length === 0
+      ) {
+        postData.append('title', searchParam?.toString()?.trim());
+      } else {
+        // preferring to check searchParam first, because it has the most recent search value fast. But it is not always passed, in else case using searchValue
+        if (isSearchTermExists) {
+          postData.append('title', searchParam?.toString()?.trim());
+        } else {
+          postData.append('title', searchValue?.toString()?.trim());
+        }
+      }
+    }
+    console.log('applyFilters postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ALL_TYPE_LISTING,
+        postData,
+      );
+      console.log('applyFilters resp', resp?.data);
+      if (resp?.data?.status) {
+        setProductData(resp?.data?.data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
+  const resetFilter = async () => {
+    setShowFilterModal(false);
+    // emptying all filter states and calling getAllType
+    setSearchValue('');
+    setSelectedProductCategries([]);
+    setTempSelectedProductCategries([]);
+    setSelectedPriceFilter('');
+    setTempSelectedPriceFilter('');
+    setSelectedRatingValues([]);
+    setTempSelectedRatingValues([]);
+    await getAllType();
+  };
+  const removeFilter = async (filterType, item) => {
+    let remainingSelectedCategories = [...TempSelectedProductCategries];
+    if (filterType === 'cat') {
+      remainingSelectedCategories = TempSelectedProductCategries?.filter(
+        el => el !== item,
+      );
+      setSelectedProductCategries([...remainingSelectedCategories]);
+      setTempSelectedProductCategries([...remainingSelectedCategories]);
+    }
+    const remainingPriceFilter = '';
+    if (filterType === 'price') {
+      setTempSelectedPriceFilter('');
+      setSelectedPriceFilter('');
+    }
+    let remainingselectedRatingValues = [...selectedRatingValues];
+    if (filterType === 'rating') {
+      remainingselectedRatingValues = selectedRatingValues?.filter(
+        el => el !== item,
+      );
+      setSelectedRatingValues(remainingselectedRatingValues);
+      setTempSelectedRatingValues(remainingselectedRatingValues);
+    }
+    selectedRatingValues;
+    // priceFilterValues?.find(el => el.id === selectedPriceFilter);
+    const postData = new FormData();
+    postData.append('type', 2);
+    let catIds = [];
+    catIds = productCategries
+      ?.filter(el => remainingSelectedCategories?.includes(el?.name))
+      ?.map(el => el?.id);
+    if (catIds?.length > 0) {
+      postData.append('category', catIds[0]);
+    }
+    if (remainingPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (remainingselectedRatingValues?.length > 0) {
+      remainingselectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    console.log('removeFilter postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ALL_TYPE_LISTING,
+        postData,
+      );
+      console.log('removeFilter resp', resp?.data);
+      if (resp?.data?.status) {
+        setShowFilterModal(false);
+        setProductData(resp?.data?.data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in removeFilter', error);
     }
     setShowLoader(false);
   };
@@ -111,7 +279,8 @@ const AllProducts = ({navigation, dispatch}) => {
     formdata.append('id', id);
     formdata.append('status', status == '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
-    const endPoint = status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE
+    const endPoint =
+      status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE;
     console.log('onLike endPoint', endPoint);
     try {
       const resp = await Service.postApiWithToken(
@@ -208,6 +377,83 @@ const AllProducts = ({navigation, dispatch}) => {
       </View>
     );
   };
+  const ShowSelectedFilters = () => {
+    return (
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}>
+          {selectedProductCategries?.map((el, index) => (
+            <View
+              key={index?.toString()}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginRight: 10,
+              }}>
+              <MyText
+                key={el}
+                text={el}
+                fontFamily="regular"
+                fontSize={13}
+                textColor={Colors.THEME_BROWN}
+              />
+              <TouchableOpacity onPress={() => removeFilter('cat', el)}>
+                <Image source={require('assets/images/trash.png')} />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        {selectedPriceFilter !== '' ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginRight: 10,
+            }}>
+            <MyText
+              text={
+                priceFilterValues?.find(el => el.id === selectedPriceFilter)
+                  ?.name
+              }
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+            />
+            <TouchableOpacity
+              onPress={() => removeFilter('price', selectedPriceFilter)}>
+              <Image source={require('assets/images/trash.png')} />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+        {selectedRatingValues?.length > 0
+          ? selectedRatingValues?.map((el, index) => (
+              <View
+                key={index?.toString()}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginRight: 10,
+                }}>
+                <MyText
+                  key={el}
+                  text={`${el} and more`}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_BROWN}
+                />
+                <TouchableOpacity onPress={() => removeFilter('rating', el)}>
+                  <Image source={require('assets/images/trash.png')} />
+                </TouchableOpacity>
+              </View>
+            ))
+          : null}
+      </View>
+    );
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -221,15 +467,17 @@ const AllProducts = ({navigation, dispatch}) => {
           <SearchWithIcon
             value={searchValue}
             setValue={setSearchValue}
-            icon={<Image source={require('assets/images/yellow-seach.png')} />}
-            placeholder="Search by course, creator or product name"
-            // style={{
-            //   width: Constant.width - 40,
-            //   alignSelf: 'center',
-            //   marginTop: -25,
-            // }}
+            placeholder="Search by title"
+            onChangeText={e => {
+              console.log('SearchWithIcon', e);
+              setSearchValue(e);
+              applyFilters(e);
+            }}
+            onPress={openFilterModal}
+            icon={<Image source={require('assets/images/filter.png')} />}
+            style={{marginTop: 10}}
           />
-
+          <ShowSelectedFilters />
           <FlatList
             data={productData || []}
             style={{marginTop: 28}}
@@ -238,6 +486,20 @@ const AllProducts = ({navigation, dispatch}) => {
           />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
+        <ProductFiltersModal
+          visible={showFilterModal}
+          setVisibility={setShowFilterModal}
+          productCategries={productCategries}
+          TempSelectedProductCategries={TempSelectedProductCategries}
+          setTempSelectedProductCategries={setTempSelectedProductCategries}
+          priceFilterValues={priceFilterValues}
+          tempSelectedPriceFilter={tempSelectedPriceFilter}
+          setTempSelectedPriceFilter={setTempSelectedPriceFilter}
+          tempSelectedRatingValues={tempSelectedRatingValues}
+          setTempSelectedRatingValues={setTempSelectedRatingValues}
+          applyFilters={applyFilters}
+          resetFilter={resetFilter}
+        />
       </View>
     </SafeAreaView>
   );

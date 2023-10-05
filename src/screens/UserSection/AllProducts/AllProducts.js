@@ -314,7 +314,7 @@ const AllProducts = ({navigation, dispatch}) => {
       ?.filter(el => remainingSelectedCategories?.includes(el?.name))
       ?.map(el => el?.id);
     if (catIds?.length > 0) {
-      catIds?.map(el => postData.append('category', el));
+      catIds?.map(el => postData.append('category[]', el));
     }
     if (remainingPriceFilter !== '') {
       postData.append('price', tempSelectedPriceFilter);

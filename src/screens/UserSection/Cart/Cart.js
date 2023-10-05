@@ -108,10 +108,9 @@ const Cart = ({navigation, dispatch}) => {
             return el;
           }
           console.log('here', JSON.stringify(el));
-          // console.log('el.introduction_video trending', el.introduction_video);
           const thumb = await createThumbnail({
-            // url: el?.Product_image[0],
-            url: `http://nileprojects.in/arkansas/public/upload/disclaimers-introduction/1695287295.mp4`,
+            url: el?.Product_image[0],
+            // url: `http://nileprojects.in/arkansas/public/upload/disclaimers-introduction/1695287295.mp4`,
             timeStamp: 1000,
           });
           return {

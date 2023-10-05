@@ -548,12 +548,25 @@ const AllProducts = ({navigation, dispatch}) => {
             style={{marginTop: 10}}
           />
           <ShowSelectedFilters />
-          <FlatList
-            data={productData || []}
-            style={{marginTop: 28}}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderProduct}
-          />
+          {productData?.length > 0 ? (
+            <FlatList
+              data={productData || []}
+              style={{marginTop: 28}}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderProduct}
+            />
+          ) : (
+            <View style={{alignItems: 'center', marginTop: 50}}>
+              <Image source={require('assets/images/no-data.png')} />
+              <MyText
+                text={'No Products found'}
+                fontFamily="medium"
+                fontSize={40}
+                textAlign="center"
+                textColor={'black'}
+              />
+            </View>
+          )}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
         <ProductFiltersModal

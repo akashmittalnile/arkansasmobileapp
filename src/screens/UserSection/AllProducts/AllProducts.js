@@ -138,8 +138,12 @@ const AllProducts = ({navigation, dispatch}) => {
     setSelectedPriceFilter(tempSelectedPriceFilter);
     setSelectedRatingValues(tempSelectedRatingValues);
   };
+  const setOriginalValues2 = () => {
+    setSelectedProductCategries(TempSelectedProductCategries);
+    setSelectedPriceFilter(tempSelectedPriceFilter);
+    setSelectedRatingValues(tempSelectedRatingValues);
+  };
   const applyFilters = async (searchParam = '') => {
-    // searchParam is passed to this function because search state takes time to update, and searchParam would reflect latest value of whats typed
     setOriginalValues();
     const postData = new FormData();
     postData.append('type', 2);
@@ -147,7 +151,6 @@ const AllProducts = ({navigation, dispatch}) => {
     catIds = productCategries
       ?.filter(el => TempSelectedProductCategries?.includes(el?.name))
       ?.map(el => el?.id);
-
     if (catIds?.length > 0) {
       postData.append('category', catIds[0]);
     }
@@ -192,6 +195,73 @@ const AllProducts = ({navigation, dispatch}) => {
       );
       console.log('applyFilters resp', resp?.data);
       if (resp?.data?.status) {
+        setShowFilterModal(false);
+        setProductData(resp?.data?.data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
+  const applyFilters2 = async (searchParam = '') => {
+    const isDeletingLastCharacterInSearch =
+      searchValue?.toString()?.trim()?.length === 1 &&
+      searchParam?.toString()?.trim()?.length === 0;
+    const isSearching = isDeletingLastCharacterInSearch || searchParam !== '';
+    setOriginalValues2();
+    const postData = new FormData();
+    postData.append('type', 2);
+    let catIds = [];
+    catIds = productCategries
+      ?.filter(el => TempSelectedProductCategries?.includes(el?.name))
+      ?.map(el => el?.id);
+    if (catIds?.length > 0) {
+      postData.append('category', catIds[0]);
+    }
+    if (tempSelectedPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (tempSelectedRatingValues?.length > 0) {
+      tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    const isSearchTermExists = searchParam?.toString()?.trim()?.length > 0;
+    const isSearchValueExists = searchValue?.toString()?.trim()?.length > 0;
+    console.log(
+      'isSearchTermExists, isSearchValueExists',
+      isSearchTermExists,
+      isSearchValueExists,
+    );
+    console.log('searchTerm', searchParam);
+    console.log('searchValue', searchValue);
+    if (isSearchTermExists || isSearchValueExists) {
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)
+      if (
+        searchValue?.toString()?.trim()?.length === 1 &&
+        searchParam?.toString()?.trim()?.length === 0
+      ) {
+        postData.append('title', searchParam?.toString()?.trim());
+      } else {
+        // preferring to check searchParam first, because it has the most recent search value fast. But it is not always passed, in else case using searchValue
+        if (isSearchTermExists) {
+          postData.append('title', searchParam?.toString()?.trim());
+        } else {
+          postData.append('title', searchValue?.toString()?.trim());
+        }
+      }
+    }
+    console.log('applyFilters postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ALL_TYPE_LISTING,
+        postData,
+      );
+      console.log('applyFilters resp', resp?.data);
+      if (resp?.data?.status) {
+        setShowFilterModal(false);
         setProductData(resp?.data?.data);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
@@ -471,7 +541,7 @@ const AllProducts = ({navigation, dispatch}) => {
             onChangeText={e => {
               console.log('SearchWithIcon', e);
               setSearchValue(e);
-              applyFilters(e);
+              applyFilters2(e);
             }}
             onPress={openFilterModal}
             icon={<Image source={require('assets/images/filter.png')} />}

@@ -32,6 +32,7 @@ import AudioPlayerScreen from 'screens/UserSection/AudioPlayerScreen/AudioPlayer
 import NoConnection from '../../screens/UserSection/NoConnection/NoConnection';
 import AllReviews from 'screens/UserSection/AllReviews/AllReviews';
 import SearchAllType from 'screens/UserSection/SearchAllType/SearchAllType';
+import SuperAdminCourses from 'screens/UserSection/SuperAdminCourses/SuperAdminCourses';
 
 const MainStack = () => {
   //variables
@@ -107,6 +108,7 @@ const MainStack = () => {
       <Stack.Screen name={ScreenNames.NO_CONNECTION} component={NoConnection} />
       <Stack.Screen name={ScreenNames.ALL_REVIEWS} component={AllReviews} />
       <Stack.Screen name={ScreenNames.SEACRCH_ALL_TYPE} component={SearchAllType} />
+      <Stack.Screen name={ScreenNames.SUPER_ADMIN_COURSES} component={SuperAdminCourses} />
     </Stack.Navigator>
   );
 };

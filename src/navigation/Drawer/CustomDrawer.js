@@ -48,6 +48,12 @@ const CustomDrawer = ({navigation}) => {
   const gotoAudioPlayerScreen = () => {
     navigation.navigate(ScreenNames.AUDIO_PLAYER_SCREEN);
   };
+  const gotoSuperAdminCourses = () => {
+    navigation.navigate(ScreenNames.SUPER_ADMIN_COURSES);
+  };
+  const gotoAllProducts = () => {
+    navigation.navigate(ScreenNames.ALL_PRODUCTS);
+  };
   const gotoWelcome = () =>
     CommonActions.reset({
       index: 1,
@@ -108,6 +114,16 @@ const CustomDrawer = ({navigation}) => {
           <DrawerItemList
             Title="My Courses"
             image={require('assets/images/my-courses-sb.png')}
+          />
+          <DrawerItemList
+            Title="Arkansas Courses"
+            image={require('assets/images/my-courses-sb.png')}
+            onPress={gotoSuperAdminCourses}
+          />
+          <DrawerItemList
+            Title="Products"
+            image={require('assets/images/my-courses-sb.png')}
+            onPress={gotoAllProducts}
           />
           <DrawerItemList
             Title="About Us"

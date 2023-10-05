@@ -36,6 +36,7 @@ import Divider from 'components/Divider/Divider';
 import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import ViewAll from '../../../components/ViewAll/ViewAll';
+import {createThumbnail} from 'react-native-create-thumbnail';
 
 const productList = [
   {
@@ -80,7 +81,14 @@ const Cart = ({navigation, dispatch}) => {
       );
       console.log('getCartList resp', resp?.data);
       if (resp?.data?.status) {
-        setCartListData(resp?.data);
+        const doCoursesExists = resp?.data?.data?.find(el => el?.type == '1');
+        if (!doCoursesExists) {
+          setCartListData(resp?.data);
+        } else {
+          const data = await generateThumb(resp?.data?.data);
+          resp.data.data = [...data];
+          setCartListData(resp?.data);
+        }
         // Toast.show(resp?.data?.message, Toast.SHORT)
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
@@ -89,6 +97,34 @@ const Cart = ({navigation, dispatch}) => {
       console.log('error in getCartList', error);
     }
     setShowLoader(false);
+  };
+  const generateThumb = async data => {
+    console.log('generateThumb', JSON.stringify(data));
+    let updatedData = [...data];
+    try {
+      updatedData = await Promise.all(
+        data?.map?.(async el => {
+          if (el?.type == '2') {
+            return el;
+          }
+          console.log('here', JSON.stringify(el));
+          // console.log('el.introduction_video trending', el.introduction_video);
+          const thumb = await createThumbnail({
+            // url: el?.Product_image[0],
+            url: `http://nileprojects.in/arkansas/public/upload/disclaimers-introduction/1695287295.mp4`,
+            timeStamp: 1000,
+          });
+          return {
+            ...el,
+            thumb,
+          };
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+    console.log('thumb data cart', updatedData);
+    return updatedData;
   };
   const gotoPaymentScreen = () => {
     navigation.navigate(ScreenNames.PROCEED_TO_PAYMENT);
@@ -160,7 +196,8 @@ const Cart = ({navigation, dispatch}) => {
           source={{
             uri:
               item?.type == '1'
-                ? item?.content_creator_image
+                ? // ? item?.content_creator_image
+                  item?.thumb?.path
                 : item.Product_image[0],
           }}
           style={styles.crseImg}></ImageBackground>

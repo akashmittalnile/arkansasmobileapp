@@ -156,7 +156,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       return;
     }
     const postData = new FormData();
-    postData.append('card_id', 5);
+    // postData.append('card_id', 5);
     console.log('onConfirm postData', postData);
     setShowLoader(true);
     try {

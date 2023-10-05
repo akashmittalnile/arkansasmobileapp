@@ -8,7 +8,7 @@ import Toast from 'react-native-simple-toast';
 const isProduction = false;
 //endpoint : base_url
 export const BASE_URL = isProduction
-  ? ``
+  ? `https://admin.permanentmakeupuniversity.com/public/api/`
   : `https://nileprojects.in/arkansas/public/api/`;
 
 export const LOGIN = `login`;

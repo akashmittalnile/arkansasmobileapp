@@ -91,6 +91,7 @@ export const styles = StyleSheet.create({
   promoInput: {
     height: 50,
     width: '70%',
+    color: Colors.LIGHT_GREY,
     backgroundColor: 'white',
     paddingLeft: 20,
     shadowColor: '#000',

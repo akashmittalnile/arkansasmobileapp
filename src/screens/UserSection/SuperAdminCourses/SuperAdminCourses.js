@@ -35,6 +35,7 @@ import Divider from 'components/Divider/Divider';
 import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import {createThumbnail} from 'react-native-create-thumbnail';
+import SAFiltersModal from './components/SAFiltersModal/SAFiltersModal';
 
 const courseList = [
   {
@@ -78,11 +79,32 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
   const userToken = useSelector(state => state.user.userToken);
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
+  const [showLoader2, setShowLoader2] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [courseData, setCourseData] = useState([]);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [courseCategries, setCourseCategries] = useState([]);
+  const [selectedCourseCategries, setSelectedCourseCategries] = useState([]);
+  const [tempSelectedCourseCategries, setTempSelectedCourseCategries] =
+    useState([]);
+  const [priceFilterValues, setPriceFilterValues] = useState([
+    {
+      id: '1',
+      name: 'High to Low',
+    },
+    {
+      id: '2',
+      name: 'Low to High',
+    },
+  ]);
+  const [tempSelectedPriceFilter, setTempSelectedPriceFilter] = useState('');
+  const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
+  const [selectedRatingValues, setSelectedRatingValues] = useState([]);
+  const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
 
   useEffect(() => {
     getCourses();
+    getCategories();
   }, []);
   const getCourses = async () => {
     // const postData = new FormData();
@@ -96,7 +118,7 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
       );
       console.log('getCourses resp', resp?.data);
       if (resp?.data?.status) {
-        const updatedData = await generateThumb(resp?.data?.data)
+        const updatedData = await generateThumb(resp?.data?.data);
         setCourseData([...updatedData]);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
@@ -105,6 +127,27 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
       console.log('error in getCourses', error);
     }
     setShowLoader(false);
+  };
+  const getCategories = async () => {
+    setShowLoader2(true);
+    try {
+      const resp = await Service.getApiWithToken(
+        userToken,
+        Service.ALL_CATEGORY,
+      );
+      console.log('getCategories resp', resp?.data);
+      if (resp?.data?.status) {
+        const data = resp?.data?.data
+          ?.filter(el => el.type == '1')
+          ?.map(el => ({name: el?.category_name, id: el?.id}));
+        setCourseCategries(data);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getCategories', error);
+    }
+    setShowLoader2(false);
   };
 
   const generateThumb = async data => {
@@ -130,9 +173,301 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
     console.log('thumb data SearchAllType', updatedData);
     return updatedData;
   };
+  const ShowSelectedFilters = () => {
+    return (
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}>
+          {selectedCourseCategries?.map((el, index) => (
+            <View
+              key={index?.toString()}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginRight: 10,
+              }}>
+              <MyText
+                text={el}
+                fontFamily="regular"
+                fontSize={13}
+                textColor={Colors.THEME_BROWN}
+              />
+              <TouchableOpacity onPress={() => removeFilter('cat', el)}>
+                <Image source={require('assets/images/trash.png')} />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        {selectedPriceFilter !== '' ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginRight: 10,
+            }}>
+            <MyText
+              text={
+                priceFilterValues?.find(el => el.id === selectedPriceFilter)
+                  ?.name
+              }
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+            />
+            <TouchableOpacity
+              onPress={() => removeFilter('price', selectedPriceFilter)}>
+              <Image source={require('assets/images/trash.png')} />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+        {selectedRatingValues?.length > 0
+          ? selectedRatingValues?.map((el, index) => (
+              <View
+                key={index?.toString()}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginRight: 10,
+                }}>
+                <MyText
+                  key={el}
+                  text={`${el} and more`}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_BROWN}
+                />
+                <TouchableOpacity onPress={() => removeFilter('rating', el)}>
+                  <Image source={require('assets/images/trash.png')} />
+                </TouchableOpacity>
+              </View>
+            ))
+          : null}
+      </View>
+    );
+  };
 
   const changeSelectedTab = id => {
     setSelectedTab(id);
+  };
+  const setOriginalValues = () => {
+    setSelectedCourseCategries(tempSelectedCourseCategries);
+    setSelectedPriceFilter(tempSelectedPriceFilter);
+    setSelectedRatingValues(tempSelectedRatingValues);
+  };
+  const setOriginalValues2 = () => {
+    setSelectedCourseCategries(tempSelectedCourseCategries);
+    setSelectedPriceFilter(tempSelectedPriceFilter);
+    setSelectedRatingValues(tempSelectedRatingValues);
+  };
+  const applyFilters = async (searchParam = '') => {
+    setOriginalValues();
+    const postData = new FormData();
+    let catIds = [];
+    catIds = courseCategries
+      ?.filter(el => tempSelectedCourseCategries?.includes(el?.name))
+      ?.map(el => el?.id);
+
+    if (catIds?.length > 0) {
+      catIds?.map(el => postData.append('category[]', el));
+    }
+    if (tempSelectedPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (tempSelectedRatingValues?.length > 0) {
+      tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    const isSearchTermExists = searchParam?.toString()?.trim()?.length > 0;
+    const isSearchValueExists = searchValue?.toString()?.trim()?.length > 0;
+    console.log(
+      'isSearchTermExists, isSearchValueExists',
+      isSearchTermExists,
+      isSearchValueExists,
+    );
+    console.log('searchTerm', searchParam);
+    console.log('searchValue', searchValue);
+    if (isSearchTermExists || isSearchValueExists) {
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)
+      if (
+        searchValue?.toString()?.trim()?.length === 1 &&
+        searchParam?.toString()?.trim()?.length === 0
+      ) {
+        postData.append('title', searchParam?.toString()?.trim());
+      } else {
+        // preferring to check searchParam first, because it has the most recent search value fast. But it is not always passed, in else case using searchValue
+        if (isSearchTermExists) {
+          postData.append('title', searchParam?.toString()?.trim());
+        } else {
+          postData.append('title', searchValue?.toString()?.trim());
+        }
+      }
+    }
+    console.log('applyFilters postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.SPECIAL_COURSES,
+        postData,
+      );
+      console.log('applyFilters resp', resp?.data);
+      if (resp?.data?.status) {
+        setShowFilterModal(false);
+        const updatedData = await generateThumb(resp?.data?.data);
+        setCourseData(updatedData);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
+  const applyFilters2 = async (searchParam = '') => {
+    const isDeletingLastCharacterInSearch =
+      searchValue?.toString()?.trim()?.length === 1 &&
+      searchParam?.toString()?.trim()?.length === 0;
+    const isSearching = isDeletingLastCharacterInSearch || searchParam !== '';
+    setOriginalValues2();
+    const postData = new FormData();
+    let catIds = [];
+    catIds = courseCategries
+      ?.filter(el => tempSelectedCourseCategries?.includes(el?.name))
+      ?.map(el => el?.id);
+
+    if (catIds?.length > 0) {
+      catIds?.map(el => postData.append('category[]', el));
+    }
+    if (tempSelectedPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (tempSelectedRatingValues?.length > 0) {
+      tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    const isSearchTermExists = searchParam?.toString()?.trim()?.length > 0;
+    const isSearchValueExists = searchValue?.toString()?.trim()?.length > 0;
+    console.log(
+      'isSearchTermExists, isSearchValueExists',
+      isSearchTermExists,
+      isSearchValueExists,
+    );
+    console.log('searchTerm', searchParam);
+    console.log('searchValue', searchValue);
+    if (isSearchTermExists || isSearchValueExists) {
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)
+      if (
+        searchValue?.toString()?.trim()?.length === 1 &&
+        searchParam?.toString()?.trim()?.length === 0
+      ) {
+        postData.append('title', searchParam?.toString()?.trim());
+      } else {
+        // preferring to check searchParam first, because it has the most recent search value fast. But it is not always passed, in else case using searchValue
+        if (isSearchTermExists) {
+          postData.append('title', searchParam?.toString()?.trim());
+        } else {
+          postData.append('title', searchValue?.toString()?.trim());
+        }
+      }
+    }
+    console.log('applyFilters postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.SPECIAL_COURSES,
+        postData,
+      );
+      console.log('applyFilters resp', resp?.data);
+      if (resp?.data?.status) {
+        setShowFilterModal(false);
+        const updatedData = await generateThumb(resp?.data?.data);
+        setCourseData(updatedData);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
+  const resetFilter = async () => {
+    setShowFilterModal(false);
+    // emptying all filter states and calling getAllType
+    setSearchValue('');
+    setSelectedCourseCategries([]);
+    setTempSelectedCourseCategries([]);
+    setSelectedPriceFilter('');
+    setTempSelectedPriceFilter('');
+    setSelectedRatingValues([]);
+    setTempSelectedRatingValues([]);
+    await getCourses();
+  };
+  const removeFilter = async (filterType, item) => {
+    let remainingSelectedCategories = selectedCourseCategries;
+    console.log('selectedCourseCategries', selectedCourseCategries, item);
+    if (filterType === 'cat') {
+      remainingSelectedCategories = selectedCourseCategries?.filter(
+        el => el !== item,
+      );
+      setSelectedCourseCategries([...remainingSelectedCategories]);
+      setTempSelectedCourseCategries([...remainingSelectedCategories]);
+    }
+    const remainingPriceFilter = '';
+    if (filterType === 'price') {
+      setTempSelectedPriceFilter('');
+      setSelectedPriceFilter('');
+    }
+    let remainingselectedRatingValues = [...selectedRatingValues];
+    if (filterType === 'rating') {
+      remainingselectedRatingValues = selectedRatingValues?.filter(
+        el => el !== item,
+      );
+      setSelectedRatingValues(remainingselectedRatingValues);
+      setTempSelectedRatingValues(remainingselectedRatingValues);
+    }
+    selectedRatingValues;
+    // priceFilterValues?.find(el => el.id === selectedPriceFilter);
+    const postData = new FormData();
+    let catIds = [];
+    catIds = courseCategries
+      ?.filter(el => remainingSelectedCategories?.includes(el?.name))
+      ?.map(el => el?.id);
+
+    if (catIds?.length > 0) {
+      catIds?.map(el => postData.append('category[]', el));
+    }
+    if (remainingPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (remainingselectedRatingValues?.length > 0) {
+      remainingselectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    console.log('removeFilter postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.SPECIAL_COURSES,
+        postData?._parts?.length === 0 ? {} : postData,
+      );
+      console.log('removeFilter resp', resp?.data);
+      if (resp?.data?.status) {
+        setShowFilterModal(false);
+        const updatedData = await generateThumb(resp?.data?.data);
+        setCourseData(updatedData);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in removeFilter', error);
+    }
+    setShowLoader(false);
+  };
+  const openFilterModal = () => {
+    setShowFilterModal(true);
   };
 
   const renderCourse = ({item}) => {
@@ -215,14 +550,17 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
           <SearchWithIcon
             value={searchValue}
             setValue={setSearchValue}
-            icon={<Image source={require('assets/images/yellow-seach.png')} />}
             placeholder="Search by title"
-            // style={{
-            //   width: Constant.width - 40,
-            //   alignSelf: 'center',
-            //   marginTop: -25,
-            // }}
+            onChangeText={e => {
+              console.log('SearchWithIcon', e);
+              setSearchValue(e);
+              applyFilters2(e);
+            }}
+            onPress={openFilterModal}
+            icon={<Image source={require('assets/images/filter.png')} />}
+            style={{marginTop: 10}}
           />
+          <ShowSelectedFilters />
           <FlatList
             data={courseData}
             style={{marginTop: 28}}
@@ -242,7 +580,21 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
             )}
           />
         </ScrollView>
-        <CustomLoader showLoader={showLoader} />
+        <CustomLoader showLoader={showLoader || showLoader2} />
+        <SAFiltersModal
+          visible={showFilterModal}
+          setVisibility={setShowFilterModal}
+          courseCategries={courseCategries}
+          tempSelectedCourseCategries={tempSelectedCourseCategries}
+          setTempSelectedCourseCategries={setTempSelectedCourseCategries}
+          priceFilterValues={priceFilterValues}
+          tempSelectedPriceFilter={tempSelectedPriceFilter}
+          setTempSelectedPriceFilter={setTempSelectedPriceFilter}
+          tempSelectedRatingValues={tempSelectedRatingValues}
+          setTempSelectedRatingValues={setTempSelectedRatingValues}
+          applyFilters={applyFilters}
+          resetFilter={resetFilter}
+        />
       </View>
     </SafeAreaView>
   );

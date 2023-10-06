@@ -268,10 +268,7 @@ const SearchAllType = ({navigation, dispatch}) => {
   const applyFilters = async (searchParam = '') => {
     setOriginalValues();
     const postData = new FormData();
-    postData.append(
-      'type',
-      temporarySelectedTab,
-    );
+    postData.append('type', temporarySelectedTab);
     let catIds = [];
     if (temporarySelectedTab === '1') {
       catIds = courseCategries
@@ -330,7 +327,7 @@ const SearchAllType = ({navigation, dispatch}) => {
         if (temporarySelectedTab !== selectedTab) {
           setSelectedTab(temporarySelectedTab);
         }
-        
+
         setShowFilterModal(false);
         if (temporarySelectedTab === '1') {
           const updatedData = await generateThumb(resp?.data?.data);
@@ -347,15 +344,13 @@ const SearchAllType = ({navigation, dispatch}) => {
     setShowLoader(false);
   };
   const applyFilters2 = async (searchParam = '') => {
-    const isDeletingLastCharacterInSearch = searchValue?.toString()?.trim()?.length === 1 &&
-        searchParam?.toString()?.trim()?.length === 0
-    const isSearching = isDeletingLastCharacterInSearch || searchParam !== ''
+    const isDeletingLastCharacterInSearch =
+      searchValue?.toString()?.trim()?.length === 1 &&
+      searchParam?.toString()?.trim()?.length === 0;
+    const isSearching = isDeletingLastCharacterInSearch || searchParam !== '';
     setOriginalValues2();
     const postData = new FormData();
-    postData.append(
-      'type',
-      selectedTab,
-    );
+    postData.append('type', selectedTab);
     let catIds = [];
     if (temporarySelectedTab === '1') {
       catIds = courseCategries
@@ -694,7 +689,20 @@ const SearchAllType = ({navigation, dispatch}) => {
             flexDirection: 'row',
             alignItems: 'center',
             flexWrap: 'wrap',
+            backgroundColor: '#ede5ca',
+            marginRight: 'auto',
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 10,
+            marginTop: 10
           }}>
+          <MyText
+            text={'Categorie(s): '}
+            fontFamily="regular"
+            fontSize={13}
+            textColor={Colors.THEME_BROWN}
+            style={{}}
+          />
           {selectedTab === '1'
             ? selectedCourseCategries?.map((el, index) => (
                 <View
@@ -710,8 +718,16 @@ const SearchAllType = ({navigation, dispatch}) => {
                     fontSize={13}
                     textColor={Colors.THEME_BROWN}
                   />
-                  <TouchableOpacity onPress={() => removeFilter('cat', el)}>
-                    <Image source={require('assets/images/trash.png')} />
+                  <TouchableOpacity
+                    onPress={() => removeFilter('cat', el)}
+                    style={{
+                      marginLeft: 5,
+                      marginTop: 3,
+                    }}>
+                    <Image
+                      source={require('assets/images/cancelfilter.png')}
+                      style={{height: 10, width: 10}}
+                    />
                   </TouchableOpacity>
                 </View>
               ))
@@ -730,8 +746,16 @@ const SearchAllType = ({navigation, dispatch}) => {
                     fontSize={13}
                     textColor={Colors.THEME_BROWN}
                   />
-                  <TouchableOpacity onPress={() => removeFilter('cat', el)}>
-                    <Image source={require('assets/images/trash.png')} />
+                  <TouchableOpacity
+                    onPress={() => removeFilter('cat', el)}
+                    style={{
+                      marginLeft: 5,
+                      marginTop: 3,
+                    }}>
+                    <Image
+                      source={require('assets/images/cancelfilter.png')}
+                      style={{height: 10, width: 10}}
+                    />
                   </TouchableOpacity>
                 </View>
               ))}
@@ -741,8 +765,20 @@ const SearchAllType = ({navigation, dispatch}) => {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginRight: 10,
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
             }}>
+            <MyText
+              text={'Price: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
             <MyText
               text={
                 priceFilterValues?.find(el => el.id === selectedPriceFilter)
@@ -753,13 +789,39 @@ const SearchAllType = ({navigation, dispatch}) => {
               textColor={Colors.THEME_BROWN}
             />
             <TouchableOpacity
-              onPress={() => removeFilter('price', selectedPriceFilter)}>
-              <Image source={require('assets/images/trash.png')} />
+              onPress={() => removeFilter('price', selectedPriceFilter)}
+              style={{
+                marginLeft: 5,
+                marginTop: 3,
+              }}>
+              <Image
+                source={require('assets/images/cancelfilter.png')}
+                style={{height: 10, width: 10}}
+              />
             </TouchableOpacity>
           </View>
         ) : null}
-        {selectedRatingValues?.length > 0
-          ? selectedRatingValues?.map((el, index) => (
+        {selectedRatingValues?.length > 0 ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+            }}>
+            <MyText
+              text={'Rating: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            {selectedRatingValues?.map((el, index) => (
               <View
                 key={index?.toString()}
                 style={{
@@ -774,12 +836,21 @@ const SearchAllType = ({navigation, dispatch}) => {
                   fontSize={13}
                   textColor={Colors.THEME_BROWN}
                 />
-                <TouchableOpacity onPress={() => removeFilter('rating', el)}>
-                  <Image source={require('assets/images/trash.png')} />
+                <TouchableOpacity
+                  onPress={() => removeFilter('rating', el)}
+                  style={{
+                    marginLeft: 5,
+                    marginTop: 3,
+                  }}>
+                  <Image
+                    source={require('assets/images/cancelfilter.png')}
+                    style={{height: 10, width: 10}}
+                  />
                 </TouchableOpacity>
               </View>
-            ))
-          : null}
+            ))}
+          </View>
+        ) : null}
       </View>
     );
   };

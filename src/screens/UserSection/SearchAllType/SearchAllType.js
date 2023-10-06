@@ -521,10 +521,12 @@ const SearchAllType = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
-
+  const gotoCourseDetails = (id, type) => {
+    navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
+  };
   const renderCourse = ({item}) => {
     return (
-      <View style={styles.courseContainer}>
+      <TouchableOpacity onPress={() => gotoCourseDetails(item?.id, '1')} style={styles.courseContainer}>
         <ImageBackground
           // source={item.courseImg}
           source={{uri: item?.thumb?.path}}
@@ -599,7 +601,7 @@ const SearchAllType = ({navigation, dispatch}) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   const renderProduct = ({item}) => {

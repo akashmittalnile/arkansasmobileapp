@@ -60,10 +60,12 @@ const AccordionItem = ({
       const resp = await DocumentPicker.pickSingle({
         // type: [DocumentPicker.types.allFiles],
         type: [
-          DocumentPicker.types.images,
+          // DocumentPicker.types.images,
           DocumentPicker.types.pdf,
           DocumentPicker.types.doc,
           DocumentPicker.types.docx,
+          DocumentPicker.types.xls,
+          DocumentPicker.types.xlsx,
         ],
       });
       // if size is greater than 1 mb, reupload image

@@ -34,7 +34,7 @@ import Divider from 'components/Divider/Divider';
 // import {WebView} from 'react-native-webview';
 import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
-
+import TrendingFiltersModal from './components/TrendingFiltersModal/TrendingFiltersModal';
 const courseList = [
   {
     id: '1',
@@ -79,17 +79,41 @@ const TrendingCourses = ({navigation, dispatch}) => {
   const [showLoader, setShowLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [courseData, setCourseData] = useState([]);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [courseCategries, setCourseCategries] = useState([]);
+  const [selectedCourseCategries, setSelectedCourseCategries] = useState([]);
+  const [tempSelectedCourseCategries, setTempSelectedCourseCategries] =
+    useState([]);
+  useState([]);
+  const [priceFilterValues, setPriceFilterValues] = useState([
+    {
+      id: '1',
+      name: 'High to Low',
+    },
+    {
+      id: '2',
+      name: 'Low to High',
+    },
+  ]);
+  const [tempSelectedPriceFilter, setTempSelectedPriceFilter] = useState('');
+  const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
+  const [selectedRatingValues, setSelectedRatingValues] = useState([]);
+  const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
 
   useEffect(() => {
     getCourses();
   }, []);
   const getCourses = async () => {
-    const postData = new FormData()
-    postData.append('limit', 10)
+    const postData = new FormData();
+    postData.append('limit', 10);
     // postData.append('tag', '')
     setShowLoader(true);
     try {
-      const resp = await Service.postApiWithToken(userToken, Service.TRENDING_COURSE, postData);
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.TRENDING_COURSE,
+        postData,
+      );
       console.log('getCourses resp', resp?.data);
       if (resp?.data?.status) {
         setCourseData(resp?.data?.data);
@@ -101,9 +125,366 @@ const TrendingCourses = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
+  const ShowSelectedFilters = () => {
+    return (
+      <View>
+        {selectedCourseCategries?.length > 0 ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+              marginTop: 10,
+            }}>
+            <MyText
+              text={'Categorie(s): '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            {selectedCourseCategries?.map((el, index) => (
+              <View
+                key={index?.toString()}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginRight: 10,
+                }}>
+                <MyText
+                  text={el}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_BROWN}
+                />
+                <TouchableOpacity
+                  onPress={() => removeFilter('cat', el)}
+                  style={{
+                    marginLeft: 5,
+                    marginTop: 3,
+                  }}>
+                  <Image
+                    source={require('assets/images/cancelfilter.png')}
+                    style={{height: 10, width: 10}}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        ) : null}
+        {selectedPriceFilter !== '' ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+            }}>
+            <MyText
+              text={'Price: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            <MyText
+              text={
+                priceFilterValues?.find(el => el.id === selectedPriceFilter)
+                  ?.name
+              }
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+            />
+            <TouchableOpacity
+              onPress={() => removeFilter('price', selectedPriceFilter)}
+              style={{
+                marginLeft: 5,
+                marginTop: 3,
+              }}>
+              <Image
+                source={require('assets/images/cancelfilter.png')}
+                style={{height: 10, width: 10}}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+        {selectedRatingValues?.length > 0 ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+            }}>
+            <MyText
+              text={'Rating: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            {selectedRatingValues?.map((el, index) => (
+              <View
+                key={index?.toString()}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginRight: 10,
+                }}>
+                <MyText
+                  key={el}
+                  text={`${el} and more`}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_BROWN}
+                />
+                <TouchableOpacity
+                  onPress={() => removeFilter('rating', el)}
+                  style={{
+                    marginLeft: 5,
+                    marginTop: 3,
+                  }}>
+                  <Image
+                    source={require('assets/images/cancelfilter.png')}
+                    style={{height: 10, width: 10}}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        ) : null}
+      </View>
+    );
+  };
+  const openFilterModal = () => {
+    setShowFilterModal(true);
+  };
+  const setOriginalValues = () => {
+    setSelectedCourseCategries(tempSelectedCourseCategries);
+    setSelectedPriceFilter(tempSelectedPriceFilter);
+    setSelectedRatingValues(tempSelectedRatingValues);
+  };
+  const setOriginalValues2 = () => {
+    setSelectedCourseCategries(tempSelectedCourseCategries);
+    setSelectedPriceFilter(tempSelectedPriceFilter);
+    setSelectedRatingValues(tempSelectedRatingValues);
+  };
+  const applyFilters = async (searchParam = '') => {
+    setOriginalValues();
+    const postData = new FormData();
+    let catIds = [];
+    catIds = courseCategries
+      ?.filter(el => tempSelectedCourseCategries?.includes(el?.name))
+      ?.map(el => el?.id);
+    if (catIds?.length > 0) {
+      catIds?.map(el => postData.append('category[]', el));
+    }
+    if (tempSelectedPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (tempSelectedRatingValues?.length > 0) {
+      tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    const isSearchTermExists = searchParam?.toString()?.trim()?.length > 0;
+    const isSearchValueExists = searchValue?.toString()?.trim()?.length > 0;
+    console.log(
+      'isSearchTermExists, isSearchValueExists',
+      isSearchTermExists,
+      isSearchValueExists,
+    );
+    console.log('searchTerm', searchParam);
+    console.log('searchValue', searchValue);
+    if (isSearchTermExists || isSearchValueExists) {
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)
+      if (
+        searchValue?.toString()?.trim()?.length === 1 &&
+        searchParam?.toString()?.trim()?.length === 0
+      ) {
+        postData.append('title', searchParam?.toString()?.trim());
+      } else {
+        // preferring to check searchParam first, because it has the most recent search value fast. But it is not always passed, in else case using searchValue
+        if (isSearchTermExists) {
+          postData.append('title', searchParam?.toString()?.trim());
+        } else {
+          postData.append('title', searchValue?.toString()?.trim());
+        }
+      }
+    }
+    console.log('applyFilters postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.TRENDING_COURSE,
+        postData,
+      );
+      console.log('applyFilters resp', resp?.data);
+      if (resp?.data?.status) {
+        setShowFilterModal(false);
+        const updatedData = await generateThumb(resp?.data?.data);
+        setCourseData(updatedData);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
+  const applyFilters2 = async (searchParam = '') => {
+    const isDeletingLastCharacterInSearch =
+      searchValue?.toString()?.trim()?.length === 1 &&
+      searchParam?.toString()?.trim()?.length === 0;
+    const isSearching = isDeletingLastCharacterInSearch || searchParam !== '';
+    setOriginalValues2();
+    const postData = new FormData();
+    let catIds = [];
+    catIds = courseCategries
+      ?.filter(el => tempSelectedCourseCategries?.includes(el?.name))
+      ?.map(el => el?.id);
 
-  const changeSelectedTab = id => {
-    setSelectedTab(id);
+    if (catIds?.length > 0) {
+      catIds?.map(el => postData.append('category[]', el));
+    }
+    if (tempSelectedPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (tempSelectedRatingValues?.length > 0) {
+      tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    const isSearchTermExists = searchParam?.toString()?.trim()?.length > 0;
+    const isSearchValueExists = searchValue?.toString()?.trim()?.length > 0;
+    console.log(
+      'isSearchTermExists, isSearchValueExists',
+      isSearchTermExists,
+      isSearchValueExists,
+    );
+    console.log('searchTerm', searchParam);
+    console.log('searchValue', searchValue);
+    if (isSearchTermExists || isSearchValueExists) {
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)
+      if (
+        searchValue?.toString()?.trim()?.length === 1 &&
+        searchParam?.toString()?.trim()?.length === 0
+      ) {
+        postData.append('title', searchParam?.toString()?.trim());
+      } else {
+        // preferring to check searchParam first, because it has the most recent search value fast. But it is not always passed, in else case using searchValue
+        if (isSearchTermExists) {
+          postData.append('title', searchParam?.toString()?.trim());
+        } else {
+          postData.append('title', searchValue?.toString()?.trim());
+        }
+      }
+    }
+    console.log('applyFilters postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.TRENDING_COURSE,
+        postData,
+      );
+      console.log('applyFilters resp', resp?.data);
+      if (resp?.data?.status) {
+        setShowFilterModal(false);
+        const updatedData = await generateThumb(resp?.data?.data);
+        setCourseData(updatedData);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
+  const resetFilter = async () => {
+    setShowFilterModal(false);
+    // emptying all filter states and calling getAllType
+    setSearchValue('');
+    setSelectedCourseCategries([]);
+    setTempSelectedCourseCategries([]);
+    setSelectedPriceFilter('');
+    setTempSelectedPriceFilter('');
+    setSelectedRatingValues([]);
+    setTempSelectedRatingValues([]);
+    await getCourses();
+  };
+  const removeFilter = async (filterType, item) => {
+    let remainingSelectedCategories = selectedCourseCategries;
+    console.log('selectedCourseCategries', selectedCourseCategries, item);
+    if (filterType === 'cat') {
+      remainingSelectedCategories = selectedCourseCategries?.filter(
+        el => el !== item,
+      );
+      setSelectedCourseCategries([...remainingSelectedCategories]);
+      setTempSelectedCourseCategries([...remainingSelectedCategories]);
+    }
+    const remainingPriceFilter = '';
+    if (filterType === 'price') {
+      setTempSelectedPriceFilter('');
+      setSelectedPriceFilter('');
+    }
+    let remainingselectedRatingValues = [...selectedRatingValues];
+    if (filterType === 'rating') {
+      remainingselectedRatingValues = selectedRatingValues?.filter(
+        el => el !== item,
+      );
+      setSelectedRatingValues(remainingselectedRatingValues);
+      setTempSelectedRatingValues(remainingselectedRatingValues);
+    }
+    selectedRatingValues;
+    // priceFilterValues?.find(el => el.id === selectedPriceFilter);
+    const postData = new FormData();
+    let catIds = [];
+    catIds = courseCategries
+      ?.filter(el => remainingSelectedCategories?.includes(el?.name))
+      ?.map(el => el?.id);
+
+    if (catIds?.length > 0) {
+      catIds?.map(el => postData.append('category[]', el));
+    }
+    if (remainingPriceFilter !== '') {
+      postData.append('price', tempSelectedPriceFilter);
+    }
+    if (remainingselectedRatingValues?.length > 0) {
+      remainingselectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    console.log('removeFilter postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.TRENDING_COURSE,
+        postData,
+      );
+      console.log('removeFilter resp', resp?.data);
+      if (resp?.data?.status) {
+        setShowFilterModal(false);
+        const updatedData = await generateThumb(resp?.data?.data);
+        setCourseData(updatedData);
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in removeFilter', error);
+    }
+    setShowLoader(false);
   };
 
   const renderCourse = ({item}) => {
@@ -186,31 +567,48 @@ const TrendingCourses = ({navigation, dispatch}) => {
           <SearchWithIcon
             value={searchValue}
             setValue={setSearchValue}
-            icon={<Image source={require('assets/images/yellow-seach.png')} />}
-            placeholder="Search by course, creator or product name"
-            // style={{
-            //   width: Constant.width - 40,
-            //   alignSelf: 'center',
-            //   marginTop: -25,
-            // }}
+            placeholder="Search by title"
+            onChangeText={e => {
+              console.log('SearchWithIcon', e);
+              setSearchValue(e);
+              applyFilters2(e);
+            }}
+            onPress={openFilterModal}
+            icon={<Image source={require('assets/images/filter.png')} />}
+            style={{marginTop: 10}}
           />
+          <ShowSelectedFilters />
           <FlatList
             data={courseData}
             style={{marginTop: 28}}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderCourse}
-            ListEmptyComponent={()=>(
+            ListEmptyComponent={() => (
               <MyText
-              text={`No Trending Courses found`}
-              fontFamily="medium"
-              fontSize={18}
-              textColor={'#455A64'}
-              style={{textAlign: 'center', marginTop: 20}}
-            />
+                text={`No Trending Courses found`}
+                fontFamily="medium"
+                fontSize={18}
+                textColor={'#455A64'}
+                style={{textAlign: 'center', marginTop: 20}}
+              />
             )}
           />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
+        <TrendingFiltersModal
+          visible={showFilterModal}
+          setVisibility={setShowFilterModal}
+          courseCategries={courseCategries}
+          tempSelectedCourseCategries={tempSelectedCourseCategries}
+          setTempSelectedCourseCategries={setTempSelectedCourseCategries}
+          priceFilterValues={priceFilterValues}
+          tempSelectedPriceFilter={tempSelectedPriceFilter}
+          setTempSelectedPriceFilter={setTempSelectedPriceFilter}
+          tempSelectedRatingValues={tempSelectedRatingValues}
+          setTempSelectedRatingValues={setTempSelectedRatingValues}
+          applyFilters={applyFilters}
+          resetFilter={resetFilter}
+        />
       </View>
     </SafeAreaView>
   );

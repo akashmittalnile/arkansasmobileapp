@@ -46,7 +46,7 @@ const AccordionItem = ({
   setPrerequisiteModalText,
   prevChapterSteps,
   isPurchased,
-  setShowNotPurchasedModal
+  setShowNotPurchasedModal,
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -325,9 +325,7 @@ const AccordionItem = ({
                       style={{marginBottom: 10}}
                     />
                     <MyText
-                      text={`${
-                        (item?.marks_obtained / item?.marks_out_of) * 100
-                      }% (0% required to pass)`}
+                      text={`${item?.percentage_obtained}% (${item?.passing_percentage}% required to pass)`}
                       fontFamily="medium"
                       fontSize={20}
                       textColor={getTextColor(item.is_completed, true)}
@@ -364,7 +362,7 @@ const AccordionItem = ({
                         <View style={styles.whiteCircle2}>
                           <View style={styles.whiteCircle}>
                             <MyText
-                              text={'22%'}
+                              text={`${item?.percentage_obtained}%`}
                               fontFamily="bold"
                               fontSize={29}
                               textColor={'white'}
@@ -382,7 +380,7 @@ const AccordionItem = ({
                       </View>
                     </View>
                     <MyText
-                      text={'You need 85% to pass'}
+                      text={`You need ${item?.passing_percentage}% to pass`}
                       fontFamily="semiBold"
                       fontSize={22}
                       textColor={'white'}
@@ -396,7 +394,9 @@ const AccordionItem = ({
                         marginBottom: 10,
                         backgroundColor: Colors.THEME_BROWN,
                       }}
-                      onPress={() => {}}
+                      onPress={() => {
+                        openQuizInBrowser(item?.quiz_url);
+                      }}
                     />
                     <MyText
                       text={'You answered 2 out of 9 questions correctly'}

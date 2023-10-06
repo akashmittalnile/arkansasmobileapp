@@ -681,85 +681,96 @@ const SearchAllType = ({navigation, dispatch}) => {
       </View>
     );
   };
+  const showSelectedCategories = () => {
+    if (selectedTab === '1' && selectedCourseCategries?.length > 0) {
+      return true;
+    } else if (selectedTab === '2' && selectedProductCategries?.length > 0) {
+      return true;
+    }
+    return false;
+  };
   const ShowSelectedFilters = () => {
     return (
       <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            backgroundColor: '#ede5ca',
-            marginRight: 'auto',
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            borderRadius: 10,
-            marginTop: 10
-          }}>
-          <MyText
-            text={'Categorie(s): '}
-            fontFamily="regular"
-            fontSize={13}
-            textColor={Colors.THEME_BROWN}
-            style={{}}
-          />
-          {selectedTab === '1'
-            ? selectedCourseCategries?.map((el, index) => (
-                <View
-                  key={index?.toString()}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginRight: 10,
-                  }}>
-                  <MyText
-                    text={el}
-                    fontFamily="regular"
-                    fontSize={13}
-                    textColor={Colors.THEME_BROWN}
-                  />
-                  <TouchableOpacity
-                    onPress={() => removeFilter('cat', el)}
+        {showSelectedCategories() ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+              marginTop: 10,
+            }}>
+            <MyText
+              text={'Categorie(s): '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+
+            {selectedTab === '1'
+              ? selectedCourseCategries?.map((el, index) => (
+                  <View
+                    key={index?.toString()}
                     style={{
-                      marginLeft: 5,
-                      marginTop: 3,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginRight: 10,
                     }}>
-                    <Image
-                      source={require('assets/images/cancelfilter.png')}
-                      style={{height: 10, width: 10}}
+                    <MyText
+                      text={el}
+                      fontFamily="regular"
+                      fontSize={13}
+                      textColor={Colors.THEME_BROWN}
                     />
-                  </TouchableOpacity>
-                </View>
-              ))
-            : selectedProductCategries?.map((el, index) => (
-                <View
-                  key={index?.toString()}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginRight: 10,
-                  }}>
-                  <MyText
-                    key={el}
-                    text={el}
-                    fontFamily="regular"
-                    fontSize={13}
-                    textColor={Colors.THEME_BROWN}
-                  />
-                  <TouchableOpacity
-                    onPress={() => removeFilter('cat', el)}
+                    <TouchableOpacity
+                      onPress={() => removeFilter('cat', el)}
+                      style={{
+                        marginLeft: 5,
+                        marginTop: 3,
+                      }}>
+                      <Image
+                        source={require('assets/images/cancelfilter.png')}
+                        style={{height: 10, width: 10}}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))
+              : selectedProductCategries?.map((el, index) => (
+                  <View
+                    key={index?.toString()}
                     style={{
-                      marginLeft: 5,
-                      marginTop: 3,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginRight: 10,
                     }}>
-                    <Image
-                      source={require('assets/images/cancelfilter.png')}
-                      style={{height: 10, width: 10}}
+                    <MyText
+                      key={el}
+                      text={el}
+                      fontFamily="regular"
+                      fontSize={13}
+                      textColor={Colors.THEME_BROWN}
                     />
-                  </TouchableOpacity>
-                </View>
-              ))}
-        </View>
+                    <TouchableOpacity
+                      onPress={() => removeFilter('cat', el)}
+                      style={{
+                        marginLeft: 5,
+                        marginTop: 3,
+                      }}>
+                      <Image
+                        source={require('assets/images/cancelfilter.png')}
+                        style={{height: 10, width: 10}}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+          </View>
+        ) : null}
         {selectedPriceFilter !== '' ? (
           <View
             style={{

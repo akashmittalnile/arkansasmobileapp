@@ -451,11 +451,7 @@ const AllProducts = ({navigation, dispatch}) => {
     return (
       <ScrollView
         showsVerticalScrollIndicator={true}
-        nestedScrollEnabled={true}
-        contentContainerStyle={{
-          minHeight: height * 0,
-          maxHeight: height * 0.5,
-        }}>
+        nestedScrollEnabled={true}>
         {selectedProductCategries?.length > 0 ? (
           <View
             style={{
@@ -464,6 +460,9 @@ const AllProducts = ({navigation, dispatch}) => {
               flexWrap: 'wrap',
               backgroundColor: '#ede5ca',
               marginRight: 'auto',
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
             }}>
             <MyText
               text={'Categorie(s): '}
@@ -488,8 +487,13 @@ const AllProducts = ({navigation, dispatch}) => {
                   fontSize={13}
                   textColor={Colors.THEME_BROWN}
                 />
-                <TouchableOpacity onPress={() => removeFilter('cat', el)}>
-                  <Image source={require('assets/images/cancelfilter.png')} />
+                <TouchableOpacity
+                  onPress={() => removeFilter('cat', el)}
+                  style={{marginLeft: 5, marginTop: 3}}>
+                  <Image
+                    source={require('assets/images/cancelfilter.png')}
+                    style={{height: 10, width: 10}}
+                  />
                 </TouchableOpacity>
               </View>
             ))}
@@ -503,6 +507,9 @@ const AllProducts = ({navigation, dispatch}) => {
               backgroundColor: '#ede5ca',
               marginRight: 'auto',
               marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
             }}>
             <MyText
               text={'Price: '}
@@ -521,29 +528,44 @@ const AllProducts = ({navigation, dispatch}) => {
               textColor={Colors.THEME_BROWN}
             />
             <TouchableOpacity
-              onPress={() => removeFilter('price', selectedPriceFilter)}>
-              <Image source={require('assets/images/cancelfilter.png')} />
+              onPress={() => removeFilter('price', selectedPriceFilter)}
+              style={{marginLeft: 5, marginTop: 3}}>
+              <Image
+                source={require('assets/images/cancelfilter.png')}
+                style={{height: 10, width: 10}}
+              />
             </TouchableOpacity>
           </View>
         ) : null}
-        {selectedRatingValues?.length > 0
-          ? selectedRatingValues?.map((el, index) => (
+        {selectedRatingValues?.length > 0 ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+            }}>
+            <MyText
+              text={'Rating: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            {selectedRatingValues?.map((el, index) => (
               <View
                 key={index?.toString()}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  backgroundColor: '#ede5ca',
-                  marginRight: 'auto',
+                  marginRight: 10,
                   marginTop: 10,
                 }}>
-                <MyText
-                  text={'Rating: '}
-                  fontFamily="regular"
-                  fontSize={13}
-                  textColor={Colors.THEME_BROWN}
-                  style={{}}
-                />
                 <MyText
                   key={el}
                   text={`${el} and more`}
@@ -551,12 +573,21 @@ const AllProducts = ({navigation, dispatch}) => {
                   fontSize={13}
                   textColor={Colors.THEME_BROWN}
                 />
-                <TouchableOpacity onPress={() => removeFilter('rating', el)}>
-                  <Image source={require('assets/images/cancelfilter.png')} />
+                <TouchableOpacity
+                  onPress={() => removeFilter('rating', el)}
+                  style={{
+                    marginLeft: 5,
+                    marginTop: 3,
+                  }}>
+                  <Image
+                    source={require('assets/images/cancelfilter.png')}
+                    style={{height: 10, width: 10}}
+                  />
                 </TouchableOpacity>
               </View>
-            ))
-          : null}
+            ))}
+          </View>
+        ) : null}
       </ScrollView>
     );
   };

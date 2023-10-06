@@ -176,39 +176,73 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
   const ShowSelectedFilters = () => {
     return (
       <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-          }}>
-          {selectedCourseCategries?.map((el, index) => (
-            <View
-              key={index?.toString()}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginRight: 10,
-              }}>
-              <MyText
-                text={el}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.THEME_BROWN}
-              />
-              <TouchableOpacity onPress={() => removeFilter('cat', el)}>
-                <Image source={require('assets/images/trash.png')} />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
+        {selectedCourseCategries?.length > 0 ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+            }}>
+            <MyText
+              text={'Categorie(s): '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            {selectedCourseCategries?.map((el, index) => (
+              <View
+                key={index?.toString()}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginRight: 10,
+                }}>
+                <MyText
+                  text={el}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_BROWN}
+                />
+                <TouchableOpacity
+                  onPress={() => removeFilter('cat', el)}
+                  style={{
+                    marginLeft: 5,
+                    marginTop: 3,
+                  }}>
+                  <Image
+                    source={require('assets/images/cancelfilter.png')}
+                    style={{height: 10, width: 10}}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        ) : null}
         {selectedPriceFilter !== '' ? (
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginRight: 10,
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
             }}>
+            <MyText
+              text={'Price: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
             <MyText
               text={
                 priceFilterValues?.find(el => el.id === selectedPriceFilter)
@@ -219,13 +253,39 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
               textColor={Colors.THEME_BROWN}
             />
             <TouchableOpacity
-              onPress={() => removeFilter('price', selectedPriceFilter)}>
-              <Image source={require('assets/images/trash.png')} />
+              onPress={() => removeFilter('price', selectedPriceFilter)}
+              style={{
+                marginLeft: 5,
+                marginTop: 3,
+              }}>
+              <Image
+                source={require('assets/images/cancelfilter.png')}
+                style={{height: 10, width: 10}}
+              />
             </TouchableOpacity>
           </View>
         ) : null}
-        {selectedRatingValues?.length > 0
-          ? selectedRatingValues?.map((el, index) => (
+        {selectedRatingValues?.length > 0 ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+            }}>
+            <MyText
+              text={'Rating: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            {selectedRatingValues?.map((el, index) => (
               <View
                 key={index?.toString()}
                 style={{
@@ -240,12 +300,21 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
                   fontSize={13}
                   textColor={Colors.THEME_BROWN}
                 />
-                <TouchableOpacity onPress={() => removeFilter('rating', el)}>
-                  <Image source={require('assets/images/trash.png')} />
+                <TouchableOpacity
+                  onPress={() => removeFilter('rating', el)}
+                  style={{
+                    marginLeft: 5,
+                    marginTop: 3,
+                  }}>
+                  <Image
+                    source={require('assets/images/cancelfilter.png')}
+                    style={{height: 10, width: 10}}
+                  />
                 </TouchableOpacity>
               </View>
-            ))
-          : null}
+            ))}
+          </View>
+        ) : null}
       </View>
     );
   };

@@ -163,7 +163,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       const resp = await Service.postApiWithToken(
         userToken,
         Service.SAVE_ORDER,
-        postData,
+        {},
       );
       console.log('onConfirm resp', resp?.data);
       if (resp?.data?.status) {
@@ -400,7 +400,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
         <AddCard
           visible={showAddCardModal}
           setVisibility={setShowAddCardModal}
-          setShowLoader={setShowLoader}
+          // setShowLoader={setShowLoader}
           userToken={userToken}
           callFunctionAfterAddingcard={getData}
         />

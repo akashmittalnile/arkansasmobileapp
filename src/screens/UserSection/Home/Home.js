@@ -422,10 +422,11 @@ const Home = ({navigation, dispatch}) => {
             <MyText
               text={item.content_creator_name}
               fontFamily="regular"
+              numberOfLines={1}
               fontSize={13}
               textColor={Colors.THEME_GOLD}
               letterSpacing={0.13}
-              style={{marginLeft: 10}}
+              style={{marginLeft: 10, width:'80%'}}
             />
           </View>
           <View style={styles.topRightRow}>

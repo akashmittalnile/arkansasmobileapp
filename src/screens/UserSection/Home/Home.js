@@ -457,7 +457,7 @@ const Home = ({navigation, dispatch}) => {
             />
             <View style={styles.courseNameView}>
               <MyText
-                text={'Course Fee:'}
+                text={'Course Fee: '}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}

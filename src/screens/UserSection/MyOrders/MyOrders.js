@@ -312,6 +312,7 @@ const MyOrders = ({navigation, dispatch}) => {
                   text={item.creatorName}
                   fontFamily="regular"
                   fontSize={13}
+                  numberOfLines={1}
                   textColor={Colors.THEME_GOLD}
                   letterSpacing={0.13}
                   style={{marginLeft: 10}}
@@ -434,6 +435,7 @@ const MyOrders = ({navigation, dispatch}) => {
                   text={item.creatorName}
                   fontFamily="regular"
                   fontSize={13}
+                  numberOfLines={1}
                   textColor={Colors.THEME_GOLD}
                   letterSpacing={0.13}
                   style={{marginLeft: 10}}

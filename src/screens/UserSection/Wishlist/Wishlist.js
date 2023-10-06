@@ -258,6 +258,7 @@ const Wishlist = ({navigation, dispatch}) => {
                 text={item?.content_creator_name}
                 fontFamily="regular"
                 fontSize={13}
+                numberOfLines={1}
                 textColor={Colors.THEME_GOLD}
                 letterSpacing={0.13}
                 style={{marginLeft: 10}}
@@ -337,6 +338,7 @@ const Wishlist = ({navigation, dispatch}) => {
                 text={item?.creator_name}
                 fontFamily="regular"
                 fontSize={13}
+                numberOfLines={1}
                 textColor={Colors.THEME_GOLD}
                 letterSpacing={0.13}
                 style={{marginLeft: 10}}

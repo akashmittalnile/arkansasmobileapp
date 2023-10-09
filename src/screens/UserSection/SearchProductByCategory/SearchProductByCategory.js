@@ -123,8 +123,8 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
     }
     setShowLoader(false);
   };
-  const gotoCourseDetails = (id, type) => {
-    navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
+  const gotoProductDetails = (id, type) => {
+    navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
   };
   const ShowSelectedFilters = () => {
     return (
@@ -412,7 +412,7 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
   const renderProduct = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => gotoCourseDetails(item?.id, '1')}
+        onPress={() => gotoProductDetails(item?.id, '2')}
         style={styles.courseContainer}>
         <ImageBackground
           source={{uri: item?.Product_image[0]}}
@@ -459,7 +459,7 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
           </View>
           <View style={styles.bottomRow}>
             <MyText
-              text={'$' + item.course_fee}
+              text={'$' + item.price}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}

@@ -265,8 +265,8 @@ const Home = ({navigation, dispatch}) => {
   const gotoSuggestedCourses = () => {
     navigation.navigate(ScreenNames.SUGGESTED_COURSES);
   };
-  const gotoTopCategory = () => {
-    navigation.navigate(ScreenNames.TOP_CATEGORY);
+  const gotoTopCategory = typeParam => {
+    navigation.navigate(ScreenNames.TOP_CATEGORY, {typeParam});
   };
   const gotoCourseDetails = (id, type) => {
     navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
@@ -497,7 +497,7 @@ const Home = ({navigation, dispatch}) => {
           <View style={styles.bottomRight}>
             <Image source={require('assets/images/star.png')} />
             <MyText
-              text={item.rating}
+              text={item.avg_rating}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.LIGHT_GREY}
@@ -596,7 +596,9 @@ const Home = ({navigation, dispatch}) => {
           text={item.category_name}
           fontFamily="regular"
           fontSize={13}
+          textAlign="center"
           textColor={Colors.LIGHT_GREY}
+          style={{marginTop: 5}}
         />
       </TouchableOpacity>
     );
@@ -614,7 +616,9 @@ const Home = ({navigation, dispatch}) => {
           text={item.category_name}
           fontFamily="regular"
           fontSize={13}
+          textAlign="center"
           textColor={Colors.LIGHT_GREY}
+          style={{marginTop: 5}}
         />
       </TouchableOpacity>
     );
@@ -673,7 +677,7 @@ const Home = ({navigation, dispatch}) => {
             <View>
               <ViewAll
                 text="Browse Courses by categories"
-                onPress={gotoTopCategory}
+                onPress={() => gotoTopCategory('1')}
                 style={{marginTop: 21}}
               />
               <FlatList
@@ -750,7 +754,7 @@ const Home = ({navigation, dispatch}) => {
             <View>
               <ViewAll
                 text="Browse Products by Categories"
-                onPress={gotoTopCategory}
+                onPress={() => gotoTopCategory('2')}
                 style={{marginTop: 21}}
               />
               <FlatList

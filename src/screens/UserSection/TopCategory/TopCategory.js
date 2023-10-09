@@ -78,7 +78,7 @@ const topCategories = [
   },
 ];
 
-const TopCategory = ({navigation, dispatch}) => {
+const TopCategory = ({navigation, dispatch, route}) => {
   //variables
   const LINE_HEIGTH = 25;
   //variables : redux
@@ -97,7 +97,7 @@ const TopCategory = ({navigation, dispatch}) => {
     try {
       const resp = await Service.getApiWithToken(
         userToken,
-        Service.ALL_CATEGORY,
+        Service.ALL_CATEGORY + `?type=${route?.params?.typeParam}`,
       );
       console.log('getCategories resp', resp?.data);
       if (resp?.data?.status) {
@@ -122,6 +122,7 @@ const TopCategory = ({navigation, dispatch}) => {
           fontSize={13}
           textAlign="center"
           textColor={Colors.LIGHT_GREY}
+          style={{marginTop: 5}}
         />
       </View>
     );
@@ -146,7 +147,12 @@ const TopCategory = ({navigation, dispatch}) => {
     <SafeAreaView style={{flex: 1}}>
       <StatusBar backgroundColor={Colors.THEME_BROWN} />
       <View style={styles.container}>
-        <MyHeader Title="Top Category" isBackButton />
+        <MyHeader
+          Title={`${
+            route?.params?.typeParam == '1' ? 'Course' : 'Product'
+          } Categories`}
+          isBackButton
+        />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}

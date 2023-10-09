@@ -160,36 +160,36 @@ const MyOrders = ({navigation, dispatch}) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getMyOrders();
-   });
-   return unsubscribe;
- }, [navigation]);
- const getMyOrders = async (type = '1') => {
-   setShowLoader(true);
-   const formdata = new FormData();
-   formdata.append('type', type);
-   try {
-     const resp = await Service.postApiWithToken(
-       userToken,
-       Service.MY_ORDER,
-       formdata,
-     );
-     console.log('getMyOrders resp', resp?.data);
-     if (resp?.data?.status) {
-       if (type === '1') {
-        //  const updatedData = await generateThumb(resp?.data?.data)
-        //  setCourseData(updatedData);
-         setCourseData(resp?.data?.data);
-       } else {
-         setProductData(resp?.data?.data);
-       }
-     } else {
-       Toast.show(resp.data.message, Toast.SHORT);
-     }
-   } catch (error) {
-     console.log('error in getMyOrders', error);
-   }
-   setShowLoader(false);
- };
+    });
+    return unsubscribe;
+  }, [navigation]);
+  const getMyOrders = async (type = '1') => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append('type', type);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.MY_ORDER,
+        formdata,
+      );
+      console.log('getMyOrders resp', resp?.data);
+      if (resp?.data?.status) {
+        if (type === '1') {
+          //  const updatedData = await generateThumb(resp?.data?.data)
+          //  setCourseData(updatedData);
+          setCourseData(resp?.data?.data);
+        } else {
+          setProductData(resp?.data?.data);
+        }
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getMyOrders', error);
+    }
+    setShowLoader(false);
+  };
 
   const multiSliderValuesChange = values => {
     setMultiSliderValue(values);
@@ -199,8 +199,8 @@ const MyOrders = ({navigation, dispatch}) => {
     setShowOrdersFilterModal(true);
   };
   const openReviewModal = (id, type) => {
-    setSelectedId(id)
-    setSelectedType(type)
+    setSelectedId(id);
+    setSelectedType(type);
     setShowReviewModal(true);
   };
 
@@ -227,14 +227,14 @@ const MyOrders = ({navigation, dispatch}) => {
   };
 
   const submitReview = async () => {
-    if(review?.trim()?.length === 0){
-      Toast.show('Please enter review')
-      return
+    if (review?.trim()?.length === 0) {
+      Toast.show('Please enter review');
+      return;
     }
-    const postData = new FormData()
-    postData.append('id', selectedId)
-    postData.append('type', selectedType)
-    postData.append('message', review)
+    const postData = new FormData();
+    postData.append('id', selectedId);
+    postData.append('type', selectedType);
+    postData.append('message', review);
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
@@ -244,11 +244,11 @@ const MyOrders = ({navigation, dispatch}) => {
       );
       console.log('submitReview resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message, Toast.SHORT)
-        setStarRating(1)
-        setReview('')
-      }else{
-        Toast.show(resp?.data?.message, Toast.SHORT)
+        Toast.show(resp?.data?.message, Toast.SHORT);
+        setStarRating(1);
+        setReview('');
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in submitReview', error);
@@ -258,7 +258,7 @@ const MyOrders = ({navigation, dispatch}) => {
 
   const renderCourse = ({item}) => {
     return (
-      <View style={styles.courseContainer}>
+      <View style={styles.course_valid_date}>
         <View style={styles.courseTopRow}>
           <MyText
             text={`Course Valid Date: ${item.courseValidDate}`}
@@ -270,7 +270,8 @@ const MyOrders = ({navigation, dispatch}) => {
           <View style={styles.statusRow}>
             <View style={styles.dot} />
             <MyText
-              text={item.status}
+              // text={item.status}
+              text={item?.order_status}
               fontFamily="medium"
               fontSize={13}
               textColor={Colors.THEME_BROWN}
@@ -280,12 +281,12 @@ const MyOrders = ({navigation, dispatch}) => {
         </View>
         <View style={styles.courseSubContainer}>
           <ImageBackground
-            source={item.courseImg}
+            source={require('assets/images/rectangle-1035.png')}
             style={styles.crseImg}
             imageStyle={{borderRadius: 10}}></ImageBackground>
           <View style={{marginLeft: 11, width: width * 0.55}}>
             <MyText
-              text={item.courseName}
+              text={item.title}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.LIGHT_GREY}
@@ -295,7 +296,7 @@ const MyOrders = ({navigation, dispatch}) => {
               <View style={styles.ratingRow}>
                 <Image source={require('assets/images/star.png')} />
                 <MyText
-                  text={item.courseRating}
+                  text={item.rating}
                   fontFamily="regular"
                   fontSize={13}
                   textColor={Colors.LIGHT_GREY}
@@ -309,7 +310,7 @@ const MyOrders = ({navigation, dispatch}) => {
                   // style={styles.crtrImg}
                 />
                 <MyText
-                  text={item.creatorName}
+                  text={item.content_creator_name}
                   fontFamily="regular"
                   fontSize={13}
                   numberOfLines={1}
@@ -325,7 +326,9 @@ const MyOrders = ({navigation, dispatch}) => {
               <Image source={require('assets/images/play.png')} />
               <MyText
                 text={
-                  item.status === 'Completed' ? 'Start over again' : 'Resume'
+                  item.order_status === 'Pending'
+                    ? 'Resume'
+                    : 'Start over again'
                 }
                 fontFamily="medium"
                 fontSize={13}
@@ -334,7 +337,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 style={{marginLeft: 5}}
               />
             </TouchableOpacity>
-            {item.status === 'Completed' ? (
+            {item.order_status !== 'Pending' ? (
               <MyButton
                 text="WRITE YOUR REVIEW HERE"
                 style={{
@@ -343,7 +346,7 @@ const MyOrders = ({navigation, dispatch}) => {
                   marginTop: 8,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                onPress={()=>openReviewModal(item?.id, '1')}
+                onPress={() => openReviewModal(item?.course_id, '1')}
               />
             ) : null}
             {/* <View style={styles.bottomRow}>
@@ -369,7 +372,7 @@ const MyOrders = ({navigation, dispatch}) => {
           style={{borderColor: '#ECECEC', marginTop: 11, marginBottom: 5}}
         />
         <MyText
-          text={`Course Completed Date: ${item.courseCompletedDate}`}
+          text={`Course Completed Date: ${item.complete_course_on}`}
           fontFamily="medium"
           fontSize={12}
           textColor={Colors.LIGHT_GREY}
@@ -383,7 +386,7 @@ const MyOrders = ({navigation, dispatch}) => {
       <View style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText
-            text={`Order ID: ${item.orderId}`}
+            text={`Order ID: ${item.order_id}`}
             fontFamily="medium"
             fontSize={12}
             textColor={Colors.LIGHT_GREY}
@@ -392,7 +395,7 @@ const MyOrders = ({navigation, dispatch}) => {
           <View style={styles.statusRow}>
             <View style={styles.dot} />
             <MyText
-              text={item.status}
+              text={item.order_status}
               fontFamily="medium"
               fontSize={13}
               textColor={Colors.THEME_BROWN}
@@ -401,14 +404,12 @@ const MyOrders = ({navigation, dispatch}) => {
           </View>
         </View>
         <View style={styles.courseSubContainer}>
-          <ImageBackground source={item.courseImg} style={styles.crseImg}>
-            {/* <TouchableOpacity>
-            <Image source={require('assets/images/play-icon.png')} />
-          </TouchableOpacity> */}
-          </ImageBackground>
+          <ImageBackground
+            source={require('assets/images/rectangle-1035.png')}
+            style={styles.crseImg}></ImageBackground>
           <View style={{marginLeft: 11, width: width * 0.5}}>
             <MyText
-              text={item.courseName}
+              text={item.title}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.LIGHT_GREY}
@@ -418,7 +419,7 @@ const MyOrders = ({navigation, dispatch}) => {
               <View style={styles.ratingRow}>
                 <Image source={require('assets/images/star.png')} />
                 <MyText
-                  text={item.courseRating}
+                  text={item.rating}
                   fontFamily="regular"
                   fontSize={13}
                   textColor={Colors.LIGHT_GREY}
@@ -432,7 +433,7 @@ const MyOrders = ({navigation, dispatch}) => {
                   // style={styles.crtrImg}
                 />
                 <MyText
-                  text={item.creatorName}
+                  text={item.creator_name}
                   fontFamily="regular"
                   fontSize={13}
                   numberOfLines={1}
@@ -444,7 +445,7 @@ const MyOrders = ({navigation, dispatch}) => {
             </View>
             <View style={styles.bottomRow}>
               <MyText
-                text={'$' + item.courseFee}
+                text={'$' + item.product_price}
                 fontFamily="bold"
                 fontSize={14}
                 textColor={Colors.THEME_GOLD}
@@ -459,7 +460,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 />
               </View>
             </View>
-            {item.status === 'Picked-up' ? (
+            {item.order_status === 'Picked-up' ? (
               <MyButton
                 text="WRITE YOUR REVIEW HERE"
                 style={{
@@ -468,7 +469,7 @@ const MyOrders = ({navigation, dispatch}) => {
                   marginTop: 8,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                onPress={()=>openReviewModal(item?.id, '2')}
+                onPress={() => openReviewModal(item?.id, '2')}
               />
             ) : null}
           </View>
@@ -477,7 +478,7 @@ const MyOrders = ({navigation, dispatch}) => {
           style={{borderColor: '#ECECEC', marginTop: 11, marginBottom: 5}}
         />
         <MyText
-          text={item.date}
+          text={item.created_date}
           fontFamily="medium"
           fontSize={12}
           textColor={Colors.LIGHT_GREY}
@@ -531,14 +532,14 @@ const MyOrders = ({navigation, dispatch}) => {
           </View>
           {selectedTab === '1' ? (
             <FlatList
-              data={courseList}
+              data={courseData}
               style={{marginTop: 28}}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderCourse}
             />
           ) : (
             <FlatList
-              data={productList}
+              data={productData}
               style={{marginTop: 28}}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderProduct}

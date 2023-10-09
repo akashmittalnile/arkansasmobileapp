@@ -271,6 +271,9 @@ const Home = ({navigation, dispatch}) => {
   const gotoCourseDetails = (id, type) => {
     navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
   };
+  const gotoSearchCourseByCategory = id => {
+    navigation.navigate(ScreenNames.SEARCH_COURSE_BY_CATEGORY, {id});
+  };
   const gotoProductDetails = (id, type) => {
     navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
   };
@@ -426,7 +429,7 @@ const Home = ({navigation, dispatch}) => {
               fontSize={13}
               textColor={Colors.THEME_GOLD}
               letterSpacing={0.13}
-              style={{marginLeft: 10, width:'80%'}}
+              style={{marginLeft: 10, width: '80%'}}
             />
           </View>
           <View style={styles.topRightRow}>
@@ -563,10 +566,12 @@ const Home = ({navigation, dispatch}) => {
       </TouchableOpacity>
     );
   };
-  const renderCategory = ({item}) => {
+  const renderCourseCategory = ({item}) => {
     // console.log('renderCategory', item);
     return (
-      <View style={styles.categoryContainer}>
+      <TouchableOpacity
+        onPress={() => gotoSearchCourseByCategory(item?.id)}
+        style={styles.categoryContainer}>
         {item.category_image ? (
           <Image source={{uri: item.category_image}} style={styles.catImg} />
         ) : null}
@@ -576,7 +581,23 @@ const Home = ({navigation, dispatch}) => {
           fontSize={13}
           textColor={Colors.LIGHT_GREY}
         />
-      </View>
+      </TouchableOpacity>
+    );
+  };
+  const renderProductCategory = ({item}) => {
+    // console.log('renderCategory', item);
+    return (
+      <TouchableOpacity onPress={() => {}} style={styles.categoryContainer}>
+        {item.category_image ? (
+          <Image source={{uri: item.category_image}} style={styles.catImg} />
+        ) : null}
+        <MyText
+          text={item.category_name}
+          fontFamily="regular"
+          fontSize={13}
+          textColor={Colors.LIGHT_GREY}
+        />
+      </TouchableOpacity>
     );
   };
 
@@ -642,7 +663,7 @@ const Home = ({navigation, dispatch}) => {
                 showsHorizontalScrollIndicator={false}
                 style={{marginTop: 15}}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={renderCategory}
+                renderItem={renderCourseCategory}
               />
             </View>
           ) : (
@@ -719,7 +740,7 @@ const Home = ({navigation, dispatch}) => {
                 showsHorizontalScrollIndicator={false}
                 style={{marginTop: 15}}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={renderCategory}
+                renderItem={renderProductCategory}
               />
             </View>
           ) : (

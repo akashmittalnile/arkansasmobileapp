@@ -33,6 +33,7 @@ import NoConnection from '../../screens/UserSection/NoConnection/NoConnection';
 import AllReviews from 'screens/UserSection/AllReviews/AllReviews';
 import SearchAllType from 'screens/UserSection/SearchAllType/SearchAllType';
 import SuperAdminCourses from 'screens/UserSection/SuperAdminCourses/SuperAdminCourses';
+import SearchCourseByCategory from 'screens/UserSection/SearchCourseByCategory/SearchCourseByCategory';
 
 const MainStack = () => {
   //variables
@@ -109,6 +110,7 @@ const MainStack = () => {
       <Stack.Screen name={ScreenNames.ALL_REVIEWS} component={AllReviews} />
       <Stack.Screen name={ScreenNames.SEACRCH_ALL_TYPE} component={SearchAllType} />
       <Stack.Screen name={ScreenNames.SUPER_ADMIN_COURSES} component={SuperAdminCourses} />
+      <Stack.Screen name={ScreenNames.SEARCH_COURSE_BY_CATEGORY} component={SearchCourseByCategory} />
     </Stack.Navigator>
   );
 };

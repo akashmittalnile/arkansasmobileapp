@@ -79,7 +79,7 @@ const Cart = ({navigation, dispatch}) => {
         Service.CART_LIST,
         {},
       );
-      console.log('getCartList resp', resp?.data);
+      console.log('getCartList resp', JSON.stringify(resp?.data));
       if (resp?.data?.status) {
         const doCoursesExists = resp?.data?.data?.find(el => el?.type == '1');
         if (!doCoursesExists) {

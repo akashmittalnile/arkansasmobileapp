@@ -47,6 +47,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 22,
+    width: '75%',
   },
   bottomRow: {
     flexDirection: 'row',

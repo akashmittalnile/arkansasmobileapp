@@ -35,6 +35,8 @@ import Divider from 'components/Divider/Divider';
 import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import TrendingFiltersModal from './components/TrendingFiltersModal/TrendingFiltersModal';
+import {createThumbnail} from 'react-native-create-thumbnail';
+
 const courseList = [
   {
     id: '1',
@@ -116,7 +118,14 @@ const TrendingCourses = ({navigation, dispatch}) => {
       );
       console.log('getCourses resp', resp?.data);
       if (resp?.data?.status) {
-        setCourseData(resp?.data?.data);
+        setCourseCategries(
+          resp?.data?.category?.map(el => ({
+            id: el?.id,
+            name: el?.category_name,
+          })),
+        );
+        const updatedData = await generateThumb(resp?.data?.data);
+        setCourseData(updatedData);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
@@ -124,6 +133,32 @@ const TrendingCourses = ({navigation, dispatch}) => {
       console.log('error in getCourses', error);
     }
     setShowLoader(false);
+  };
+  const generateThumb = async data => {
+    // console.log('generateThumb');
+    let updatedData = [];
+    try {
+      updatedData = await Promise.all(
+        data?.map?.(async el => {
+          // console.log('el.introduction_video trending', el.introduction_video);
+          const thumb = await createThumbnail({
+            url: el.introduction_video,
+            timeStamp: 1000,
+          });
+          return {
+            ...el,
+            thumb,
+          };
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+    // console.log('thumb data SearchAllType', updatedData);
+    return updatedData;
+  };
+  const gotoCourseDetails = (id, type) => {
+    navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
   };
   const ShowSelectedFilters = () => {
     return (
@@ -325,6 +360,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
         }
       }
     }
+    postData.append('limit', 10);
     console.log('applyFilters postData', JSON.stringify(postData));
     setShowLoader(true);
     try {
@@ -393,6 +429,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
       }
     }
     console.log('applyFilters postData', JSON.stringify(postData));
+    postData.append('limit', 10);
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
@@ -466,12 +503,13 @@ const TrendingCourses = ({navigation, dispatch}) => {
       remainingselectedRatingValues?.map(el => postData.append('rating[]', el));
     }
     console.log('removeFilter postData', JSON.stringify(postData));
+    postData.append('limit', 10);
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
         Service.TRENDING_COURSE,
-        postData,
+        postData?._parts?.length === 0 ? {} : postData,
       );
       console.log('removeFilter resp', resp?.data);
       if (resp?.data?.status) {
@@ -489,9 +527,9 @@ const TrendingCourses = ({navigation, dispatch}) => {
 
   const renderCourse = ({item}) => {
     return (
-      <View style={styles.courseContainer}>
+      <TouchableOpacity onPress={() => gotoCourseDetails(item?.id, '1')} style={styles.courseContainer}>
         <ImageBackground
-          source={{uri: item.introduction_image}}
+          source={{uri: item?.thumb?.path}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
           <TouchableOpacity>
@@ -551,7 +589,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   //UI
@@ -584,13 +622,16 @@ const TrendingCourses = ({navigation, dispatch}) => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderCourse}
             ListEmptyComponent={() => (
-              <MyText
-                text={`No Trending Courses found`}
-                fontFamily="medium"
-                fontSize={18}
-                textColor={'#455A64'}
-                style={{textAlign: 'center', marginTop: 20}}
-              />
+              <View style={{alignItems: 'center', marginTop: 50}}>
+                <Image source={require('assets/images/no-data.png')} />
+                <MyText
+                  text={'No Trending Courses found'}
+                  fontFamily="medium"
+                  fontSize={40}
+                  textAlign="center"
+                  textColor={'black'}
+                />
+              </View>
             )}
           />
         </ScrollView>

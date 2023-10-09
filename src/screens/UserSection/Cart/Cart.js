@@ -226,7 +226,9 @@ const Cart = ({navigation, dispatch}) => {
                 // style={styles.crtrImg}
               />
               <MyText
-                text={item.creator_name}
+                text={
+                  item?.type == '1' ? item?.category_name : item.creator_name
+                }
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.THEME_GOLD}

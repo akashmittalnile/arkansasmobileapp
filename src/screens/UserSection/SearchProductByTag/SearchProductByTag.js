@@ -34,7 +34,7 @@ import Divider from 'components/Divider/Divider';
 // import {WebView} from 'react-native-webview';
 import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
-import SearchProductByTagModal from './components/SearchProductByTagFiltersModal/SearchProductByTagModal';
+import SearchProductByTagFiltersModal from './components/SearchProductByTagFiltersModal/SearchProductByTagFiltersModal';
 
 const productList = [
   {
@@ -641,7 +641,7 @@ const SearchProductByTag = ({navigation, dispatch, route}) => {
           )}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
-        <SearchProductByTagModal
+        <SearchProductByTagFiltersModal
           visible={showFilterModal}
           setVisibility={setShowFilterModal}
           productCategries={productCategries}

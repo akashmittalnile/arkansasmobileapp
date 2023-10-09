@@ -22,7 +22,7 @@ import Dropdown from '../../../../../components/Dropdown/Dropdown';
 import MyButton from '../../../../../components/MyButton/MyButton';
 import MyMultiSelect from '../../../../../components/MyMultiSelect/MyMultiSelect';
 
-const SearchProductByTagModal = ({
+const SearchProductByTagFiltersModal = ({
   visible,
   setVisibility,
 
@@ -213,4 +213,4 @@ const SearchProductByTagModal = ({
   );
 };
 
-export default SearchProductByTagModal;
+export default SearchProductByTagFiltersModal;

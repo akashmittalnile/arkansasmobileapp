@@ -36,6 +36,7 @@ import SuperAdminCourses from 'screens/UserSection/SuperAdminCourses/SuperAdminC
 import SearchCourseByCategory from 'screens/UserSection/SearchCourseByCategory/SearchCourseByCategory';
 import SearchProductByCategory from 'screens/UserSection/SearchProductByCategory/SearchProductByCategory';
 import SearchCourseByTag from 'screens/UserSection/SearchCourseByTag/SearchCourseByTag';
+import SearchProductByTag from 'screens/UserSection/SearchProductByTag/SearchProductByTag';
 
 const MainStack = () => {
   //variables
@@ -115,6 +116,7 @@ const MainStack = () => {
       <Stack.Screen name={ScreenNames.SEARCH_COURSE_BY_CATEGORY} component={SearchCourseByCategory} />
       <Stack.Screen name={ScreenNames.SEARCH_PRODUCT_BY_CATEGORY} component={SearchProductByCategory} />
       <Stack.Screen name={ScreenNames.SEARCH_COURSE_BY_TAG} component={SearchCourseByTag} />
+      <Stack.Screen name={ScreenNames.SEARCH_PRODUCT_BY_TAG} component={SearchProductByTag} />
     </Stack.Navigator>
   );
 };

@@ -277,9 +277,14 @@ const Home = ({navigation, dispatch}) => {
   const gotoSearchCourseByTag = id => {
     navigation.navigate(ScreenNames.SEARCH_COURSE_BY_TAG, {id});
   };
+  const gotoSearchProductByTag = id => {
+    navigation.navigate(ScreenNames.SEARCH_PRODUCT_BY_TAG, {id});
+  };
   const searchByTag = (id, type) => {
-    if(type == '1'){
-      gotoSearchCourseByTag(id)
+    if (type == '1') {
+      gotoSearchCourseByTag(id);
+    } else if (type == '2') {
+      gotoSearchProductByTag(id);
     }
   };
   const gotoSearchProductByCategory = id => {

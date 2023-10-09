@@ -84,11 +84,15 @@ const SuggestedProducts = ({navigation, dispatch}) => {
     getSuggestedProducts();
   }, []);
   const getSuggestedProducts = async () => {
-    const postData = new FormData()
-    postData.append('type', 2)
+    const postData = new FormData();
+    postData.append('type', 2);
     setShowLoader(true);
     try {
-      const resp = await Service.postApiWithToken(userToken, Service.SUGGESTED_LIST, postData);
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.SUGGESTED_LIST,
+        postData,
+      );
       console.log('getSuggestedProducts resp', resp?.data);
       if (resp?.data?.status) {
         setProductData(resp?.data?.data);
@@ -108,7 +112,8 @@ const SuggestedProducts = ({navigation, dispatch}) => {
     formdata.append('id', id);
     formdata.append('status', status == '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
-    const endPoint = status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE
+    const endPoint =
+      status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE;
     console.log('onLike endPoint', endPoint);
     try {
       const resp = await Service.postApiWithToken(
@@ -132,8 +137,9 @@ const SuggestedProducts = ({navigation, dispatch}) => {
   const renderProduct = ({item}) => {
     return (
       <View style={styles.courseContainer}>
-        <ImageBackground source={{uri: item?.Product_image[0]}} style={styles.crseImg}>
-        </ImageBackground>
+        <ImageBackground
+          source={{uri: item?.Product_image[0]}}
+          style={styles.crseImg}></ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText
             text={item.title}
@@ -179,7 +185,7 @@ const SuggestedProducts = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-            <TouchableOpacity
+              <TouchableOpacity
                 onPress={() => {
                   onLike('2', item.id, item?.isWishlist);
                 }}>

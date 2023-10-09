@@ -34,6 +34,7 @@ import AllReviews from 'screens/UserSection/AllReviews/AllReviews';
 import SearchAllType from 'screens/UserSection/SearchAllType/SearchAllType';
 import SuperAdminCourses from 'screens/UserSection/SuperAdminCourses/SuperAdminCourses';
 import SearchCourseByCategory from 'screens/UserSection/SearchCourseByCategory/SearchCourseByCategory';
+import SearchProductByCategory from 'screens/UserSection/SearchProductByCategory/SearchProductByCategory';
 
 const MainStack = () => {
   //variables
@@ -111,6 +112,7 @@ const MainStack = () => {
       <Stack.Screen name={ScreenNames.SEACRCH_ALL_TYPE} component={SearchAllType} />
       <Stack.Screen name={ScreenNames.SUPER_ADMIN_COURSES} component={SuperAdminCourses} />
       <Stack.Screen name={ScreenNames.SEARCH_COURSE_BY_CATEGORY} component={SearchCourseByCategory} />
+      <Stack.Screen name={ScreenNames.SEARCH_PRODUCT_BY_CATEGORY} component={SearchProductByCategory} />
     </Stack.Navigator>
   );
 };

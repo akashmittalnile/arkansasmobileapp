@@ -274,6 +274,9 @@ const Home = ({navigation, dispatch}) => {
   const gotoSearchCourseByCategory = id => {
     navigation.navigate(ScreenNames.SEARCH_COURSE_BY_CATEGORY, {id});
   };
+  const gotoSearchProductByCategory = id => {
+    navigation.navigate(ScreenNames.SEARCH_PRODUCT_BY_CATEGORY, {id});
+  };
   const gotoProductDetails = (id, type) => {
     navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
   };
@@ -587,7 +590,9 @@ const Home = ({navigation, dispatch}) => {
   const renderProductCategory = ({item}) => {
     // console.log('renderCategory', item);
     return (
-      <TouchableOpacity onPress={() => {}} style={styles.categoryContainer}>
+      <TouchableOpacity
+        onPress={() => gotoSearchProductByCategory(item?.id)}
+        style={styles.categoryContainer}>
         {item.category_image ? (
           <Image source={{uri: item.category_image}} style={styles.catImg} />
         ) : null}

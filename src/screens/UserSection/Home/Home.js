@@ -274,6 +274,14 @@ const Home = ({navigation, dispatch}) => {
   const gotoSearchCourseByCategory = id => {
     navigation.navigate(ScreenNames.SEARCH_COURSE_BY_CATEGORY, {id});
   };
+  const gotoSearchCourseByTag = id => {
+    navigation.navigate(ScreenNames.SEARCH_COURSE_BY_TAG, {id});
+  };
+  const searchByTag = (id, type) => {
+    if(type == '1'){
+      gotoSearchCourseByTag(id)
+    }
+  };
   const gotoSearchProductByCategory = id => {
     navigation.navigate(ScreenNames.SEARCH_PRODUCT_BY_CATEGORY, {id});
   };
@@ -316,7 +324,8 @@ const Home = ({navigation, dispatch}) => {
   const renderTags = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => changeSelectedTag(item.id)}
+        // onPress={() => changeSelectedTag(item.id)}
+        onPress={() => searchByTag(item.id, item.type)}
         style={[
           styles.courseTypeContainer,
           selectedTag === item.id

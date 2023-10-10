@@ -200,8 +200,8 @@ const MyOrders = ({navigation, dispatch}) => {
       console.log('getMyOrders resp', resp?.data);
       if (resp?.data?.status) {
         if (type === '1') {
-           const updatedData = await generateThumb(resp?.data?.data)
-           setCourseData(updatedData);
+          const updatedData = await generateThumb(resp?.data?.data);
+          setCourseData(updatedData);
         } else {
           setProductData(resp?.data?.data);
         }
@@ -511,7 +511,9 @@ const MyOrders = ({navigation, dispatch}) => {
   };
   const renderCourse = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => gotoCourseDetails(item?.course_id, '1')} style={styles.courseContainer}>
+      <TouchableOpacity
+        onPress={() => gotoCourseDetails(item?.course_id, '1')}
+        style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText
             text={`Course Valid Date: ${item.course_valid_date}`}
@@ -636,7 +638,9 @@ const MyOrders = ({navigation, dispatch}) => {
   };
   const renderProduct = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => gotoProductDetails(item?.order_id, '2')} style={styles.courseContainer}>
+      <TouchableOpacity
+        onPress={() => gotoProductDetails(item?.order_id, '2')}
+        style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText
             text={`Order ID: ${item?.order_number}`}
@@ -755,7 +759,7 @@ const MyOrders = ({navigation, dispatch}) => {
             icon={<Image source={require('assets/images/filter.png')} />}
             placeholder="Search..."
             onPress={openFilterModal}
-              onChangeText={e => {
+            onChangeText={e => {
               console.log('SearchWithIcon', e);
               setSearchValue(e);
               applyFilters2(e);

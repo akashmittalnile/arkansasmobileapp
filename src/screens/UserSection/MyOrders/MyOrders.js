@@ -503,10 +503,15 @@ const MyOrders = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
-
+  const gotoCourseDetails = (id, type) => {
+    navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
+  };
+  const gotoProductDetails = (id, type) => {
+    navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
+  };
   const renderCourse = ({item}) => {
     return (
-      <View style={styles.courseContainer}>
+      <TouchableOpacity onPress={() => gotoCourseDetails(item?.course_id, '1')} style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText
             text={`Course Valid Date: ${item.course_valid_date}`}
@@ -519,7 +524,7 @@ const MyOrders = ({navigation, dispatch}) => {
             <View style={styles.dot} />
             <MyText
               // text={item.status}
-              text={item?.order_status}
+              text={item?.course_completed == '1' ? 'Completed' : 'Pending'}
               fontFamily="medium"
               fontSize={13}
               textColor={Colors.THEME_BROWN}
@@ -626,12 +631,12 @@ const MyOrders = ({navigation, dispatch}) => {
           textColor={Colors.LIGHT_GREY}
           style={{}}
         />
-      </View>
+      </TouchableOpacity>
     );
   };
   const renderProduct = ({item}) => {
     return (
-      <View style={styles.courseContainer}>
+      <TouchableOpacity onPress={() => gotoProductDetails(item?.order_id, '2')} style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText
             text={`Order ID: ${item?.order_number}`}
@@ -732,7 +737,7 @@ const MyOrders = ({navigation, dispatch}) => {
           textColor={Colors.LIGHT_GREY}
           style={{}}
         />
-      </View>
+      </TouchableOpacity>
     );
   };
   //UI

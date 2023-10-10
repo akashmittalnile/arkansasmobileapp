@@ -189,7 +189,14 @@ const ProceedToPayment = ({navigation, dispatch}) => {
   const resetIndexGoToMyOrders = CommonActions.reset({
     index: 1,
     // routes: [{name: ScreenNames.MY_ORDERS}],
-    routes: [{name: ScreenNames.BOTTOM_TAB}],
+    routes: [
+      {
+        name: ScreenNames.BOTTOM_TAB,
+        state: {
+          routes: [{name: ScreenNames.MY_ORDERS}],
+        },
+      },
+    ],
   });
   const gotoMyCourses = () => {
     navigation.dispatch(resetIndexGoToMyOrders);
@@ -287,7 +294,11 @@ const ProceedToPayment = ({navigation, dispatch}) => {
               showSeeAll={false}
               // buttonText="Add New"
               // onPress={openAddCardModal}
-              style={{justifyContent: 'center', marginTop: 25, marginBottom: 21}}
+              style={{
+                justifyContent: 'center',
+                marginTop: 25,
+                marginBottom: 21,
+              }}
             />
             <CardField
               accessible={true}

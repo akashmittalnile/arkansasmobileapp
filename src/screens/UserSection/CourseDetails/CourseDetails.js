@@ -727,7 +727,9 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               />
             </View>
           ) : null}
-          <FAB_Button onPress={openReviewModal} />
+          {productDetails?.isPurchased ? (
+            <FAB_Button onPress={openReviewModal} />
+          ) : null}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
         <Review

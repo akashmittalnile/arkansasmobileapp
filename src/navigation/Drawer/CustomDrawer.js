@@ -55,7 +55,9 @@ const CustomDrawer = ({navigation}) => {
     navigation.navigate(ScreenNames.ALL_PRODUCTS);
   };
   const gotoMyOrders = () => {
-    navigation.navigate(ScreenNames.MY_ORDERS);
+    navigation.navigate(ScreenNames.BOTTOM_TAB, {
+      screen: ScreenNames.MY_ORDERS,
+    });
   };
   const gotoWelcome = () =>
     CommonActions.reset({
@@ -68,12 +70,12 @@ const CustomDrawer = ({navigation}) => {
       const resp = await Service.postApiWithToken(
         userToken,
         Service.LOGOUT,
-        {}
+        {},
       );
       console.log('logout resp', resp?.data);
       if (resp?.data?.status) {
         closeDrawer();
-        navigation.dispatch(gotoWelcome)
+        navigation.dispatch(gotoWelcome);
         dispatch(logOutUser());
         await AsyncStorage.clear();
       }
@@ -190,7 +192,7 @@ const CustomDrawer = ({navigation}) => {
 
         {/* <Text style={styles.versionText}>App Version: V1.0.0.12</Text> */}
       </ScrollView>
-      <CustomLoader text='Logging Out....' showLoader={showLoader} />
+      <CustomLoader text="Logging Out...." showLoader={showLoader} />
     </View>
   );
 };

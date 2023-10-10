@@ -438,6 +438,14 @@ const AccordionItem = ({
                   <View style={{alignItems: 'center'}}>
                     <MyText
                       // text={'Tuesday, May 23, 2013 12:53 PM'}
+                      text={`Survey completed`}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={getTextColor(item.is_completed, true)}
+                      style={{marginBottom: 10}}
+                    />
+                    <MyText
+                      // text={'Tuesday, May 23, 2013 12:53 PM'}
                       text={item?.complete_date}
                       fontFamily="medium"
                       fontSize={20}

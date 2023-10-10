@@ -400,6 +400,10 @@ const CourseDetails = ({navigation, dispatch, route}) => {
     }
     setShowLoader(false);
   };
+  const openInBrowser = link => {
+    console.log('openPdfInBrowser', link);
+    Linking.openURL(link);
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -682,6 +686,29 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               />
               <MyButton
                 text="Buy Now"
+                style={{
+                  width: '48%',
+                  height: 50,
+                  backgroundColor: Colors.THEME_GOLD,
+                }}
+              />
+            </View>
+          ) : null}
+          {productDetails?.courseCompleted ? (
+            <View style={styles.buttonsRow}>
+              <MyButton
+                text="View Certificate"
+                onPress={() => {
+                  openInBrowser(item?.certificate);
+                }}
+                style={{
+                  width: '48%',
+                  height: 50,
+                  backgroundColor: Colors.THEME_BROWN,
+                }}
+              />
+              <MyButton
+                text="Download Certificate"
                 style={{
                   width: '48%',
                   height: 50,

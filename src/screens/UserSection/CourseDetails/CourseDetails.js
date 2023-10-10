@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  Linking,
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -400,8 +401,9 @@ const CourseDetails = ({navigation, dispatch, route}) => {
     }
     setShowLoader(false);
   };
-  const openInBrowser = link => {
-    console.log('openPdfInBrowser', link);
+  const openInBrowser = file => {
+    console.log('openPdfInBrowser', file);
+    const link = `https://docs.google.com/viewerng/viewer?url=${file}`;
     Linking.openURL(link);
   };
   //UI
@@ -699,7 +701,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               <MyButton
                 text="View Certificate"
                 onPress={() => {
-                  openInBrowser(item?.certificate);
+                  openInBrowser(productDetails?.certificate);
                 }}
                 style={{
                   width: '48%',

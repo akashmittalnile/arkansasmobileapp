@@ -560,9 +560,13 @@ const MyOrders = ({navigation, dispatch}) => {
                 />
               </View>
               <View style={styles.crtrRow}>
-                <Image
+                {/* <Image
                   source={require('assets/images/profile-circle.png')}
                   // style={styles.crtrImg}
+                /> */}
+                <Image
+                  source={{uri: item?.content_creator_image}}
+                  style={styles.createImgStyle}
                 />
                 <MyText
                   text={item.content_creator_name}
@@ -685,9 +689,13 @@ const MyOrders = ({navigation, dispatch}) => {
                 />
               </View>
               <View style={styles.crtrRow}>
-                <Image
+                {/* <Image
                   source={require('assets/images/profile-circle.png')}
                   // style={styles.crtrImg}
+                /> */}
+                <Image
+                  source={{uri: item?.content_creator_image}}
+                  style={styles.createImgStyle}
                 />
                 <MyText
                   text={item.content_creator_name}

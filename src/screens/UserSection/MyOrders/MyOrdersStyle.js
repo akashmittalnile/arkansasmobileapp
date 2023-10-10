@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 22,
-    width:'80%'
+    width: '80%',
   },
   bottomRow: {
     flexDirection: 'row',
@@ -106,5 +106,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 8,
+  },
+  createImgStyle: {
+    height: 13,
+    width: 13,
+    borderRadius: 13 / 2,
   },
 });

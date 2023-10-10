@@ -131,4 +131,9 @@ export const styles = StyleSheet.create({
     width: 31,
     borderRadius: 31 / 2,
   },
+  createImgStyle: {
+    height: 13,
+    width: 13,
+    borderRadius: 13 / 2,
+  },
 });

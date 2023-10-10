@@ -134,6 +134,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
   const [showNotPurchasedModal, setShowNotPurchasedModal] = useState(false);
 
   useEffect(() => {
+    console.log('userToken', userToken);
     getProductDetails();
   }, []);
   const getProductDetails = async () => {
@@ -460,9 +461,13 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               />
             </View>
             <View style={styles.crtrRow}>
-              <Image
+              {/* <Image
                 source={require('assets/images/profile-circle.png')}
                 // style={styles.crtrImg}
+              /> */}
+              <Image
+                source={{uri: productDetails?.content_creator_image}}
+                style={styles.createImgStyle}
               />
               <MyText
                 text={productDetails?.content_creator_name}

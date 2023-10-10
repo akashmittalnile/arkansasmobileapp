@@ -351,9 +351,13 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               />
             </View>
             <View style={styles.crtrRow}>
-              <Image
+              {/* <Image
                 source={require('assets/images/profile-circle.png')}
                 // style={styles.crtrImg}
+              /> */}
+              <Image
+                source={{uri: productDetails?.creator_image}}
+                style={styles.createImgStyle}
               />
               <MyText
                 text={productDetails?.creator_name}

@@ -223,7 +223,7 @@ const AccordionItem = ({
               ) : null}
             </View>
           </View>
-          {item.type === 'video' ? (
+          {item.is_completed == '1' ? (
             <Image
               source={require('assets/images/tick-circle-white.png')}
               style={{}}

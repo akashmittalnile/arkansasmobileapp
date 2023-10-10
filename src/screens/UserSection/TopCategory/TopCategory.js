@@ -111,10 +111,25 @@ const TopCategory = ({navigation, dispatch, route}) => {
     }
     setShowLoader(false);
   };
+  const gotoSearch = id => {
+    if (route?.params?.typeParam == '1') {
+      gotoSearchCourseByCategory(id);
+    } else {
+      gotoSearchProductByCategory(id);
+    }
+  };
+  const gotoSearchCourseByCategory = id => {
+    navigation.navigate(ScreenNames.SEARCH_COURSE_BY_CATEGORY, {id});
+  };
+  const gotoSearchProductByCategory = id => {
+    navigation.navigate(ScreenNames.SEARCH_PRODUCT_BY_CATEGORY, {id});
+  };
 
   const renderCategory = ({item}) => {
     return (
-      <View style={styles.categoryContainer}>
+      <TouchableOpacity
+        onPress={() => gotoSearch(item?.id)}
+        style={styles.categoryContainer}>
         <Image source={{uri: item.category_image}} style={styles.catImg} />
         <MyText
           text={item.category_name}
@@ -124,7 +139,7 @@ const TopCategory = ({navigation, dispatch, route}) => {
           textColor={Colors.LIGHT_GREY}
           style={{marginTop: 5}}
         />
-      </View>
+      </TouchableOpacity>
     );
   };
   const filterCategoriesByName = text => {

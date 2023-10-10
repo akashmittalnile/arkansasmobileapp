@@ -694,7 +694,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               />
             </View>
           ) : null}
-          {productDetails?.courseCompleted ? (
+          {productDetails?.isPurchased && productDetails?.courseCompleted == '1' ? (
             <View style={styles.buttonsRow}>
               <MyButton
                 text="View Certificate"

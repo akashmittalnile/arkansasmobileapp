@@ -446,7 +446,7 @@ const Home = ({navigation, dispatch}) => {
               fontSize={13}
               textColor={Colors.THEME_GOLD}
               letterSpacing={0.13}
-              style={{marginLeft: 10, width: '80%'}}
+              style={{marginLeft: 10, width: '60%'}}
             />
           </View>
           <View style={styles.topRightRow}>

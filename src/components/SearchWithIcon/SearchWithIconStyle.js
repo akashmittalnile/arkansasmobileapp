@@ -38,4 +38,13 @@ export const styles = StyleSheet.create({
     shadowRadius: 15,
     elevation: 2,
   },
+  dot:{
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    backgroundColor: Colors.THEME_BROWN,
+    height: 10,
+    width: 10,
+    borderRadius: 10 / 2,
+  }
 });

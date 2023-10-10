@@ -116,6 +116,7 @@ const Signup = ({navigation}) => {
       formaData.append('email', email);
       formaData.append('phone', phone);
       formaData.append('password', password);
+      formaData.append('role', '1');
       console.log('signUpUser formaData', formaData);
       const resp = await Service.postApi(Service.REGISTER, formaData);
       console.log('signUpUser resp', resp?.data);

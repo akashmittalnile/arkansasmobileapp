@@ -77,6 +77,8 @@ const Login = ({navigation}) => {
         signInData.append('email', email);
         signInData.append('password', password);
         signInData.append('fcm_token', fcmToken);
+        signInData.append('role', '1');
+        console.log('signInUser formData', signInData);
         const resp = await Service.postApi(Service.LOGIN, signInData);
         console.log('signInUser resp', resp?.data);
         if (resp?.data?.status) {

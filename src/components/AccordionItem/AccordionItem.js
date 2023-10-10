@@ -318,7 +318,8 @@ const AccordionItem = ({
                 ) : item?.is_completed == '1' ? (
                   <View style={{alignItems: 'center'}}>
                     <MyText
-                      text={'Tuesday, May 23, 2013 12:53 PM'}
+                      // text={'Tuesday, May 23, 2013 12:53 PM'}
+                      text={item?.complete_date}
                       fontFamily="medium"
                       fontSize={20}
                       textColor={getTextColor(item.is_completed, true)}
@@ -399,7 +400,7 @@ const AccordionItem = ({
                       }}
                     />
                     <MyText
-                      text={'You answered 2 out of 9 questions correctly'}
+                      text={`You answered ${item?.total_correct} out of ${item?.total_question} questions correctly`}
                       fontFamily="medium"
                       fontSize={20}
                       textAlign="center"

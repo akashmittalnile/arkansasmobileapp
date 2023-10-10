@@ -406,10 +406,10 @@ const CourseDetails = ({navigation, dispatch, route}) => {
     const link = `https://docs.google.com/viewerng/viewer?url=${file}`;
     Linking.openURL(link);
   };
-  const downloadCertificate = (link) => {
+  const downloadCertificate = link => {
     console.log('openPdfInBrowser', link);
     Linking.openURL(link);
-  }
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -700,7 +700,8 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               />
             </View>
           ) : null}
-          {productDetails?.isPurchased && productDetails?.courseCompleted == '1' ? (
+          {productDetails?.isPurchased &&
+          productDetails?.courseCompleted == '1' ? (
             <View style={styles.buttonsRow}>
               <MyButton
                 text="View Certificate"
@@ -712,7 +713,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                   height: 50,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                />
+              />
               <MyButton
                 text="Download Certificate"
                 onPress={() => {

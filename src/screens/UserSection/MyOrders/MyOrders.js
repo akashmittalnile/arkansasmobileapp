@@ -36,6 +36,7 @@ import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import OrdersFilter from '../../../modals/OrdersFilter/OrdersFilter';
 import Review from '../../../modals/Review/Review';
+import {createThumbnail} from 'react-native-create-thumbnail';
 
 const courseList = [
   {
@@ -94,7 +95,7 @@ const MyOrders = ({navigation, dispatch}) => {
   const userToken = useSelector(state => state.user.userToken);
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
-  const [showOrdersFilterModal, setShowOrdersFilterModal] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [selectedTab, setSelectedTab] = useState('1');
@@ -157,6 +158,29 @@ const MyOrders = ({navigation, dispatch}) => {
   const [courseData, setCourseData] = useState([]);
   const [productData, setProductData] = useState([]);
 
+  const [courseCategries, setCourseCategries] = useState([]);
+  const [selectedCourseCategries, setSelectedCourseCategries] = useState([]);
+  const [tempSelectedCourseCategries, setTempSelectedCourseCategries] =
+    useState([]);
+  const [productCategries, setProductCategries] = useState([]);
+  const [selectedProductCategries, setSelectedProductCategries] = useState([]);
+  const [TempSelectedProductCategries, setTempSelectedProductCategries] =
+    useState([]);
+  const [priceFilterValues, setPriceFilterValues] = useState([
+    {
+      id: '1',
+      name: 'High to Low',
+    },
+    {
+      id: '2',
+      name: 'Low to High',
+    },
+  ]);
+  const [tempSelectedPriceFilter, setTempSelectedPriceFilter] = useState('');
+  const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
+  const [selectedRatingValues, setSelectedRatingValues] = useState([]);
+  const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getMyOrders();
@@ -176,11 +200,18 @@ const MyOrders = ({navigation, dispatch}) => {
       console.log('getMyOrders resp', resp?.data);
       if (resp?.data?.status) {
         if (type === '1') {
-          //  const updatedData = await generateThumb(resp?.data?.data)
-          //  setCourseData(updatedData);
-          setCourseData(resp?.data?.data);
+           const updatedData = await generateThumb(resp?.data?.data)
+           setCourseData(updatedData);
         } else {
           setProductData(resp?.data?.data);
+        }
+        if (resp?.data?.category) {
+          setCourseCategries(
+            resp?.data?.category?.filter(el => el?.type == '1'),
+          );
+          setProductCategries(
+            resp?.data?.category?.filter(el => el?.type == '2'),
+          );
         }
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
@@ -190,13 +221,229 @@ const MyOrders = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
+  const generateThumb = async data => {
+    // console.log('generateThumb');
+    let updatedData = [...data];
+    try {
+      updatedData = await Promise.all(
+        data?.map?.(async el => {
+          // console.log('el.introduction_video trending', el.introduction_video);
+          const thumb = await createThumbnail({
+            url: el?.introduction_video,
+            timeStamp: 1000,
+          });
+          return {
+            ...el,
+            thumb,
+          };
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+    // console.log('thumb data SearchAllType', updatedData);
+    return updatedData;
+  };
+  const isFilterApplied = () => {
+    if (showSelectedCategories()) {
+      return true;
+    } else if (selectedPriceFilter !== '') {
+      return true;
+    } else if (selectedRatingValues?.length > 0) {
+      return true;
+    }
+    return false;
+  };
+  const showSelectedCategories = () => {
+    if (selectedTab === '1' && selectedCourseCategries?.length > 0) {
+      return true;
+    } else if (selectedTab === '2' && selectedProductCategries?.length > 0) {
+      return true;
+    }
+    return false;
+  };
+  const ShowSelectedFilters = () => {
+    return (
+      <View>
+        {showSelectedCategories() ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+              marginTop: 10,
+            }}>
+            <MyText
+              text={'Categorie(s): '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
 
+            {selectedTab === '1'
+              ? selectedCourseCategries?.map((el, index) => (
+                  <View
+                    key={index?.toString()}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginRight: 10,
+                    }}>
+                    <MyText
+                      text={el}
+                      fontFamily="regular"
+                      fontSize={13}
+                      textColor={Colors.THEME_BROWN}
+                    />
+                    <TouchableOpacity
+                      onPress={() => removeFilter('cat', el)}
+                      style={{
+                        marginLeft: 5,
+                        marginTop: 3,
+                      }}>
+                      <Image
+                        source={require('assets/images/cancelfilter.png')}
+                        style={{height: 10, width: 10}}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))
+              : selectedProductCategries?.map((el, index) => (
+                  <View
+                    key={index?.toString()}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginRight: 10,
+                    }}>
+                    <MyText
+                      key={el}
+                      text={el}
+                      fontFamily="regular"
+                      fontSize={13}
+                      textColor={Colors.THEME_BROWN}
+                    />
+                    <TouchableOpacity
+                      onPress={() => removeFilter('cat', el)}
+                      style={{
+                        marginLeft: 5,
+                        marginTop: 3,
+                      }}>
+                      <Image
+                        source={require('assets/images/cancelfilter.png')}
+                        style={{height: 10, width: 10}}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+          </View>
+        ) : null}
+        {selectedPriceFilter !== '' ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+            }}>
+            <MyText
+              text={'Price: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            <MyText
+              text={
+                priceFilterValues?.find(el => el.id === selectedPriceFilter)
+                  ?.name
+              }
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+            />
+            <TouchableOpacity
+              onPress={() => removeFilter('price', selectedPriceFilter)}
+              style={{
+                marginLeft: 5,
+                marginTop: 3,
+              }}>
+              <Image
+                source={require('assets/images/cancelfilter.png')}
+                style={{height: 10, width: 10}}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+        {selectedRatingValues?.length > 0 ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              backgroundColor: '#ede5ca',
+              marginRight: 'auto',
+              marginTop: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 10,
+            }}>
+            <MyText
+              text={'Rating: '}
+              fontFamily="regular"
+              fontSize={13}
+              textColor={Colors.THEME_BROWN}
+              style={{}}
+            />
+            {selectedRatingValues?.map((el, index) => (
+              <View
+                key={index?.toString()}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginRight: 10,
+                }}>
+                <MyText
+                  key={el}
+                  text={`${el} and more`}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_BROWN}
+                />
+                <TouchableOpacity
+                  onPress={() => removeFilter('rating', el)}
+                  style={{
+                    marginLeft: 5,
+                    marginTop: 3,
+                  }}>
+                  <Image
+                    source={require('assets/images/cancelfilter.png')}
+                    style={{height: 10, width: 10}}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        ) : null}
+      </View>
+    );
+  };
   const multiSliderValuesChange = values => {
     setMultiSliderValue(values);
   };
 
-  const openOrdersFilterModal = () => {
-    setShowOrdersFilterModal(true);
+  const openFilterModal = () => {
+    setShowFilterModal(true);
   };
   const openReviewModal = (id, type) => {
     setSelectedId(id);
@@ -282,7 +529,7 @@ const MyOrders = ({navigation, dispatch}) => {
         </View>
         <View style={styles.courseSubContainer}>
           <ImageBackground
-            source={require('assets/images/rectangle-1035.png')}
+            source={{uri: item?.thumb?.path}}
             style={styles.crseImg}
             imageStyle={{borderRadius: 10}}></ImageBackground>
           <View style={{marginLeft: 11, width: width * 0.55}}>
@@ -500,16 +747,18 @@ const MyOrders = ({navigation, dispatch}) => {
           style={styles.mainView}>
           <SearchWithIcon
             value={searchValue}
-            setValue={setSearchValue}
             icon={<Image source={require('assets/images/filter.png')} />}
             placeholder="Search..."
-            onPress={openOrdersFilterModal}
-            // style={{
-            //   width: Constant.width - 40,
-            //   alignSelf: 'center',
-            //   marginTop: -25,
-            // }}
+            onPress={openFilterModal}
+              onChangeText={e => {
+              console.log('SearchWithIcon', e);
+              setSearchValue(e);
+              applyFilters2(e);
+            }}
+            style={{marginTop: 10}}
+            showDot={isFilterApplied}
           />
+          <ShowSelectedFilters />
           <View style={styles.tabsContainer}>
             {tabs?.map(item => (
               <TouchableOpacity
@@ -549,8 +798,8 @@ const MyOrders = ({navigation, dispatch}) => {
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
         <OrdersFilter
-          visible={showOrdersFilterModal}
-          setVisibility={setShowOrdersFilterModal}
+          visible={showFilterModal}
+          setVisibility={setShowFilterModal}
           onClearFilter={onClearFilter}
           onApplyFilter={onApplyFilter}
           orderTypes={orderTypes}

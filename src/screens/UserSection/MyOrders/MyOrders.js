@@ -338,7 +338,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 style={{marginLeft: 5}}
               />
             </TouchableOpacity>
-            {item.order_status !== 'Pending' ? (
+            {item.isReviewed == '0' ? (
               <MyButton
                 text="WRITE YOUR REVIEW HERE"
                 style={{
@@ -461,7 +461,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 />
               </View>
             </View>
-            {item.order_status === 'Picked-up' ? (
+            {item.isReviewed == '0' ? (
               <MyButton
                 text="WRITE YOUR REVIEW HERE"
                 style={{

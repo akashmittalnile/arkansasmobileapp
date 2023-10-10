@@ -211,7 +211,8 @@ const Home = ({navigation, dispatch}) => {
   const generateThumb = async data => {
     console.log('generateThumb');
     let trending_course_data = [...data?.trending_course];
-    let suggested_course_data = [...data?.suggested_course];
+    // let suggested_course_data = [...data?.suggested_course];
+    let special_course_data = [...data?.special_course];
     try {
       trending_course_data = await Promise.all(
         data?.trending_course?.map?.(async el => {
@@ -230,8 +231,8 @@ const Home = ({navigation, dispatch}) => {
       console.error('Error generating thumbnails:', error);
     }
     try {
-      suggested_course_data = await Promise.all(
-        data?.suggested_course?.map?.(async el => {
+      special_course_data = await Promise.all(
+        data?.special_course?.map?.(async el => {
           // console.log('el.introduction_video suggested', el.introduction_video);
           const thumb = await createThumbnail({
             url: el.introduction_video,
@@ -246,11 +247,29 @@ const Home = ({navigation, dispatch}) => {
     } catch (error) {
       console.error('Error generating thumbnails:', error);
     }
+    // try {
+    //   suggested_course_data = await Promise.all(
+    //     data?.suggested_course?.map?.(async el => {
+    //       // console.log('el.introduction_video suggested', el.introduction_video);
+    //       const thumb = await createThumbnail({
+    //         url: el.introduction_video,
+    //         timeStamp: 1000,
+    //       });
+    //       return {
+    //         ...el,
+    //         thumb,
+    //       };
+    //     }),
+    //   );
+    // } catch (error) {
+    //   console.error('Error generating thumbnails:', error);
+    // }
 
     // console.log('trending_course_data', trending_course_data);
     // console.log('suggested_course_data', suggested_course_data);
-    data.suggested_course = suggested_course_data;
+    // data.suggested_course = suggested_course_data;
     data.trending_course = trending_course_data;
+    data.special_course = special_course_data;
     console.log('thumb data', data);
     // const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
     return data;
@@ -264,6 +283,9 @@ const Home = ({navigation, dispatch}) => {
   };
   const gotoSuggestedCourses = () => {
     navigation.navigate(ScreenNames.SUGGESTED_COURSES);
+  };
+  const gotoSuperAdminCourses = () => {
+    navigation.navigate(ScreenNames.SUPER_ADMIN_COURSES);
   };
   const gotoTopCategory = typeParam => {
     navigation.navigate(ScreenNames.TOP_CATEGORY, {typeParam});
@@ -698,7 +720,33 @@ const Home = ({navigation, dispatch}) => {
               style={{textAlign: 'center', marginTop: 20}}
             />
           )}
-          {homeData?.suggested_course?.length > 0 ? (
+          {homeData?.special_course?.length > 0 ? (
+            <View>
+              <ViewAll
+                text="Arkansas Courses"
+                onPress={gotoSuperAdminCourses}
+                // onPress={gotoSuggestedProducts}
+                style={{marginTop: 25}}
+              />
+              <FlatList
+                data={homeData?.special_course}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{marginTop: 15}}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderCourse}
+              />
+            </View>
+          ) : (
+            <MyText
+              text={`No Arkansas Courses found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
+          )}
+          {/* {homeData?.suggested_course?.length > 0 ? (
             <View>
               <ViewAll
                 text="Suggested Courses"
@@ -723,7 +771,7 @@ const Home = ({navigation, dispatch}) => {
               textColor={'#455A64'}
               style={{textAlign: 'center', marginTop: 20}}
             />
-          )}
+          )} */}
           {homeData?.all_product?.length > 0 ? (
             <View>
               <ViewAll

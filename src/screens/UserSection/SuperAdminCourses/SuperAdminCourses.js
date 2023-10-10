@@ -149,7 +149,9 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
     }
     setShowLoader2(false);
   };
-
+  const gotoCourseDetails = (id, type) => {
+    navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
+  };
   const generateThumb = async data => {
     // console.log('generateThumb');
     let updatedData = [...data];
@@ -541,7 +543,7 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
 
   const renderCourse = ({item}) => {
     return (
-      <View style={styles.courseContainer}>
+      <TouchableOpacity onPress={() => gotoCourseDetails(item?.id, '1')} style={styles.courseContainer}>
         <ImageBackground
           source={{uri: item?.thumb?.path}}
           style={styles.crseImg}
@@ -603,7 +605,7 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   //UI

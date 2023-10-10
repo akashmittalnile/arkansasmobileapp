@@ -506,7 +506,7 @@ const MyOrders = ({navigation, dispatch}) => {
 
   const renderCourse = ({item}) => {
     return (
-      <View style={styles.course_valid_date}>
+      <View style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText
             text={`Course Valid Date: ${item.course_valid_date}`}

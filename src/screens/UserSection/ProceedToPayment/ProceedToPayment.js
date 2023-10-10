@@ -106,22 +106,11 @@ const ProceedToPayment = ({navigation, dispatch}) => {
     index: 1,
     routes: [{name: ScreenNames.BOTTOM_TAB}],
   });
-  const handlePayClick = async (order_id, total_amount) => {
+  const handlePayClick = async (order_id, total_amount, stripeToken) => {
     // setShowLoader(true);
     try {
-      console.log('card', card);
-      const res = await createToken({card, type: 'Card'});
-      console.log('res stripe', res);
-      if (res?.error) {
-        if (res?.error?.message) {
-          Toast.show(res?.error?.message, Toast.SHORT);
-        } else {
-          Toast.show('Card details incorrect', Toast.SHORT);
-        }
-        return;
-      }
       const myData = new FormData();
-      myData.append('stripeToken', res?.token?.id);
+      myData.append('stripeToken', stripeToken);
       myData.append('order_id', order_id);
       myData.append('total_amount', total_amount);
       console.log('handlePayClick postData', myData);
@@ -155,6 +144,17 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       Toast.show('Please complete card details', Toast.SHORT);
       return;
     }
+    console.log('card', card);
+    const res = await createToken({card, type: 'Card'});
+    console.log('res stripe', res);
+    if (res?.error) {
+      if (res?.error?.message) {
+        Toast.show(res?.error?.message, Toast.SHORT);
+      } else {
+        Toast.show('Card details incorrect', Toast.SHORT);
+      }
+      return;
+    }
     const postData = new FormData();
     // postData.append('card_id', 5);
     console.log('onConfirm postData', postData);
@@ -167,7 +167,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       );
       console.log('onConfirm resp', resp?.data);
       if (resp?.data?.status) {
-        handlePayClick(resp?.data?.order_id, resp?.data?.total_amount);
+        handlePayClick(resp?.data?.order_id, resp?.data?.total_amount, res?.token?.id);
         // Toast.show(resp.data.message, Toast.SHORT);
         // openSuccessfulyPurchasedModal();
         // navigation.dispatch(resetIndexGoToUserBottomTab);

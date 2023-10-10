@@ -306,6 +306,29 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       setShowLoader(false);
     }
   };
+  const addToCart = async (object_id, object_type, cart_value) => {
+    const postData = new FormData();
+    postData.append('object_id', object_id);
+    postData.append('object_type', object_type);
+    postData.append('cart_value', cart_value);
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ADD_TO_CART,
+        postData,
+      );
+      console.log('addToCart resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message, Toast.SHORT);
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in addToCart', error);
+    }
+    setShowLoader(false);
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -476,6 +499,9 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           <View style={styles.buttonsRow}>
             <MyButton
               text="Add to Cart"
+              onPress={() => {
+                addToCart(productDetails?.id, '2', productDetails?.price);
+              }}
               style={{
                 width: '48%',
                 height: 50,

@@ -221,10 +221,12 @@ const Cart = ({navigation, dispatch}) => {
               />
             </View>
             <View style={styles.crtrRow}>
-              <Image
-                source={require('assets/images/profile-circle.png')}
-                // style={styles.crtrImg}
-              />
+              {item?.type == '2' ? (
+                <Image
+                  source={{uri: item?.creator_image}}
+                  style={styles.createImgStyle}
+                />
+              ) : null}
               <MyText
                 text={
                   item?.type == '1' ? item?.category_name : item.creator_name

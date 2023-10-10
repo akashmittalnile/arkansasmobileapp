@@ -148,4 +148,9 @@ export const styles = StyleSheet.create({
     borderColor: '#ECECEC',
     borderWidth: 1
   },
+  createImgStyle: {
+    height: 13,
+    width: 13,
+    borderRadius: 13 / 2,
+  },
 });

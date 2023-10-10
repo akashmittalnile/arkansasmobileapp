@@ -410,18 +410,50 @@ const AccordionItem = ({
                   </ImageBackground>
                 ) : null
               ) : null}
-              {item.type === 'survey'
-                ? item.chapter_question?.map((sur, surIndex) => (
-                    <View key={surIndex?.toString()}>
-                      <Text>{sur?.title}</Text>
-                      {sur?.chapter_option?.map((opt, optIndex) => (
-                        <View key={optIndex?.toString()}>
-                          <Text>{opt?.value}</Text>
-                        </View>
-                      ))}
-                    </View>
-                  ))
-                : null}
+              {item.type === 'survey' ? (
+                item?.is_completed == '0' ? (
+                  <View style={{alignItems: 'center'}}>
+                    <Image source={require('assets/images/quiz-info.png')} />
+                    <MyText
+                      text={`Please complete the Survey in which the questions will be related to the sections you have completed till now.`}
+                      textColor={Colors.LIGHT_GREY}
+                      fontSize={18}
+                      fontFamily="regular"
+                      textAlign="center"
+                      style={{marginBottom: 20}}
+                    />
+                    <MyButton
+                      text="Start Survey"
+                      style={{
+                        width: width * 0.4,
+                        height: 46,
+                        backgroundColor: Colors.THEME_BROWN,
+                      }}
+                      onPress={() => {
+                        openQuizInBrowser(item?.survey_url);
+                      }}
+                    />
+                  </View>
+                ) : item?.is_completed == '1' ? (
+                  <View style={{alignItems: 'center'}}>
+                    <MyText
+                      // text={'Tuesday, May 23, 2013 12:53 PM'}
+                      text={item?.complete_date}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={getTextColor(item.is_completed, true)}
+                      style={{marginBottom: 10}}
+                    />
+                    {/* <MyText
+                      text={`${item?.percentage_obtained}% (${item?.passing_percentage}% required to pass)`}
+                      fontFamily="medium"
+                      fontSize={20}
+                      textColor={getTextColor(item.is_completed, true)}
+                      style={{}}
+                    /> */}
+                  </View>
+                ) : null
+              ) : null}
               {item.type === 'pdf' ? (
                 <View style={styles.pdfContainer}>
                   <Image source={require('assets/images/pdf-icon.png')} />

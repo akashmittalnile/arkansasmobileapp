@@ -628,7 +628,7 @@ const SearchAllType = ({navigation, dispatch}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={item?.rating}
+                text={item?.avg_rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}

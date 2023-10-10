@@ -543,7 +543,9 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
 
   const renderCourse = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => gotoCourseDetails(item?.id, '1')} style={styles.courseContainer}>
+      <TouchableOpacity
+        onPress={() => gotoCourseDetails(item?.id, '1')}
+        style={styles.courseContainer}>
         <ImageBackground
           source={{uri: item?.thumb?.path}}
           style={styles.crseImg}

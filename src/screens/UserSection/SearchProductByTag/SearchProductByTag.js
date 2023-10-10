@@ -396,7 +396,7 @@ const SearchProductByTag = ({navigation, dispatch, route}) => {
             <View style={styles.ratingRow}>
               <Image source={require('assets/images/star.png')} />
               <MyText
-                text={item.avg_rating}
+                text={item?.avg_rating}
                 fontFamily="regular"
                 fontSize={13}
                 textColor={Colors.LIGHT_GREY}

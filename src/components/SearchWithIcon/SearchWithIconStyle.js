@@ -40,8 +40,8 @@ export const styles = StyleSheet.create({
   },
   dot:{
     position: 'absolute',
-    top: 5,
-    right: 5,
+    top: 2,
+    right: 2,
     backgroundColor: Colors.THEME_BROWN,
     height: 10,
     width: 10,

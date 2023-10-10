@@ -15,7 +15,7 @@ const SearchWithIcon = ({
   onChangeText,
   icon = <MyIcon.AntDesign name="search1" color={Colors.WHITE} size={24} />,
   onPress = () => {},
-  showDot = false,
+  showDot = () => {},
   style = {},
 }) => {
   //UI
@@ -30,7 +30,7 @@ const SearchWithIcon = ({
       />
       <TouchableOpacity onPress={onPress} style={styles.iconView}>
         {icon}
-        {showDot?
+        {showDot()?
           <View style={styles.dot} />
         :null}
       </TouchableOpacity>

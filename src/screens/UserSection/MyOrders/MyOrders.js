@@ -220,6 +220,7 @@ const MyOrders = ({navigation, dispatch}) => {
 
   const changeSelectedTab = id => {
     setSelectedTab(id);
+    getMyOrders(id);
   };
 
   const gotoStartCourse = () => {
@@ -261,7 +262,7 @@ const MyOrders = ({navigation, dispatch}) => {
       <View style={styles.course_valid_date}>
         <View style={styles.courseTopRow}>
           <MyText
-            text={`Course Valid Date: ${item.courseValidDate}`}
+            text={`Course Valid Date: ${item.course_valid_date}`}
             fontFamily="medium"
             fontSize={12}
             textColor={Colors.LIGHT_GREY}
@@ -372,7 +373,7 @@ const MyOrders = ({navigation, dispatch}) => {
           style={{borderColor: '#ECECEC', marginTop: 11, marginBottom: 5}}
         />
         <MyText
-          text={`Course Completed Date: ${item.complete_course_on}`}
+          text={`Course Completed Date: ${item.course_valid_date}`}
           fontFamily="medium"
           fontSize={12}
           textColor={Colors.LIGHT_GREY}
@@ -386,7 +387,7 @@ const MyOrders = ({navigation, dispatch}) => {
       <View style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText
-            text={`Order ID: ${item.order_id}`}
+            text={`Order ID: ${item?.order_number}`}
             fontFamily="medium"
             fontSize={12}
             textColor={Colors.LIGHT_GREY}
@@ -433,7 +434,7 @@ const MyOrders = ({navigation, dispatch}) => {
                   // style={styles.crtrImg}
                 />
                 <MyText
-                  text={item.creator_name}
+                  text={item.content_creator_name}
                   fontFamily="regular"
                   fontSize={13}
                   numberOfLines={1}
@@ -445,7 +446,7 @@ const MyOrders = ({navigation, dispatch}) => {
             </View>
             <View style={styles.bottomRow}>
               <MyText
-                text={'$' + item.product_price}
+                text={'$' + item?.price}
                 fontFamily="bold"
                 fontSize={14}
                 textColor={Colors.THEME_GOLD}
@@ -478,7 +479,7 @@ const MyOrders = ({navigation, dispatch}) => {
           style={{borderColor: '#ECECEC', marginTop: 11, marginBottom: 5}}
         />
         <MyText
-          text={item.created_date}
+          text={item.order_date}
           fontFamily="medium"
           fontSize={12}
           textColor={Colors.LIGHT_GREY}

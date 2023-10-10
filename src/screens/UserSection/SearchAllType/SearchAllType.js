@@ -526,7 +526,9 @@ const SearchAllType = ({navigation, dispatch}) => {
   };
   const renderCourse = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => gotoCourseDetails(item?.id, '1')} style={styles.courseContainer}>
+      <TouchableOpacity
+        onPress={() => gotoCourseDetails(item?.id, '1')}
+        style={styles.courseContainer}>
         <ImageBackground
           // source={item.courseImg}
           source={{uri: item?.thumb?.path}}
@@ -684,6 +686,16 @@ const SearchAllType = ({navigation, dispatch}) => {
         </View>
       </View>
     );
+  };
+  const isFilterApplied = () => {
+    if (showSelectedCategories()) {
+      return true;
+    } else if (selectedPriceFilter !== '') {
+      return true;
+    } else if (selectedRatingValues?.length > 0) {
+      return true;
+    }
+    return false;
   };
   const showSelectedCategories = () => {
     if (selectedTab === '1' && selectedCourseCategries?.length > 0) {
@@ -912,6 +924,7 @@ const SearchAllType = ({navigation, dispatch}) => {
             onPress={openFilterModal}
             icon={<Image source={require('assets/images/filter.png')} />}
             style={{marginTop: 10}}
+            showDot={isFilterApplied}
           />
           <ShowSelectedFilters />
           {selectedTab === '1' ? (

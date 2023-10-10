@@ -534,7 +534,7 @@ const Home = ({navigation, dispatch}) => {
           <View style={styles.starView}>
             <Image source={require('assets/images/star.png')} />
             <MyText
-              text={item.rating}
+              text={item?.rating}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.LIGHT_GREY}

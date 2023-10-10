@@ -296,7 +296,7 @@ const MyOrders = ({navigation, dispatch}) => {
               <View style={styles.ratingRow}>
                 <Image source={require('assets/images/star.png')} />
                 <MyText
-                  text={item.rating}
+                  text={item?.rating}
                   fontFamily="regular"
                   fontSize={13}
                   textColor={Colors.LIGHT_GREY}
@@ -419,7 +419,7 @@ const MyOrders = ({navigation, dispatch}) => {
               <View style={styles.ratingRow}>
                 <Image source={require('assets/images/star.png')} />
                 <MyText
-                  text={item.rating}
+                  text={item?.rating}
                   fontFamily="regular"
                   fontSize={13}
                   textColor={Colors.LIGHT_GREY}

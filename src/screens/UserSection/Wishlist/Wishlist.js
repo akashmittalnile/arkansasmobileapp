@@ -693,10 +693,12 @@ const Wishlist = ({navigation, dispatch}) => {
     formdata.append('id', id);
     formdata.append('status', status == '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
+    const endPoint =
+      status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE;
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        Service.LIKE_OBJECT_TYPE,
+        endPoint,
         formdata,
       );
       console.log('onLike resp', resp?.data);

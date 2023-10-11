@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {Colors, Constant} from 'global/Index';
+import { width } from '../../../global/Constant';
 
 export const styles = StyleSheet.create({
   container: {
@@ -29,5 +30,28 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     marginTop: 85,
+  },
+  imageViewStyle: {
+    width: 110,
+    height: 110,
+    alignSelf:'center',
+    marginTop: 30,
+    marginBottom: 10
+  },
+  deleteButtonStyle: {
+    position: 'absolute',
+    backgroundColor: Colors.THEME_GOLD,
+    borderRadius: 100,
+    padding: 5,
+    right: 5,
+    top: 5,
+  },
+  addButtonStyle: {
+    position: 'absolute',
+    backgroundColor: Colors.THEME_GOLD,
+    borderRadius: 100,
+    padding: 10,
+    right: 5,
+    bottom: 5,
   },
 });

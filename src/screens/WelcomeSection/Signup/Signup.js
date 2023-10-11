@@ -10,6 +10,8 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   StatusBar,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 //global
 import {Colors, Constant, Images, ScreenNames} from 'global/Index';
@@ -36,9 +38,11 @@ import Divider from '../../../components/Divider/Divider';
 import TextInputWithFlag from '../../../components/TextInputWithFlag/TextInputWithFlag';
 import {CountryPicker} from 'react-native-country-codes-picker';
 import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup';
-import {Service} from '../../../global/Index';
+import {MyIcon, Service} from '../../../global/Index';
 import Toast from 'react-native-simple-toast';
 import CustomLoader from '../../../components/CustomLoader/CustomLoader';
+import SelectImageSource from 'modals/SelectImageSource/SelectImageSource';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const Signup = ({navigation}) => {
   //variables : redux variables
@@ -65,6 +69,8 @@ const Signup = ({navigation}) => {
     },
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showImageSourceModal, setShowImageSourceModal] = useState(false);
+  const [filePath, setFilePath] = useState('');
   const dispatch = useDispatch();
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
@@ -83,7 +89,10 @@ const Signup = ({navigation}) => {
     routes: [{name: ScreenNames.LOGIN}],
   });
   const Validation = () => {
-    if (firstName == '') {
+    if (filePath == '') {
+      Toast.show('Please add Profile Image', Toast.LONG);
+      return;
+    } else if (firstName == '') {
       Toast.show('Please enter First Name', Toast.SHORT);
       return false;
     } else if (lastName == '') {
@@ -111,11 +120,21 @@ const Signup = ({navigation}) => {
     setShowLoader(true);
     try {
       const formaData = new FormData();
+      const imageName = filePath?.uri?.slice(
+        filePath?.uri?.lastIndexOf('/'),
+        filePath?.uri?.length,
+      );
+      formaData.append('profile_image', {
+        name: imageName,
+        type: filePath?.type,
+        uri: filePath?.uri,
+      });
       formaData.append('first_name', firstName);
       formaData.append('last_name', lastName);
       formaData.append('email', email);
       formaData.append('phone', phone);
       formaData.append('password', password);
+      formaData.append('fcm_token', 'jfrjnjf7r47647444yhfhf');
       formaData.append('role', '1');
       console.log('signUpUser formaData', formaData);
       const resp = await Service.postApi(Service.REGISTER, formaData);
@@ -131,6 +150,111 @@ const Signup = ({navigation}) => {
     }
     setShowLoader(false);
   };
+  //function : imp function
+  const openCamera = () => {
+    const options = {
+      width: 1080,
+      height: 1080,
+      cropping: true,
+      mediaType: 'photo',
+      compressImageQuality: 1,
+      compressImageMaxHeight: 1080 / 2,
+      compressImageMaxWidth: 1080 / 2,
+    };
+    launchCamera(options, response => {
+      if (response.didCancel) {
+        Toast.show('User cancelled picking image', Toast.LONG);
+        setShowImageSourceModal(false);
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        Toast.show('Camera not available on device', Toast.LONG);
+        setShowImageSourceModal(false);
+        return;
+      } else if (response.errorCode == 'permission') {
+        Toast.show('Permission not satisfied', Toast.LONG);
+        setShowImageSourceModal(false);
+        return;
+      } else if (response.errorCode == 'others') {
+        Toast.show(response.errorMessage, Toast.LONG);
+        setShowImageSourceModal(false);
+        return;
+      }
+      console.log('Response = ', response.assets[0]);
+      setFilePath(response.assets[0]);
+      setShowImageSourceModal(false);
+    });
+  };
+  //function : imp function
+  const checkCameraPermission = async () => {
+    if (Platform.OS === 'ios') {
+      openCamera();
+    } else {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Storage Permission Required',
+            message:
+              'Application needs access to your storage to access camera',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          openCamera();
+          console.log('Storage Permission Granted.');
+        } else {
+          Toast.show(`Storage Permission Not Granted`, Toast.SHORT);
+          // Alert.alert('Error', 'Storage Permission Not Granted');
+        }
+      } catch (err) {
+        // To handle permission related exception
+        console.log('ERROR' + err);
+      }
+    }
+  };
+  //function : imp function
+  const openLibrary = () => {
+    let options = {
+      title: 'Select Image',
+      customButtons: [
+        {
+          name: 'customOptionKey',
+          title: 'Choose Photo from Custom Option',
+        },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        // Alert.alert('User cancelled camera picker');
+        setShowImageSourceModal(false);
+        Toast.show('User cancelled image picker', Toast.LONG);
+        // Alert.alert('User cancelled image picker');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        setShowImageSourceModal(false);
+        Toast.show('Camera not available on device', Toast.LONG);
+        // Alert.alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        setShowImageSourceModal(false);
+        Toast.show('Permission not satisfied', Toast.LONG);
+        // Alert.alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        setShowImageSourceModal(false);
+        Toast.show(response.errorMessage, Toast.LONG);
+        // Alert.alert(response.errorMessage);
+        return;
+      } else {
+        setFilePath(response.assets[0]);
+        setShowImageSourceModal(false);
+      }
+      setShowImageSourceModal(false);
+    });
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -144,12 +268,55 @@ const Signup = ({navigation}) => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingBottom: '20%'}}>
             <WelcomeHeader text="Sign Up" right="42%" />
+            {filePath == '' ? (
+              <View style={styles.imageViewStyle}>
+                <Image
+                  resizeMode="contain"
+                  borderRadius={100}
+                  source={require('assets/images/user-default.png')}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    setShowImageSourceModal(true);
+                  }}
+                  style={styles.addButtonStyle}>
+                  <MyIcon.AntDesign
+                    name="plus"
+                    color={Colors.WHITE}
+                    size={16}
+                  />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.imageViewStyle}>
+                <Image
+                  resizeMode="cover"
+                  borderRadius={1000}
+                  source={{uri: filePath.uri}}
+                  style={{height: '100%', width: '100%'}}
+                />
+                <TouchableOpacity
+                  // onPress={() => setFilePath('')}
+                  onPress={() => setShowImageSourceModal(true)}
+                  style={styles.addButtonStyle}>
+                  <MyIcon.Feather
+                    name="edit-2"
+                    color={Colors.WHITE}
+                    size={16}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
             <MyText
               text={'Please enter your basic details'}
               fontSize={14}
               fontFamily="medium"
               textColor="black"
-              style={{marginTop: 50, marginBottom: 25}}
+              style={{marginTop: 10, marginBottom: 25}}
             />
             <MyTextInput
               placeholder={'First Name'}
@@ -296,6 +463,12 @@ const Signup = ({navigation}) => {
         />
       </View>
       <CustomLoader showLoader={showLoader} />
+      <SelectImageSource
+        visible={showImageSourceModal}
+        setVisibility={setShowImageSourceModal}
+        openLibrary={openLibrary}
+        openCamera={checkCameraPermission}
+      />
     </SafeAreaView>
   );
 };

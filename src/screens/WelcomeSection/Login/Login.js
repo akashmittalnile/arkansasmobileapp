@@ -76,7 +76,7 @@ const Login = ({navigation}) => {
         const signInData = new FormData();
         signInData.append('email', email);
         signInData.append('password', password);
-        signInData.append('fcm_token', fcmToken);
+        signInData.append('fcm_token', 'jfrjnjf7r47647444yhfhf');
         signInData.append('role', '1');
         console.log('signInUser formData', signInData);
         const resp = await Service.postApi(Service.LOGIN, signInData);

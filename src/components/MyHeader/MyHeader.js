@@ -35,22 +35,22 @@ const MyHeader = ({
   const userInfo = useSelector(state => state.user.userInfo);
   const userToken = useSelector(state => state.user.userToken);
   const userNotifications = useSelector(state => state.user.userNotifications);
-  const [greetingMsg, setGreetingMsg] = useState('')
+  const [greetingMsg, setGreetingMsg] = useState('');
 
   useEffect(() => {
-    getGreetingMessage()
-  }, [])
+    getGreetingMessage();
+  }, []);
 
   const getGreetingMessage = () => {
     const now = new Date();
     const hrs = now.getHours();
-    let msg = "";
+    let msg = '';
 
-    if (hrs >= 0 || hr == 24) msg = "Good Morning,";
-    if (hrs >= 12) msg = "Good Afternoon,";
-    if (hrs >= 16) msg = "Good Evening,";    
-    setGreetingMsg(msg)
-  }
+    if (hrs >= 0 || hr == 24) msg = 'Good Morning,';
+    if (hrs >= 12) msg = 'Good Afternoon,';
+    if (hrs >= 16) msg = 'Good Evening,';
+    setGreetingMsg(msg);
+  };
 
   const resetIndexGoToWelcome = CommonActions.reset({
     index: 1,
@@ -83,7 +83,11 @@ const MyHeader = ({
           <View style={styles.leftContainer}>
             <Image
               resizeMode="contain"
-              source={{uri: personImg}}
+              source={
+                userInfo?.profile_pic
+                  ? {uri: userInfo?.profile_pic}
+                  : require('assets/images/user-default.png')
+              }
               style={styles.personImg}
             />
             <View style={{marginLeft: 10}}>

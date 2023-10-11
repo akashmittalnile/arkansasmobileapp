@@ -176,7 +176,7 @@ const Home = ({navigation, dispatch}) => {
     return unsubscribe;
   }, [navigation]);
   const getHomeData = async () => {
-    setShowLoader(true);
+    !showLoader && setShowLoader(true);
     try {
       const resp = await Service.getApiWithToken(userToken, Service.HOME);
       console.log('getHomeData resp', JSON.stringify(resp?.data));
@@ -233,7 +233,7 @@ const Home = ({navigation, dispatch}) => {
     } catch (error) {
       console.log('error in onLike', error);
     }
-    setShowLoader(false);
+    showLoader && setShowLoader(false);
   };
   const generateThumb = async data => {
     console.log('generateThumb');

@@ -107,7 +107,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
     routes: [{name: ScreenNames.BOTTOM_TAB}],
   });
   const handlePayClick = async (order_id, total_amount, stripeToken) => {
-    // setShowLoader(true);
+    !showLoader && setShowLoader(true);
     try {
       const myData = new FormData();
       myData.append('stripeToken', stripeToken);
@@ -131,7 +131,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
     } catch (error) {
       console.log('error in handlePayClick', error);
     }
-    // setShowLoader(false);
+    setShowLoader(false);
   };
   const onConfirm = async () => {
     if (madePayment) {
@@ -167,7 +167,11 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       );
       console.log('onConfirm resp', resp?.data);
       if (resp?.data?.status) {
-        handlePayClick(resp?.data?.order_id, resp?.data?.total_amount, res?.token?.id);
+        handlePayClick(
+          resp?.data?.order_id,
+          resp?.data?.total_amount,
+          res?.token?.id,
+        );
         // Toast.show(resp.data.message, Toast.SHORT);
         // openSuccessfulyPurchasedModal();
         // navigation.dispatch(resetIndexGoToUserBottomTab);
@@ -177,7 +181,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
     } catch (error) {
       console.log('error in onConfirm', error);
     }
-    setShowLoader(false);
+    showLoader && setShowLoader(false);
   };
 
   const openSuccessfulyPurchasedModal = () => {

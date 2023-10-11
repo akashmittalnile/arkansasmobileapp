@@ -922,7 +922,7 @@ const SearchAllType = ({navigation, dispatch}) => {
             ))}
           </View>
           <SearchWithIcon
-            placeholder="Search by title"
+            placeholder="Search by Title"
             value={searchValue}
             onChangeText={e => {
               console.log('SearchWithIcon', e);

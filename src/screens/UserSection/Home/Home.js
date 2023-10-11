@@ -706,7 +706,7 @@ const Home = ({navigation, dispatch}) => {
           style={styles.mainView}>
           <SearchWithIconDummy
             icon={<Image source={require('assets/images/yellow-seach.png')} />}
-            placeholder="Search by course, creator or product name"
+            placeholder="Search by Course, Creator or Product name"
             onPress={gotoSearchAllType}
           />
           <FlatList
@@ -745,7 +745,7 @@ const Home = ({navigation, dispatch}) => {
           {homeData?.course_category?.length > 0 ? (
             <View>
               <ViewAll
-                text="Browse Courses by categories"
+                text="Browse Courses by Categories"
                 onPress={() => gotoTopCategory('1')}
                 style={{marginTop: 21}}
               />

@@ -598,7 +598,7 @@ const SearchCourseByTag = ({navigation, dispatch, route}) => {
           <SearchWithIcon
             value={searchValue}
             setValue={setSearchValue}
-            placeholder="Search by title"
+            placeholder="Search by Title"
             onChangeText={e => {
               console.log('SearchWithIcon', e);
               setSearchValue(e);

@@ -144,7 +144,7 @@ const Login = ({navigation}) => {
               onPress={gotoForgotPasswordEmail}
               style={styles.forgot}>
               <MyText
-                text={'FORGOT PASSWORD'}
+                text={'FORGOT PASSWORD?'}
                 fontSize={14}
                 fontFamily="medium"
                 textColor={Colors.THEME_GOLD}

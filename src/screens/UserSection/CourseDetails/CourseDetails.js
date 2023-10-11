@@ -15,6 +15,7 @@ import {
   SafeAreaView,
   StatusBar,
   Linking,
+  Platform,
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -50,6 +51,7 @@ import VideoModal from '../../../components/VideoModal/VideoModal';
 import Modal from 'react-native-modal';
 import PrerequisiteModal from '../../../modals/PrerequisiteModal/PrerequisiteModal';
 import CourseNotPurshasedModal from '../../../modals/CourseNotPurchasedModal/CourseNotPurshasedModal';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const data = [
   {
@@ -413,9 +415,68 @@ const CourseDetails = ({navigation, dispatch, route}) => {
     const link = `https://docs.google.com/viewerng/viewer?url=${file}`;
     Linking.openURL(link);
   };
-  const downloadCertificate = link => {
-    console.log('openPdfInBrowser', link);
-    Linking.openURL(link);
+  // const downloadCertificate = link => {
+  //   console.log('openPdfInBrowser', link);
+  //   Linking.openURL(link);
+  // };
+  const downloadCertificate = async link => {
+    console.log('downloadCertificate', link);
+    let pdfUrl = link;
+    let DownloadDir =
+      Platform.OS == 'ios'
+        ? RNFetchBlob.fs.dirs.DocumentDir
+        : RNFetchBlob.fs.dirs.DownloadDir;
+    const {dirs} = RNFetchBlob.fs;
+    const dirToSave =
+      Platform.OS == 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
+    const configfb = {
+      fileCache: true,
+      useDownloadManager: true,
+      notification: true,
+      mediaScannable: true,
+      title: 'Arkansas',
+      path: `${dirToSave}.pdf`,
+    };
+    console.log('here');
+    const configOptions = Platform.select({
+      ios: {
+        fileCache: configfb.fileCache,
+        title: configfb.title,
+        path: configfb.path,
+        appendExt: 'pdf',
+      },
+      android: configfb,
+    });
+    console.log('here2');
+    Platform.OS == 'android'
+      ? RNFetchBlob.config({
+          fileCache: true,
+          addAndroidDownloads: {
+            useDownloadManager: true,
+            notification: true,
+            path: `${DownloadDir}/.pdf`,
+            description: 'Arkansas',
+            title: `course ${productDetails?.title}certificate.pdf`,
+            mime: 'application/pdf',
+            mediaScannable: true,
+          },
+        })
+          .fetch('GET', `${pdfUrl}`)
+          .catch(error => {
+            console.warn(error.message);
+          })
+      : RNFetchBlob.config(configOptions)
+          .fetch('GET', `${pdfUrl}`, {})
+          .then(res => {
+            if (Platform.OS === 'ios') {
+              RNFetchBlob.fs.writeFile(configfb.path, res.data, 'base64');
+              RNFetchBlob.ios.previewDocument(configfb.path);
+            }
+            console.log('The file saved to ', res);
+          })
+          .catch(e => {
+            console.log('The file saved to ERROR', e.message);
+          });
   };
   //UI
   return (

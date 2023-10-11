@@ -37,6 +37,7 @@ import SearchCourseByCategory from 'screens/UserSection/SearchCourseByCategory/S
 import SearchProductByCategory from 'screens/UserSection/SearchProductByCategory/SearchProductByCategory';
 import SearchCourseByTag from 'screens/UserSection/SearchCourseByTag/SearchCourseByTag';
 import SearchProductByTag from 'screens/UserSection/SearchProductByTag/SearchProductByTag';
+import SideMenuLinks from 'screens/UserSection/SideMenuLinks/SideMenuLinks';
 
 const MainStack = () => {
   //variables
@@ -117,6 +118,7 @@ const MainStack = () => {
       <Stack.Screen name={ScreenNames.SEARCH_PRODUCT_BY_CATEGORY} component={SearchProductByCategory} />
       <Stack.Screen name={ScreenNames.SEARCH_COURSE_BY_TAG} component={SearchCourseByTag} />
       <Stack.Screen name={ScreenNames.SEARCH_PRODUCT_BY_TAG} component={SearchProductByTag} />
+      <Stack.Screen name={ScreenNames.SIDE_MENU_LINKS} component={SideMenuLinks} />
     </Stack.Navigator>
   );
 };

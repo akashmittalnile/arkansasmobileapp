@@ -47,6 +47,7 @@ const AccordionItem = ({
   prevChapterSteps,
   isPurchased,
   setShowNotPurchasedModal,
+  gotoSideMenuLinks,
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -311,7 +312,8 @@ const AccordionItem = ({
                         backgroundColor: Colors.THEME_BROWN,
                       }}
                       onPress={() => {
-                        openQuizInBrowser(item?.quiz_url);
+                        // openQuizInBrowser(item?.quiz_url);
+                        gotoSideMenuLinks(item.title, item?.quiz_url);
                       }}
                     />
                   </View>
@@ -396,7 +398,8 @@ const AccordionItem = ({
                         backgroundColor: Colors.THEME_BROWN,
                       }}
                       onPress={() => {
-                        openQuizInBrowser(item?.quiz_url);
+                        // openQuizInBrowser(item?.quiz_url);
+                        gotoSideMenuLinks(item.title, item?.quiz_url)
                       }}
                     />
                     <MyText
@@ -430,7 +433,8 @@ const AccordionItem = ({
                         backgroundColor: Colors.THEME_BROWN,
                       }}
                       onPress={() => {
-                        openQuizInBrowser(item?.survey_url);
+                        // openQuizInBrowser(item?.survey_url);
+                        gotoSideMenuLinks(item.title, item?.survey_url)
                       }}
                     />
                   </View>

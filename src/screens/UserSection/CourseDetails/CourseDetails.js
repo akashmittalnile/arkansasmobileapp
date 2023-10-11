@@ -134,9 +134,12 @@ const CourseDetails = ({navigation, dispatch, route}) => {
   const [showNotPurchasedModal, setShowNotPurchasedModal] = useState(false);
 
   useEffect(() => {
-    console.log('userToken', userToken);
-    getProductDetails();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('userToken', userToken);
+      getProductDetails();
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getProductDetails = async () => {
     const postData = new FormData();
     postData.append('type', route?.params?.type);
@@ -241,6 +244,9 @@ const CourseDetails = ({navigation, dispatch, route}) => {
       id: productDetails?.id,
       type: '1',
     });
+  };
+  const gotoSideMenuLinks = (name, link) => {
+    navigation.navigate(ScreenNames.SIDE_MENU_LINKS, {name, link});
   };
 
   const submitReview = async () => {
@@ -630,6 +636,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                           setPrerequisiteModalText={setPrerequisiteModalText}
                           isPurchased={productDetails?.isPurchased}
                           setShowNotPurchasedModal={setShowNotPurchasedModal}
+                          gotoSideMenuLinks={gotoSideMenuLinks}
                         />
                       );
                     }}

@@ -456,7 +456,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             notification: true,
             path: `${DownloadDir}/.pdf`,
             description: 'Arkansas',
-            title: `course ${productDetails?.title}certificate.pdf`,
+            title: `${productDetails?.title} course certificate.pdf`,
             mime: 'application/pdf',
             mediaScannable: true,
           },

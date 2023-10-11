@@ -39,6 +39,7 @@ import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup'
 import { Service } from '../../../global/Index';
 import Toast from 'react-native-simple-toast';
 import CustomLoader from '../../../components/CustomLoader/CustomLoader';
+import messaging from '@react-native-firebase/messaging';
 
 const Login = ({navigation}) => {
   //variables : redux variables
@@ -50,6 +51,23 @@ const Login = ({navigation}) => {
   const phoneRef = useRef(null);
   const passwordRef = useRef(null);
 
+  const checkToken = async () => {
+    try {
+        const token = await messaging().getToken();
+        if (token) {
+            console.log('fcm token', token);
+            setFcmToken(token);
+        } else {
+            console.log('could not get fcm token');
+        }
+    } catch (error) {
+        console.log('error in getting fcm token', error);
+    }
+};
+//useEffect
+useEffect(() => {
+    checkToken();
+}, []);
   //function : navigation function
   const gotoSignUp = () => {
     navigation.navigate(ScreenNames.SIGN_UP);
@@ -76,7 +94,7 @@ const Login = ({navigation}) => {
         const signInData = new FormData();
         signInData.append('email', email);
         signInData.append('password', password);
-        signInData.append('fcm_token', 'jfrjnjf7r47647444yhfhf');
+        signInData.append('fcm_token', fcmToken);
         signInData.append('role', '1');
         console.log('signInUser formData', signInData);
         const resp = await Service.postApi(Service.LOGIN, signInData);

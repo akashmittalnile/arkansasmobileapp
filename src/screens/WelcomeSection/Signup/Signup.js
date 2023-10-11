@@ -43,6 +43,7 @@ import Toast from 'react-native-simple-toast';
 import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 import SelectImageSource from 'modals/SelectImageSource/SelectImageSource';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import messaging from '@react-native-firebase/messaging';
 
 const Signup = ({navigation}) => {
   //variables : redux variables
@@ -71,12 +72,30 @@ const Signup = ({navigation}) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showImageSourceModal, setShowImageSourceModal] = useState(false);
   const [filePath, setFilePath] = useState('');
+  const [fcmToken, setFcmToken] = useState('');
   const dispatch = useDispatch();
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
   const phoneRef = useRef(null);
   const passwordRef = useRef(null);
 
+  const checkToken = async () => {
+    try {
+        const token = await messaging().getToken();
+        if (token) {
+            console.log('fcm token', token);
+            setFcmToken(token);
+        } else {
+            console.log('could not get fcm token');
+        }
+    } catch (error) {
+        console.log('error in getting fcm token', error);
+    }
+};
+//useEffect
+useEffect(() => {
+    checkToken();
+}, []);
   const openSuccessModal = () => {
     setShowSuccessModal(true);
   };
@@ -134,7 +153,7 @@ const Signup = ({navigation}) => {
       formaData.append('email', email);
       formaData.append('phone', phone);
       formaData.append('password', password);
-      formaData.append('fcm_token', 'jfrjnjf7r47647444yhfhf');
+      formaData.append('fcm_token', fcmToken);
       formaData.append('role', '1');
       console.log('signUpUser formaData', formaData);
       const resp = await Service.postApi(Service.REGISTER, formaData);

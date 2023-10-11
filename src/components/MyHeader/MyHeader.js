@@ -1,6 +1,6 @@
 //import : react components
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, TouchableOpacity, Image, Keyboard, Platform} from 'react-native';
+import {View, TouchableOpacity, Image, Keyboard, Platform, Alert} from 'react-native';
 import {
   DrawerActions,
   useNavigation,
@@ -84,8 +84,8 @@ const MyHeader = ({
             <Image
               resizeMode="contain"
               source={
-                userInfo?.profile_pic
-                  ? {uri: userInfo?.profile_pic}
+                userInfo?.profile_image
+                  ? {uri: userInfo?.profile_image}
                   : require('assets/images/user-default.png')
               }
               style={styles.personImg}

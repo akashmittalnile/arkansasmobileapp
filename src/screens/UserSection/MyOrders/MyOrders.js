@@ -718,7 +718,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 style={{}}
               />
               <View style={styles.iconsRow}>
-                <Image source={require('assets/images/heart-selected.png')} />
+                {/* <Image source={require('assets/images/heart-selected.png')} /> */}
                 <Image
                   source={require('assets/images/share.png')}
                   style={{marginLeft: 10}}

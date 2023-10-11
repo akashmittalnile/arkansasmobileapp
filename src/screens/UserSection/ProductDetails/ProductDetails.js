@@ -234,7 +234,8 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     formdata.append('id', id);
     formdata.append('status', status == '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
-    const endPoint = status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE
+    const endPoint =
+      status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE;
     console.log('onLike endPoint', endPoint);
     try {
       const resp = await Service.postApiWithToken(
@@ -465,7 +466,11 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                 <View style={styles.reviewTopRow}>
                   <View style={styles.reviewTopLeftRow}>
                     <Image
-                      source={{uri: item?.profile_image}}
+                      source={
+                        item?.profile_image
+                          ? {uri: item?.profile_image}
+                          : require('assets/images/user-default.png')
+                      }
                       style={styles.reviewImg}
                     />
                     <MyText

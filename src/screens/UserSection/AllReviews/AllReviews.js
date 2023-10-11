@@ -122,14 +122,14 @@ const AllReviews = ({navigation, dispatch, route}) => {
         Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
         setStarRating(1);
         setReview('');
-        getReviewList()
+        getReviewList();
       } else {
         Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in submitReview', error);
     }
-    setShowReviewModal(false)
+    setShowReviewModal(false);
     setShowLoader(false);
   };
   const openReviewModal = () => {
@@ -162,7 +162,14 @@ const AllReviews = ({navigation, dispatch, route}) => {
               <View key={item.id} style={styles.reviewContainer}>
                 <View style={styles.reviewTopRow}>
                   <View style={styles.reviewTopLeftRow}>
-                    <Image source={{uri: item.img}} style={styles.reviewImg} />
+                    <Image
+                      source={
+                        item?.profile_image
+                          ? {uri: item?.profile_image}
+                          : require('assets/images/user-default.png')
+                      }
+                      style={styles.reviewImg}
+                    />
                     <MyText
                       text={item.user_name}
                       fontFamily="medium"

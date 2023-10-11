@@ -651,7 +651,11 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                 <View style={styles.reviewTopRow}>
                   <View style={styles.reviewTopLeftRow}>
                     <Image
-                      source={{uri: item?.profile_image}}
+                      source={
+                        item?.profile_image
+                          ? {uri: item?.profile_image}
+                          : require('assets/images/user-default.png')
+                      }
                       style={styles.reviewImg}
                     />
                     <MyText

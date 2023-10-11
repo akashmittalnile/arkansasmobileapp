@@ -82,4 +82,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  createImgStyle: {
+    height: 13,
+    width: 13,
+    borderRadius: 13 / 2,
+  },
 });

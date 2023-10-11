@@ -109,7 +109,7 @@ const TrendingCourses = ({navigation, dispatch}) => {
     const postData = new FormData();
     postData.append('limit', 10);
     // postData.append('tag', '')
-    setShowLoader(true);
+    !showLoader && setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
@@ -156,6 +156,34 @@ const TrendingCourses = ({navigation, dispatch}) => {
     }
     // console.log('thumb data SearchAllType', updatedData);
     return updatedData;
+  };
+  const onLike = async (type, id, status) => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append('type', type);
+    formdata.append('id', id);
+    formdata.append('status', status == '1' ? '0' : '1');
+    console.log('onLike formdata', formdata);
+    const endPoint =
+      status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE;
+    console.log('onLike endPoint', endPoint);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        endPoint,
+        formdata,
+      );
+      console.log('onLike resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp.data.message, Toast.SHORT);
+        getCourses();
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in onLike', error);
+    }
+    showLoader && setShowLoader(false);
   };
   const gotoCourseDetails = (id, type) => {
     navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
@@ -537,7 +565,9 @@ const TrendingCourses = ({navigation, dispatch}) => {
 
   const renderCourse = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => gotoCourseDetails(item?.id, '1')} style={styles.courseContainer}>
+      <TouchableOpacity
+        onPress={() => gotoCourseDetails(item?.id, '1')}
+        style={styles.courseContainer}>
         <ImageBackground
           source={{uri: item?.thumb?.path}}
           style={styles.crseImg}
@@ -567,9 +597,13 @@ const TrendingCourses = ({navigation, dispatch}) => {
               />
             </View>
             <View style={styles.crtrRow}>
-              <Image
+              {/* <Image
                 source={require('assets/images/profile-circle.png')}
                 // style={styles.crtrImg}
+              /> */}
+              <Image
+                source={{uri: item?.content_creator_image}}
+                style={styles.createImgStyle}
               />
               <MyText
                 text={item?.content_creator_name}
@@ -591,7 +625,18 @@ const TrendingCourses = ({navigation, dispatch}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image source={require('assets/images/heart-selected.png')} />
+              <TouchableOpacity
+                onPress={() => {
+                  onLike('1', item.id, item?.isWishlist);
+                }}>
+                <Image
+                  source={
+                    item?.isWishlist
+                      ? require('assets/images/heart-selected.png')
+                      : require('assets/images/heart.png')
+                  }
+                />
+              </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}

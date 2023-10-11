@@ -489,7 +489,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             ))
           ) : (
             <MyText
-              text={'No Reviews found!'}
+              text={'No Reviews found'}
               fontFamily="medium"
               fontSize={18}
               textAlign="center"

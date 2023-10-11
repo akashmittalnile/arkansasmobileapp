@@ -675,7 +675,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             ))
           ) : (
             <MyText
-              text={'No Reviews found!'}
+              text={'No Reviews found'}
               fontFamily="medium"
               fontSize={18}
               textAlign="center"
@@ -705,37 +705,38 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               />
             </View>
           ) : null}
-          {productDetails?.isPurchased &&
-          productDetails?.courseCompleted == '1' ? (
-            <View style={styles.buttonsRow}>
-              <MyButton
-                text="View Certificate"
-                onPress={() => {
-                  openInBrowser(productDetails?.certificate);
-                }}
-                style={{
-                  width: '48%',
-                  height: 50,
-                  backgroundColor: Colors.THEME_BROWN,
-                }}
-              />
-              <MyButton
-                text="Download Certificate"
-                onPress={() => {
-                  downloadCertificate(productDetails?.certificate);
-                }}
-                style={{
-                  width: '48%',
-                  height: 50,
-                  backgroundColor: Colors.THEME_GOLD,
-                }}
-              />
-            </View>
-          ) : null}
+
           {productDetails?.isPurchased ? (
             <FAB_Button onPress={openReviewModal} />
           ) : null}
         </ScrollView>
+        {productDetails?.isPurchased &&
+        productDetails?.courseCompleted == '1' ? (
+          <View style={[styles.buttonsRow, {paddingHorizontal: 20}]}>
+            <MyButton
+              text="View Certificate"
+              onPress={() => {
+                openInBrowser(productDetails?.certificate);
+              }}
+              style={{
+                width: '48%',
+                height: 50,
+                backgroundColor: Colors.THEME_BROWN,
+              }}
+            />
+            <MyButton
+              text="Download Certificate"
+              onPress={() => {
+                downloadCertificate(productDetails?.certificate);
+              }}
+              style={{
+                width: '48%',
+                height: 50,
+                backgroundColor: Colors.THEME_GOLD,
+              }}
+            />
+          </View>
+        ) : null}
         <CustomLoader showLoader={showLoader} />
         <Review
           visible={showReviewModal}

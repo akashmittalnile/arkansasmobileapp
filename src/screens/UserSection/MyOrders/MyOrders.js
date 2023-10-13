@@ -473,6 +473,9 @@ const MyOrders = ({navigation, dispatch}) => {
   const gotoStartCourse = () => {
     navigation.navigate(ScreenNames.START_COURSE);
   };
+  const gotoOrderDetails = (order_id) => {
+    navigation.navigate(ScreenNames.ORDER_DETAILS, {order_id});
+  };
 
   const submitReview = async () => {
     if (review?.trim()?.length === 0) {
@@ -596,30 +599,23 @@ const MyOrders = ({navigation, dispatch}) => {
               </View>
             </View>
             <MyText
-                text={'$' + item?.price}
-                fontFamily="bold"
-                fontSize={14}
-                textColor={Colors.THEME_GOLD}
-                letterSpacing={0.14}
-                style={{}}
-              />
-            {/* <TouchableOpacity
-              onPress={gotoStartCourse}
-              style={styles.courseButton}>
-              <Image source={require('assets/images/play.png')} />
-              <MyText
-                text={
-                  item.order_status === 'Pending'
-                    ? 'Resume'
-                    : 'Start over again'
-                }
-                fontFamily="medium"
-                fontSize={13}
-                textColor={Colors.THEME_GOLD}
-                letterSpacing={0.13}
-                style={{marginLeft: 5}}
-              />
-            </TouchableOpacity> */}
+              text={'$' + item?.price}
+              fontFamily="bold"
+              fontSize={14}
+              textColor={Colors.THEME_GOLD}
+              letterSpacing={0.14}
+              style={{}}
+            />
+            <MyButton
+              text="VIEW ORDER DETAILS"
+              style={{
+                width: '90%',
+                height: 40,
+                marginTop: 8,
+                backgroundColor: Colors.THEME_BROWN,
+              }}
+              onPress={() => gotoOrderDetails(item?.order_id)}
+            />
             {/* {item.isReviewed == '0' ? (
               <MyButton
                 text="WRITE YOUR REVIEW HERE"

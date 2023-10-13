@@ -38,6 +38,7 @@ import SearchProductByCategory from 'screens/UserSection/SearchProductByCategory
 import SearchCourseByTag from 'screens/UserSection/SearchCourseByTag/SearchCourseByTag';
 import SearchProductByTag from 'screens/UserSection/SearchProductByTag/SearchProductByTag';
 import SideMenuLinks from 'screens/UserSection/SideMenuLinks/SideMenuLinks';
+import OrderDetails from 'screens/UserSection/OrderDetails/OrderDetails';
 
 const MainStack = () => {
   //variables
@@ -119,6 +120,7 @@ const MainStack = () => {
       <Stack.Screen name={ScreenNames.SEARCH_COURSE_BY_TAG} component={SearchCourseByTag} />
       <Stack.Screen name={ScreenNames.SEARCH_PRODUCT_BY_TAG} component={SearchProductByTag} />
       <Stack.Screen name={ScreenNames.SIDE_MENU_LINKS} component={SideMenuLinks} />
+      <Stack.Screen name={ScreenNames.ORDER_DETAILS} component={OrderDetails} />
     </Stack.Navigator>
   );
 };

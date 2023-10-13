@@ -14,6 +14,7 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   StatusBar,
+  Platform,
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -42,9 +43,33 @@ import BillingTab from './components/BillingTab/BillingTab';
 import AddCard from '../../../modals/AddCard/AddCard';
 import OrderHistoryTab from './components/OrderHistoryTab/OrderHistoryTab';
 import OrderStatus from '../../../modals/OrderStatus/OrderStatus';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const personImg = `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`;
-
+const certificateList = [
+  {
+    id: '1',
+    creatorName: `Max Bryrant`,
+    certificateImg: require('assets/images/certificate-image.png'),
+    certificateName: 'Tattoo Cover-Ups & Transformations',
+    certificateRating: '4.7',
+    certificateFee: '399.00',
+    status: 'Completed',
+    onView: () => {},
+    onDownload: () => {},
+  },
+  {
+    id: '2',
+    creatorName: `Max Bryrant`,
+    certificateImg: require('assets/images/certificate-image.png'),
+    certificateName: 'Tattoo Cover-Ups & Transformations',
+    certificateRating: '4.7',
+    certificateFee: '399.00',
+    status: 'Ongoing',
+    onView: () => {},
+    onDownload: () => {},
+  },
+];
 const Profile = ({navigation, dispatch}) => {
   //variables
   const LINE_HEIGTH = 25;
@@ -92,30 +117,7 @@ const Profile = ({navigation, dispatch}) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   // certificate tab states
-  const [certificateList, setCertificateList] = useState([
-    {
-      id: '1',
-      creatorName: `Max Bryrant`,
-      certificateImg: require('assets/images/certificate-image.png'),
-      certificateName: 'Tattoo Cover-Ups & Transformations',
-      certificateRating: '4.7',
-      certificateFee: '399.00',
-      status: 'Completed',
-      onView: () => {},
-      onDownload: () => {},
-    },
-    {
-      id: '2',
-      creatorName: `Max Bryrant`,
-      certificateImg: require('assets/images/certificate-image.png'),
-      certificateName: 'Tattoo Cover-Ups & Transformations',
-      certificateRating: '4.7',
-      certificateFee: '399.00',
-      status: 'Ongoing',
-      onView: () => {},
-      onDownload: () => {},
-    },
-  ]);
+  const [certificateData, setCertificateData] = useState([]);
   const [orderHistoryData, setOrderHistoryData] = useState([
     {
       id: '1',
@@ -165,21 +167,21 @@ const Profile = ({navigation, dispatch}) => {
     getProfileData();
   }, []);
   const getProfileData = async (id = '1') => {
-    const endPoint = getEndpoint(id)
+    const endPoint = getEndpoint(id);
     console.log('endPoint', endPoint);
     setShowLoader(true);
     try {
       const resp = await Service.getApiWithToken(userToken, endPoint);
       console.log('getProfileData resp', resp?.data);
       if (resp?.data?.status) {
-        if(id === '1'){
-          setProfileTabData(resp?.data?.data)
-        } else if(id === '3'){
-          setCertificatesTabData(resp?.data?.data)
-        } else if(id === '4'){
-          setNotificationsTabData(resp?.data?.data)
-        } else if(id === '5'){
-          setBillingTabData(resp?.data?.data)
+        if (id === '1') {
+          setProfileTabData(resp?.data?.data);
+        } else if (id === '3') {
+          setCertificatesTabData(resp?.data?.data);
+        } else if (id === '4') {
+          setNotificationsTabData(resp?.data?.data);
+        } else if (id === '5') {
+          setBillingTabData(resp?.data?.data);
         }
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
@@ -189,19 +191,80 @@ const Profile = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
-  const setProfileTabData = (data) => {
-    setFirstName(data?.first_name)
-    setLastName(data?.last_name)
-    setEmail(data?.email)
-    setCompany(data?.company)
-    setProfessionalTitle(data?.professional_title)
-    setTimezone(data?.timezone)
-  }
-  const setCertificatesTabData = (data) => {}
-  const setNotificationsTabData = (data) => {}
-  const setBillingTabData = (data) => {
-    setCardList(data)
-  }
+  const downloadCertificate = async (link, title) => {
+    console.log('downloadCertificate', link);
+    let pdfUrl = link;
+    let DownloadDir =
+      Platform.OS == 'ios'
+        ? RNFetchBlob.fs.dirs.DocumentDir
+        : RNFetchBlob.fs.dirs.DownloadDir;
+    const {dirs} = RNFetchBlob.fs;
+    const dirToSave =
+      Platform.OS == 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
+    const configfb = {
+      fileCache: true,
+      useDownloadManager: true,
+      notification: true,
+      mediaScannable: true,
+      title: 'Arkansas',
+      path: `${dirToSave}.pdf`,
+    };
+    console.log('here');
+    const configOptions = Platform.select({
+      ios: {
+        fileCache: configfb.fileCache,
+        title: configfb.title,
+        path: configfb.path,
+        appendExt: 'pdf',
+      },
+      android: configfb,
+    });
+    console.log('here2');
+    Platform.OS == 'android'
+      ? RNFetchBlob.config({
+          fileCache: true,
+          addAndroidDownloads: {
+            useDownloadManager: true,
+            notification: true,
+            path: `${DownloadDir}/.pdf`,
+            description: 'Arkansas',
+            title: `${title} course certificate.pdf`,
+            mime: 'application/pdf',
+            mediaScannable: true,
+          },
+        })
+          .fetch('GET', `${pdfUrl}`)
+          .catch(error => {
+            console.warn(error.message);
+          })
+      : RNFetchBlob.config(configOptions)
+          .fetch('GET', `${pdfUrl}`, {})
+          .then(res => {
+            if (Platform.OS === 'ios') {
+              RNFetchBlob.fs.writeFile(configfb.path, res.data, 'base64');
+              RNFetchBlob.ios.previewDocument(configfb.path);
+            }
+            console.log('The file saved to ', res);
+          })
+          .catch(e => {
+            console.log('The file saved to ERROR', e.message);
+          });
+  };
+  const setProfileTabData = data => {
+    setFirstName(data?.first_name);
+    setLastName(data?.last_name);
+    setEmail(data?.email);
+    setCompany(data?.company);
+    setProfessionalTitle(data?.professional_title);
+    setTimezone(data?.timezone);
+  };
+  const setCertificatesTabData = data => {
+    setCertificateData(data);
+  };
+  const setNotificationsTabData = data => {};
+  const setBillingTabData = data => {
+    setCardList(data);
+  };
 
   const openAddCardModal = () => {
     setShowAddCardModal(true);
@@ -210,9 +273,9 @@ const Profile = ({navigation, dispatch}) => {
     setShowOrderStatusModal(true);
   };
 
-  const deleteCard = async (id) => {
-    const postData = new FormData()
-    postData.append('id', id)
+  const deleteCard = async id => {
+    const postData = new FormData();
+    postData.append('id', id);
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
@@ -222,10 +285,10 @@ const Profile = ({navigation, dispatch}) => {
       );
       console.log('deleteCard resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message, Toast.SHORT)
-        getProfileData('5')
-      }else{
-        Toast.show(resp?.data?.message, Toast.SHORT)
+        Toast.show(resp?.data?.message, Toast.SHORT);
+        getProfileData('5');
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in deleteCard', error);
@@ -235,8 +298,8 @@ const Profile = ({navigation, dispatch}) => {
 
   const changeSelectedTab = id => {
     setSelectedTab(id);
-    if(id !== '2'){
-      getProfileData(id)
+    if (id !== '2') {
+      getProfileData(id);
     }
   };
   const changePasswordValidation = () => {
@@ -254,10 +317,10 @@ const Profile = ({navigation, dispatch}) => {
       return false;
     }
     return true;
-  }
+  };
   const onChangePassword = async () => {
-    if(!changePasswordValidation()){
-      return
+    if (!changePasswordValidation()) {
+      return;
     }
     const postData = new FormData();
     postData.append('current_password', oldPassword);
@@ -272,18 +335,18 @@ const Profile = ({navigation, dispatch}) => {
       );
       console.log('onChangePassword resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message, Toast.SHORT)
-        setOldPassword('')
-        setNewPassword('')
-        setConfirmPassword('')
-      }else{
-        Toast.show(resp?.data?.message, Toast.SHORT)
+        Toast.show(resp?.data?.message, Toast.SHORT);
+        setOldPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in onChangePassword', error);
     }
     setShowLoader(false);
-    closeModal()
+    closeModal();
   };
 
   const renderTab = ({item}) => {
@@ -394,22 +457,24 @@ const Profile = ({navigation, dispatch}) => {
                 onChangePassword={onChangePassword}
               />
             ) : selectedTab == '3' ? (
-              <CertificateTab certificateList={certificateList} />
-            ) 
-            // : selectedTab == '4' ? (
+              <CertificateTab
+                certificateList={certificateData}
+                downloadCertificate={downloadCertificate}
+              />
+            ) : // : selectedTab == '4' ? (
             //   <NotificationsTab
             //     notificationsEnabled={notificationsEnabled}
             //     setNotificationsEnabled={setNotificationsEnabled}
             //   />
-            // ) 
+            // )
             // : selectedTab == '5' ? (
             //   <BillingTab
             //     cardList={cardList}
             //     deleteCard={deleteCard}
             //     openAddCardModal={openAddCardModal}
             //   />
-            // ) 
-            : selectedTab == '6' ? (
+            // )
+            selectedTab == '6' ? (
               <OrderHistoryTab
                 orderHistoryData={orderHistoryData}
                 viewDetails={viewDetails}
@@ -438,16 +503,16 @@ const mapDispatchToProps = dispatch => ({
 });
 export default connect(null, mapDispatchToProps)(Profile);
 
-const getEndpoint = (id) => {
-  let endPoint = ''
-    if(id === '1'){
-      endPoint = Service.PROFILE
-    } else if(id === '3'){
-      endPoint = Service.CERTIFICATES
-    } else if(id === '4'){
-      endPoint = Service.NOTIFICATIONS
-    } else if(id === '5'){
-      endPoint = Service.SAVE_CARD_LISTING
-    }
-    return endPoint
-}
+const getEndpoint = id => {
+  let endPoint = '';
+  if (id === '1') {
+    endPoint = Service.PROFILE;
+  } else if (id === '3') {
+    endPoint = Service.CERTIFICATES;
+  } else if (id === '4') {
+    endPoint = Service.NOTIFICATIONS;
+  } else if (id === '5') {
+    endPoint = Service.SAVE_CARD_LISTING;
+  }
+  return endPoint;
+};

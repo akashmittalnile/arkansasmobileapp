@@ -31,19 +31,39 @@ import Divider from 'components/Divider/Divider';
 import NameEnterValue from '../../../../../components/NameEnterValue/NameEnterValue';
 import MyButton from '../../../../../components/MyButton/MyButton';
 // import {WebView} from 'react-native-webview';
+import Pdf from 'react-native-pdf';
 
-const CertificateTab = ({certificateList}) => {
+const CertificateTab = ({certificateList, downloadCertificate}) => {
   const renderCertificate = ({item}) => {
     return (
       <View style={styles.courseContainer}>
         <View style={styles.courseSubContainer}>
-          <ImageBackground
+          {/* <ImageBackground
             source={item.certificateImg}
             style={styles.crseImg}
-            imageStyle={{borderRadius: 10}}></ImageBackground>
+            imageStyle={{borderRadius: 10}}></ImageBackground> */}
+          <View style={styles.crseImg}>
+            <Pdf
+              source={{uri: item?.download_pdf}}
+              trustAllCerts={false}
+              onLoadComplete={(numberOfPages, filePath) => {
+                console.log(`Number of pages: ${numberOfPages}`);
+              }}
+              onPageChanged={(page, numberOfPages) => {
+                console.log(`Current page: ${page}`);
+              }}
+              onError={error => {
+                console.log(error);
+              }}
+              onPressLink={uri => {
+                console.log(`Link pressed: ${uri}`);
+              }}
+              style={styles.crseImg}
+            />
+          </View>
           <View style={{marginLeft: 11, width: width * 0.55}}>
             <MyText
-              text={item.certificateName}
+              text={item.title}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.LIGHT_GREY}
@@ -53,7 +73,7 @@ const CertificateTab = ({certificateList}) => {
               <View style={styles.ratingRow}>
                 <Image source={require('assets/images/star.png')} />
                 <MyText
-                  text={item.certificateRating}
+                  text={item.avg_rating}
                   fontFamily="regular"
                   fontSize={13}
                   textColor={Colors.LIGHT_GREY}
@@ -67,7 +87,7 @@ const CertificateTab = ({certificateList}) => {
                   // style={styles.crtrImg}
                 />
                 <MyText
-                  text={item.creatorName}
+                  text={item.creator_name}
                   fontFamily="regular"
                   fontSize={13}
                   textColor={Colors.THEME_GOLD}
@@ -96,7 +116,9 @@ const CertificateTab = ({certificateList}) => {
                   marginLeft: 12,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                onPress={item.onDownload}
+                onPress={() =>
+                  downloadCertificate(item?.download_pdf, item?.title)
+                }
               />
             </View>
           </View>

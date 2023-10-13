@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
-import {width} from '../../../../../global/Constant';
+import {width, height} from '../../../../../global/Constant';
 
 export const styles = StyleSheet.create({
   courseContainer: {
@@ -74,5 +74,9 @@ export const styles = StyleSheet.create({
   buttonsRow: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  pdf: {
+    height: 99,
+    width: width * 0.33,
   },
 });

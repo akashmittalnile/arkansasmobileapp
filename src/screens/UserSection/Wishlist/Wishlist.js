@@ -164,13 +164,13 @@ const Wishlist = ({navigation, dispatch}) => {
   }, [selectedTab]);
 
   const getAllType = async (type = '1') => {
-    setShowLoader(true);
+    !showLoader && setShowLoader(true);
     const formdata = new FormData();
     formdata.append('type', type);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        Service.ALL_TYPE_LISTING,
+        Service.WISHLIST,
         formdata,
       );
       // console.log('getAllType resp', resp?.data);
@@ -289,7 +289,7 @@ const Wishlist = ({navigation, dispatch}) => {
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        Service.ALL_TYPE_LISTING,
+        Service.WISHLIST,
         postData,
       );
       console.log('applyFilters resp', resp?.data);
@@ -371,7 +371,7 @@ const Wishlist = ({navigation, dispatch}) => {
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        Service.ALL_TYPE_LISTING,
+        Service.WISHLIST,
         postData,
       );
       console.log('applyFilters resp', resp?.data);
@@ -469,7 +469,7 @@ const Wishlist = ({navigation, dispatch}) => {
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        Service.ALL_TYPE_LISTING,
+        Service.WISHLIST,
         postData,
       );
       console.log('removeFilter resp', resp?.data);
@@ -704,14 +704,14 @@ const Wishlist = ({navigation, dispatch}) => {
       console.log('onLike resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show(resp.data.message, Toast.SHORT);
-        getAllType(type);
+        getAllType(selectedTab);
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
     } catch (error) {
       console.log('error in onLike', error);
     }
-    setShowLoader(false);
+    showLoader && setShowLoader(false);
   };
 
   const changeSelectedTab = id => {
@@ -791,11 +791,11 @@ const Wishlist = ({navigation, dispatch}) => {
             <View style={styles.iconsRow}>
               <TouchableOpacity
                 onPress={() => {
-                  onLike('1', item.id, item.isLike);
+                  onLike('1', item.id, item.isWishlist);
                 }}>
                 <Image
                   source={
-                    item.isLike
+                    item.isWishlist
                       ? require('assets/images/heart-selected.png')
                       : require('assets/images/heart-yellow-outline.png')
                   }
@@ -877,11 +877,11 @@ const Wishlist = ({navigation, dispatch}) => {
             <View style={styles.iconsRow}>
               <TouchableOpacity
                 onPress={() => {
-                  onLike('2', item.id, item.isLike);
+                  onLike('2', item.id, item.isWishlist);
                 }}>
                 <Image
                   source={
-                    item.isLike
+                    item.isWishlist
                       ? require('assets/images/heart-selected.png')
                       : require('assets/images/heart-yellow-outline.png')
                   }

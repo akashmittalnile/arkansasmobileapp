@@ -57,7 +57,7 @@ const SuccessfulyPurchased = ({visible, setVisibility, gotoMyCourses}) => {
           style={{}}
         />
         <MyText
-          text="Thank you for purchasing course . We received your order and Successfully placed. Kindly check the course in My Courses section."
+          text="Thank you for your purchase. You can now take the course by looking it up in the My Course Section"
           textColor={Colors.LIGHT_GREY}
           fontSize={18}
           fontFamily="regular"

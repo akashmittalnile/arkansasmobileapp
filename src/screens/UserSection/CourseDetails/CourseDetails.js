@@ -273,6 +273,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
         Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
         setStarRating(1);
         setReview('');
+        getProductDetails();
       } else {
         Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
       }
@@ -708,7 +709,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
           <View style={{height: 37}}></View>
           <ViewAllSub
             text="Ratings & Reviews"
-            rating={productDetails?.rating}
+            rating={productDetails?.avg_rating}
             reviews={productDetails?.review_count}
             onPress={gotoAllReviews}
             style={{marginBottom: 17}}

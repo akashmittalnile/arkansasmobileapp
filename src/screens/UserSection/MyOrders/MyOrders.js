@@ -526,7 +526,7 @@ const MyOrders = ({navigation, dispatch}) => {
             <View style={styles.dot} />
             <MyText
               // text={item.status}
-              text={item?.course_completed == '1' ? 'Completed' : 'Pending'}
+              text={item?.course_completed == '1' ? 'Completed' : 'Ongoing'}
               fontFamily="medium"
               fontSize={13}
               textColor={Colors.THEME_BROWN}
@@ -540,6 +540,22 @@ const MyOrders = ({navigation, dispatch}) => {
             style={styles.crseImg}
             imageStyle={{borderRadius: 10}}></ImageBackground>
           <View style={{marginLeft: 11, width: width * 0.55}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <MyText
+                text={'Order number: '}
+                fontFamily="regular"
+                fontSize={13}
+                textColor={Colors.LIGHT_GREY}
+                style={{}}
+              />
+              <MyText
+                text={item.order_number}
+                fontFamily="regular"
+                fontSize={13}
+                textColor={Colors.THEME_GOLD}
+                style={{}}
+              />
+            </View>
             <MyText
               text={item.title}
               fontFamily="regular"
@@ -579,7 +595,15 @@ const MyOrders = ({navigation, dispatch}) => {
                 />
               </View>
             </View>
-            <TouchableOpacity
+            <MyText
+                text={'$' + item?.price}
+                fontFamily="bold"
+                fontSize={14}
+                textColor={Colors.THEME_GOLD}
+                letterSpacing={0.14}
+                style={{}}
+              />
+            {/* <TouchableOpacity
               onPress={gotoStartCourse}
               style={styles.courseButton}>
               <Image source={require('assets/images/play.png')} />
@@ -595,8 +619,8 @@ const MyOrders = ({navigation, dispatch}) => {
                 letterSpacing={0.13}
                 style={{marginLeft: 5}}
               />
-            </TouchableOpacity>
-            {item.isReviewed == '0' ? (
+            </TouchableOpacity> */}
+            {/* {item.isReviewed == '0' ? (
               <MyButton
                 text="WRITE YOUR REVIEW HERE"
                 style={{
@@ -607,7 +631,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 }}
                 onPress={() => openReviewModal(item?.course_id, '1')}
               />
-            ) : null}
+            ) : null} */}
             {/* <View style={styles.bottomRow}>
               <MyText
                 text={'$' + item.courseFee}
@@ -725,7 +749,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 />
               </View>
             </View>
-            {item.isReviewed == '0' ? (
+            {/* {item.isReviewed == '0' ? (
               <MyButton
                 text="WRITE YOUR REVIEW HERE"
                 style={{
@@ -736,7 +760,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 }}
                 onPress={() => openReviewModal(item?.id, '2')}
               />
-            ) : null}
+            ) : null} */}
           </View>
         </View>
         <Divider

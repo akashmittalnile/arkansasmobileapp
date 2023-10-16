@@ -663,7 +663,8 @@ const MyOrders = ({navigation, dispatch}) => {
   const renderProduct = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => gotoProductDetails(item?.order_id, '2')}
+        // onPress={() => gotoProductDetails(item?.order_id, '2')}
+        onPress={() => gotoOrderDetails(item?.order_id)}
         style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText

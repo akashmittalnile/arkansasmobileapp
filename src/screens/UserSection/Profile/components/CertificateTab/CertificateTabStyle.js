@@ -79,4 +79,9 @@ export const styles = StyleSheet.create({
     height: 99,
     width: width * 0.33,
   },
+  createImgStyle: {
+    height: 13,
+    width: 13,
+    borderRadius: 13 / 2,
+  },
 });

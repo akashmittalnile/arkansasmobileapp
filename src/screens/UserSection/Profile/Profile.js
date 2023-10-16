@@ -44,6 +44,7 @@ import AddCard from '../../../modals/AddCard/AddCard';
 import OrderHistoryTab from './components/OrderHistoryTab/OrderHistoryTab';
 import OrderStatus from '../../../modals/OrderStatus/OrderStatus';
 import RNFetchBlob from 'rn-fetch-blob';
+import {createThumbnail} from 'react-native-create-thumbnail';
 
 const personImg = `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`;
 const certificateList = [
@@ -258,14 +259,36 @@ const Profile = ({navigation, dispatch}) => {
     setProfessionalTitle(data?.professional_title);
     setTimezone(data?.timezone);
   };
-  const setCertificatesTabData = data => {
-    setCertificateData(data);
+  const setCertificatesTabData = async data => {
+    const thumbData = await generateThumb(data)
+    setCertificateData([...thumbData]);
   };
   const setNotificationsTabData = data => {};
   const setBillingTabData = data => {
     setCardList(data);
   };
-
+  const generateThumb = async data => {
+    console.log('generateThumb', JSON.stringify(data));
+    let updatedData = [...data];
+    try {
+      updatedData = await Promise.all(
+        data?.map?.(async el => {
+          const thumb = await createThumbnail({
+            url: el?.video,
+            timeStamp: 1000,
+          });
+          return {
+            ...el,
+            thumb,
+          };
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+    console.log('thumb data cart', updatedData);
+    return updatedData;
+  };
   const openAddCardModal = () => {
     setShowAddCardModal(true);
   };

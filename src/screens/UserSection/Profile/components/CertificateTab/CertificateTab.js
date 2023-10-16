@@ -38,11 +38,11 @@ const CertificateTab = ({certificateList, downloadCertificate}) => {
     return (
       <View style={styles.courseContainer}>
         <View style={styles.courseSubContainer}>
-          {/* <ImageBackground
-            source={item.certificateImg}
+          <ImageBackground
+            source={{uri: item?.thumb?.path}}
             style={styles.crseImg}
-            imageStyle={{borderRadius: 10}}></ImageBackground> */}
-          <View style={styles.crseImg}>
+            imageStyle={{borderRadius: 10}}></ImageBackground>
+          {/* <View style={styles.crseImg}>
             <Pdf
               source={{uri: item?.download_pdf}}
               trustAllCerts={false}
@@ -60,7 +60,7 @@ const CertificateTab = ({certificateList, downloadCertificate}) => {
               }}
               style={styles.crseImg}
             />
-          </View>
+          </View> */}
           <View style={{marginLeft: 11, width: width * 0.55}}>
             <MyText
               text={item.title}
@@ -82,9 +82,13 @@ const CertificateTab = ({certificateList, downloadCertificate}) => {
                 />
               </View>
               <View style={styles.crtrRow}>
-                <Image
+                {/* <Image
                   source={require('assets/images/profile-circle.png')}
                   // style={styles.crtrImg}
+                /> */}
+                <Image
+                  source={{uri: item?.creator_image}}
+                  style={styles.createImgStyle}
                 />
                 <MyText
                   text={item.creator_name}
@@ -92,7 +96,8 @@ const CertificateTab = ({certificateList, downloadCertificate}) => {
                   fontSize={13}
                   textColor={Colors.THEME_GOLD}
                   letterSpacing={0.13}
-                  style={{marginLeft: 10}}
+                  numberOfLines={1}
+                  style={{marginLeft: 10, width: '70%'}}
                 />
               </View>
             </View>

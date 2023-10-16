@@ -99,10 +99,10 @@ const Profile = ({navigation, dispatch}) => {
     //   id: '5',
     //   name: 'Billing',
     // },
-    {
-      id: '6',
-      name: 'Order History',
-    },
+    // {
+    //   id: '6',
+    //   name: 'Order History',
+    // },
   ]);
   // profile tab states
   const [firstName, setFirstName] = useState('');
@@ -312,7 +312,7 @@ const Profile = ({navigation, dispatch}) => {
     } else if (confirmPassword?.trim()?.length === 0) {
       Toast.show('Please enter Confirm Password', Toast.SHORT);
       return false;
-    } else if (confirmPassword !== newPassword) {
+    } else if (confirmPassword?.trim() !== newPassword?.trim()) {
       Toast.show('Confirm Password and New Password do not match', Toast.SHORT);
       return false;
     }
@@ -346,7 +346,7 @@ const Profile = ({navigation, dispatch}) => {
       console.log('error in onChangePassword', error);
     }
     setShowLoader(false);
-    closeModal();
+    // closeModal();
   };
 
   const renderTab = ({item}) => {

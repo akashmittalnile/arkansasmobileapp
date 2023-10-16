@@ -11,6 +11,7 @@ import {
   FlatList,
   ActivityIndicator,
   Alert,
+  Keyboard,
 } from 'react-native';
 //import : custom components
 import MyText from 'components/MyText/MyText';
@@ -78,10 +79,10 @@ const ProfileTab = ({
         value={email}
         setValue={setEmail}
         onSubmitEditing={() => {
-          companyRef.current.focus();
+          Keyboard.dismiss()
         }}
       />
-      <NameEnterValue
+      {/* <NameEnterValue
         inputRef={companyRef}
         name={'Company'}
         placeholder={'Company'}
@@ -107,7 +108,7 @@ const ProfileTab = ({
         placeholder={'Time Zone'}
         value={timezone}
         setValue={setTimezone}
-      />
+      /> */}
       <MyButton
         text="SAVE CHANGES"
         style={{

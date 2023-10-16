@@ -112,14 +112,14 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       const myData = new FormData();
       myData.append('stripeToken', stripeToken);
       myData.append('order_id', order_id);
-      myData.append('total_amount', total_amount);
+      myData.append('total_amount', Number(total_amount));
       console.log('handlePayClick postData', myData);
       const resp = await Service.postApiWithToken(
         userToken,
         Service.MAKE_PAYMENT,
         myData,
       );
-      console.log('handlePayClick postData', myData);
+      console.log('handlePayClick resp', resp?.data);
       if (resp?.data?.status) {
         setMadePayment(true);
         Toast.show(resp?.data?.message, Toast.SHORT);

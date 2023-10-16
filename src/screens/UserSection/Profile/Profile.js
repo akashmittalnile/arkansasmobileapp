@@ -15,6 +15,7 @@ import {
   SafeAreaView,
   StatusBar,
   Platform,
+  Linking,
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -393,6 +394,11 @@ const Profile = ({navigation, dispatch}) => {
       </TouchableOpacity>
     );
   };
+  const openInBrowser = file => {
+    console.log('openPdfInBrowser', file);
+    const link = `https://docs.google.com/viewerng/viewer?url=${file}`;
+    Linking.openURL(link);
+  };
 
   //UI
   return (
@@ -483,6 +489,7 @@ const Profile = ({navigation, dispatch}) => {
               <CertificateTab
                 certificateList={certificateData}
                 downloadCertificate={downloadCertificate}
+                openInBrowser={openInBrowser}
               />
             ) : // : selectedTab == '4' ? (
             //   <NotificationsTab

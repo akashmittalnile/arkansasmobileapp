@@ -33,7 +33,11 @@ import MyButton from '../../../../../components/MyButton/MyButton';
 // import {WebView} from 'react-native-webview';
 import Pdf from 'react-native-pdf';
 
-const CertificateTab = ({certificateList, downloadCertificate}) => {
+const CertificateTab = ({
+  certificateList,
+  downloadCertificate,
+  openInBrowser,
+}) => {
   const renderCertificate = ({item}) => {
     return (
       <View style={styles.courseContainer}>
@@ -110,7 +114,7 @@ const CertificateTab = ({certificateList, downloadCertificate}) => {
                   marginTop: 8,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                onPress={item.onView}
+                onPress={() => openInBrowser(item.download_pdf)}
               />
               <MyButton
                 text="DOWNLOAD"

@@ -160,7 +160,7 @@ const OrderDetails = ({navigation, dispatch}) => {
       <View style={styles.summaryContainer}>
         <View style={[styles.row, {marginBottom: 10}]}>
           <MyText
-            text={`Subtotal (1)`}
+            text={`Total Amount (1)`}
             fontSize={14}
             fontFamily="medium"
             textColor={'#455A64'}
@@ -176,7 +176,7 @@ const OrderDetails = ({navigation, dispatch}) => {
         </View>
         <View style={[styles.row, {marginBottom: 19}]}>
           <MyText
-            text={`Discount`}
+            text={`Tax`}
             fontSize={14}
             fontFamily="medium"
             textColor={'#8F93A0'}
@@ -193,7 +193,7 @@ const OrderDetails = ({navigation, dispatch}) => {
         <Divider style={{borderColor: '#E0E0E0'}} />
         <View style={[styles.row, {marginTop: 14}]}>
           <MyText
-            text={`Total`}
+            text={`Shipping Cost`}
             fontSize={18}
             fontFamily="medium"
             textColor={'#455A64'}
@@ -250,6 +250,16 @@ const OrderDetails = ({navigation, dispatch}) => {
               </View>
             </ImageBackground>
           </View>
+          <MyButton
+            text="DONWLOAD INVOICE"
+            style={{
+              width: width * 0.9,
+              marginBottom: 10,
+              backgroundColor: Colors.THEME_BROWN,
+              marginTop: 32,
+            }}
+            onPress={() => {}}
+          />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
       </View>

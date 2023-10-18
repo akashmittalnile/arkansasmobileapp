@@ -101,7 +101,10 @@ const SuggestedProductsFiltersModal = ({
               marginTop={50}
             />
             <MyMultiSelect
-              data={productCategries?.map(el => ({label: el.name, value: el.name}))}
+              data={productCategries?.map(el => ({
+                label: el.name,
+                value: el.name,
+              }))}
               value={TempSelectedProductCategries}
               setValue={setTempSelectedProductCategries}
               placeholder={'Select Categories'}
@@ -167,13 +170,23 @@ const SuggestedProductsFiltersModal = ({
               marginTop={27}
             />
             {allRatingValues?.map(el => (
-              <TouchableWithoutFeedback onPress={() => addRating(el)}>
+              <TouchableWithoutFeedback
+                // onPress={() => addRating(el)}
+                onPress={() => {
+                  if (tempSelectedRatingValues?.length === 0) {
+                    setTempSelectedRatingValues([el]);
+                  } else if (tempSelectedRatingValues[0] === el) {
+                    setTempSelectedRatingValues([]);
+                  } else {
+                    setTempSelectedRatingValues([el]);
+                  }
+                }}>
                 <View style={styles.statusView}>
                   <Image
                     source={
                       tempSelectedRatingValues.includes(el)
-                        ? require('assets/images/checkbox-selected.png')
-                        : require('assets/images/checkbox.png')
+                        ? require('assets/images/selected-2.png')
+                        : require('assets/images/not-selected.png')
                     }
                     style={styles.radioButton}
                   />

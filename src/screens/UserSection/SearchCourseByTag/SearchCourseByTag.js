@@ -159,6 +159,16 @@ const SearchCourseByTag = ({navigation, dispatch, route}) => {
   const gotoCourseDetails = (id, type) => {
     navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
   };
+  const isFilterApplied = () => {
+    if (selectedCourseCategries?.length > 0) {
+      return true;
+    } else if (selectedPriceFilter !== '') {
+      return true;
+    } else if (selectedRatingValues?.length > 0) {
+      return true;
+    }
+    return false;
+  };
   const ShowSelectedFilters = () => {
     return (
       <View>
@@ -607,6 +617,7 @@ const SearchCourseByTag = ({navigation, dispatch, route}) => {
             onPress={openFilterModal}
             icon={<Image source={require('assets/images/filter.png')} />}
             style={{marginTop: 10}}
+            showDot={isFilterApplied}
           />
           <ShowSelectedFilters />
           <FlatList

@@ -452,6 +452,16 @@ const SuggestedProducts = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
+  const isFilterApplied = () => {
+    if (selectedProductCategries?.length > 0) {
+      return true;
+    } else if (selectedPriceFilter !== '') {
+      return true;
+    } else if (selectedRatingValues?.length > 0) {
+      return true;
+    }
+    return false;
+  };
   const ShowSelectedFilters = () => {
     return (
       <ScrollView
@@ -618,6 +628,7 @@ const SuggestedProducts = ({navigation, dispatch}) => {
             onPress={openFilterModal}
             icon={<Image source={require('assets/images/filter.png')} />}
             style={{marginTop: 10}}
+            showDot={isFilterApplied}
           />
           <ShowSelectedFilters />
           {productData?.length > 0 ? (

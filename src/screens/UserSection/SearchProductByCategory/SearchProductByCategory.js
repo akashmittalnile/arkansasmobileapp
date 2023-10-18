@@ -126,6 +126,14 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
   const gotoProductDetails = (id, type) => {
     navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
   };
+  const isFilterApplied = () => {
+    if (selectedPriceFilter !== '') {
+      return true;
+    } else if (selectedRatingValues?.length > 0) {
+      return true;
+    }
+    return false;
+  };
   const ShowSelectedFilters = () => {
     return (
       <View>
@@ -504,6 +512,7 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
             onPress={openFilterModal}
             icon={<Image source={require('assets/images/filter.png')} />}
             style={{marginTop: 10}}
+            showDot={isFilterApplied}
           />
           <ShowSelectedFilters />
           <FlatList

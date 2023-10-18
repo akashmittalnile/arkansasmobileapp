@@ -175,6 +175,16 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
     console.log('thumb data SearchAllType', updatedData);
     return updatedData;
   };
+  const isFilterApplied = () => {
+    if (selectedCourseCategries?.length > 0) {
+      return true;
+    } else if (selectedPriceFilter !== '') {
+      return true;
+    } else if (selectedRatingValues?.length > 0) {
+      return true;
+    }
+    return false;
+  };
   const ShowSelectedFilters = () => {
     return (
       <View>
@@ -636,6 +646,7 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
             onPress={openFilterModal}
             icon={<Image source={require('assets/images/filter.png')} />}
             style={{marginTop: 10}}
+            showDot={isFilterApplied}
           />
           <ShowSelectedFilters />
           <FlatList

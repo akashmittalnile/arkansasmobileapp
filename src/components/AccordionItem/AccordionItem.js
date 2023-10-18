@@ -210,7 +210,7 @@ const AccordionItem = ({
                 fontSize={16}
                 textColor={getTextColor(item?.is_completed)}
               />
-              {item.type === 'video' ? (
+              {/* {item.type === 'video' ? (
                 <View style={styles.timerRow}>
                   <Image source={require('assets/images/clock.png')} />
                   <MyText
@@ -221,7 +221,7 @@ const AccordionItem = ({
                     style={{marginLeft: 5}}
                   />
                 </View>
-              ) : null}
+              ) : null} */}
             </View>
           </View>
           {item.is_completed == '1' ? (

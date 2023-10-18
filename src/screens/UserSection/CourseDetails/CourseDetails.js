@@ -574,6 +574,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               fontSize={16}
               numberOfLines={1}
               textColor={'black'}
+              textAlign={'right'}
               style={{width: '30%'}}
             />
             {/* </View> */}

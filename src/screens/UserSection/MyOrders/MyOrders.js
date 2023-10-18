@@ -37,6 +37,8 @@ import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import OrdersFilter from '../../../modals/OrdersFilter/OrdersFilter';
 import Review from '../../../modals/Review/Review';
 import {createThumbnail} from 'react-native-create-thumbnail';
+import moment from 'moment';
+import DatePicker from 'react-native-date-picker';
 
 const courseList = [
   {
@@ -166,20 +168,15 @@ const MyOrders = ({navigation, dispatch}) => {
   const [selectedProductCategries, setSelectedProductCategries] = useState([]);
   const [TempSelectedProductCategries, setTempSelectedProductCategries] =
     useState([]);
-  const [priceFilterValues, setPriceFilterValues] = useState([
-    {
-      id: '1',
-      name: 'High to Low',
-    },
-    {
-      id: '2',
-      name: 'Low to High',
-    },
-  ]);
-  const [tempSelectedPriceFilter, setTempSelectedPriceFilter] = useState('');
-  const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
   const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
+  const [temporarySelectedTab, setTemporarySelectedTab] = useState('1');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [tempStartDate, setTempStartDate] = useState('');
+  const [openTempStartDate, setOpenTempStartDate] = useState('');
+  const [tempEndDate, setTempEndDate] = useState('');
+  const [openTempEndDate, setOpenTempEndDate] = useState('');
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -244,12 +241,16 @@ const MyOrders = ({navigation, dispatch}) => {
     // console.log('thumb data SearchAllType', updatedData);
     return updatedData;
   };
+  const showDateFilter = () => {
+    if (selectedTab == '2') {
+      return false;
+    } else if (startDate !== '' && endDate !== '') {
+      return true;
+    }
+    return false;
+  };
   const isFilterApplied = () => {
     if (showSelectedCategories()) {
-      return true;
-    } else if (selectedPriceFilter !== '') {
-      return true;
-    } else if (selectedRatingValues?.length > 0) {
       return true;
     }
     return false;
@@ -344,7 +345,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 ))}
           </View>
         ) : null}
-        {selectedPriceFilter !== '' ? (
+        {showDateFilter() ? (
           <View
             style={{
               flexDirection: 'row',
@@ -357,23 +358,22 @@ const MyOrders = ({navigation, dispatch}) => {
               borderRadius: 10,
             }}>
             <MyText
-              text={'Price: '}
+              text={'Selected Dates: '}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.THEME_BROWN}
               style={{}}
             />
             <MyText
-              text={
-                priceFilterValues?.find(el => el.id === selectedPriceFilter)
-                  ?.name
-              }
+              text={`${moment(startDate).format('DD-MM-YYYY')} - ${moment(
+                endDate,
+              ).format('DD-MM-YYYY')}`}
               fontFamily="regular"
               fontSize={13}
               textColor={Colors.THEME_BROWN}
             />
             <TouchableOpacity
-              onPress={() => removeFilter('price', selectedPriceFilter)}
+              onPress={() => removeFilter('date', '')}
               style={{
                 marginLeft: 5,
                 marginTop: 3,
@@ -383,56 +383,6 @@ const MyOrders = ({navigation, dispatch}) => {
                 style={{height: 10, width: 10}}
               />
             </TouchableOpacity>
-          </View>
-        ) : null}
-        {selectedRatingValues?.length > 0 ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              backgroundColor: '#ede5ca',
-              marginRight: 'auto',
-              marginTop: 10,
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-              borderRadius: 10,
-            }}>
-            <MyText
-              text={'Rating: '}
-              fontFamily="regular"
-              fontSize={13}
-              textColor={Colors.THEME_BROWN}
-              style={{}}
-            />
-            {selectedRatingValues?.map((el, index) => (
-              <View
-                key={index?.toString()}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginRight: 10,
-                }}>
-                <MyText
-                  key={el}
-                  text={`${el} and more`}
-                  fontFamily="regular"
-                  fontSize={13}
-                  textColor={Colors.THEME_BROWN}
-                />
-                <TouchableOpacity
-                  onPress={() => removeFilter('rating', el)}
-                  style={{
-                    marginLeft: 5,
-                    marginTop: 3,
-                  }}>
-                  <Image
-                    source={require('assets/images/cancelfilter.png')}
-                    style={{height: 10, width: 10}}
-                  />
-                </TouchableOpacity>
-              </View>
-            ))}
           </View>
         ) : null}
       </View>
@@ -473,7 +423,7 @@ const MyOrders = ({navigation, dispatch}) => {
   const gotoStartCourse = () => {
     navigation.navigate(ScreenNames.START_COURSE);
   };
-  const gotoOrderDetails = (order_id) => {
+  const gotoOrderDetails = order_id => {
     navigation.navigate(ScreenNames.ORDER_DETAILS, {order_id});
   };
 
@@ -773,6 +723,276 @@ const MyOrders = ({navigation, dispatch}) => {
       </TouchableOpacity>
     );
   };
+  const setOriginalValues = () => {
+    setSelectedTab(temporarySelectedTab);
+    setSelectedCourseCategries(tempSelectedCourseCategries);
+    setSelectedProductCategries(TempSelectedProductCategries);
+    setSelectedRatingValues(tempSelectedRatingValues);
+    setStartDate(tempStartDate);
+    setEndDate(tempEndDate);
+  };
+  const setOriginalValues2 = () => {
+    setSelectedCourseCategries(tempSelectedCourseCategries);
+    setSelectedProductCategries(TempSelectedProductCategries);
+    setSelectedRatingValues(tempSelectedRatingValues);
+    setStartDate(tempStartDate);
+    setEndDate(tempEndDate);
+  };
+  const applyFilters = async (searchParam = '') => {
+    setOriginalValues();
+    const postData = new FormData();
+    postData.append('type', temporarySelectedTab);
+    let catIds = [];
+    if (temporarySelectedTab === '1') {
+      catIds = courseCategries
+        ?.filter(el => tempSelectedCourseCategries?.includes(el?.name))
+        ?.map(el => el?.id);
+    } else {
+      catIds = productCategries
+        ?.filter(el => TempSelectedProductCategries?.includes(el?.name))
+        ?.map(el => el?.id);
+    }
+    if (catIds?.length > 0) {
+      catIds?.map(el => postData.append('category[]', el));
+    }
+    if (tempSelectedRatingValues?.length > 0) {
+      tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    const isSearchTermExists = searchParam?.toString()?.trim()?.length > 0;
+    const isSearchValueExists = searchValue?.toString()?.trim()?.length > 0;
+    console.log(
+      'isSearchTermExists, isSearchValueExists',
+      isSearchTermExists,
+      isSearchValueExists,
+    );
+    console.log('searchTerm', searchParam);
+    console.log('searchValue', searchValue);
+    if (isSearchTermExists || isSearchValueExists) {
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)
+      if (
+        searchValue?.toString()?.trim()?.length === 1 &&
+        searchParam?.toString()?.trim()?.length === 0
+      ) {
+        postData.append('title', searchParam?.toString()?.trim());
+      } else {
+        // preferring to check searchParam first, because it has the most recent search value fast. But it is not always passed, in else case using searchValue
+        if (isSearchTermExists) {
+          postData.append('title', searchParam?.toString()?.trim());
+        } else {
+          postData.append('title', searchValue?.toString()?.trim());
+        }
+      }
+    }
+    console.log('applyFilters postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.MY_ORDER,
+        postData,
+      );
+      console.log('applyFilters resp', resp?.data);
+      if (resp?.data?.status) {
+        // tab is not changed when searching
+        if (temporarySelectedTab !== selectedTab) {
+          setSelectedTab(temporarySelectedTab);
+        }
+
+        setShowFilterModal(false);
+        if (temporarySelectedTab === '1') {
+          const updatedData = await generateThumb(resp?.data?.data);
+          setCourseData(updatedData);
+        } else {
+          setProductData(resp?.data?.data);
+        }
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
+  const applyFilters2 = async (searchParam = '') => {
+    const isDeletingLastCharacterInSearch =
+      searchValue?.toString()?.trim()?.length === 1 &&
+      searchParam?.toString()?.trim()?.length === 0;
+    const isSearching = isDeletingLastCharacterInSearch || searchParam !== '';
+    setOriginalValues2();
+    const postData = new FormData();
+    postData.append('type', selectedTab);
+    let catIds = [];
+    if (temporarySelectedTab === '1') {
+      catIds = courseCategries
+        ?.filter(el => tempSelectedCourseCategries?.includes(el?.name))
+        ?.map(el => el?.id);
+    } else {
+      catIds = productCategries
+        ?.filter(el => TempSelectedProductCategries?.includes(el?.name))
+        ?.map(el => el?.id);
+    }
+    if (catIds?.length > 0) {
+      catIds?.map(el => postData.append('category[]', el));
+    }
+    if (tempSelectedRatingValues?.length > 0) {
+      tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    const isSearchTermExists = searchParam?.toString()?.trim()?.length > 0;
+    const isSearchValueExists = searchValue?.toString()?.trim()?.length > 0;
+    console.log(
+      'isSearchTermExists, isSearchValueExists',
+      isSearchTermExists,
+      isSearchValueExists,
+    );
+    console.log('searchTerm', searchParam);
+    console.log('searchValue', searchValue);
+    if (isSearchTermExists || isSearchValueExists) {
+      // handling special case: while deleting last character of search, since search state would not update fast, so using searchParam instead of search state (searchValue)
+      if (
+        searchValue?.toString()?.trim()?.length === 1 &&
+        searchParam?.toString()?.trim()?.length === 0
+      ) {
+        postData.append('title', searchParam?.toString()?.trim());
+      } else {
+        // preferring to check searchParam first, because it has the most recent search value fast. But it is not always passed, in else case using searchValue
+        if (isSearchTermExists) {
+          postData.append('title', searchParam?.toString()?.trim());
+        } else {
+          postData.append('title', searchValue?.toString()?.trim());
+        }
+      }
+    }
+    console.log('applyFilters postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.MY_ORDER,
+        postData,
+      );
+      console.log('applyFilters resp', resp?.data);
+      if (resp?.data?.status) {
+        setShowFilterModal(false);
+        if (selectedTab === '1') {
+          const updatedData = await generateThumb(resp?.data?.data);
+          setCourseData(updatedData);
+        } else {
+          setProductData(resp?.data?.data);
+        }
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in applyFilters', error);
+    }
+    setShowLoader(false);
+  };
+  const resetFilter = async () => {
+    setShowFilterModal(false);
+    // emptying all filter states and calling getMyOrders
+    setSearchValue('');
+    setSelectedTab('1');
+    setTemporarySelectedTab('1');
+    setSelectedCourseCategries([]);
+    setTempSelectedCourseCategries([]);
+    setSelectedProductCategries([]);
+    setTempSelectedProductCategries([]);
+    setSelectedRatingValues([]);
+    setTempSelectedRatingValues([]);
+    await getMyOrders();
+  };
+  const removeFilter = async (filterType, item) => {
+    let remainingStartDate = tempStartDate;
+    let remainingEndDate = tempEndDate;
+    if (filterType === 'date') {
+      remainingStartDate = '';
+      remainingEndDate = '';
+      setTempStartDate('');
+      setTempEndDate('');
+      setStartDate('');
+      setEndDate('');
+    }
+    if (selectedTab === '1') {
+      if (tempStartDate !== '' && tempEndDate !== '') {
+        postData.append('start_date', tempStartDate);
+        postData.append('end_date', tempEndDate);
+      }
+    }
+    let remainingSelectedCategories =
+      selectedTab === '1'
+        ? selectedCourseCategries
+        : TempSelectedProductCategries;
+    console.log('selectedCourseCategries', selectedCourseCategries, item);
+    if (filterType === 'cat') {
+      if (selectedTab === '1') {
+        remainingSelectedCategories = selectedCourseCategries?.filter(
+          el => el !== item,
+        );
+        setSelectedCourseCategries([...remainingSelectedCategories]);
+        setTempSelectedCourseCategries([...remainingSelectedCategories]);
+      } else {
+        remainingSelectedCategories = TempSelectedProductCategries?.filter(
+          el => el !== item,
+        );
+        setSelectedProductCategries([...remainingSelectedCategories]);
+        setTempSelectedProductCategries([...remainingSelectedCategories]);
+      }
+    }
+    let remainingselectedRatingValues = [...selectedRatingValues];
+    if (filterType === 'rating') {
+      remainingselectedRatingValues = selectedRatingValues?.filter(
+        el => el !== item,
+      );
+      setSelectedRatingValues(remainingselectedRatingValues);
+      setTempSelectedRatingValues(remainingselectedRatingValues);
+    }
+    selectedRatingValues;
+    const postData = new FormData();
+    postData.append('type', temporarySelectedTab);
+    let catIds = [];
+    if (temporarySelectedTab === '1') {
+      catIds = courseCategries
+        ?.filter(el => remainingSelectedCategories?.includes(el?.name))
+        ?.map(el => el?.id);
+    } else {
+      catIds = productCategries
+        ?.filter(el => remainingSelectedCategories?.includes(el?.name))
+        ?.map(el => el?.id);
+    }
+    if (catIds?.length > 0) {
+      catIds?.map(el => postData.append('category[]', el));
+    }
+    if (remainingselectedRatingValues?.length > 0) {
+      remainingselectedRatingValues?.map(el => postData.append('rating[]', el));
+    }
+    console.log('removeFilter postData', JSON.stringify(postData));
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.MY_ORDER,
+        postData,
+      );
+      console.log('removeFilter resp', resp?.data);
+      if (resp?.data?.status) {
+        if (temporarySelectedTab !== selectedTab) {
+          setSelectedTab(temporarySelectedTab);
+        }
+        setShowFilterModal(false);
+        if (temporarySelectedTab === '1') {
+          const updatedData = await generateThumb(resp?.data?.data);
+          setCourseData(updatedData);
+        } else {
+          setProductData(resp?.data?.data);
+        }
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in removeFilter', error);
+    }
+    setShowLoader(false);
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -783,20 +1003,6 @@ const MyOrders = ({navigation, dispatch}) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
-          <SearchWithIcon
-            value={searchValue}
-            icon={<Image source={require('assets/images/filter.png')} />}
-            placeholder="Search..."
-            onPress={openFilterModal}
-            onChangeText={e => {
-              console.log('SearchWithIcon', e);
-              setSearchValue(e);
-              applyFilters2(e);
-            }}
-            style={{marginTop: 10}}
-            showDot={isFilterApplied}
-          />
-          <ShowSelectedFilters />
           <View style={styles.tabsContainer}>
             {tabs?.map(item => (
               <TouchableOpacity
@@ -818,6 +1024,20 @@ const MyOrders = ({navigation, dispatch}) => {
               </TouchableOpacity>
             ))}
           </View>
+          <SearchWithIcon
+            value={searchValue}
+            icon={<Image source={require('assets/images/filter.png')} />}
+            placeholder="Search..."
+            onPress={openFilterModal}
+            onChangeText={e => {
+              console.log('SearchWithIcon', e);
+              setSearchValue(e);
+              applyFilters2(e);
+            }}
+            style={{marginTop: 10}}
+            showDot={isFilterApplied}
+          />
+          <ShowSelectedFilters />
           {selectedTab === '1' ? (
             <FlatList
               data={courseData}
@@ -840,6 +1060,25 @@ const MyOrders = ({navigation, dispatch}) => {
           setVisibility={setShowFilterModal}
           onClearFilter={onClearFilter}
           onApplyFilter={onApplyFilter}
+          courseCategries={courseCategries}
+          productCategries={productCategries}
+          tempSelectedCourseCategries={tempSelectedCourseCategries}
+          setTempSelectedCourseCategries={setTempSelectedCourseCategries}
+          TempSelectedProductCategries={TempSelectedProductCategries}
+          setTempSelectedProductCategries={setTempSelectedProductCategries}
+          tabs={tabs}
+          temporarySelectedTab={temporarySelectedTab}
+          setTemporarySelectedTab={setTemporarySelectedTab}
+          tempStartDate={tempStartDate}
+          setTempStartDate={setTempStartDate}
+          openTempStartDate={openTempStartDate}
+          setOpenTempStartDate={setOpenTempStartDate}
+          tempEndDate={tempEndDate}
+          setTempEndDate={setTempEndDate}
+          openTempEndDate={openTempEndDate}
+          setOpenTempEndDate={setOpenTempEndDate}
+          applyFilters={applyFilters}
+          resetFilter={resetFilter}
           orderTypes={orderTypes}
           subjects={subjects}
           dateUploaded={dateUploaded}
@@ -860,6 +1099,36 @@ const MyOrders = ({navigation, dispatch}) => {
           review={review}
           setReview={setReview}
           submitReview={submitReview}
+        />
+        <DatePicker
+          modal
+          mode="date"
+          // mode="time"
+          open={openTempStartDate}
+          date={tempStartDate || new Date()}
+          onConfirm={time => {
+            setOpenTempStartDate(false);
+            setTempStartDate(time);
+          }}
+          onCancel={() => {
+            setOpenTempStartDate(false);
+          }}
+          // minimumDate={new Date()}
+        />
+        <DatePicker
+          modal
+          mode="date"
+          // mode="time"
+          open={openTempEndDate}
+          date={tempEndDate || new Date()}
+          onConfirm={time => {
+            setOpenTempEndDate(false);
+            setTempEndDate(time);
+          }}
+          onCancel={() => {
+            setOpenTempEndDate(false);
+          }}
+          // minimumDate={new Date()}
         />
       </View>
     </SafeAreaView>

@@ -23,6 +23,9 @@ import Modal from 'react-native-modal';
 import MyButton from '../../components/MyButton/MyButton';
 import {width} from '../../global/Constant';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import moment from 'moment';
+import MyMultiSelect from '../../components/MyMultiSelect/MyMultiSelect';
+import DateSelector from '../../components/DateSelector/DateSelector';
 
 const sliderRadius = 3;
 const someWidth = 50;
@@ -43,6 +46,22 @@ const OrdersFilter = ({
   selectedDateUploaded,
   multiSliderValue,
   multiSliderValuesChange,
+
+  tabs,
+  courseCategries,
+  productCategries,
+  temporarySelectedTab,
+  setTemporarySelectedTab,
+  tempSelectedCourseCategries,
+  setTempSelectedCourseCategries,
+  TempSelectedProductCategries,
+  setTempSelectedProductCategries,
+  tempStartDate,
+  setOpenTempStartDate,
+  tempEndDate,
+  setOpenTempEndDate,
+  applyFilters,
+  resetFilter,
 }) => {
   //variables : navigation
   const navigation = useNavigation();
@@ -90,6 +109,12 @@ const OrdersFilter = ({
       </View>
     );
   };
+  const getCategoryDropdownData = () => {
+    // console.log('getCategoryDropdownData', temporarySelectedTab);
+    const data =
+      temporarySelectedTab === '1' ? courseCategries : productCategries;
+    return data?.map(el => ({label: el.name, value: el.name}));
+  };
   //UI
   return (
     <Modal
@@ -124,7 +149,7 @@ const OrdersFilter = ({
               style={{position: 'absolute', left: '45%'}}
             />
           </View>
-          <MyText
+          {/* <MyText
             text="Choose Order Type"
             textColor={Colors.DARK_GREY}
             fontSize={16}
@@ -161,49 +186,112 @@ const OrdersFilter = ({
                 </View>
               </TouchableWithoutFeedback>
             ))}
-          </View>
+          </View> */}
           <MyText
-            text="Subject"
+            text={'Select Type'}
             textColor={Colors.DARK_GREY}
             fontSize={16}
             fontFamily="medium"
-            style={{marginTop: 47, marginBottom: 14}}
+            marginBottom={14}
+            marginTop={40}
           />
-          <View style={{}}>
-            {subjects?.map((item, index) => (
-              <TouchableWithoutFeedback
-                key={item.id}
-                onPress={() => {
-                  changeSubjects(item.id);
-                }}>
-                <View style={[styles.row, {marginBottom: 12}]}>
-                  <Image
-                    source={
-                      selectedSubject === item.id
-                        ? require('assets/images/selected-2.png')
-                        : require('assets/images/not-selected.png')
-                    }
-                    style={{height: 22, width: 22}}
-                  />
-                  <MyText
-                    text={item.name}
-                    textColor={Colors.DARK_GREY}
-                    fontSize={16}
-                    fontFamily="medium"
-                    style={{marginLeft: 10}}
-                  />
-                </View>
-              </TouchableWithoutFeedback>
-            ))}
-          </View>
+          {tabs?.map((el, index) => (
+            <TouchableWithoutFeedback
+              onPress={() => {
+                setTemporarySelectedTab(el?.id);
+                // on change type, remove older selected category data
+                if (temporarySelectedTab !== el?.id) {
+                  el?.id == '2'
+                    ? setTempSelectedCourseCategries([])
+                    : setTempSelectedProductCategries([]);
+                }
+              }}>
+              <View style={styles.statusView}>
+                <Image
+                  source={
+                    temporarySelectedTab === el?.id
+                      ? require('assets/images/selected-2.png')
+                      : require('assets/images/not-selected.png')
+                  }
+                  style={{width: 22, height: 22}}
+                />
+                <MyText
+                  text={el?.name}
+                  textColor={Colors.DARK_GREY}
+                  fontSize={14}
+                  marginLeft={10}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          ))}
           <MyText
-            text="Date Uploaded"
+            text="Choose Category"
             textColor={Colors.DARK_GREY}
             fontSize={16}
             fontFamily="medium"
-            style={{marginTop: 35, marginBottom: 14}}
+            style={{marginTop: 25, marginBottom: 14}}
           />
-          <View style={styles.row}>
+          <MyMultiSelect
+            data={getCategoryDropdownData()}
+            value={
+              temporarySelectedTab == '1'
+                ? tempSelectedCourseCategries
+                : TempSelectedProductCategries
+            }
+            setValue={
+              temporarySelectedTab == '1'
+                ? setTempSelectedCourseCategries
+                : setTempSelectedProductCategries
+            }
+            placeholder={'Select Categories'}
+            style={{marginBottom: 0, backgroundColor: 'white'}}
+          />
+          {temporarySelectedTab == '1' ? (
+            <>
+              <MyText
+                text="Select Start Date and End Date"
+                textColor={Colors.DARK_GREY}
+                fontSize={16}
+                fontFamily="medium"
+                style={{marginTop: 35, marginBottom: 14}}
+              />
+              <View style={styles.datesRow}>
+                <DateSelector
+                  Title={
+                    tempStartDate == ''
+                      ? 'Select Date'
+                      : moment(tempStartDate).format('DD-MM-YYYY')
+                  }
+                  onPress={() => {
+                    setOpenTempStartDate(true);
+                  }}
+                  calenderViewStyle={{
+                    width: '48%',
+                    marginTop: 0,
+                    marginBottom: 0,
+                  }}
+                  dateViewStyle={{borderWidth: 0}}
+                />
+                <DateSelector
+                  Title={
+                    tempEndDate == ''
+                      ? 'Select Date'
+                      : moment(tempEndDate).format('DD-MM-YYYY')
+                  }
+                  onPress={() => {
+                    setOpenTempEndDate(true);
+                  }}
+                  calenderViewStyle={{
+                    width: '48%',
+                    marginTop: 0,
+                    marginBottom: 0,
+                  }}
+                  dateViewStyle={{borderWidth: 0}}
+                />
+              </View>
+            </>
+          ) : null}
+          {/* <View style={styles.row}>
             {dateUploaded?.map((item, index) => (
               <TouchableWithoutFeedback
                 key={item.id}
@@ -233,81 +321,7 @@ const OrdersFilter = ({
                 </View>
               </TouchableWithoutFeedback>
             ))}
-          </View>
-          <MyText
-            text="Price"
-            textColor={Colors.DARK_GREY}
-            fontSize={16}
-            fontFamily="medium"
-            style={{marginTop: 35, marginBottom: 5}}
-          />
-          <View style={{paddingHorizontal: 15}}>
-            <MultiSlider
-              values={[multiSliderValue[0], multiSliderValue[1]]}
-              // values={[multiSliderValue[0]]}
-              sliderLength={320}
-              onValuesChange={multiSliderValuesChange}
-              min={0}
-              max={10000}
-              step={1}
-              // markerOffsetX={12}
-              // markerOffsetY={10}
-              enableLabel
-              customLabel={props => <CustomLabel {...props} />}
-              allowOverlap={false}
-              minMarkerOverlapDistance={10}
-              markerStyle={{
-                ...Platform.select({
-                  ios: {
-                    height: 25,
-                    width: 25,
-                    shadowColor: '#000000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 3,
-                    },
-                    shadowRadius: 1,
-                    shadowOpacity: 0.1,
-                    borderColor: Colors.THEME_GOLD,
-                    borderWidth: 1,
-                  },
-                  android: {
-                    height: 25,
-                    width: 25,
-                    borderRadius: 50,
-                    backgroundColor: Colors.THEME_GOLD,
-                    borderColor: Colors.THEME_GOLD,
-                    borderWidth: 1,
-                  },
-                }),
-              }}
-              pressedMarkerStyle={{
-                ...Platform.select({
-                  android: {
-                    height: 25,
-                    width: 25,
-                    borderRadius: 20,
-                    backgroundColor: Colors.THEME_GOLD,
-                  },
-                }),
-              }}
-              selectedStyle={{backgroundColor: Colors.THEME_BROWN}}
-              unselectedStyle={{
-                backgroundColor: '#ECECEC',
-                // borderColor: '#f23476',
-                // borderWidth: 0.5,
-              }}
-              trackStyle={{
-                height: 5,
-              }}
-              touchDimensions={{
-                height: 40,
-                width: 40,
-                borderRadius: 20,
-                slipDisplacement: 40,
-              }}
-            />
-          </View>
+          </View> */}
           <MyButton
             text="APPLY"
             style={{
@@ -316,7 +330,7 @@ const OrdersFilter = ({
               marginBottom: 10,
               backgroundColor: Colors.THEME_GOLD,
             }}
-            onPress={onApplyFilter}
+            onPress={() => applyFilters()}
           />
           <MyButton
             text="CLEAR"
@@ -325,7 +339,7 @@ const OrdersFilter = ({
               marginBottom: 10,
               backgroundColor: Colors.THEME_BROWN,
             }}
-            onPress={onClearFilter}
+            onPress={resetFilter}
           />
         </ScrollView>
       </View>

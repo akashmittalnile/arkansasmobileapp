@@ -61,6 +61,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
+  middleLeftRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   bottomRow: {
     flexDirection: 'row',
     alignItems: 'center',

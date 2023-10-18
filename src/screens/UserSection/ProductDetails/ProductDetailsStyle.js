@@ -59,7 +59,12 @@ export const styles = StyleSheet.create({
   middleRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginTop: 8,
+  },
+  middleLeftRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   iconsRow: {
     flexDirection: 'row',

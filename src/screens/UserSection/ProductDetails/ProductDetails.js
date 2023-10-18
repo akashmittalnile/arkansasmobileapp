@@ -146,7 +146,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       console.log('getProductDetails resp', resp?.data?.data?.Product_image);
       if (resp?.data?.status) {
         setProductDetails(resp?.data?.data);
-        let sliData = []
+        let sliData = [];
         sliData = resp?.data?.data?.Product_image?.map(el => ({
           slider: el,
         }));
@@ -364,52 +364,64 @@ const ProductDetails = ({navigation, dispatch, route}) => {
             />
           </View>
           <View style={styles.middleRow}>
-            <View style={styles.ratingRow}>
-              <Image source={require('assets/images/star.png')} />
-              <MyText
-                text={productDetails?.rating}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.LIGHT_GREY}
-                letterSpacing={0.13}
-                style={{marginLeft: 5}}
-              />
-            </View>
-            <View style={styles.crtrRow}>
-              {/* <Image
+            <View style={styles.middleLeftRow}>
+              <View style={styles.ratingRow}>
+                <Image source={require('assets/images/star.png')} />
+                <MyText
+                  text={productDetails?.rating}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.LIGHT_GREY}
+                  letterSpacing={0.13}
+                  style={{marginLeft: 5}}
+                />
+              </View>
+              <View style={styles.crtrRow}>
+                {/* <Image
                 source={require('assets/images/profile-circle.png')}
                 // style={styles.crtrImg}
               /> */}
-              <Image
-                source={{uri: productDetails?.creator_image}}
-                style={styles.createImgStyle}
-              />
-              <MyText
-                text={productDetails?.creator_name}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.THEME_GOLD}
-                letterSpacing={0.13}
-                style={{marginLeft: 10}}
-              />
-            </View>
-            <View style={styles.iconsRow}>
-              <TouchableOpacity
-                onPress={() => {
-                  onLike('2', productDetails.id, productDetails.isWishlist);
-                }}>
                 <Image
-                  source={
-                    productDetails?.isWishlist
-                      ? require('assets/images/heart-selected.png')
-                      : require('assets/images/heart.png')
-                  }
-                  style={{height: 14, width: 14}}
+                  source={{uri: productDetails?.creator_image}}
+                  style={styles.createImgStyle}
                 />
-              </TouchableOpacity>
-              <Image
-                source={require('assets/images/share.png')}
-                style={{marginLeft: 10, height: 14, width: 14}}
+                <MyText
+                  text={productDetails?.creator_name}
+                  fontFamily="regular"
+                  fontSize={13}
+                  textColor={Colors.THEME_GOLD}
+                  letterSpacing={0.13}
+                  style={{marginLeft: 10}}
+                />
+              </View>
+              <View style={styles.iconsRow}>
+                <TouchableOpacity
+                  onPress={() => {
+                    onLike('2', productDetails.id, productDetails.isWishlist);
+                  }}>
+                  <Image
+                    source={
+                      productDetails?.isWishlist
+                        ? require('assets/images/heart-selected.png')
+                        : require('assets/images/heart.png')
+                    }
+                    style={{height: 14, width: 14}}
+                  />
+                </TouchableOpacity>
+                <Image
+                  source={require('assets/images/share.png')}
+                  style={{marginLeft: 10, height: 14, width: 14}}
+                />
+              </View>
+            </View>
+            <View style={{width: '40%', alignItems: 'flex-end'}}>
+              <MyText
+                text={productDetails?.category_name}
+                fontFamily="medium"
+                fontSize={16}
+                numberOfLines={1}
+                textColor={'black'}
+                style={{}}
               />
             </View>
           </View>

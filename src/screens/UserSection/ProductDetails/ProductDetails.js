@@ -414,16 +414,14 @@ const ProductDetails = ({navigation, dispatch, route}) => {
                 />
               </View>
             </View>
-            <View style={{width: '40%', alignItems: 'flex-end'}}>
-              <MyText
-                text={productDetails?.category_name}
-                fontFamily="medium"
-                fontSize={16}
-                numberOfLines={1}
-                textColor={'black'}
-                style={{}}
-              />
-            </View>
+            <MyText
+              text={productDetails?.category_name}
+              fontFamily="medium"
+              fontSize={16}
+              numberOfLines={1}
+              textColor={'black'}
+              style={{width: '30%'}}
+            />
           </View>
 
           {showModal.isVisible ? (

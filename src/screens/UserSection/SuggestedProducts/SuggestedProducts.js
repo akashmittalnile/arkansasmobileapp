@@ -160,10 +160,15 @@ const SuggestedProducts = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
+  const gotoProductDetails = (id, type) => {
+    navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
+  };
 
   const renderProduct = ({item}) => {
     return (
-      <View style={styles.courseContainer}>
+      <TouchableOpacity
+        onPress={() => gotoProductDetails(item?.id, '2')}
+        style={styles.courseContainer}>
         <ImageBackground
           source={{uri: item?.Product_image[0]}}
           style={styles.crseImg}></ImageBackground>
@@ -235,7 +240,7 @@ const SuggestedProducts = ({navigation, dispatch}) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   const openFilterModal = () => {

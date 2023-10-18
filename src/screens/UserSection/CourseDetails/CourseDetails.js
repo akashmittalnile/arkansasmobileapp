@@ -567,15 +567,16 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                 />
               </View>
             </View>
-            <View style={{width: '50%', alignItems: 'flex-end', justifyContent: 'center'}}>
-              <MyText
-                text={productDetails?.category_name}
-                fontFamily="medium"
-                fontSize={16}
-                numberOfLines={1}
-                textColor={'black'}
-              />
-            </View>
+            {/* <View style={{width: '50%', alignItems: 'flex-end', justifyContent: 'center'}}> */}
+            <MyText
+              text={productDetails?.category_name}
+              fontFamily="medium"
+              fontSize={16}
+              numberOfLines={1}
+              textColor={'black'}
+              style={{width: '30%'}}
+            />
+            {/* </View> */}
           </View>
 
           <View style={styles.validDateRow}>

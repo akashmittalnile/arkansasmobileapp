@@ -143,10 +143,11 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         Service.OBJECT_TYPE_DETAILS,
         postData,
       );
-      console.log('getProductDetails resp', resp?.data?.data);
+      console.log('getProductDetails resp', resp?.data?.data?.Product_image);
       if (resp?.data?.status) {
         setProductDetails(resp?.data?.data);
-        const sliData = resp?.data?.data?.Product_image?.map(el => ({
+        let sliData = []
+        sliData = resp?.data?.data?.Product_image?.map(el => ({
           slider: el,
         }));
         setSliderData([...sliData]);

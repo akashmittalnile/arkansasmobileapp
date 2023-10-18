@@ -113,7 +113,7 @@ const AccordionItem = ({
     if (!isPrerequisiteCompleted(item)) {
       setShowPrerequisiteModal(true);
       // chapindex name
-      setPrerequisiteModalText(String(chapindex) + ': ');
+      setPrerequisiteModalText(String(chapindex));
       return;
     }
 

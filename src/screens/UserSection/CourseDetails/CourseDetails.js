@@ -52,6 +52,7 @@ import Modal from 'react-native-modal';
 import PrerequisiteModal from '../../../modals/PrerequisiteModal/PrerequisiteModal';
 import CourseNotPurshasedModal from '../../../modals/CourseNotPurchasedModal/CourseNotPurshasedModal';
 import RNFetchBlob from 'rn-fetch-blob';
+import ViewPdf from '../../../modals/ViewPdf/ViewPdf';
 
 const data = [
   {
@@ -134,6 +135,8 @@ const CourseDetails = ({navigation, dispatch, route}) => {
   const [showPrerequisiteModal, setShowPrerequisiteModal] = useState(false);
   const [prerequisiteModalText, setPrerequisiteModalText] = useState('');
   const [showNotPurchasedModal, setShowNotPurchasedModal] = useState(false);
+  const [showViewPdfModal, setShowViewPdfModal] = useState(false);
+  const [pdfLink, setPdfLink] = useState('');
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -713,6 +716,8 @@ const CourseDetails = ({navigation, dispatch, route}) => {
                           isPurchased={productDetails?.isPurchased}
                           setShowNotPurchasedModal={setShowNotPurchasedModal}
                           gotoSideMenuLinks={gotoSideMenuLinks}
+                          setShowViewPdfModal={setShowViewPdfModal}
+                          setPdfLink={setPdfLink}
                         />
                       );
                     }}
@@ -803,7 +808,9 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             <MyButton
               text="View Certificate"
               onPress={() => {
-                openInBrowser(productDetails?.certificate);
+                setShowViewPdfModal(true);
+                setPdfLink(productDetails?.certificate)
+                // openInBrowser(productDetails?.certificate);
               }}
               style={{
                 width: '48%',
@@ -844,6 +851,16 @@ const CourseDetails = ({navigation, dispatch, route}) => {
           visible={showNotPurchasedModal}
           setVisibility={setShowNotPurchasedModal}
         />
+        {showViewPdfModal ? (
+          <ViewPdf
+            visible={showViewPdfModal}
+            setVisibility={setShowViewPdfModal}
+            pdfLink={pdfLink || ''}
+            handleDownload={() => {
+              downloadCertificate(pdfLink);
+            }}
+          />
+        ) : null}
       </View>
     </SafeAreaView>
   );

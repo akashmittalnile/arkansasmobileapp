@@ -48,6 +48,8 @@ const AccordionItem = ({
   isPurchased,
   setShowNotPurchasedModal,
   gotoSideMenuLinks,
+  setShowViewPdfModal,
+  setPdfLink,
 }) => {
   // console.log('AccordionItem item', item?.type, item);
   const shareValue = useSharedValue(0);
@@ -471,7 +473,9 @@ const AccordionItem = ({
                   <Image source={require('assets/images/pdf-icon.png')} />
                   <TouchableOpacity
                     onPress={() => {
-                      openPdfInBrowser(item?.file);
+                      // openPdfInBrowser(item?.file);
+                      setShowViewPdfModal(true);
+                      setPdfLink(item?.file)
                     }}
                     style={{width: '85%'}}>
                     <MyText

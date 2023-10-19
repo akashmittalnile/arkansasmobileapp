@@ -395,6 +395,37 @@ const OrderDetails = ({navigation, dispatch, route}) => {
               </View>
             </ImageBackground>
           </View>
+          <View
+            style={styles.cardContainer}>
+            <View style={styles.cardContainerLeftRow}>
+              {/* <Image
+                source={
+                  item.card_id === selectedCard
+                    ? require('assets/images/selected.png')
+                    : require('assets/images/not-selected.png')
+                }
+              /> */}
+              <Image
+                source={getCardImage('VISA')}
+                style={{marginLeft: 15}}
+              />
+              <View style={{marginLeft: 12}}>
+                <MyText
+                  // text={'**** **** **** ' + item.card_number.slice(-5)}
+                  text={'**** **** **** '}
+                  fontSize={16}
+                  fontFamily="medium"
+                  textColor={'#261313'}
+                />
+                <MyText
+                  text={`Expires ${`12/24`}`}
+                  fontSize={14}
+                  fontFamily="light"
+                  textColor={Colors.LIGHT_GREY}
+                />
+              </View>
+            </View>
+          </View>
           <MyButton
             text="DOWNLOAD INVOICE"
             style={{
@@ -435,4 +466,14 @@ const itemData = {
   content_creator_name: 'Arkansas ',
   content_creator_id: 1,
   isReviewed: 0,
+};
+
+const getCardImage = type => {
+  if (type === 'VISA') {
+    return require('assets/images/visa.png');
+  } else if (type === 'MASTERCARD') {
+    return require('assets/images/mastercard.png');
+  } else {
+    return require('assets/images/mastercard.png');
+  }
 };

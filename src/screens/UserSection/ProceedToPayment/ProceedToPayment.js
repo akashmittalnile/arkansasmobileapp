@@ -146,7 +146,8 @@ const ProceedToPayment = ({navigation, dispatch}) => {
     }
     console.log('card', card);
     const res = await createToken({card, type: 'Card'});
-    console.log('res stripe', res);
+    console.log('res stripe', res?.token?.id);
+    // return
     if (res?.error) {
       if (res?.error?.message) {
         Toast.show(res?.error?.message, Toast.SHORT);

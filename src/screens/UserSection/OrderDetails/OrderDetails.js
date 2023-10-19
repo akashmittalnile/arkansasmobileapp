@@ -181,7 +181,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
           <View style={styles.statusRow}>
             <View style={styles.dot} />
             <MyText
-              text={'order_status'}
+              text={item?.order_status == '1' ? 'Paid' : 'Not Paid'}
               fontFamily="medium"
               fontSize={13}
               textColor={Colors.THEME_BROWN}

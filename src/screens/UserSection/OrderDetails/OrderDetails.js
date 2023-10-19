@@ -89,7 +89,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
           if (el?.type == '2') {
             return el;
           }
-          console.log('here', JSON.stringify(el));
+          // console.log('here', JSON.stringify(el));
           const thumb = await createThumbnail({
             url: el?.video,
             timeStamp: 1000,
@@ -143,7 +143,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
             notification: true,
             path: `${DownloadDir}/.pdf`,
             description: 'Arkansas',
-            title: `${orderData?.data?.order_id} invoice.pdf`,
+            title: `${orderData?.data?.order_number} invoice.pdf`,
             mime: 'application/pdf',
             mediaScannable: true,
           },
@@ -167,12 +167,12 @@ const OrderDetails = ({navigation, dispatch, route}) => {
   };
 
   const RenderItem = ({item}) => {
-    console.log('item', item);
+    // console.log('item', item);
     return (
       <View style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText
-            text={`Order ID: ${item?.order_number}`}
+            text={`Order ID: ${orderData?.data?.order_number}`}
             fontFamily="medium"
             fontSize={12}
             textColor={Colors.LIGHT_GREY}

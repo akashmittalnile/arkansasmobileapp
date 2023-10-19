@@ -755,6 +755,15 @@ const MyOrders = ({navigation, dispatch}) => {
     if (catIds?.length > 0) {
       catIds?.map(el => postData.append('category[]', el));
     }
+    if (temporarySelectedTab === '1') {
+      if (tempStartDate !== '' && tempEndDate !== '') {
+        postData.append(
+          'start_date',
+          moment(tempStartDate).format('YYYY-MM-DD'),
+        );
+        postData.append('end_date', moment(tempEndDate).format('YYYY-MM-DD'));
+      }
+    }
     if (tempSelectedRatingValues?.length > 0) {
       tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
     }
@@ -834,6 +843,15 @@ const MyOrders = ({navigation, dispatch}) => {
     if (catIds?.length > 0) {
       catIds?.map(el => postData.append('category[]', el));
     }
+    if (temporarySelectedTab === '1') {
+      if (tempStartDate !== '' && tempEndDate !== '') {
+        postData.append(
+          'start_date',
+          moment(tempStartDate).format('YYYY-MM-DD'),
+        );
+        postData.append('end_date', moment(tempEndDate).format('YYYY-MM-DD'));
+      }
+    }
     if (tempSelectedRatingValues?.length > 0) {
       tempSelectedRatingValues?.map(el => postData.append('rating[]', el));
     }
@@ -899,6 +917,10 @@ const MyOrders = ({navigation, dispatch}) => {
     setTempSelectedProductCategries([]);
     setSelectedRatingValues([]);
     setTempSelectedRatingValues([]);
+    setTempStartDate('');
+    setTempEndDate('');
+    setStartDate('');
+    setEndDate('');
     await getMyOrders();
   };
   const removeFilter = async (filterType, item) => {
@@ -913,9 +935,9 @@ const MyOrders = ({navigation, dispatch}) => {
       setEndDate('');
     }
     if (selectedTab === '1') {
-      if (tempStartDate !== '' && tempEndDate !== '') {
-        postData.append('start_date', tempStartDate);
-        postData.append('end_date', tempEndDate);
+      if (remainingStartDate !== '' && remainingEndDate !== '') {
+        postData.append('start_date', remainingStartDate);
+        postData.append('end_date', remainingEndDate);
       }
     }
     let remainingSelectedCategories =
@@ -973,7 +995,7 @@ const MyOrders = ({navigation, dispatch}) => {
         Service.MY_ORDER,
         postData,
       );
-      console.log('removeFilter resp', resp?.data);
+      // console.log('removeFilter resp', resp?.data);
       if (resp?.data?.status) {
         if (temporarySelectedTab !== selectedTab) {
           setSelectedTab(temporarySelectedTab);
@@ -1039,19 +1061,43 @@ const MyOrders = ({navigation, dispatch}) => {
           />
           <ShowSelectedFilters />
           {selectedTab === '1' ? (
-            <FlatList
-              data={courseData}
-              style={{marginTop: 28}}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={renderCourse}
-            />
-          ) : (
+            courseData?.length > 0 ? (
+              <FlatList
+                data={courseData}
+                style={{marginTop: 28}}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderCourse}
+              />
+            ) : (
+              <View style={{alignItems: 'center', marginTop: 50}}>
+                <Image source={require('assets/images/no-data.png')} />
+                <MyText
+                  text={'No Courses found'}
+                  fontFamily="medium"
+                  fontSize={40}
+                  textAlign="center"
+                  textColor={'black'}
+                />
+              </View>
+            )
+          ) : productData?.length > 0 ? (
             <FlatList
               data={productData}
               style={{marginTop: 28}}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderProduct}
             />
+          ) : (
+            <View style={{alignItems: 'center', marginTop: 50}}>
+              <Image source={require('assets/images/no-data.png')} />
+              <MyText
+                text={'No Products found'}
+                fontFamily="medium"
+                fontSize={40}
+                textAlign="center"
+                textColor={'black'}
+              />
+            </View>
           )}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

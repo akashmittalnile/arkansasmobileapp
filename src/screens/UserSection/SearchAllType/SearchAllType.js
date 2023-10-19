@@ -949,7 +949,7 @@ const SearchAllType = ({navigation, dispatch}) => {
                 <View style={{alignItems: 'center', marginTop: 50}}>
                   <Image source={require('assets/images/no-data.png')} />
                   <MyText
-                    text={'No courses found'}
+                    text={'No Courses found'}
                     fontFamily="medium"
                     fontSize={40}
                     textAlign="center"

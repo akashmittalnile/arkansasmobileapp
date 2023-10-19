@@ -21,6 +21,7 @@ import {styles} from './ViewPdfStyle';
 import MyButton from '../../components/MyButton/MyButton';
 import {width} from '../../global/Constant';
 import Pdf from 'react-native-pdf';
+import FAB_Button from '../../components/FAB_Button/FAB_Button';
 
 const ViewPdf = ({visible, setVisibility, pdfLink, handleDownload}) => {
   const [pdfHeight, setPdfHeight] = useState(null);
@@ -100,7 +101,12 @@ const ViewPdf = ({visible, setVisibility, pdfLink, handleDownload}) => {
               ]}
             />
           </View>
-          <MyButton
+          <FAB_Button
+            icon={<Image source={require('assets/images/download-icon.png')} />}
+            bottom={50}
+            onPress={handleDownload}
+          />
+          {/* <MyButton
             text="Download Certificate"
             style={{
               width: '100%',
@@ -111,7 +117,7 @@ const ViewPdf = ({visible, setVisibility, pdfLink, handleDownload}) => {
               bottom: 50,
             }}
             onPress={handleDownload}
-          />
+          /> */}
         </View>
       </View>
     </Modal>

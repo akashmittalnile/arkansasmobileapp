@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  Platform,
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -36,16 +37,137 @@ import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import OrdersFilter from '../../../modals/OrdersFilter/OrdersFilter';
 import Review from '../../../modals/Review/Review';
+import {createThumbnail} from 'react-native-create-thumbnail';
+import RNFetchBlob from 'rn-fetch-blob';
 
-const OrderDetails = ({navigation, dispatch}) => {
+const OrderDetails = ({navigation, dispatch, route}) => {
   //variables
   const LINE_HEIGTH = 25;
   //variables : redux
   const userToken = useSelector(state => state.user.userToken);
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
+  const [orderData, setOrderData] = useState(false);
+
+  useEffect(() => {
+    getOrderDetail();
+  }, []);
+  const getOrderDetail = async () => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append('order_id', route?.params?.order_id);
+    formdata.append('item_id', route?.params?.item_id);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.ORDER_DETAIL,
+        formdata,
+      );
+      console.log('getOrderDetail resp', resp?.data);
+      if (resp?.data?.status) {
+        const isCourseExist = resp.data.items?.find(el => el.type == '1');
+        if (isCourseExist) {
+          resp.data.items = await generateThumb(resp?.data?.items);
+          setOrderData(resp?.data);
+        } else {
+          setOrderData(resp?.data);
+        }
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in getOrderDetail', error);
+    }
+    setShowLoader(false);
+  };
+  const generateThumb = async data => {
+    console.log('generateThumb', JSON.stringify(data));
+    let updatedData = [...data];
+    try {
+      updatedData = await Promise.all(
+        data?.map?.(async el => {
+          if (el?.type == '2') {
+            return el;
+          }
+          console.log('here', JSON.stringify(el));
+          const thumb = await createThumbnail({
+            url: el?.video,
+            timeStamp: 1000,
+          });
+          return {
+            ...el,
+            thumb,
+          };
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+    console.log('thumb data order details', updatedData);
+    return updatedData;
+  };
+
+  const downloadInvoice = async () => {
+    console.log('downloadInvoice', orderData?.invoice);
+    let pdfUrl = orderData?.invoice;
+    let DownloadDir =
+      Platform.OS == 'ios'
+        ? RNFetchBlob.fs.dirs.DocumentDir
+        : RNFetchBlob.fs.dirs.DownloadDir;
+    const {dirs} = RNFetchBlob.fs;
+    const dirToSave =
+      Platform.OS == 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
+    const configfb = {
+      fileCache: true,
+      useDownloadManager: true,
+      notification: true,
+      mediaScannable: true,
+      title: 'Arkansas',
+      path: `${dirToSave}.pdf`,
+    };
+    console.log('here');
+    const configOptions = Platform.select({
+      ios: {
+        fileCache: configfb.fileCache,
+        title: configfb.title,
+        path: configfb.path,
+        appendExt: 'pdf',
+      },
+      android: configfb,
+    });
+    Platform.OS == 'android'
+      ? RNFetchBlob.config({
+          fileCache: true,
+          addAndroidDownloads: {
+            useDownloadManager: true,
+            notification: true,
+            path: `${DownloadDir}/.pdf`,
+            description: 'Arkansas',
+            title: `${orderData?.data?.order_id} invoice.pdf`,
+            mime: 'application/pdf',
+            mediaScannable: true,
+          },
+        })
+          .fetch('GET', `${pdfUrl}`)
+          .catch(error => {
+            console.warn(error.message);
+          })
+      : RNFetchBlob.config(configOptions)
+          .fetch('GET', `${pdfUrl}`, {})
+          .then(res => {
+            if (Platform.OS === 'ios') {
+              RNFetchBlob.fs.writeFile(configfb.path, res.data, 'base64');
+              RNFetchBlob.ios.previewDocument(configfb.path);
+            }
+            console.log('The file saved to ', res);
+          })
+          .catch(e => {
+            console.log('The file saved to ERROR', e.message);
+          });
+  };
 
   const RenderItem = ({item}) => {
+    console.log('item', item);
     return (
       <View style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
@@ -59,7 +181,7 @@ const OrderDetails = ({navigation, dispatch}) => {
           <View style={styles.statusRow}>
             <View style={styles.dot} />
             <MyText
-              text={item.order_status}
+              text={'order_status'}
               fontFamily="medium"
               fontSize={13}
               textColor={Colors.THEME_BROWN}
@@ -69,7 +191,9 @@ const OrderDetails = ({navigation, dispatch}) => {
         </View>
         <View style={styles.courseSubContainer}>
           <ImageBackground
-            source={require('assets/images/rectangle-1035.png')}
+            source={
+              item?.type == '1' ? {uri: item?.thumb?.path} : {uri: item?.image}
+            }
             style={styles.crseImg}></ImageBackground>
           <View style={{marginLeft: 11, width: width * 0.5}}>
             <MyText
@@ -113,7 +237,7 @@ const OrderDetails = ({navigation, dispatch}) => {
             </View>
             <View style={styles.bottomRow}>
               <MyText
-                text={'$' + item?.price}
+                text={'$' + item?.total_amount_paid}
                 fontFamily="bold"
                 fontSize={14}
                 textColor={Colors.THEME_GOLD}
@@ -220,7 +344,16 @@ const OrderDetails = ({navigation, dispatch}) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
-          <RenderItem item={itemData} />
+          {orderData?.items && Array.isArray(orderData?.items) ? (
+            <>
+              <RenderItem item={orderData?.items?.find(el => el.is_primary)} />
+              {orderData?.items?.length > 1
+                ? orderData?.items
+                    ?.filter(el => !el.is_primary)
+                    ?.map(item => <RenderItem item={item} />)
+                : null}
+            </>
+          ) : null}
           <Summary />
 
           <View style={styles.amountContainer}>
@@ -251,14 +384,14 @@ const OrderDetails = ({navigation, dispatch}) => {
             </ImageBackground>
           </View>
           <MyButton
-            text="DONWLOAD INVOICE"
+            text="DOWNLOAD INVOICE"
             style={{
               width: width * 0.9,
               marginBottom: 10,
               backgroundColor: Colors.THEME_BROWN,
               marginTop: 32,
             }}
-            onPress={() => {}}
+            onPress={downloadInvoice}
           />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />

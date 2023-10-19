@@ -423,8 +423,8 @@ const MyOrders = ({navigation, dispatch}) => {
   const gotoStartCourse = () => {
     navigation.navigate(ScreenNames.START_COURSE);
   };
-  const gotoOrderDetails = order_id => {
-    navigation.navigate(ScreenNames.ORDER_DETAILS, {order_id});
+  const gotoOrderDetails = (order_id, item_id) => {
+    navigation.navigate(ScreenNames.ORDER_DETAILS, {order_id, item_id});
   };
 
   const submitReview = async () => {
@@ -564,7 +564,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 marginTop: 8,
                 backgroundColor: Colors.THEME_BROWN,
               }}
-              onPress={() => gotoOrderDetails(item?.order_id)}
+              onPress={() => gotoOrderDetails(item?.order_id, item?.item_id)}
             />
             {/* {item.isReviewed == '0' ? (
               <MyButton
@@ -614,7 +614,7 @@ const MyOrders = ({navigation, dispatch}) => {
     return (
       <TouchableOpacity
         // onPress={() => gotoProductDetails(item?.order_id, '2')}
-        onPress={() => gotoOrderDetails(item?.order_id)}
+        onPress={() => gotoOrderDetails(item?.order_id, item?.item_id)}
         style={styles.courseContainer}>
         <View style={styles.courseTopRow}>
           <MyText

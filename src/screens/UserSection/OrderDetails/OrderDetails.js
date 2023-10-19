@@ -221,11 +221,11 @@ const OrderDetails = ({navigation, dispatch, route}) => {
                   // style={styles.crtrImg}
                 /> */}
                 <Image
-                  source={{uri: item?.content_creator_image}}
+                  source={{uri: item?.creator_image}}
                   style={styles.createImgStyle}
                 />
                 <MyText
-                  text={item.content_creator_name}
+                  text={item.creator_name}
                   fontFamily="regular"
                   fontSize={13}
                   numberOfLines={1}
@@ -270,7 +270,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
           style={{borderColor: '#ECECEC', marginTop: 11, marginBottom: 5}}
         />
         <MyText
-          text={item.order_date}
+          text={orderData?.data?.order_date}
           fontFamily="medium"
           fontSize={12}
           textColor={Colors.LIGHT_GREY}
@@ -284,7 +284,8 @@ const OrderDetails = ({navigation, dispatch, route}) => {
       <View style={styles.summaryContainer}>
         <View style={[styles.row, {marginBottom: 10}]}>
           <MyText
-            text={`Total Amount (1)`}
+            // text={`Total Amount (1)`}
+            text={`Total Amount`}
             fontSize={14}
             fontFamily="medium"
             textColor={'#455A64'}
@@ -347,11 +348,22 @@ const OrderDetails = ({navigation, dispatch, route}) => {
           {orderData?.items && Array.isArray(orderData?.items) ? (
             <>
               <RenderItem item={orderData?.items?.find(el => el.is_primary)} />
-              {orderData?.items?.length > 1
-                ? orderData?.items
+              {orderData?.items?.length > 1 ? (
+                <>
+                  <MyText
+                    text={'Other Items'}
+                    fontFamily="medium"
+                    fontSize={16}
+                    textColor={Colors.THEME_BROWN}
+                    style={{marginBottom: 10}}
+                  />
+                  {orderData?.items
                     ?.filter(el => !el.is_primary)
-                    ?.map(item => <RenderItem item={item} />)
-                : null}
+                    ?.map(item => (
+                      <RenderItem item={item} />
+                    ))}
+                </>
+              ) : null}
             </>
           ) : null}
           <Summary />
@@ -374,7 +386,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
                   style={{}}
                 />
                 <MyText
-                  text={'$$458'}
+                  text={'$' + orderData?.data?.total_amount}
                   fontFamily="bold"
                   fontSize={16}
                   textColor={Colors.WHITE}

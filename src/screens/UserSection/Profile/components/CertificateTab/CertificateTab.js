@@ -37,6 +37,9 @@ const CertificateTab = ({
   certificateList,
   downloadCertificate,
   openInBrowser,
+  setShowViewPdfModal,
+  setPdfLink,
+  setPdfTitle,
 }) => {
   const renderCertificate = ({item}) => {
     return (
@@ -114,7 +117,12 @@ const CertificateTab = ({
                   marginTop: 8,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                onPress={() => openInBrowser(item.download_pdf)}
+                onPress={() => {
+                  // openInBrowser(item.download_pdf)
+                  setShowViewPdfModal(true)
+                  setPdfLink(item.download_pdf)
+                  setPdfTitle(item.title)
+                }}
               />
               <MyButton
                 text="DOWNLOAD"

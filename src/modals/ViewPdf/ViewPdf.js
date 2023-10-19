@@ -23,7 +23,8 @@ import {width} from '../../global/Constant';
 import Pdf from 'react-native-pdf';
 
 const ViewPdf = ({visible, setVisibility, pdfLink, handleDownload}) => {
-  console.log('visible modal', visible);
+  const [pdfHeight, setPdfHeight] = useState(null);
+  const [pdfWidth, setPdfWidth] = useState(null);
   //variables : navigation
   const navigation = useNavigation();
   //function : navigation function
@@ -64,13 +65,25 @@ const ViewPdf = ({visible, setVisibility, pdfLink, handleDownload}) => {
         <TouchableOpacity style={styles.blurView} onPress={closeModal} />
         <View style={styles.mainView}>
           {renderHeader()}
-          <View style={styles.pdfContainer}>
+          <View
+            style={[
+              styles.pdfContainer,
+              // pdfHeight === null ? {} : {height: pdfHeight}
+            ]}>
             <Pdf
               source={{uri: pdfLink}}
               // source={{uri: `http://samples.leanpub.com/thereactnativebook-sample.pdf`}}
               trustAllCerts={false}
-              onLoadComplete={(numberOfPages, filePath) => {
+              onLoadComplete={(
+                numberOfPages,
+                path,
+                {width, height},
+                tableContents,
+              ) => {
                 console.log(`Number of pages: ${numberOfPages}`);
+                console.log(`{width, height}`, {width, height});
+                setPdfHeight(height);
+                setPdfWidth(width);
               }}
               onPageChanged={(page, numberOfPages) => {
                 console.log(`Current page: ${page}`);
@@ -81,7 +94,10 @@ const ViewPdf = ({visible, setVisibility, pdfLink, handleDownload}) => {
               onPressLink={uri => {
                 console.log(`Link pressed: ${uri}`);
               }}
-              style={styles.crseImg}
+              style={[
+                styles.crseImg,
+                // pdfHeight === null ? {} : {height: pdfHeight, width: pdfWidth}
+              ]}
             />
           </View>
           <MyButton

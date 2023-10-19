@@ -46,6 +46,7 @@ import OrderHistoryTab from './components/OrderHistoryTab/OrderHistoryTab';
 import OrderStatus from '../../../modals/OrderStatus/OrderStatus';
 import RNFetchBlob from 'rn-fetch-blob';
 import {createThumbnail} from 'react-native-create-thumbnail';
+import ViewPdf from '../../../modals/ViewPdf/ViewPdf';
 
 const personImg = `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`;
 const certificateList = [
@@ -153,6 +154,9 @@ const Profile = ({navigation, dispatch}) => {
   const [cardList, setCardList] = useState([]);
   const [showAddCardModal, setShowAddCardModal] = useState(false);
   const [showOrderStatusModal, setShowOrderStatusModal] = useState(false);
+  const [showViewPdfModal, setShowViewPdfModal] = useState(false);
+  const [pdfLink, setPdfLink] = useState('');
+  const [pdfTitle, setPdfTitle] = useState('');
 
   // profile tab refs
   const lastNameRef = useRef(null);
@@ -490,6 +494,9 @@ const Profile = ({navigation, dispatch}) => {
                 certificateList={certificateData}
                 downloadCertificate={downloadCertificate}
                 openInBrowser={openInBrowser}
+                setShowViewPdfModal={setShowViewPdfModal}
+                setPdfLink={setPdfLink}
+                setPdfTitle={setPdfTitle}
               />
             ) : // : selectedTab == '4' ? (
             //   <NotificationsTab
@@ -524,6 +531,14 @@ const Profile = ({navigation, dispatch}) => {
           visible={showOrderStatusModal}
           setVisibility={setShowOrderStatusModal}
         />
+        {showViewPdfModal ? (
+          <ViewPdf
+            visible={showViewPdfModal}
+            setVisibility={setShowViewPdfModal}
+            pdfLink={pdfLink || ''}
+            handleDownload={() => downloadCertificate(pdfLink, pdfTitle)}
+          />
+        ) : null}
       </View>
     </SafeAreaView>
   );

@@ -217,7 +217,7 @@ const Wishlist = ({navigation, dispatch}) => {
     } catch (error) {
       console.error('Error generating thumbnails:', error);
     }
-    console.log('thumb data wishlist', updatedData);
+    // console.log('thumb data wishlist', updatedData);
     return updatedData;
   };
   const setOriginalValues = () => {
@@ -813,7 +813,7 @@ const Wishlist = ({navigation, dispatch}) => {
     );
   };
   const renderProduct = ({item}) => {
-    console.log('wishlist item.Product_image', item.Product_image);
+    // console.log('wishlist item.Product_image', item.Product_image);
     return (
       <TouchableOpacity
         onPress={() => gotoProductDetails(item?.id, '2')}

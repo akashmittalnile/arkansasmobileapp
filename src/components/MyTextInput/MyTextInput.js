@@ -18,6 +18,7 @@ const MyTextInput = ({
   borderColor = '#E0E0E0',
   keyboardType = 'default',
   onSubmitEditing,
+  editable = true,
   onTouchStart = () => {},
   backgroundColor = '#fff',
   style = {},
@@ -73,6 +74,7 @@ const MyTextInput = ({
         secureTextEntry={
           !secureTextEntry ? false : look ? !secureTextEntry : secureTextEntry
         }
+        editable={editable}
         onTouchStart={onTouchStart}
         keyboardType={keyboardType}
         maxLength={maxLength}

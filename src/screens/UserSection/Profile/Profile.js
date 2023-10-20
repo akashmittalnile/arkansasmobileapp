@@ -47,6 +47,9 @@ import OrderStatus from '../../../modals/OrderStatus/OrderStatus';
 import RNFetchBlob from 'rn-fetch-blob';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import ViewPdf from '../../../modals/ViewPdf/ViewPdf';
+import {CountryPicker} from 'react-native-country-codes-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUser } from '../../../reduxToolkit/reducer/user';
 
 const personImg = `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`;
 const certificateList = [
@@ -157,9 +160,26 @@ const Profile = ({navigation, dispatch}) => {
   const [showViewPdfModal, setShowViewPdfModal] = useState(false);
   const [pdfLink, setPdfLink] = useState('');
   const [pdfTitle, setPdfTitle] = useState('');
-
+  const [selectedCountry, setSelectedCountry] = useState({
+    code: 'US',
+    dial_code: '+1',
+    flag: '🇺🇸',
+    name: {
+      by: '',
+      cz: 'Spoj  ené státy',
+      en: 'United States',
+      es: 'Estados Unidos',
+      pl: 'Stany Zjednoczone',
+      pt: 'Estados Unidos',
+      ru: 'Соединенные Штаты',
+      ua: 'Сполучені Штати',
+    },
+  });
+  const [phone, setPhone] = useState('');
+  const [show, setShow] = useState(false);
   // profile tab refs
   const lastNameRef = useRef(null);
+  const phoneRef = useRef(null);
   const emailRef = useRef(null);
   const companyRef = useRef(null);
   const professionalTitleRef = useRef(null);
@@ -263,9 +283,10 @@ const Profile = ({navigation, dispatch}) => {
     setCompany(data?.company);
     setProfessionalTitle(data?.professional_title);
     setTimezone(data?.timezone);
+    setPhone(data?.phone);
   };
   const setCertificatesTabData = async data => {
-    const thumbData = await generateThumb(data)
+    const thumbData = await generateThumb(data);
     setCertificateData([...thumbData]);
   };
   const setNotificationsTabData = data => {};
@@ -320,6 +341,34 @@ const Profile = ({navigation, dispatch}) => {
       }
     } catch (error) {
       console.log('error in deleteCard', error);
+    }
+    setShowLoader(false);
+  };
+
+  const updateProfileDetails = async () => {
+    const postData = new FormData();
+    postData.append('first_name', firstName);
+    postData.append('last_name', lastName);
+    postData.append('phone', phone);
+    // postData.append("profile_image", userInfo?.profile_image);
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.UPDATE_PROFILE,
+        postData,
+      );
+      console.log('updateProfileDetails resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show(resp?.data?.message, Toast.SHORT);
+        const jsonValue = JSON.stringify(resp.data.user);
+        await AsyncStorage.setItem('userInfo', jsonValue);
+        dispatch(setUser(resp.data.user));
+      } else {
+        Toast.show(resp?.data?.message, Toast.SHORT);
+      }
+    } catch (error) {
+      console.log('error in updateProfileDetails', error);
     }
     setShowLoader(false);
   };
@@ -418,7 +467,14 @@ const Profile = ({navigation, dispatch}) => {
             contentContainerStyle={{paddingBottom: '20%'}}
             style={styles.mainView}>
             <View style={styles.contactContainer}>
-              <Image source={{uri: personImg}} style={styles.personImg} />
+              <Image
+                source={
+                  userInfo?.profile_image
+                    ? {uri: userInfo?.profile_image}
+                    : require('assets/images/user-default.png')
+                }
+                style={styles.personImg}
+              />
               <View style={{marginLeft: 17}}>
                 <MyText
                   text={`${userInfo?.first_name} ${userInfo?.last_name}`}
@@ -465,6 +521,11 @@ const Profile = ({navigation, dispatch}) => {
                 setLastName={setLastName}
                 email={email}
                 setEmail={setEmail}
+                phone={phone}
+                setPhone={setPhone}
+                show={show}
+                setShow={setShow}
+                selectedCountry={selectedCountry}
                 company={company}
                 setCompany={setCompany}
                 professionalTitle={professionalTitle}
@@ -472,10 +533,12 @@ const Profile = ({navigation, dispatch}) => {
                 timezone={timezone}
                 setTimezone={setTimezone}
                 lastNameRef={lastNameRef}
+                phoneRef={phoneRef}
                 emailRef={emailRef}
                 companyRef={companyRef}
                 professionalTitleRef={professionalTitleRef}
                 timezoneRef={timezoneRef}
+                updateProfileDetails={updateProfileDetails}
               />
             ) : selectedTab === '2' ? (
               <PasswordTab
@@ -539,6 +602,36 @@ const Profile = ({navigation, dispatch}) => {
             handleDownload={() => downloadCertificate(pdfLink, pdfTitle)}
           />
         ) : null}
+        <CountryPicker
+          show={show}
+          disableBackdrop={false}
+          // style={styles.countrySilderStyle}
+          style={{
+            // Styles for whole modal [View]
+            modal: {
+              height: Constant.height * 0.4,
+              // backgroundColor: 'red',
+            },
+            // Styles for modal backdrop [View]
+            backdrop: {},
+            countryName: {
+              color: 'black',
+            },
+            dialCode: {
+              color: 'black',
+            },
+          }}
+          // when picker button press you will get the country object with dial code
+          pickerButtonOnPress={item => {
+            // console.warn('item', item);
+            // setCountryCode(item.dial_code);
+            setSelectedCountry(item);
+            setShow(false);
+          }}
+          placeholderTextColor={'#c9c9c9'}
+          color={Colors.BLACK}
+          onBackdropPress={() => setShow(false)}
+        />
       </View>
     </SafeAreaView>
   );

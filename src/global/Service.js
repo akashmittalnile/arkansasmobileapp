@@ -52,6 +52,7 @@ export const REMOVE_CART = `remove-cart`;
 export const MAKE_PAYMENT = `make-payment`;
 export const SPECIAL_COURSES = `special-courses`;
 export const ORDER_DETAIL = `order-detail`;
+export const UPDATE_PROFILE = `update-profile`;
 
 //function : post API
 export const postAPI = async (endPoint, postData, token = '') => {

@@ -30,6 +30,7 @@ import {width, height} from 'global/Constant';
 import Divider from 'components/Divider/Divider';
 import NameEnterValue from '../../../../../components/NameEnterValue/NameEnterValue';
 import MyButton from '../../../../../components/MyButton/MyButton';
+import TextInputWithFlag from '../../../../../components/TextInputWithFlag/TextInputWithFlag';
 // import {WebView} from 'react-native-webview';
 
 const ProfileTab = ({
@@ -46,10 +47,18 @@ const ProfileTab = ({
   timezone,
   setTimezone,
   lastNameRef,
+  phoneRef,
   emailRef,
+  phone,
+  setPhone,
+  selectedCountry,
+  showsetPhone,
+  setShowsetPhone,
+  selectedCountrysetPhone,
   companyRef,
   professionalTitleRef,
   timezoneRef,
+  updateProfileDetails,
 }) => {
   return (
     <View style={{marginTop: 31}}>
@@ -77,10 +86,21 @@ const ProfileTab = ({
         name={'Email id'}
         placeholder={'Email id'}
         value={email}
+        editable={false}
         setValue={setEmail}
-        onSubmitEditing={() => {
-          Keyboard.dismiss()
-        }}
+        onSubmitEditing={() => phoneRef.current.focus()}
+      />
+      <TextInputWithFlag
+        inputRef={phoneRef}
+        value={phone}
+        Flag={selectedCountry.flag}
+        CountryCode={selectedCountry.dial_code}
+        placeholder="Enter Phone Number"
+        keyboardType="number-pad"
+        maxLength={10}
+        onPress={() => setShow(true)}
+        onChangeText={text => setPhone(text)}
+        onSubmitEditing={() => passwordRef.current.focus()}
       />
       {/* <NameEnterValue
         inputRef={companyRef}
@@ -116,6 +136,7 @@ const ProfileTab = ({
           marginBottom: 10,
           backgroundColor: Colors.THEME_GOLD,
         }}
+        onPress={updateProfileDetails}
       />
       <MyButton
         text="CLEAR ALL"

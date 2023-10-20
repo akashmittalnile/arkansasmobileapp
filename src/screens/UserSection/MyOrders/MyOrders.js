@@ -601,13 +601,13 @@ const MyOrders = ({navigation, dispatch}) => {
         <Divider
           style={{borderColor: '#ECECEC', marginTop: 11, marginBottom: 5}}
         />
-        <MyText
+        {/* <MyText
           text={`Course Completed Date: ${item.course_valid_date}`}
           fontFamily="medium"
           fontSize={12}
           textColor={Colors.LIGHT_GREY}
           style={{}}
-        />
+        /> */}
       </TouchableOpacity>
     );
   };

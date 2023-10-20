@@ -119,9 +119,9 @@ const CertificateTab = ({
                 }}
                 onPress={() => {
                   // openInBrowser(item.download_pdf)
-                  setShowViewPdfModal(true)
-                  setPdfLink(item.download_pdf)
-                  setPdfTitle(item.title)
+                  setShowViewPdfModal(true);
+                  setPdfLink(item.download_pdf);
+                  setPdfTitle(item.title);
                 }}
               />
               <MyButton
@@ -143,6 +143,20 @@ const CertificateTab = ({
       </View>
     );
   };
+  if (certificateList?.length === 0) {
+    return (
+      <View style={{alignItems: 'center', marginTop: 50}}>
+        <Image source={require('assets/images/no-data.png')} />
+        <MyText
+          text={'No Certificates found'}
+          fontFamily="medium"
+          fontSize={40}
+          textAlign="center"
+          textColor={'black'}
+        />
+      </View>
+    );
+  }
   return (
     <FlatList
       data={certificateList}

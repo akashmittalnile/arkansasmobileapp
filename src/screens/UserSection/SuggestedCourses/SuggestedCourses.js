@@ -624,11 +624,11 @@ const SuggestedCourses = ({navigation, dispatch}) => {
             <View style={styles.iconsRow}>
               <TouchableOpacity
                 onPress={() => {
-                  onLike('1', item.id, item.isLike);
+                  onLike('1', item.id, item?.isWishlist);
                 }}>
                 <Image
                   source={
-                    item.isLike
+                    item?.isWishlist
                       ? require('assets/images/heart-selected.png')
                       : require('assets/images/heart-yellow-outline.png')
                   }

@@ -37,8 +37,10 @@ export const styles = StyleSheet.create({
   },
   cartNumView: {
     position: 'absolute',
-    top: -10,
-    right: -5,
+    // top: -10,
+    // right: -5,
+    top: -2,
+    right: 0,
     height: 15,
     width: 15,
     justifyContent: 'center',

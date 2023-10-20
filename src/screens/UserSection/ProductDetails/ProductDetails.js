@@ -559,7 +559,9 @@ const ProductDetails = ({navigation, dispatch, route}) => {
               }}
             />
           </View>
-          <FAB_Button onPress={openReviewModal} />
+          {productDetails?.isPurchased ? (
+            <FAB_Button onPress={openReviewModal} />
+          ) : null}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
         <Review

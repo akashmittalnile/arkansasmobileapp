@@ -41,6 +41,7 @@ import {
   setCartCount,
 } from 'src/reduxToolkit/reducer/user';
 import SearchWithIconDummy from '../../../components/SearchWithIconDummy/SearchWithIconDummy';
+import VideoModal from '../../../components/VideoModal/VideoModal';
 
 const courseTypes = [
   {name: 'All', id: '1'},
@@ -166,6 +167,7 @@ const Home = ({navigation, dispatch}) => {
   const [homeData, setHomeData] = useState({});
   const [selectedTag, setSelectedTag] = useState('1');
   const [trendingCourses, setTrendingCourses] = useState([]);
+  const [showModal, setShowModal] = useState({isVisible: false, data: null});
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -301,7 +303,12 @@ const Home = ({navigation, dispatch}) => {
     // const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
     return data;
   };
-
+  const toggleModal = state => {
+    setShowModal({
+      isVisible: state.isVisible,
+      data: state.data,
+    });
+  };
   const gotoSearchAllType = () => {
     navigation.navigate(ScreenNames.SEACRCH_ALL_TYPE);
   };
@@ -521,7 +528,12 @@ const Home = ({navigation, dispatch}) => {
           <ImageBackground
             source={{uri: item?.thumb?.path}}
             style={styles.crseImg}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              setShowModal({
+                isVisible: true,
+                data: item,
+              });
+            }} >
               <Image source={require('assets/images/play-icon.png')} />
             </TouchableOpacity>
           </ImageBackground>
@@ -793,6 +805,14 @@ const Home = ({navigation, dispatch}) => {
               style={{textAlign: 'center', marginTop: 20}}
             />
           )}
+          {showModal.isVisible ? (
+            <VideoModal
+              isVisible={showModal.isVisible}
+              toggleModal={toggleModal}
+              videoDetail={{...showModal?.data, url: showModal?.data?.introduction_video}}
+              // {...props}
+            />
+          ) : null}
           {/* {homeData?.suggested_course?.length > 0 ? (
             <View>
               <ViewAll

@@ -36,6 +36,7 @@ import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import SearchCourseByCategoryFiltersModal from './components/SearchCourseByCategoryFiltersModal/SearchCourseByCategoryFiltersModal';
 import {createThumbnail} from 'react-native-create-thumbnail';
+import VideoModal from '../../../components/VideoModal/VideoModal';
 
 const courseList = [
   {
@@ -96,6 +97,7 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
   const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
   const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
+  const [showModal, setShowModal] = useState({isVisible: false, data: null});
 
   useEffect(() => {
     getCourses();
@@ -145,6 +147,12 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
     }
     // console.log('thumb data SearchAllType', updatedData);
     return updatedData;
+  };
+  const toggleModal = state => {
+    setShowModal({
+      isVisible: state.isVisible,
+      data: state.data,
+    });
   };
   const gotoCourseDetails = (id, type) => {
     navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
@@ -452,7 +460,12 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
           source={{uri: item?.thumb?.path}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+              setShowModal({
+                isVisible: true,
+                data: item,
+              });
+            }} >
             <Image source={require('assets/images/play-icon.png')} />
           </TouchableOpacity>
         </ImageBackground>
@@ -540,6 +553,14 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
             style={{marginTop: 10}}
             showDot={isFilterApplied}
           />
+          {showModal.isVisible ? (
+            <VideoModal
+              isVisible={showModal.isVisible}
+              toggleModal={toggleModal}
+              videoDetail={{...showModal?.data, url: showModal?.data?.introduction_video}}
+              // {...props}
+            />
+          ) : null}
           <ShowSelectedFilters />
           <FlatList
             data={courseData}

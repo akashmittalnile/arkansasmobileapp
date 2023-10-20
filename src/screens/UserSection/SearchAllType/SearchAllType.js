@@ -36,6 +36,7 @@ import MyButton from '../../../components/MyButton/MyButton';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import FiltersModal from './components/FiltersModal/FiltersModal';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
+import VideoModal from '../../../components/VideoModal/VideoModal';
 
 const courseList = [
   {
@@ -151,7 +152,8 @@ const SearchAllType = ({navigation, dispatch}) => {
   const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
   const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
-
+  const [showModal, setShowModal] = useState({isVisible: false, data: null});
+  
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getAllType();
@@ -524,6 +526,12 @@ const SearchAllType = ({navigation, dispatch}) => {
   const gotoCourseDetails = (id, type) => {
     navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
   };
+  const toggleModal = state => {
+    setShowModal({
+      isVisible: state.isVisible,
+      data: state.data,
+    });
+  };
   const renderCourse = ({item}) => {
     return (
       <TouchableOpacity
@@ -534,7 +542,12 @@ const SearchAllType = ({navigation, dispatch}) => {
           source={{uri: item?.thumb?.path}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+              setShowModal({
+                isVisible: true,
+                data: item,
+              });
+            }} >
             <Image source={require('assets/images/play-icon.png')} />
           </TouchableOpacity>
         </ImageBackground>
@@ -935,6 +948,14 @@ const SearchAllType = ({navigation, dispatch}) => {
             showDot={isFilterApplied}
           />
           <ShowSelectedFilters />
+          {showModal.isVisible ? (
+            <VideoModal
+              isVisible={showModal.isVisible}
+              toggleModal={toggleModal}
+              videoDetail={{...showModal?.data, url: showModal?.data?.introduction_video}}
+              // {...props}
+            />
+          ) : null}
           {selectedTab === '1' ? (
             <>
               {courseData?.length > 0 ? (

@@ -426,9 +426,9 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
           source={{uri: item?.Product_image[0]}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Image source={require('assets/images/play-icon.png')} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </ImageBackground>
         <View style={{marginLeft: 11, width: width * 0.42}}>
           <MyText

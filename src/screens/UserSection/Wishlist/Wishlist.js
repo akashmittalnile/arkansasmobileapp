@@ -36,6 +36,7 @@ import MyButton from '../../../components/MyButton/MyButton';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import FiltersModal from './components/FiltersModal/FiltersModal';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
+import VideoModal from '../../../components/VideoModal/VideoModal';
 
 const courseList = [
   {
@@ -151,6 +152,7 @@ const Wishlist = ({navigation, dispatch}) => {
   const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
   const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
+  const [showModal, setShowModal] = useState({isVisible: false, data: null});
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -735,7 +737,12 @@ const Wishlist = ({navigation, dispatch}) => {
           source={{uri: item?.thumb?.path}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+              setShowModal({
+                isVisible: true,
+                data: item,
+              });
+            }}>
             <Image source={require('assets/images/play-icon.png')} />
           </TouchableOpacity>
         </ImageBackground>
@@ -950,6 +957,12 @@ const Wishlist = ({navigation, dispatch}) => {
       </View>
     );
   };
+  const toggleModal = state => {
+    setShowModal({
+      isVisible: state.isVisible,
+      data: state.data,
+    });
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -994,6 +1007,14 @@ const Wishlist = ({navigation, dispatch}) => {
             style={{marginTop: 10}}
             showDot={isFilterApplied}
           />
+          {showModal.isVisible ? (
+            <VideoModal
+              isVisible={showModal.isVisible}
+              toggleModal={toggleModal}
+              videoDetail={{...showModal?.data, url: showModal?.data?.introduction_video}}
+              // {...props}
+            />
+          ) : null}
           <ShowSelectedFilters />
           {selectedTab === '1' ? <Courses /> : <Products />}
         </ScrollView>

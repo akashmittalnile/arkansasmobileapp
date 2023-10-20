@@ -327,7 +327,7 @@ const Profile = ({navigation, dispatch}) => {
         return;
       }
       console.log('Response = ', response.assets[0]);
-      setProfileImage(response.assets[0]);
+      // setProfileImage(response.assets[0]);
       updateProfileDetails(response.assets[0]);
       setShowImageSourceModal(false);
     });
@@ -398,7 +398,7 @@ const Profile = ({navigation, dispatch}) => {
         return;
       } else {
         updateProfileDetails(response.assets[0]);
-        setProfileImage(response.assets[0]);
+        // setProfileImage(response.assets[0]);
         setShowImageSourceModal(false);
       }
       setShowImageSourceModal(false);
@@ -482,6 +482,7 @@ const Profile = ({navigation, dispatch}) => {
       console.log('updateProfileDetails resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show(resp?.data?.message, Toast.SHORT);
+        setProfileImage(resp?.data?.user?.profile_image)
         const jsonValue = JSON.stringify(resp.data.user);
         await AsyncStorage.setItem('userInfo', jsonValue);
         dispatch(setUser(resp.data.user));
@@ -592,12 +593,7 @@ const Profile = ({navigation, dispatch}) => {
                 <Image
                   source={
                     profileImage
-                      ? {
-                          uri:
-                            typeof profileImage === 'object'
-                              ? profileImage?.uri
-                              : profileImage,
-                        }
+                      ? {uri: profileImage}
                       : require('assets/images/user-default.png')
                   }
                   style={styles.personImg}

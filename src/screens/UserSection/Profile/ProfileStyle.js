@@ -67,4 +67,12 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     elevation: 2,
   },
+  addButtonStyle: {
+    position: 'absolute',
+    backgroundColor: Colors.THEME_GOLD,
+    borderRadius: 100,
+    padding: 10,
+    right: 5,
+    bottom: 5,
+  },
 });

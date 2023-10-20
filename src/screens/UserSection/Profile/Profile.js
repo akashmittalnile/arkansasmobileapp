@@ -16,6 +16,7 @@ import {
   StatusBar,
   Platform,
   Linking,
+  PermissionsAndroid,
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -49,7 +50,9 @@ import {createThumbnail} from 'react-native-create-thumbnail';
 import ViewPdf from '../../../modals/ViewPdf/ViewPdf';
 import {CountryPicker} from 'react-native-country-codes-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { setUser } from '../../../reduxToolkit/reducer/user';
+import {setUser} from '../../../reduxToolkit/reducer/user';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import SelectImageSource from '../../../modals/SelectImageSource/SelectImageSource';
 
 const personImg = `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`;
 const certificateList = [
@@ -177,6 +180,8 @@ const Profile = ({navigation, dispatch}) => {
   });
   const [phone, setPhone] = useState('');
   const [show, setShow] = useState(false);
+  const [showImageSourceModal, setShowImageSourceModal] = useState(false);
+  const [profileImage, setProfileImage] = useState(userInfo?.profile_image);
   // profile tab refs
   const lastNameRef = useRef(null);
   const phoneRef = useRef(null);
@@ -293,6 +298,112 @@ const Profile = ({navigation, dispatch}) => {
   const setBillingTabData = data => {
     setCardList(data);
   };
+  const openCamera = () => {
+    const options = {
+      width: 1080,
+      height: 1080,
+      cropping: true,
+      mediaType: 'photo',
+      compressImageQuality: 1,
+      compressImageMaxHeight: 1080 / 2,
+      compressImageMaxWidth: 1080 / 2,
+    };
+    launchCamera(options, response => {
+      if (response.didCancel) {
+        Toast.show('User cancelled picking image', Toast.LONG);
+        setShowImageSourceModal(false);
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        Toast.show('Camera not available on device', Toast.LONG);
+        setShowImageSourceModal(false);
+        return;
+      } else if (response.errorCode == 'permission') {
+        Toast.show('Permission not satisfied', Toast.LONG);
+        setShowImageSourceModal(false);
+        return;
+      } else if (response.errorCode == 'others') {
+        Toast.show(response.errorMessage, Toast.LONG);
+        setShowImageSourceModal(false);
+        return;
+      }
+      console.log('Response = ', response.assets[0]);
+      setProfileImage(response.assets[0]);
+      updateProfileDetails(response.assets[0]);
+      setShowImageSourceModal(false);
+    });
+  };
+  //function : imp function
+  const checkCameraPermission = async () => {
+    if (Platform.OS === 'ios') {
+      openCamera();
+    } else {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Storage Permission Required',
+            message:
+              'Application needs access to your storage to access camera',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          openCamera();
+          console.log('Storage Permission Granted.');
+        } else {
+          Toast.show(`Storage Permission Not Granted`, Toast.SHORT);
+          // Alert.alert('Error', 'Storage Permission Not Granted');
+        }
+      } catch (err) {
+        // To handle permission related exception
+        console.log('ERROR' + err);
+      }
+    }
+  };
+  //function : imp function
+  const openLibrary = () => {
+    let options = {
+      title: 'Select Image',
+      customButtons: [
+        {
+          name: 'customOptionKey',
+          title: 'Choose Photo from Custom Option',
+        },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        // Alert.alert('User cancelled camera picker');
+        setShowImageSourceModal(false);
+        Toast.show('User cancelled image picker', Toast.LONG);
+        // Alert.alert('User cancelled image picker');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        setShowImageSourceModal(false);
+        Toast.show('Camera not available on device', Toast.LONG);
+        // Alert.alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        setShowImageSourceModal(false);
+        Toast.show('Permission not satisfied', Toast.LONG);
+        // Alert.alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        setShowImageSourceModal(false);
+        Toast.show(response.errorMessage, Toast.LONG);
+        // Alert.alert(response.errorMessage);
+        return;
+      } else {
+        updateProfileDetails(response.assets[0]);
+        setProfileImage(response.assets[0]);
+        setShowImageSourceModal(false);
+      }
+      setShowImageSourceModal(false);
+    });
+  };
   const generateThumb = async data => {
     console.log('generateThumb', JSON.stringify(data));
     let updatedData = [...data];
@@ -345,12 +456,22 @@ const Profile = ({navigation, dispatch}) => {
     setShowLoader(false);
   };
 
-  const updateProfileDetails = async () => {
+  const updateProfileDetails = async img => {
     const postData = new FormData();
     postData.append('first_name', firstName);
     postData.append('last_name', lastName);
     postData.append('phone', phone);
-    // postData.append("profile_image", userInfo?.profile_image);
+    if (img) {
+      const imageName = img?.uri?.slice(
+        img?.uri?.lastIndexOf('/'),
+        img?.uri?.length,
+      );
+      postData.append('profile_image', {
+        name: imageName,
+        type: img?.type,
+        uri: img?.uri,
+      });
+    }
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
@@ -467,14 +588,31 @@ const Profile = ({navigation, dispatch}) => {
             contentContainerStyle={{paddingBottom: '20%'}}
             style={styles.mainView}>
             <View style={styles.contactContainer}>
-              <Image
-                source={
-                  userInfo?.profile_image
-                    ? {uri: userInfo?.profile_image}
-                    : require('assets/images/user-default.png')
-                }
-                style={styles.personImg}
-              />
+              <View>
+                <Image
+                  source={
+                    profileImage
+                      ? {
+                          uri:
+                            typeof profileImage === 'object'
+                              ? profileImage?.uri
+                              : profileImage,
+                        }
+                      : require('assets/images/user-default.png')
+                  }
+                  style={styles.personImg}
+                />
+                <TouchableOpacity
+                  // onPress={() => setFilePath('')}
+                  onPress={() => setShowImageSourceModal(true)}
+                  style={styles.addButtonStyle}>
+                  <MyIcon.Feather
+                    name="edit-2"
+                    color={Colors.WHITE}
+                    size={16}
+                  />
+                </TouchableOpacity>
+              </View>
               <View style={{marginLeft: 17}}>
                 <MyText
                   text={`${userInfo?.first_name} ${userInfo?.last_name}`}
@@ -631,6 +769,12 @@ const Profile = ({navigation, dispatch}) => {
           placeholderTextColor={'#c9c9c9'}
           color={Colors.BLACK}
           onBackdropPress={() => setShow(false)}
+        />
+        <SelectImageSource
+          visible={showImageSourceModal}
+          setVisibility={setShowImageSourceModal}
+          openLibrary={openLibrary}
+          openCamera={checkCameraPermission}
         />
       </View>
     </SafeAreaView>

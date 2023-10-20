@@ -52,6 +52,7 @@ const ProfileTab = ({
   phone,
   setPhone,
   selectedCountry,
+  setShow,
   showsetPhone,
   setShowsetPhone,
   selectedCountrysetPhone,
@@ -98,7 +99,7 @@ const ProfileTab = ({
         placeholder="Enter Phone Number"
         keyboardType="number-pad"
         maxLength={10}
-        onPress={() => setShow(true)}
+        // onPress={() => setShow(true)}
         onChangeText={text => setPhone(text)}
         onSubmitEditing={() => passwordRef.current.focus()}
       />

@@ -424,6 +424,7 @@ const MyOrders = ({navigation, dispatch}) => {
     navigation.navigate(ScreenNames.START_COURSE);
   };
   const gotoOrderDetails = (order_id, item_id) => {
+    console.log('order_id, item_id', order_id, item_id);
     navigation.navigate(ScreenNames.ORDER_DETAILS, {order_id, item_id});
   };
 

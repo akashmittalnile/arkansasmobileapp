@@ -406,19 +406,19 @@ const OrderDetails = ({navigation, dispatch, route}) => {
                 }
               /> */}
               <Image
-                source={getCardImage('VISA')}
+                source={getCardImage(orderData?.data?.transaction?.card_type)}
                 style={{marginLeft: 15}}
               />
               <View style={{marginLeft: 12}}>
                 <MyText
-                  // text={'**** **** **** ' + item.card_number.slice(-5)}
-                  text={'**** **** **** '}
+                  text={'**** **** **** ' + orderData?.data?.transaction?.card_no}
+                  // text={'**** **** **** '}
                   fontSize={16}
                   fontFamily="medium"
                   textColor={'#261313'}
                 />
                 <MyText
-                  text={`Expires ${`12/24`}`}
+                  text={`Expires ${orderData?.data?.transaction?.expiry}`}
                   fontSize={14}
                   fontFamily="light"
                   textColor={Colors.LIGHT_GREY}
@@ -469,11 +469,10 @@ const itemData = {
 };
 
 const getCardImage = type => {
-  if (type === 'VISA') {
+  console.log('getCardImage', type);
+  if (type === 'Visa') {
     return require('assets/images/visa.png');
-  } else if (type === 'MASTERCARD') {
-    return require('assets/images/mastercard.png');
-  } else {
+  } else if (type === 'Mastercard') {
     return require('assets/images/mastercard.png');
   }
 };

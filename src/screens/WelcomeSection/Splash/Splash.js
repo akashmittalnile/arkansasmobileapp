@@ -51,7 +51,7 @@ const Splash = ({navigation}) => {
         if (notifications) {
           dispatch(setUserNotifications(JSON.parse(notifications)));
         }
-        if (cartCount) {
+        if (typeof cartCount === 'number') {
           dispatch(setCartCount(JSON.parse(cartCount)));
         }
       }

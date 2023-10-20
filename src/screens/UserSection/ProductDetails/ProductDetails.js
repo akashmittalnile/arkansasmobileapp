@@ -46,9 +46,8 @@ import FAB_Button from '../../../components/FAB_Button/FAB_Button';
 import Review from '../../../modals/Review/Review';
 import VideoModal from '../../../components/VideoModal/VideoModal';
 import Carousel from '../../../components/Carousel/Carousel';
-import {
-  setCartCount,
-} from 'src/reduxToolkit/reducer/user';
+import {setCartCount} from 'src/reduxToolkit/reducer/user';
+import {ImageSlider, ImageCarousel} from 'react-native-image-slider-banner';
 
 const data = [
   {
@@ -146,12 +145,13 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         Service.OBJECT_TYPE_DETAILS,
         postData,
       );
-      console.log('getProductDetails resp', resp?.data?.data?.Product_image);
+      console.log('getProductDetails resp', resp?.data);
       if (resp?.data?.status) {
         setProductDetails(resp?.data?.data);
         let sliData = [];
         sliData = resp?.data?.data?.Product_image?.map(el => ({
-          slider: el,
+          // slider: el,
+          img: el,
         }));
         setSliderData([...sliData]);
         // Toast.show(resp?.data?.message, Toast.SHORT)
@@ -349,9 +349,28 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           style={styles.mainView}>
           {typeof productDetails === 'object' ? (
             sliderData?.length > 0 ? (
-              <Carousel data={sliderData} />
+              <ImageSlider
+                data={sliderData}
+                autoPlay={false}
+                closeIconColor="#ED1C24"
+                // onItemChanged={handleItemChanged}
+                activeIndicatorStyle={{backgroundColor: Colors.THEME_GOLD}}
+                inActiveIndicatorStyle={{backgroundColor: '#fff'}}
+                caroselImageStyle={{
+                  resizeMode: 'contain',
+                  // height: '100%',
+                  width: width - 40,
+                  height: height * 0.30,
+                  borderRadius: 20
+                }}
+              />
             ) : null
           ) : null}
+          {/* {typeof productDetails === 'object' ? (
+            sliderData?.length > 0 ? (
+              <Carousel data={sliderData} />
+            ) : null
+          ) : null} */}
 
           <View style={styles.topRow}>
             <MyText

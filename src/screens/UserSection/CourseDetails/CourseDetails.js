@@ -53,6 +53,9 @@ import PrerequisiteModal from '../../../modals/PrerequisiteModal/PrerequisiteMod
 import CourseNotPurshasedModal from '../../../modals/CourseNotPurchasedModal/CourseNotPurshasedModal';
 import RNFetchBlob from 'rn-fetch-blob';
 import ViewPdf from '../../../modals/ViewPdf/ViewPdf';
+import {
+  setCartCount,
+} from 'src/reduxToolkit/reducer/user';
 
 const data = [
   {
@@ -391,6 +394,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
       setShowLoader(false);
     }
   };
+  const gotoCart = () => navigation.navigate(ScreenNames.CART);
   const addToCart = async (object_id, object_type, cart_value) => {
     const postData = new FormData();
     postData.append('object_id', object_id);
@@ -405,7 +409,9 @@ const CourseDetails = ({navigation, dispatch, route}) => {
       );
       console.log('addToCart resp', resp?.data);
       if (resp?.data?.status) {
+        // dispatch(setCartCount(resp?.data?.cart_count))
         Toast.show(resp?.data?.message, Toast.SHORT);
+        gotoCart();
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
       }

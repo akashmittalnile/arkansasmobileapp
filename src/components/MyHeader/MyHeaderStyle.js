@@ -45,5 +45,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fe0000',
     borderRadius: 100,
+
+    backgroundColor: Colors.THEME_GOLD,
+    height: 10,
+    width: 10,
+    borderRadius: 10 / 2,
   },
 });

@@ -156,9 +156,9 @@ const MyHeader = ({
         ) : null}
         {IsCartIcon ? (
           <TouchableOpacity onPress={gotoCart}>
-            {cartCount !== '' ? (
+            {cartCount != 0 ? (
               <View style={styles.cartNumView}>
-                <MyText text={cartCount} fontSize={10} textColor="white" />
+                {/* <MyText text={cartCount} fontSize={10} textColor="white" /> */}
               </View>
             ) : null}
             <Image source={require('assets/images/cart.png')} />

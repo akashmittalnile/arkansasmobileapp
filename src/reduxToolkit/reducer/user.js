@@ -4,7 +4,7 @@ const initialState = {
   userInfo: {},
   userToken: '',
   userNotifications: [],
-  cartCount: '',
+  cartCount: 0,
 };
 const user = createSlice({
   name: 'user',
@@ -37,7 +37,7 @@ const user = createSlice({
     clearCart(state, {payload}) {
       return {
         ...state,
-        cartCount: '',
+        cartCount: 0,
       };
     },
     logOutUser(state, {payload}) {
@@ -49,7 +49,7 @@ const user = createSlice({
   },
 });
 
-export const {setUserToken, setUser, setUserNotifications, logOutUser, clearCart} = user.actions;
+export const {setUserToken, setUser, setUserNotifications, logOutUser, clearCart, setCartCount} = user.actions;
 const userReducer = user.reducer;
 
 export default userReducer;

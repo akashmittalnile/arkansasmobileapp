@@ -181,7 +181,7 @@ const Home = ({navigation, dispatch}) => {
     !showLoader && setShowLoader(true);
     try {
       const resp = await Service.getApiWithToken(userToken, Service.HOME);
-      console.log('getHomeData resp', JSON.stringify(resp?.data));
+      // console.log('getHomeData resp', JSON.stringify(resp?.data));
       if (resp?.data?.status) {
         const dataWithThumb = await generateThumb(resp?.data?.data);
         setHomeData(dataWithThumb);
@@ -198,12 +198,12 @@ const Home = ({navigation, dispatch}) => {
     setShowLoader2(true);
     try {
       const resp = await Service.getApiWithToken(userToken, Service.CART_COUNT);
-      console.log('getCartCount resp', resp);
-      // if (resp?.data?.status) {
-      //   dispatch(setCartCount(resp?.data?.data))
-      // } else {
-      //   Toast.show(resp.data.message, Toast.SHORT);
-      // }
+      console.log('getCartCount resp', resp?.data);
+      if (resp?.data?.status) {
+        dispatch(setCartCount(resp?.data?.data))
+      } else {
+        Toast.show(resp.data.message, Toast.SHORT);
+      }
     } catch (error) {
       console.log('error in getCartCount', error);
     }
@@ -238,7 +238,7 @@ const Home = ({navigation, dispatch}) => {
     showLoader && setShowLoader(false);
   };
   const generateThumb = async data => {
-    console.log('generateThumb');
+    // console.log('generateThumb');
     let trending_course_data = [...data?.trending_course];
     // let suggested_course_data = [...data?.suggested_course];
     let special_course_data = [...data?.special_course];
@@ -299,7 +299,7 @@ const Home = ({navigation, dispatch}) => {
     // data.suggested_course = suggested_course_data;
     data.trending_course = trending_course_data;
     data.special_course = special_course_data;
-    console.log('thumb data', data);
+    // console.log('thumb data', data);
     // const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
     return data;
   };
@@ -359,6 +359,7 @@ const Home = ({navigation, dispatch}) => {
   const changeSelectedTag = id => {
     setSelectedTag(id);
   };
+  const gotoCart = () => navigation.navigate(ScreenNames.CART);
   const addToCart = async (object_id, object_type, cart_value) => {
     const postData = new FormData();
     postData.append('object_id', object_id);
@@ -373,7 +374,9 @@ const Home = ({navigation, dispatch}) => {
       );
       console.log('addToCart resp', resp?.data);
       if (resp?.data?.status) {
+        // dispatch(setCartCount(resp?.data?.cart_count))
         Toast.show(resp?.data?.message, Toast.SHORT);
+        gotoCart();
       } else {
         Toast.show(resp?.data?.message, Toast.SHORT);
       }

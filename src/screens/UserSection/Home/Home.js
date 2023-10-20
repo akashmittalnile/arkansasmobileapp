@@ -651,6 +651,9 @@ const Home = ({navigation, dispatch}) => {
                 height: 30,
                 backgroundColor: Colors.THEME_BROWN,
               }}
+              onPress={() => {
+                addToCart(item.id, '2', item.price);
+              }}
             />
             <TouchableOpacity
               onPress={() => {

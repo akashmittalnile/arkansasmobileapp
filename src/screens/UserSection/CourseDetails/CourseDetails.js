@@ -795,6 +795,9 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               />
               <MyButton
                 text="Buy Now"
+                onPress={() =>
+                  addToCart(productDetails?.id, 1, productDetails?.course_fee)
+                }
                 style={{
                   width: '48%',
                   height: 50,

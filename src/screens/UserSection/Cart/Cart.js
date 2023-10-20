@@ -220,7 +220,7 @@ const Cart = ({navigation, dispatch}) => {
                 style={{marginLeft: 5}}
               />
             </View>
-            <View style={styles.crtrRow}>
+            <View style={[styles.crtrRow, {width: '70%'}]}>
               {item?.type == '2' ? (
                 <Image
                   source={{uri: item?.creator_image}}
@@ -233,6 +233,7 @@ const Cart = ({navigation, dispatch}) => {
                 }
                 fontFamily="regular"
                 fontSize={13}
+                numberOfLines={1}
                 textColor={Colors.THEME_GOLD}
                 letterSpacing={0.13}
                 style={{marginLeft: 10}}

@@ -174,9 +174,6 @@ const StartCourse = ({navigation, dispatch}) => {
   const gotoCourseList = () => {
     navigation.navigate(ScreenNames.COURSE_LIST);
   };
-  const gotoMcqScreen = () => {
-    navigation.navigate(ScreenNames.MCQ_SCREEN);
-  };
   const openCourseCompletedModal = () => {
     setShowCourseCompletedModal(true);
   };
@@ -279,7 +276,7 @@ const StartCourse = ({navigation, dispatch}) => {
               // onPress={openCourseCompletedModal}
               // onPress={openRescheduleTestModal}
               // onPress={gotoCourseCompletedScreen}
-              onPress={gotoMcqScreen}
+              // onPress={gotoMcqScreen}
             />
             <MyButton
               text="Continue"

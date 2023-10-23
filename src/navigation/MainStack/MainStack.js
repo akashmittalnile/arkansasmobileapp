@@ -24,7 +24,6 @@ import ProceedToPayment from 'screens/UserSection/ProceedToPayment/ProceedToPaym
 import StartCourse from 'screens/UserSection/StartCourse/StartCourse';
 import CourseList from 'screens/UserSection/CourseList/CourseList';
 import Notifications from 'screens/UserSection/Notifications/Notifications';
-import McqScreen from 'screens/UserSection/McqScreen/McqScreen';
 import ProductDetails from 'screens/UserSection/ProductDetails/ProductDetails';
 import CourseDetails from 'screens/UserSection/CourseDetails/CourseDetails';
 import NoConnection from '../../screens/UserSection/NoConnection/NoConnection';
@@ -92,7 +91,6 @@ const MainStack = () => {
         name={ScreenNames.NOTIFICATIONS}
         component={Notifications}
       />
-      <Stack.Screen name={ScreenNames.MCQ_SCREEN} component={McqScreen} />
       <Stack.Screen
         name={ScreenNames.PRODUCT_DETAILS}
         component={ProductDetails}

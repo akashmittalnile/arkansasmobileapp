@@ -174,9 +174,6 @@ const StartCourse = ({navigation, dispatch}) => {
   const gotoCourseList = () => {
     navigation.navigate(ScreenNames.COURSE_LIST);
   };
-  const gotoCourseCompletedScreen = () => {
-    navigation.navigate(ScreenNames.COURSE_COMPLETED_SCREEN);
-  };
   const gotoMcqScreen = () => {
     navigation.navigate(ScreenNames.MCQ_SCREEN);
   };

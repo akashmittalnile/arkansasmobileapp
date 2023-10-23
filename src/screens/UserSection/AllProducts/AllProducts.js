@@ -36,40 +36,6 @@ import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import ProductFiltersModal from './components/ProductFiltersModal/ProductFiltersModal';
 
-const productList = [
-  {
-    id: '1',
-    creatorName: `Max Bryrant`,
-    courseImg: require('assets/images/prod-img-1.png'),
-    courseName: `O'Reilly's tattoo machine Motor`,
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-  {
-    id: '2',
-    creatorName: `Nikhil Sam`,
-    courseImg: require('assets/images/prod-img-2.png'),
-    courseName: `O'Reilly's tattoo machine Motor`,
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-  {
-    id: '3',
-    creatorName: `Nikhil Sam`,
-    courseImg: require('assets/images/prod-img-3.png'),
-    courseName: `O'Reilly's tattoo machine Motor`,
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-  {
-    id: '4',
-    creatorName: `Nikhil Sam`,
-    courseImg: require('assets/images/prod-img-3.png'),
-    courseName: `O'Reilly's tattoo machine Motor`,
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-];
 
 const AllProducts = ({navigation, dispatch}) => {
   //variables

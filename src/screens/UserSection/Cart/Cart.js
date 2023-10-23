@@ -38,24 +38,6 @@ import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import ViewAll from '../../../components/ViewAll/ViewAll';
 import {createThumbnail} from 'react-native-create-thumbnail';
 
-const productList = [
-  {
-    id: '1',
-    creatorName: `Max Bryrant`,
-    courseImg: require('assets/images/prod-img-1.png'),
-    courseName: `O'Reilly's tattoo machine Motor`,
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-  {
-    id: '2',
-    creatorName: `Nikhil Sam`,
-    courseImg: require('assets/images/prod-img-2.png'),
-    courseName: `O'Reilly's tattoo machine Motor`,
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-];
 
 const Cart = ({navigation, dispatch}) => {
   //variables

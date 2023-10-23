@@ -35,49 +35,6 @@ import Divider from 'components/Divider/Divider';
 import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 
-const topCategories = [
-  {
-    id: '1',
-    name: 'Technical Line Tattoo Program',
-    img: require('assets/images/technical-line-tattoo-program.png'),
-  },
-  {
-    id: '2',
-    name: 'Piercing Program',
-    img: require('assets/images/piercing-program.png'),
-  },
-  {
-    id: '3',
-    name: 'Tattoo Removal',
-    img: require('assets/images/tattoo-removal.png'),
-  },
-  {
-    id: '4',
-    name: 'Machine Microblading',
-    img: require('assets/images/machine-microblading.png'),
-  },
-  {
-    id: '5',
-    name: 'Standard Tattoo Program',
-    img: require('assets/images/standard-tattoo-program.png'),
-  },
-  {
-    id: '6',
-    name: 'Permanent Lips Training',
-    img: require('assets/images/permanent-lips-training.png'),
-  },
-  {
-    id: '7',
-    name: 'Permanent Powder',
-    img: require('assets/images/permanent-powder.png'),
-  },
-  {
-    id: '8',
-    name: 'Permanent Eyeliner Training',
-    img: require('assets/images/permanent-eyeliner-training.png'),
-  },
-];
-
 const TopCategory = ({navigation, dispatch, route}) => {
   //variables
   const LINE_HEIGTH = 25;

@@ -54,31 +54,6 @@ import {setUser} from '../../../reduxToolkit/reducer/user';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import SelectImageSource from '../../../modals/SelectImageSource/SelectImageSource';
 
-const personImg = `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`;
-const certificateList = [
-  {
-    id: '1',
-    creatorName: `Max Bryrant`,
-    certificateImg: require('assets/images/certificate-image.png'),
-    certificateName: 'Tattoo Cover-Ups & Transformations',
-    certificateRating: '4.7',
-    certificateFee: '399.00',
-    status: 'Completed',
-    onView: () => {},
-    onDownload: () => {},
-  },
-  {
-    id: '2',
-    creatorName: `Max Bryrant`,
-    certificateImg: require('assets/images/certificate-image.png'),
-    certificateName: 'Tattoo Cover-Ups & Transformations',
-    certificateRating: '4.7',
-    certificateFee: '399.00',
-    status: 'Ongoing',
-    onView: () => {},
-    onDownload: () => {},
-  },
-];
 const Profile = ({navigation, dispatch}) => {
   //variables
   const LINE_HEIGTH = 25;
@@ -131,7 +106,7 @@ const Profile = ({navigation, dispatch}) => {
     {
       id: '1',
       creatorName: `Max Bryrant`,
-      courseImg: require('assets/images/prod-img-1.png'),
+      courseImg: '',
       courseName: `O'Reilly's tattoo machine Motor`,
       courseRating: '4.7',
       courseFee: '399.00',
@@ -143,7 +118,7 @@ const Profile = ({navigation, dispatch}) => {
     {
       id: '2',
       creatorName: `Nikhil Sam`,
-      courseImg: require('assets/images/prod-img-2.png'),
+      courseImg: '',
       courseName: `O'Reilly's tattoo machine Motor`,
       courseRating: '4.7',
       courseFee: '399.00',

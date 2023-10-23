@@ -26,7 +26,7 @@ import {width} from '../../global/Constant';
 const courseData = {
   id: '1',
   creatorName: `Max Bryrant`,
-  courseImg: require('assets/images/rectangle-1035.png'),
+  courseImg: '',
   courseName: 'Tattoo Cover-Ups & Transformations',
   courseRating: '4.7',
   courseFee: '399.00',

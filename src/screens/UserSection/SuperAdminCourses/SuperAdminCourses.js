@@ -38,40 +38,6 @@ import {createThumbnail} from 'react-native-create-thumbnail';
 import SAFiltersModal from './components/SAFiltersModal/SAFiltersModal';
 import VideoModal from '../../../components/VideoModal/VideoModal';
 
-const courseList = [
-  {
-    id: '1',
-    creatorName: `Max Bryrant`,
-    courseImg: require('assets/images/rectangle-1035.png'),
-    courseName: 'Tattoo Cover-Ups & Transformations',
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-  {
-    id: '2',
-    creatorName: `Max Bryrant`,
-    courseImg: require('assets/images/rectangle-1035.png'),
-    courseName: 'Tattoo Cover-Ups & Transformations',
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-  {
-    id: '3',
-    creatorName: `Max Bryrant`,
-    courseImg: require('assets/images/rectangle-1035.png'),
-    courseName: 'Tattoo Cover-Ups & Transformations',
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-  {
-    id: '4',
-    creatorName: `Max Bryrant`,
-    courseImg: require('assets/images/rectangle-1035.png'),
-    courseName: 'Tattoo Cover-Ups & Transformations',
-    courseRating: '4.7',
-    courseFee: '399.00',
-  },
-];
 
 const SuperAdminCourses = ({navigation, dispatch}) => {
   //variables

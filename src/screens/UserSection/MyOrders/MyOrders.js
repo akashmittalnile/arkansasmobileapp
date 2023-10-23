@@ -41,55 +41,6 @@ import {createThumbnail} from 'react-native-create-thumbnail';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 
-const courseList = [
-  {
-    id: '1',
-    creatorName: `Max Bryrant`,
-    courseImg: require('assets/images/rectangle-1035.png'),
-    courseName: 'Tattoo Cover-Ups & Transformations',
-    courseRating: '4.7',
-    courseFee: '399.00',
-    status: 'Completed',
-    courseValidDate: '26 Juny 2023',
-    courseCompletedDate: '26 Juny 2023 9:30AM',
-  },
-  {
-    id: '2',
-    creatorName: `Max Bryrant`,
-    courseImg: require('assets/images/rectangle-1035.png'),
-    courseName: 'Tattoo Cover-Ups & Transformations',
-    courseRating: '4.7',
-    courseFee: '399.00',
-    status: 'Ongoing',
-    courseValidDate: '26 Juny 2023',
-    courseCompletedDate: '26 Juny 2023 9:30AM',
-  },
-];
-const productList = [
-  {
-    id: '1',
-    creatorName: `Max Bryrant`,
-    courseImg: require('assets/images/prod-img-1.png'),
-    courseName: `O'Reilly's tattoo machine Motor`,
-    courseRating: '4.7',
-    courseFee: '399.00',
-    status: 'Picked-up',
-    orderId: 'HBD898DMND8333',
-    date: '26 Juny 2023 9:30AM',
-  },
-  {
-    id: '2',
-    creatorName: `Nikhil Sam`,
-    courseImg: require('assets/images/prod-img-2.png'),
-    courseName: `O'Reilly's tattoo machine Motor`,
-    courseRating: '4.7',
-    courseFee: '399.00',
-    status: 'Packed',
-    orderId: 'HBD898DMND8333',
-    courseCompletedDate: '26 Juny 2023 9:30AM',
-    date: '26 Juny 2023 9:30AM',
-  },
-];
 
 const MyOrders = ({navigation, dispatch}) => {
   //variables
@@ -653,7 +604,7 @@ const MyOrders = ({navigation, dispatch}) => {
         </View>
         <View style={styles.courseSubContainer}>
           <ImageBackground
-            source={require('assets/images/rectangle-1035.png')}
+            source={{uri: item?.Product_image[0]}}
             style={styles.crseImg}></ImageBackground>
           <View style={{marginLeft: 11, width: width * 0.5}}>
             <MyText

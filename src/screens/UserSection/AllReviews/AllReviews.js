@@ -141,7 +141,7 @@ const AllReviews = ({navigation, dispatch, route}) => {
     <SafeAreaView style={{flex: 1}}>
       <StatusBar backgroundColor={Colors.THEME_BROWN} />
       <View style={styles.container}>
-        <MyHeader Title="Home" />
+        <MyHeader Title="All Reviews" isBackButton />
         {/* <MyHeader Title="Home" isBackButton /> */}
         <ScrollView
           showsVerticalScrollIndicator={false}

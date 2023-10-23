@@ -45,9 +45,6 @@ const CustomDrawer = ({navigation}) => {
     closeDrawer();
     navigation.dispatch(resetIndexGoToSignup);
   };
-  const gotoAudioPlayerScreen = () => {
-    navigation.navigate(ScreenNames.AUDIO_PLAYER_SCREEN);
-  };
   const gotoSuperAdminCourses = () => {
     navigation.navigate(ScreenNames.SUPER_ADMIN_COURSES);
   };
@@ -134,7 +131,7 @@ const CustomDrawer = ({navigation}) => {
           <DrawerItemList
             Title="About Us"
             image={require('assets/images/about-us-sb.png')}
-            onPress={gotoAudioPlayerScreen}
+            onPress={() => {}}
           />
           <DrawerItemList
             Title="Help & Support"

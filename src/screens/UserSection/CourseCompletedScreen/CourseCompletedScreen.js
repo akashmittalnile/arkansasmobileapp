@@ -33,7 +33,7 @@ import {width, height} from 'global/Constant';
 import Divider from 'components/Divider/Divider';
 // import {WebView} from 'react-native-webview';
 import MyButton from '../../../components/MyButton/MyButton';
-import ProgressCircle from 'react-native-progress-circle';
+// import ProgressCircle from 'react-native-progress-circle';
 
 const CourseCompletedScreen = ({navigation, dispatch}) => {
   //variables
@@ -67,7 +67,7 @@ const CourseCompletedScreen = ({navigation, dispatch}) => {
           contentContainerStyle={{paddingBottom: '20%', alignItems: 'center'}}
           style={styles.mainView}>
           <View style={{marginTop: 30}}></View>
-          <ProgressCircle
+          {/* <ProgressCircle
             percent={95}
             radius={100}
             borderWidth={8}
@@ -86,7 +86,7 @@ const CourseCompletedScreen = ({navigation, dispatch}) => {
               fontSize={14}
               fontFamily="medium"
             />
-          </ProgressCircle>
+          </ProgressCircle> */}
           <MyText
             text="Congratulations!"
             fontSize={24}

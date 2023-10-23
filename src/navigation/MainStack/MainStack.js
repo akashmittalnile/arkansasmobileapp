@@ -28,7 +28,6 @@ import CourseCompletedScreen from 'screens/UserSection/CourseCompletedScreen/Cou
 import McqScreen from 'screens/UserSection/McqScreen/McqScreen';
 import ProductDetails from 'screens/UserSection/ProductDetails/ProductDetails';
 import CourseDetails from 'screens/UserSection/CourseDetails/CourseDetails';
-import AudioPlayerScreen from 'screens/UserSection/AudioPlayerScreen/AudioPlayerScreen';
 import NoConnection from '../../screens/UserSection/NoConnection/NoConnection';
 import AllReviews from 'screens/UserSection/AllReviews/AllReviews';
 import SearchAllType from 'screens/UserSection/SearchAllType/SearchAllType';
@@ -106,10 +105,6 @@ const MainStack = () => {
       <Stack.Screen
         name={ScreenNames.COURSE_DETAILS}
         component={CourseDetails}
-      />
-      <Stack.Screen
-        name={ScreenNames.AUDIO_PLAYER_SCREEN}
-        component={AudioPlayerScreen}
       />
       <Stack.Screen name={ScreenNames.NO_CONNECTION} component={NoConnection} />
       <Stack.Screen name={ScreenNames.ALL_REVIEWS} component={AllReviews} />

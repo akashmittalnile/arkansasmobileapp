@@ -21,7 +21,7 @@ import {styles} from './CourseCompletedStyle';
 import Modal from 'react-native-modal';
 import MyButton from '../../components/MyButton/MyButton';
 import {width} from '../../global/Constant';
-import ProgressCircle from 'react-native-progress-circle';
+// import ProgressCircle from 'react-native-progress-circle';
 
 const courseData = {
   id: '1',
@@ -122,7 +122,7 @@ const CourseCompleted = ({visible, setVisibility}) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> */}
       <View style={styles.modalContent}>
         <View style={{height: 10}}></View>
-        <ProgressCircle
+        {/* <ProgressCircle
           percent={95}
           radius={100}
           borderWidth={8}
@@ -141,7 +141,7 @@ const CourseCompleted = ({visible, setVisibility}) => {
             fontSize={14}
             fontFamily="medium"
           />
-        </ProgressCircle>
+        </ProgressCircle> */}
         <MyText
           text="Congratulations!"
           fontSize={24}

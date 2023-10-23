@@ -1,12 +1,12 @@
 import { Dimensions } from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+// import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-export const getWidth = (x) => {
-  return wp(x / 1440 * 100)
-}
-export const getHeight = (x) => {
-  return hp(x / 800 * 100)
-}
+// export const getWidth = (x) => {
+//   return wp(x / 1440 * 100)
+// }
+// export const getHeight = (x) => {
+//   return hp(x / 800 * 100)
+// }
 
 export const { width, height } = Dimensions.get('screen');
 

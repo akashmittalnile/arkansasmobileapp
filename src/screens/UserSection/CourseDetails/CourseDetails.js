@@ -504,7 +504,12 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             // source={require('assets/images/rectangle-1035.png')}
             style={styles.crseImg}
             imageStyle={{borderRadius: 10}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                setShowModal({
+                  isVisible: true,
+                  data: productDetails,
+                });
+              }}>
               <Image source={require('assets/images/play-icon.png')} />
             </TouchableOpacity>
           </ImageBackground>
@@ -604,7 +609,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             <VideoModal
               isVisible={showModal.isVisible}
               toggleModal={toggleModal}
-              videoDetail={{...showModal?.data, url: showModal?.data?.file}}
+              videoDetail={{...showModal?.data, url: showModal?.data?.introduction_video}}
               // {...props}
             />
           ) : null}

@@ -813,11 +813,11 @@ const Wishlist = ({navigation, dispatch}) => {
             <View style={styles.iconsRow}>
               <TouchableOpacity
                 onPress={() => {
-                  onLike('1', item.id, item.isWishlist);
+                  onLike('1', item.id, '1');
                 }}>
                 <Image
                   source={
-                    item.isWishlist
+                    true
                       ? require('assets/images/heart-selected.png')
                       : require('assets/images/heart-yellow-outline.png')
                   }
@@ -899,11 +899,11 @@ const Wishlist = ({navigation, dispatch}) => {
             <View style={styles.iconsRow}>
               <TouchableOpacity
                 onPress={() => {
-                  onLike('2', item.id, item.isWishlist);
+                  onLike('2', item.id, '1');
                 }}>
                 <Image
                   source={
-                    item.isWishlist
+                    true
                       ? require('assets/images/heart-selected.png')
                       : require('assets/images/heart-yellow-outline.png')
                   }

@@ -44,7 +44,7 @@ import NotificationsTab from './components/NotificationsTab/NotificationsTab';
 import BillingTab from './components/BillingTab/BillingTab';
 import AddCard from '../../../modals/AddCard/AddCard';
 import OrderHistoryTab from './components/OrderHistoryTab/OrderHistoryTab';
-import OrderStatus from '../../../modals/OrderStatus/OrderStatus';
+// import OrderStatus from '../../../modals/OrderStatus/OrderStatus';
 import RNFetchBlob from 'rn-fetch-blob';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import ViewPdf from '../../../modals/ViewPdf/ViewPdf';

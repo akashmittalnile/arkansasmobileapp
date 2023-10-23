@@ -48,6 +48,11 @@ const OrderDetails = ({navigation, dispatch, route}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [orderData, setOrderData] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [review, setReview] = useState('');
+  const [starRating, setStarRating] = useState(1);
+  const [selectedId, setSelectedId] = useState('1');
+  const [selectedType, setSelectedType] = useState(null);
 
   useEffect(() => {
     getOrderDetail();
@@ -253,7 +258,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
                 />
               </View>
             </View>
-            {item.isReviewed == '0' ? (
+            {item?.type == '1' ? (
               <MyButton
                 text="WRITE YOUR REVIEW HERE"
                 style={{
@@ -262,7 +267,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
                   marginTop: 8,
                   backgroundColor: Colors.THEME_BROWN,
                 }}
-                onPress={() => openReviewModal(item?.id, '2')}
+                onPress={() => openReviewModal(item?.id, '1')}
               />
             ) : null}
           </View>
@@ -336,6 +341,43 @@ const OrderDetails = ({navigation, dispatch, route}) => {
       </View>
     );
   };
+  const openReviewModal = (id, type) => {
+    setSelectedId(id);
+    setSelectedType(type);
+    setShowReviewModal(true);
+  };
+  const submitReview = async () => {
+    if (review?.trim()?.length === 0) {
+      Toast.show({text1: 'Please enter review'});
+      return;
+    }
+    const postData = new FormData();
+    postData.append('id', selectedId);
+    postData.append('type', selectedType);
+    postData.append('rating', starRating);
+    postData.append('comment', review);
+    console.log('submitReview postData', postData);
+    setShowLoader(true);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        Service.SUBMIT_REVIEW,
+        postData,
+      );
+      console.log('submitReview resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show({text1: resp?.data?.message || resp?.data?.Message});
+        setStarRating(1);
+        setReview('');
+        setShowReviewModal(false)
+      } else {
+        Toast.show({text1: resp?.data?.message || resp?.data?.Message});
+      }
+    } catch (error) {
+      console.log('error in submitReview', error);
+    }
+    setShowLoader(false);
+  };
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -396,8 +438,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
               </View>
             </ImageBackground>
           </View>
-          <View
-            style={styles.cardContainer}>
+          <View style={styles.cardContainer}>
             <View style={styles.cardContainerLeftRow}>
               {/* <Image
                 source={
@@ -412,7 +453,9 @@ const OrderDetails = ({navigation, dispatch, route}) => {
               />
               <View style={{marginLeft: 12}}>
                 <MyText
-                  text={'**** **** **** ' + orderData?.data?.transaction?.card_no}
+                  text={
+                    '**** **** **** ' + orderData?.data?.transaction?.card_no
+                  }
                   // text={'**** **** **** '}
                   fontSize={16}
                   fontFamily="medium"
@@ -439,6 +482,15 @@ const OrderDetails = ({navigation, dispatch, route}) => {
           />
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
+        <Review
+          visible={showReviewModal}
+          setVisibility={setShowReviewModal}
+          starRating={starRating}
+          setStarRating={setStarRating}
+          review={review}
+          setReview={setReview}
+          submitReview={submitReview}
+        />
       </View>
     </SafeAreaView>
   );

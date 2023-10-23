@@ -663,7 +663,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 />
               </View>
             </View>
-            {/* {item.isReviewed == '0' ? (
+            {item.isReviewed == '0' ? (
               <MyButton
                 text="WRITE YOUR REVIEW HERE"
                 style={{
@@ -674,7 +674,7 @@ const MyOrders = ({navigation, dispatch}) => {
                 }}
                 onPress={() => openReviewModal(item?.id, '2')}
               />
-            ) : null} */}
+            ) : null}
           </View>
         </View>
         <Divider

@@ -47,6 +47,7 @@ import {
   StripeContainer,
 } from '@stripe/stripe-react-native';
 import {clearCart} from 'src/reduxToolkit/reducer/user';
+import { setCartCount } from '../../../reduxToolkit/reducer/user';
 
 const ProceedToPayment = ({navigation, dispatch}) => {
   //variables
@@ -122,6 +123,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       console.log('handlePayClick resp', resp?.data);
       if (resp?.data?.status) {
         setMadePayment(true);
+        dispatch(setCartCount(resp?.data?.cart_count))
         Toast.show(resp?.data?.message, Toast.SHORT);
         openSuccessfulyPurchasedModal();
         dispatch(clearCart());

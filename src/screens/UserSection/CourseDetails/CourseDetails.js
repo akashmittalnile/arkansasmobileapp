@@ -409,7 +409,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
       );
       console.log('addToCart resp', resp?.data);
       if (resp?.data?.status) {
-        // dispatch(setCartCount(resp?.data?.cart_count))
+        dispatch(setCartCount(resp?.data?.cart_count))
         Toast.show(resp?.data?.message, Toast.SHORT);
         gotoCart();
       } else {

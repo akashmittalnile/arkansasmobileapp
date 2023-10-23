@@ -11,7 +11,7 @@ import {Colors, ScreenNames} from '../../../global/Index';
 //import : redux
 import {useDispatch, useSelector} from 'react-redux';
 // import {CustomToastAction} from '../../redux/actions/actions';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import MyButton from 'components/MyButton/MyButton';
 import {width} from '../../../global/Constant';
 
@@ -39,8 +39,7 @@ const NoConnection = ({navigation}) => {
       }
     } else {
       Toast.show(
-        'Please check your internet connection and try again!',
-        Toast.SHORT,
+        {text1: 'Please check your internet connection and try again!'}
       );
       // Alert.alert('Please check your internet connection and try again!')
       // dispatch(

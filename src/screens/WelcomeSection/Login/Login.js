@@ -37,7 +37,7 @@ import TextInputWithFlag from '../../../components/TextInputWithFlag/TextInputWi
 import {CountryPicker} from 'react-native-country-codes-picker';
 import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup';
 import { Service } from '../../../global/Index';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 import messaging from '@react-native-firebase/messaging';
 
@@ -81,9 +81,9 @@ useEffect(() => {
   });
   const Validation = () => {
     if (email == '') {
-      Toast.show('Please enter Email Address', Toast.LONG);
+      Toast.show({text1: 'Please enter Email Address'});
     } else if (password == '') {
-      Toast.show('Please enter Password', Toast.LONG);
+      Toast.show({text1: 'Please enter Password'});
     }
     return true;
   };
@@ -113,7 +113,7 @@ useEffect(() => {
           // }
         } else {
           // Alert.alert('', `${resp.data.message}`);
-          Toast.show(resp.data.message, Toast.SHORT);
+          Toast.show({text1: resp.data.message});
         }
       } catch (error) {
         console.log('error in signInUser', error);

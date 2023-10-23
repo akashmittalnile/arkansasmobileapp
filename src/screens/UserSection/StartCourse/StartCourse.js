@@ -22,7 +22,7 @@ import MyText from 'components/MyText/MyText';
 import CustomLoader from 'components/CustomLoader/CustomLoader';
 //import : third parties
 import LinearGradient from 'react-native-linear-gradient';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 //import : global
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
 //import : styles

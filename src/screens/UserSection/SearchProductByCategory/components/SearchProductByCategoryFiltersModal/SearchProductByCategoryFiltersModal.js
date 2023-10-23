@@ -15,7 +15,7 @@ import DateSelector from 'components/DateSelector/DateSelector';
 import {Colors, MyIcon} from 'global/Index';
 //third parties
 import moment from 'moment';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 //styles
 import {styles} from './SearchProductByCategoryFiltersModalStyle';
 import Dropdown from '../../../../../components/Dropdown/Dropdown';

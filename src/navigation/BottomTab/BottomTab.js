@@ -15,7 +15,7 @@ import Wishlist from 'screens/UserSection/Wishlist/Wishlist';
 import MyOrders from 'screens/UserSection/MyOrders/MyOrders';
 import Profile from 'screens/UserSection/Profile/Profile';
 import {useSelector} from 'react-redux';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 
 const BottomTab = ({userToken}) => {
   const userInfo = useSelector(state => state.user.userInfo);

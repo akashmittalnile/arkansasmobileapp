@@ -21,7 +21,7 @@ import MyText from 'components/MyText/MyText';
 import CustomLoader from 'components/CustomLoader/CustomLoader';
 //import : third parties
 import LinearGradient from 'react-native-linear-gradient';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 //import : global
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
 //import : styles
@@ -90,9 +90,9 @@ const AllReviews = ({navigation, dispatch, route}) => {
       console.log('getReviewList resp', resp?.data);
       if (resp?.data?.status) {
         setReviewList(resp?.data?.review_list);
-        // Toast.show(resp?.data?.message, Toast.SHORT)
+        // Toast.show({text1: resp?.data?.message})
       } else {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
       }
     } catch (error) {
       console.log('error in getReviewList', error);
@@ -102,7 +102,7 @@ const AllReviews = ({navigation, dispatch, route}) => {
 
   const submitReview = async () => {
     if (review?.trim()?.length === 0) {
-      Toast.show('Please enter review');
+      Toast.show({text1: 'Please enter review'});
       return;
     }
     const postData = new FormData();
@@ -119,12 +119,12 @@ const AllReviews = ({navigation, dispatch, route}) => {
       );
       console.log('submitReview resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message || resp?.data?.Message});
         setStarRating(1);
         setReview('');
         getReviewList();
       } else {
-        Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message || resp?.data?.Message});
       }
     } catch (error) {
       console.log('error in submitReview', error);

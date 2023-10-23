@@ -23,7 +23,7 @@ import MyText from 'components/MyText/MyText';
 import CustomLoader from 'components/CustomLoader/CustomLoader';
 //import : third parties
 import LinearGradient from 'react-native-linear-gradient';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 //import : global
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
 //import : styles
@@ -94,10 +94,10 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       if (resp?.data?.status) {
         // show message only when no cards found
         resp?.data?.data?.length === 0 &&
-          Toast.show(resp.data.message, Toast.SHORT);
+          Toast.show({text1: resp.data.message});
         setScreenData(resp?.data);
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in getData', error);
@@ -129,11 +129,11 @@ const ProceedToPayment = ({navigation, dispatch}) => {
           'cart_count',
           JSON.stringify(resp?.data?.cart_count),
         );
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
         openSuccessfulyPurchasedModal();
         dispatch(clearCart());
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
       }
     } catch (error) {
       console.log('error in handlePayClick', error);
@@ -142,13 +142,13 @@ const ProceedToPayment = ({navigation, dispatch}) => {
   };
   const onConfirm = async () => {
     if (madePayment) {
-      Toast.show('You have already made payment', Toast.SHORT);
+      Toast.show({text1: 'You have already made payment'});
       return;
     } else if (card === 0) {
-      Toast.show('Please enter card details', Toast.SHORT);
+      Toast.show({text1: 'Please enter card details'});
       return;
     } else if (!card?.complete) {
-      Toast.show('Please complete card details', Toast.SHORT);
+      Toast.show({text1: 'Please complete card details'});
       return;
     }
     console.log('card', card);
@@ -157,9 +157,9 @@ const ProceedToPayment = ({navigation, dispatch}) => {
     // return
     if (res?.error) {
       if (res?.error?.message) {
-        Toast.show(res?.error?.message, Toast.SHORT);
+        Toast.show({text1: res?.error?.message});
       } else {
-        Toast.show('Card details incorrect', Toast.SHORT);
+        Toast.show({text1: 'Card details incorrect'});
       }
       return;
     }
@@ -180,11 +180,11 @@ const ProceedToPayment = ({navigation, dispatch}) => {
           resp?.data?.total_amount,
           res?.token?.id,
         );
-        // Toast.show(resp.data.message, Toast.SHORT);
+        // Toast.show({text1: resp.data.message});
         // openSuccessfulyPurchasedModal();
         // navigation.dispatch(resetIndexGoToUserBottomTab);
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in onConfirm', error);

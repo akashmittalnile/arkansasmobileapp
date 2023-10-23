@@ -26,7 +26,7 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import moment from 'moment';
 import MyMultiSelect from '../../components/MyMultiSelect/MyMultiSelect';
 import DateSelector from '../../components/DateSelector/DateSelector';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 
 const sliderRadius = 3;
 const someWidth = 50;
@@ -334,17 +334,15 @@ const OrdersFilter = ({
             onPress={() => {
               if (temporarySelectedTab == '1') {
                 if (tempStartDate == '' && tempEndDate != '') {
-                  Toast.show(
-                    `Please select both Start Date and End Date`,
-                    Toast.SHORT,
-                  );
+                  Toast.show({
+                    text1: `Please select both Start Date and End Date`,
+                  });
                   return;
                 }
                 if (tempStartDate != '' && tempEndDate == '') {
-                  Toast.show(
-                    `Please select both Start Date and End Date`,
-                    Toast.SHORT,
-                  );
+                  Toast.show({
+                    text1: `Please select both Start Date and End Date`,
+                  });
                   return;
                 }
               }

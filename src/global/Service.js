@@ -3,7 +3,7 @@ import {Alert} from 'react-native';
 //third parties
 //import : axios
 import axios from 'axios';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 
 const isProduction = false;
 //endpoint : base_url
@@ -91,28 +91,28 @@ export const getApi = endPoint =>
     .catch(error => {
       if (error?.response?.status === 422) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
         console.log(error.response.headers);
       } else if (error?.response?.status === 404) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       } else if (error?.response?.status === 401) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       } else if (error?.response?.status === 500) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       } else {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       }
@@ -133,28 +133,28 @@ export const getApiWithToken = (token, endPoint) =>
     .catch(error => {
       if (error?.response?.status === 422) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
         console.log(error.response.headers);
       } else if (error?.response?.status === 404) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       } else if (error?.response?.status === 401) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       } else if (error?.response?.status === 500) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       } else {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       }
@@ -177,22 +177,22 @@ export const postApi = (endPoint, data) =>
       console.log('header', error.response.headers);
       if (error?.response?.status === 422) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('error status', error?.response?.status);
         console.log('error message', error.response.data.message);
       } else if (error?.response?.status === 404) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('error status', error?.response?.status);
         console.log('error message', error.response.data.message);
       } else if (error?.response?.status === 401) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('error status', error?.response?.status);
         console.log('error message', error.response.data.message);
       } else if (error?.response?.status === 500) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('error status', error?.response?.status);
         console.log('error message', error.response.data.message);
       } else if (error?.response?.status === 0) {
@@ -200,13 +200,13 @@ export const postApi = (endPoint, data) =>
         //   '',
         //   `Internet connection appears to be offline. Please check your internet connection and try again.`,
         // );
-        Toast.show(
-          'Internet connection appears to be offline. Please check your internet connection and try again.',
-          Toast.SHORT,
-        );
+        Toast.show({
+          text1:
+            'Internet connection appears to be offline. Please check your internet connection and try again.',
+        });
       } else {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('error status', error?.response?.status);
         console.log('error message', error.response.data.message);
       }
@@ -236,28 +236,28 @@ export const postApiWithToken = (token, endPoint, data) =>
       console.log('error', error);
       if (error?.response?.status === 422) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
         console.log(error.response.headers);
       } else if (error?.response?.status === 404) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('error status', error?.response?.status);
         console.log('error message', error.response.data.message);
       } else if (error?.response?.status === 401) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('error status', error?.response?.status);
         console.log('error message', error.response.data.message);
       } else if (error?.response?.status === 500) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('error status', error?.response?.status);
         console.log('error message', error.response.data.message);
       } else {
         // Alert.alert('', `${error}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('error status', error?.response?.status);
         console.log('error message', error.response.data.message);
       }
@@ -278,28 +278,28 @@ export const postJsonApiWithToken = (token, endPoint, data) =>
     .catch(error => {
       if (error?.response?.status === 422) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
         console.log(error.response.headers);
       } else if (error?.response?.status === 404) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       } else if (error?.response?.status === 401) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       } else if (error?.response?.status === 500) {
         // Alert.alert('', `${error.response.data.message}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       } else {
         // Alert.alert('', `${error}`);
-        Toast.show(error.response.data.message, Toast.SHORT);
+        Toast.show({text1: error.response.data.message});
         console.log('data', error.response.data);
         console.log('status', error.response.status);
       }

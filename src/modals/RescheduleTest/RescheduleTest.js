@@ -23,7 +23,7 @@ import MyButton from '../../components/MyButton/MyButton';
 import {width} from '../../global/Constant';
 import DateSelector from '../../components/DateSelector/DateSelector';
 import moment from 'moment';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import DatePicker from 'react-native-date-picker';
 
 const RescheduleTest = ({visible, setVisibility}) => {

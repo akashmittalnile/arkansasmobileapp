@@ -21,7 +21,7 @@ import Modal from 'react-native-modal';
 import MyButton from '../../components/MyButton/MyButton';
 import {width} from '../../global/Constant';
 import MyTextInput from '../../components/MyTextInput/MyTextInput';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import { Service } from '../../global/Index';
 
 const AddCard = ({visible, setVisibility, setShowLoader, userToken, callFunctionAfterAddingcard}) => {
@@ -56,7 +56,7 @@ const AddCard = ({visible, setVisibility, setShowLoader, userToken, callFunction
       thirdCode === '' &&
       forthCode === ''
     ) {
-      Toast.show('Please enter Card Number', Toast.SHORT);
+      Toast.show({text1: 'Please enter Card Number'});
       return false;
     } else if (
       firstCode?.length < 4 ||
@@ -64,16 +64,16 @@ const AddCard = ({visible, setVisibility, setShowLoader, userToken, callFunction
       thirdCode?.length < 4 ||
       forthCode?.length < 4
     ) {
-      Toast.show('Please enter complete Card Number', Toast.SHORT);
+      Toast.show({text1: 'Please enter complete Card Number'});
       return false;
     } else if (mm?.trim()?.length < 2) {
-      Toast.show('Please enter month', Toast.SHORT);
+      Toast.show({text1: 'Please enter month'});
       return false;
     } else if (mm?.trim()?.length < 2) {
-      Toast.show('Please enter year', Toast.SHORT);
+      Toast.show({text1: 'Please enter year'});
       return false;
     } else if (cardholdderName?.trim()?.length === 0) {
-      Toast.show('Please enter Cardholder Name', Toast.SHORT);
+      Toast.show({text1: 'Please enter Cardholder Name'});
       return false;
     }
     return true;
@@ -99,10 +99,10 @@ const AddCard = ({visible, setVisibility, setShowLoader, userToken, callFunction
       );
       console.log('onAddCard resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message, Toast.SHORT)
+        Toast.show({text1: resp?.data?.message})
         callFunctionAfterAddingcard('5')
       }else{
-        Toast.show(resp?.data?.message, Toast.SHORT)
+        Toast.show({text1: resp?.data?.message})
       }
     } catch (error) {
       console.log('error in onAddCard', error);

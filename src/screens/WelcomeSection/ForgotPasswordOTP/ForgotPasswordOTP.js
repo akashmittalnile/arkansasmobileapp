@@ -23,7 +23,7 @@ import {useDispatch} from 'react-redux';
 import MyButton from 'components/MyButton/MyButton';
 import {width} from '../../../global/Constant';
 import WelcomeHeader from 'components/WelcomeHeader/WelcomeHeader';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 import { Service } from '../../../global/Index';
 
@@ -49,11 +49,11 @@ const ForgotPasswordOTP = ({navigation, route}) => {
   };
   const Validation = () => {
     if(firstCode === '' && secondCode === '' && thirdCode === '' && forthCode === ''){
-      Toast.show('Please enter Verification Code', Toast.SHORT);
+      Toast.show({text1: 'Please enter Verification Code'});
       return false;
     }
     else if (firstCode === '' || secondCode === '' || thirdCode === '' || forthCode === '') {
-      Toast.show('Please enter complete Verification Code', Toast.SHORT);
+      Toast.show({text1: 'Please enter complete Verification Code'});
       return false;
     }
     return true
@@ -71,10 +71,10 @@ const ForgotPasswordOTP = ({navigation, route}) => {
       const resp = await Service.postApi(Service.VERIFY_OTP, postData);
       console.log('handleValidateOtp resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
         gotoForgotPasswordChange();
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in handleValidateOtp', error);
@@ -91,9 +91,9 @@ const ForgotPasswordOTP = ({navigation, route}) => {
       console.log('handleResendOtp resp', resp?.data);
       if (resp?.data?.status) {
         setCorrectOtp(resp.data.code)
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in handleResendOtp', error);

@@ -17,7 +17,7 @@ import {styles} from './MyHeaderStyle';
 import {useSelector, useDispatch} from 'react-redux';
 import {logOutUser} from 'src/reduxToolkit/reducer/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 
 const personImg = `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`;
 

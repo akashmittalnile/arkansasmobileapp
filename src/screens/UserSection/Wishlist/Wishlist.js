@@ -22,7 +22,7 @@ import MyText from 'components/MyText/MyText';
 import CustomLoader from 'components/CustomLoader/CustomLoader';
 //import : third parties
 import LinearGradient from 'react-native-linear-gradient';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 //import : global
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
 //import : styles
@@ -126,7 +126,7 @@ const Wishlist = ({navigation, dispatch}) => {
           );
         }
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in getAllType', error);
@@ -256,7 +256,7 @@ const Wishlist = ({navigation, dispatch}) => {
           setProductData(resp?.data?.data);
         }
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in applyFilters', error);
@@ -333,7 +333,7 @@ const Wishlist = ({navigation, dispatch}) => {
           setProductData(resp?.data?.data);
         }
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in applyFilters', error);
@@ -434,7 +434,7 @@ const Wishlist = ({navigation, dispatch}) => {
           setProductData(resp?.data?.data);
         }
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in removeFilter', error);
@@ -652,10 +652,10 @@ const Wishlist = ({navigation, dispatch}) => {
       );
       console.log('onLike resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
         getAllType(selectedTab);
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in onLike', error);

@@ -26,7 +26,7 @@ import MyText from '../MyText/MyText';
 import {Colors, MyIcon} from '../../global/Index';
 import Pdf from 'react-native-pdf';
 import DocumentPicker from 'react-native-document-picker';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import MyButton from '../MyButton/MyButton';
 import {width} from '../../global/Constant';
 
@@ -73,17 +73,16 @@ const AccordionItem = ({
       });
       // if size is greater than 1 mb, reupload image
       if (resp.size > 10 * 1024 * 1024) {
-        Toast.show(
-          'Assignment document size exceeds 10 MB, please upload smaller assignment document',
-          Toast.LONG,
-        );
+        Toast.show({
+          text1:
+            'Assignment document size exceeds 10 MB, please upload smaller assignment document',
+        });
         return;
       }
       if (resp.type === `image/webp`) {
-        Toast.show(
-          'Webp image format not allowed, please select another image',
-          Toast.LONG,
-        );
+        Toast.show({
+          text1: 'Webp image format not allowed, please select another image',
+        });
         return;
       }
       console.log('setValue', resp);
@@ -401,7 +400,7 @@ const AccordionItem = ({
                       }}
                       onPress={() => {
                         // openQuizInBrowser(item?.quiz_url);
-                        gotoSideMenuLinks(item.title, item?.quiz_url)
+                        gotoSideMenuLinks(item.title, item?.quiz_url);
                       }}
                     />
                     <MyText
@@ -436,7 +435,7 @@ const AccordionItem = ({
                       }}
                       onPress={() => {
                         // openQuizInBrowser(item?.survey_url);
-                        gotoSideMenuLinks(item.title, item?.survey_url)
+                        gotoSideMenuLinks(item.title, item?.survey_url);
                       }}
                     />
                   </View>
@@ -475,7 +474,7 @@ const AccordionItem = ({
                     onPress={() => {
                       // openPdfInBrowser(item?.file);
                       setShowViewPdfModal(true);
-                      setPdfLink(item?.file)
+                      setPdfLink(item?.file);
                     }}
                     style={{width: '85%'}}>
                     <MyText

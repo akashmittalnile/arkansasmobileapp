@@ -21,7 +21,7 @@ import MyText from 'components/MyText/MyText';
 import CustomLoader from 'components/CustomLoader/CustomLoader';
 //import : third parties
 import LinearGradient from 'react-native-linear-gradient';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 //import : global
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
 //import : styles
@@ -155,9 +155,9 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           img: el,
         }));
         setSliderData([...sliData]);
-        // Toast.show(resp?.data?.message, Toast.SHORT)
+        // Toast.show({text1: resp?.data?.message})
       } else {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
       }
     } catch (error) {
       console.log('error in getProductDetails', error);
@@ -198,7 +198,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
 
   const submitReview = async () => {
     if (review?.trim()?.length === 0) {
-      Toast.show('Please enter review');
+      Toast.show({text1: 'Please enter review'});
       return;
     }
     const postData = new FormData();
@@ -215,11 +215,11 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       );
       console.log('submitReview resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message || resp?.data?.Message});
         setStarRating(1);
         setReview('');
       } else {
-        Toast.show(resp?.data?.message || resp?.data?.Message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message || resp?.data?.Message});
       }
     } catch (error) {
       console.log('error in submitReview', error);
@@ -250,10 +250,10 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       );
       console.log('onLike resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
         getProductDetails();
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in onLike', error);
@@ -275,7 +275,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     if (documents.find(el => el.id === chapter_step_id)) {
       return true;
     } else {
-      Toast.show('Please select assignment file', Toast.SHORT);
+      Toast.show({text1: 'Please select assignment file'});
       return false;
     }
   };
@@ -300,11 +300,11 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         );
         console.log('uploadDocument resp', resp?.data);
         if (resp.data.status) {
-          Toast.show(resp.data.message, Toast.SHORT);
+          Toast.show({text1: resp.data.message});
           deleteDocument(item?.id);
           getProductDetails();
         } else {
-          Toast.show(resp.data.message, Toast.SHORT);
+          Toast.show({text1: resp.data.message});
         }
       } catch (error) {
         console.log('error in uploadDocument', error);
@@ -332,10 +332,10 @@ const ProductDetails = ({navigation, dispatch, route}) => {
           'cart_count',
           JSON.stringify(resp?.data?.cart_count),
         );
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
         gotoCart();
       } else {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
       }
     } catch (error) {
       console.log('error in addToCart', error);

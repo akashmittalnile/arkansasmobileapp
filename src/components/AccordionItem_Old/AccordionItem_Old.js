@@ -26,7 +26,7 @@ import MyText from '../MyText/MyText';
 import {Colors, MyIcon} from '../../global/Index';
 import Pdf from 'react-native-pdf';
 import DocumentPicker from 'react-native-document-picker';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import MyButton from '../MyButton/MyButton';
 import {width} from '../../global/Constant';
 
@@ -66,17 +66,16 @@ const AccordionItem_Old = ({
       });
       // if size is greater than 1 mb, reupload image
       if (resp.size > 10 * 1024 * 1024) {
-        Toast.show(
-          'Assignment document size exceeds 10 MB, please upload smaller assignment document',
-          Toast.LONG,
-        );
+        Toast.show({
+          text1:
+            'Assignment document size exceeds 10 MB, please upload smaller assignment document',
+        });
         return;
       }
       if (resp.type === `image/webp`) {
-        Toast.show(
-          'Webp image format not allowed, please select another image',
-          Toast.LONG,
-        );
+        Toast.show({
+          text1: 'Webp image format not allowed, please select another image',
+        });
         return;
       }
       console.log('setValue', resp);

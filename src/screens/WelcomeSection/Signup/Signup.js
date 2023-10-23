@@ -39,7 +39,7 @@ import TextInputWithFlag from '../../../components/TextInputWithFlag/TextInputWi
 import {CountryPicker} from 'react-native-country-codes-picker';
 import SuccessfulSignup from '../../../modals/SuccessfulSignup/SuccessfulSignup';
 import {MyIcon, Service} from '../../../global/Index';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 import SelectImageSource from 'modals/SelectImageSource/SelectImageSource';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -109,25 +109,25 @@ useEffect(() => {
   });
   const Validation = () => {
     if (filePath == '') {
-      Toast.show('Please add Profile Image', Toast.LONG);
+      Toast.show({text1: 'Please add Profile Image'});
       return;
     } else if (firstName == '') {
-      Toast.show('Please enter First Name', Toast.SHORT);
+      Toast.show({text1: 'Please enter First Name'});
       return false;
     } else if (lastName == '') {
-      Toast.show('Please enter Last Name', Toast.SHORT);
+      Toast.show({text1: 'Please enter Last Name'});
       return false;
     } else if (email == '') {
-      Toast.show('Please enter Email Address', Toast.SHORT);
+      Toast.show({text1: 'Please enter Email Address'});
       return false;
     } else if (password == '') {
-      Toast.show('Please enter Password', Toast.SHORT);
+      Toast.show({text1: 'Please enter Password'});
       return false;
     } else if (phone == '') {
-      Toast.show('Please enter Phone Number', Toast.SHORT);
+      Toast.show({text1: 'Please enter Phone Number'});
       return false;
     } else if (password == '') {
-      Toast.show('Please enter Password', Toast.SHORT);
+      Toast.show({text1: 'Please enter Password'});
       return false;
     }
     return true;
@@ -159,10 +159,10 @@ useEffect(() => {
       const resp = await Service.postApi(Service.REGISTER, formaData);
       console.log('signUpUser resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
         openSuccessModal();
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in signUpUser', error);
@@ -182,19 +182,19 @@ useEffect(() => {
     };
     launchCamera(options, response => {
       if (response.didCancel) {
-        Toast.show('User cancelled picking image', Toast.LONG);
+        Toast.show({text1: 'User cancelled picking image'});
         setShowImageSourceModal(false);
         return;
       } else if (response.errorCode == 'camera_unavailable') {
-        Toast.show('Camera not available on device', Toast.LONG);
+        Toast.show({text1: 'Camera not available on device'});
         setShowImageSourceModal(false);
         return;
       } else if (response.errorCode == 'permission') {
-        Toast.show('Permission not satisfied', Toast.LONG);
+        Toast.show({text1: 'Permission not satisfied'});
         setShowImageSourceModal(false);
         return;
       } else if (response.errorCode == 'others') {
-        Toast.show(response.errorMessage, Toast.LONG);
+        Toast.show({text1: response.errorMessage});
         setShowImageSourceModal(false);
         return;
       }
@@ -221,7 +221,7 @@ useEffect(() => {
           openCamera();
           console.log('Storage Permission Granted.');
         } else {
-          Toast.show(`Storage Permission Not Granted`, Toast.SHORT);
+          Toast.show({text1: `Storage Permission Not Granted`});
           // Alert.alert('Error', 'Storage Permission Not Granted');
         }
       } catch (err) {
@@ -249,22 +249,22 @@ useEffect(() => {
       if (response.didCancel) {
         // Alert.alert('User cancelled camera picker');
         setShowImageSourceModal(false);
-        Toast.show('User cancelled image picker', Toast.LONG);
+        Toast.show({text1: 'User cancelled image picker'});
         // Alert.alert('User cancelled image picker');
         return;
       } else if (response.errorCode == 'camera_unavailable') {
         setShowImageSourceModal(false);
-        Toast.show('Camera not available on device', Toast.LONG);
+        Toast.show({text1: 'Camera not available on device'});
         // Alert.alert('Camera not available on device');
         return;
       } else if (response.errorCode == 'permission') {
         setShowImageSourceModal(false);
-        Toast.show('Permission not satisfied', Toast.LONG);
+        Toast.show({text1: 'Permission not satisfied'});
         // Alert.alert('Permission not satisfied');
         return;
       } else if (response.errorCode == 'others') {
         setShowImageSourceModal(false);
-        Toast.show(response.errorMessage, Toast.LONG);
+        Toast.show({text1: response.errorMessage});
         // Alert.alert(response.errorMessage);
         return;
       } else {

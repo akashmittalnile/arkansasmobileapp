@@ -21,7 +21,7 @@ import MyText from 'components/MyText/MyText';
 import CustomLoader from 'components/CustomLoader/CustomLoader';
 //import : third parties
 import LinearGradient from 'react-native-linear-gradient';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 //import : global
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
 //import : styles
@@ -84,7 +84,7 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
         const updatedData = await generateThumb(resp?.data?.data);
         setCourseData(updatedData);
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in getCourses', error);
@@ -290,7 +290,7 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
         const updatedData = await generateThumb(resp?.data?.data);
         setCourseData(updatedData);
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in applyFilters', error);
@@ -352,7 +352,7 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
         const updatedData = await generateThumb(resp?.data?.data);
         setCourseData(updatedData);
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in applyFilters', error);
@@ -409,7 +409,7 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
         const updatedData = await generateThumb(resp?.data?.data);
         setCourseData(updatedData);
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in removeFilter', error);

@@ -23,7 +23,7 @@ import CustomLoader from 'components/CustomLoader/CustomLoader';
 //import : third parties
 import LinearGradient from 'react-native-linear-gradient';
 import Toast from 'react-native-toast-message';
-// import Toast from 'react-native-simple-toast';
+// import Toast from 'react-native-toast-message';
 //import : global
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
 //import : styles
@@ -285,10 +285,10 @@ const Home = ({navigation, dispatch}) => {
           'cart_count',
           JSON.stringify(resp?.data?.cart_count),
         );
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
         gotoCart();
       } else {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
       }
     } catch (error) {
       console.log('error in addToCart', error);

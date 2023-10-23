@@ -23,7 +23,7 @@ import MyButton from 'components/MyButton/MyButton';
 import {width} from '../../../global/Constant';
 import WelcomeHeader from 'components/WelcomeHeader/WelcomeHeader';
 import MyTextInput from 'components/MyTextInput/MyTextInput';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 import { Service } from '../../../global/Index';
 
@@ -39,7 +39,7 @@ const ForgotPasswordEmail = ({navigation}) => {
   };
   const handleForgotPasswrord = async () => {
     if (email?.trim()?.length === 0) {
-      Toast.show('Please enter Email Address', Toast.SHORT);
+      Toast.show({text1: 'Please enter Email Address'});
       return;
     }
     setShowLoader(true);
@@ -49,10 +49,10 @@ const ForgotPasswordEmail = ({navigation}) => {
       const resp = await Service.postApi(Service.FORGET_PASSWORD, postData);
       console.log('handleForgotPasswrord resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
         gotoForgotPasswordOTP(resp.data.message);
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in handleForgotPasswrord', error);

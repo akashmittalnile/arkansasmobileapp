@@ -23,7 +23,7 @@ import MyButton from 'components/MyButton/MyButton';
 import {width} from '../../../global/Constant';
 import WelcomeHeader from 'components/WelcomeHeader/WelcomeHeader';
 import MyTextInput from 'components/MyTextInput/MyTextInput';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 import CustomLoader from '../../../components/CustomLoader/CustomLoader';
 import { Service } from '../../../global/Index';
 
@@ -46,14 +46,14 @@ const ForgotPasswordChange = ({navigation, route}) => {
   };
   const Validation = () => {
     if(password?.trim()?.length === 0){
-      Toast.show('Please enter Password', Toast.SHORT);
+      Toast.show({text1: 'Please enter Password'});
       return false;
     }
     else if(confirmPassword?.trim()?.length === 0){
-      Toast.show('Please enter Confirm Password', Toast.SHORT);
+      Toast.show({text1: 'Please enter Confirm Password'});
       return false;
     } else if(password !== confirmPassword){
-      Toast.show('Password and Confirm Password do not match', Toast.SHORT);
+      Toast.show({text1: 'Password and Confirm Password do not match'});
       return false;
     } 
     return true
@@ -73,10 +73,10 @@ const ForgotPasswordChange = ({navigation, route}) => {
       const resp = await Service.postApi(Service.VERIFY_OTP, postData);
       console.log('changePassword resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
         gotoLogin();
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in changePassword', error);

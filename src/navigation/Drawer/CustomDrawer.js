@@ -19,7 +19,7 @@ import {styles} from './CustomDrawerStyle';
 //import : modal
 //import : third parties
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 //import : redux
 import {useSelector, useDispatch} from 'react-redux';
 import {logOutUser, setUser} from 'src/reduxToolkit/reducer/user';

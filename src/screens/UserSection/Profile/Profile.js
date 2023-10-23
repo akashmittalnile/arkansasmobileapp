@@ -24,7 +24,7 @@ import MyText from 'components/MyText/MyText';
 import CustomLoader from 'components/CustomLoader/CustomLoader';
 //import : third parties
 import LinearGradient from 'react-native-linear-gradient';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-toast-message';
 //import : global
 import {Colors, Constant, MyIcon, ScreenNames, Service} from 'global/Index';
 //import : styles
@@ -190,7 +190,7 @@ const Profile = ({navigation, dispatch}) => {
           setBillingTabData(resp?.data?.data);
         }
       } else {
-        Toast.show(resp.data.message, Toast.SHORT);
+        Toast.show({text1: resp.data.message});
       }
     } catch (error) {
       console.log('error in getProfileData', error);
@@ -285,19 +285,19 @@ const Profile = ({navigation, dispatch}) => {
     };
     launchCamera(options, response => {
       if (response.didCancel) {
-        Toast.show('User cancelled picking image', Toast.LONG);
+        Toast.show({text1: 'User cancelled picking image'});
         setShowImageSourceModal(false);
         return;
       } else if (response.errorCode == 'camera_unavailable') {
-        Toast.show('Camera not available on device', Toast.LONG);
+        Toast.show({text1: 'Camera not available on device'});
         setShowImageSourceModal(false);
         return;
       } else if (response.errorCode == 'permission') {
-        Toast.show('Permission not satisfied', Toast.LONG);
+        Toast.show({text1: 'Permission not satisfied'});
         setShowImageSourceModal(false);
         return;
       } else if (response.errorCode == 'others') {
-        Toast.show(response.errorMessage, Toast.LONG);
+        Toast.show({text1: response.errorMessage});
         setShowImageSourceModal(false);
         return;
       }
@@ -325,7 +325,7 @@ const Profile = ({navigation, dispatch}) => {
           openCamera();
           console.log('Storage Permission Granted.');
         } else {
-          Toast.show(`Storage Permission Not Granted`, Toast.SHORT);
+          Toast.show({text1: `Storage Permission Not Granted`});
           // Alert.alert('Error', 'Storage Permission Not Granted');
         }
       } catch (err) {
@@ -353,22 +353,22 @@ const Profile = ({navigation, dispatch}) => {
       if (response.didCancel) {
         // Alert.alert('User cancelled camera picker');
         setShowImageSourceModal(false);
-        Toast.show('User cancelled image picker', Toast.LONG);
+        Toast.show({text1: 'User cancelled image picker'});
         // Alert.alert('User cancelled image picker');
         return;
       } else if (response.errorCode == 'camera_unavailable') {
         setShowImageSourceModal(false);
-        Toast.show('Camera not available on device', Toast.LONG);
+        Toast.show({text1: 'Camera not available on device'});
         // Alert.alert('Camera not available on device');
         return;
       } else if (response.errorCode == 'permission') {
         setShowImageSourceModal(false);
-        Toast.show('Permission not satisfied', Toast.LONG);
+        Toast.show({text1: 'Permission not satisfied'});
         // Alert.alert('Permission not satisfied');
         return;
       } else if (response.errorCode == 'others') {
         setShowImageSourceModal(false);
-        Toast.show(response.errorMessage, Toast.LONG);
+        Toast.show({text1: response.errorMessage});
         // Alert.alert(response.errorMessage);
         return;
       } else {
@@ -420,10 +420,10 @@ const Profile = ({navigation, dispatch}) => {
       );
       console.log('deleteCard resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
         getProfileData('5');
       } else {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
       }
     } catch (error) {
       console.log('error in deleteCard', error);
@@ -456,13 +456,13 @@ const Profile = ({navigation, dispatch}) => {
       );
       console.log('updateProfileDetails resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
         setProfileImage(resp?.data?.user?.profile_image)
         const jsonValue = JSON.stringify(resp.data.user);
         await AsyncStorage.setItem('userInfo', jsonValue);
         dispatch(setUser(resp.data.user));
       } else {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
       }
     } catch (error) {
       console.log('error in updateProfileDetails', error);
@@ -478,16 +478,16 @@ const Profile = ({navigation, dispatch}) => {
   };
   const changePasswordValidation = () => {
     if (oldPassword?.trim()?.length === 0) {
-      Toast.show('Please enter Old Password', Toast.SHORT);
+      Toast.show({text1: 'Please enter Old Password'});
       return false;
     } else if (newPassword?.trim()?.length === 0) {
-      Toast.show('Please enter New Password', Toast.SHORT);
+      Toast.show({text1: 'Please enter New Password'});
       return false;
     } else if (confirmPassword?.trim()?.length === 0) {
-      Toast.show('Please enter Confirm Password', Toast.SHORT);
+      Toast.show({text1: 'Please enter Confirm Password'});
       return false;
     } else if (confirmPassword?.trim() !== newPassword?.trim()) {
-      Toast.show('Confirm Password and New Password do not match', Toast.SHORT);
+      Toast.show({text1: 'Confirm Password and New Password do not match'});
       return false;
     }
     return true;
@@ -509,12 +509,12 @@ const Profile = ({navigation, dispatch}) => {
       );
       console.log('onChangePassword resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
         setOldPassword('');
         setNewPassword('');
         setConfirmPassword('');
       } else {
-        Toast.show(resp?.data?.message, Toast.SHORT);
+        Toast.show({text1: resp?.data?.message});
       }
     } catch (error) {
       console.log('error in onChangePassword', error);

@@ -711,7 +711,7 @@ const Profile = ({navigation, dispatch}) => {
             selectedTab == '6' ? (
               <OrderHistoryTab
                 orderHistoryData={orderHistoryData}
-                viewDetails={viewDetails}
+                // viewDetails={viewDetails}
               />
             ) : null}
           </ScrollView>
@@ -724,10 +724,10 @@ const Profile = ({navigation, dispatch}) => {
           userToken={userToken}
           callFunctionAfterAddingcard={getProfileData}
         />
-        <OrderStatus
+        {/* <OrderStatus
           visible={showOrderStatusModal}
           setVisibility={setShowOrderStatusModal}
-        />
+        /> */}
         {showViewPdfModal ? (
           <ViewPdf
             visible={showViewPdfModal}

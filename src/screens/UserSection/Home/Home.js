@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  RefreshControl,
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -168,6 +169,7 @@ const Home = ({navigation, dispatch}) => {
   const [selectedTag, setSelectedTag] = useState('1');
   const [trendingCourses, setTrendingCourses] = useState([]);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -200,7 +202,7 @@ const Home = ({navigation, dispatch}) => {
       const resp = await Service.getApiWithToken(userToken, Service.CART_COUNT);
       console.log('getCartCount resp', resp?.data);
       if (resp?.data?.status) {
-        dispatch(setCartCount(resp?.data?.data))
+        dispatch(setCartCount(resp?.data?.data));
       } else {
         Toast.show(resp.data.message, Toast.SHORT);
       }
@@ -209,6 +211,20 @@ const Home = ({navigation, dispatch}) => {
     }
     setShowLoader2(false);
   };
+  const checkcon = () => {
+    getHomeData();
+    getCartCount();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
+  }, []);
   const onLike = async (type, id, status) => {
     setShowLoader(true);
     const formdata = new FormData();
@@ -531,12 +547,13 @@ const Home = ({navigation, dispatch}) => {
           <ImageBackground
             source={{uri: item?.thumb?.path}}
             style={styles.crseImg}>
-            <TouchableOpacity onPress={() => {
-              setShowModal({
-                isVisible: true,
-                data: item,
-              });
-            }} >
+            <TouchableOpacity
+              onPress={() => {
+                setShowModal({
+                  isVisible: true,
+                  data: item,
+                });
+              }}>
               <Image source={require('assets/images/play-icon.png')} />
             </TouchableOpacity>
           </ImageBackground>
@@ -721,6 +738,9 @@ const Home = ({navigation, dispatch}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           <SearchWithIconDummy
             icon={<Image source={require('assets/images/yellow-seach.png')} />}
@@ -815,7 +835,10 @@ const Home = ({navigation, dispatch}) => {
             <VideoModal
               isVisible={showModal.isVisible}
               toggleModal={toggleModal}
-              videoDetail={{...showModal?.data, url: showModal?.data?.introduction_video}}
+              videoDetail={{
+                ...showModal?.data,
+                url: showModal?.data?.introduction_video,
+              }}
               // {...props}
             />
           ) : null}

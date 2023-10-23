@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  RefreshControl,
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -177,6 +178,7 @@ const MyOrders = ({navigation, dispatch}) => {
   const [openTempStartDate, setOpenTempStartDate] = useState('');
   const [tempEndDate, setTempEndDate] = useState('');
   const [openTempEndDate, setOpenTempEndDate] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -218,6 +220,19 @@ const MyOrders = ({navigation, dispatch}) => {
     }
     setShowLoader(false);
   };
+  const checkcon = () => {
+    getMyOrders();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
+  }, []);
   const generateThumb = async data => {
     // console.log('generateThumb');
     let updatedData = [...data];
@@ -1025,6 +1040,9 @@ const MyOrders = ({navigation, dispatch}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           <View style={styles.tabsContainer}>
             {tabs?.map(item => (

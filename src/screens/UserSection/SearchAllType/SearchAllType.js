@@ -160,7 +160,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        Service.LIKE_OBJECT_TYPE,
+        status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE,
         formdata,
       );
       console.log('onLike resp', resp?.data);

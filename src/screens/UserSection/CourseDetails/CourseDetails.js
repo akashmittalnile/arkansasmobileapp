@@ -300,12 +300,12 @@ const CourseDetails = ({navigation, dispatch, route}) => {
     const formdata = new FormData();
     formdata.append('type', type);
     formdata.append('id', id);
-    formdata.append('status', status === '1' ? '0' : '1');
+    formdata.append('status', status == '1' ? '0' : '1');
     console.log('onLike formdata', formdata);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
-        status === '1' ? UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE,
+        status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE,
         formdata,
       );
       console.log('onLike resp', resp?.data);

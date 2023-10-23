@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
-    paddingBottom: 63,
+    // paddingBottom: 63,
     backgroundColor: Colors.THEME_BROWN,
   },
   container2: {

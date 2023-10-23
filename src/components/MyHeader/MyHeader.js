@@ -1,6 +1,13 @@
 //import : react components
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, TouchableOpacity, Image, Keyboard, Platform, Alert} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  Keyboard,
+  Platform,
+  Alert,
+} from 'react-native';
 import {
   DrawerActions,
   useNavigation,
@@ -18,6 +25,13 @@ import {useSelector, useDispatch} from 'react-redux';
 import {logOutUser} from 'src/reduxToolkit/reducer/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 
 const personImg = `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`;
 
@@ -27,6 +41,8 @@ const MyHeader = ({
   isBorderRadius = true,
   IsCartIcon = true,
   IsNotificationIcon = true,
+  style = {},
+  scrolling,
 }) => {
   //variables
   const navigation = useNavigation();
@@ -36,10 +52,57 @@ const MyHeader = ({
   const userToken = useSelector(state => state.user.userToken);
   const userNotifications = useSelector(state => state.user.userNotifications);
   const [greetingMsg, setGreetingMsg] = useState('');
+  // animated code
+  const shareValue = useSharedValue(0);
+  const [headerPaddingBottom, setHeaderPaddingBottom] = useState(
+    isBackButton ? 73 : 63,
+  );
+  const [headerBorderRadius, setHeaderBorderRadius] = useState(
+    isBorderRadius ? 30 : 0,
+  );
+  const headerAnimatedStyle = useAnimatedStyle(() => ({
+    paddingBottom: interpolate(
+      shareValue.value,
+      [0, 1],
+      [isBackButton ? 73 : 63, headerPaddingBottom],
+    ),
+    borderBottomLeftRadius: interpolate(
+      shareValue.value,
+      [0, 1],
+      [isBorderRadius ? 30 : 0, headerBorderRadius],
+    ),
+    borderBottomRightRadius: interpolate(
+      shareValue.value,
+      [0, 1],
+      [isBorderRadius ? 30 : 0, headerBorderRadius],
+    ),
+  }));
 
   useEffect(() => {
     getGreetingMessage();
   }, []);
+  useEffect(() => {
+    if (scrolling) {
+      setHeaderPaddingBottom(20);
+      setHeaderBorderRadius(0);
+    } else {
+      setHeaderPaddingBottom(isBorderRadius ? 30 : 0);
+      setHeaderBorderRadius(30);
+    }
+    if (shareValue.value === 0) {
+      shareValue.value = withTiming(1, {
+        // duration: 500,
+        duration: 400,
+        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+      });
+    } else {
+      shareValue.value = withTiming(0, {
+        // duration: 500,
+        duration: 400,
+        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+      });
+    }
+  }, [scrolling]);
 
   const getGreetingMessage = () => {
     const now = new Date();
@@ -66,14 +129,16 @@ const MyHeader = ({
   const gotoCart = () => navigation.navigate(ScreenNames.CART);
   //UI
   return (
-    <View
+    <Animated.View
       style={[
         styles.container,
-        {
-          borderBottomLeftRadius: isBorderRadius ? 30 : 0,
-          paddingBottom: isBackButton ? 73 : 63,
-          borderBottomRightRadius: isBorderRadius ? 30 : 0,
-        },
+        style,
+        // {
+        //   borderBottomLeftRadius: isBorderRadius ? 30 : 0,
+        //   paddingBottom: isBackButton ? 73 : 63,
+        //   borderBottomRightRadius: isBorderRadius ? 30 : 0,
+        // },
+        headerAnimatedStyle,
       ]}>
       {/* section first drawer and back icon  */}
       <TouchableOpacity onPress={isBackButton ? goBack : openDrawer}>
@@ -165,7 +230,7 @@ const MyHeader = ({
           </TouchableOpacity>
         ) : null}
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

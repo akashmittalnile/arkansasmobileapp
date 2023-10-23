@@ -60,6 +60,7 @@ const Home = ({navigation, dispatch}) => {
   const [trendingCourses, setTrendingCourses] = useState([]);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
   const [refreshing, setRefreshing] = useState(false);
+  const [scrolling, setscrolling] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -621,13 +622,23 @@ const Home = ({navigation, dispatch}) => {
       </TouchableOpacity>
     );
   };
+  const handleScroll = event => {
+    const yOffset = event.nativeEvent.contentOffset.y;
+    if (yOffset === 0) {
+      // Your code to handle reaching the top of the scroll view
+      console.log('Reached the top');
+      setscrolling(false);
+    } else {
+      setscrolling(true);
+    }
+  };
 
   //UI
   return (
     <SafeAreaView style={{flex: 1}}>
       <StatusBar backgroundColor={Colors.THEME_BROWN} />
       <View style={styles.container}>
-        <MyHeader Title="Home" />
+        <MyHeader Title="Home" scrolling={scrolling} style={scrolling ? {zIndex: 99} : null} />
         {/* <MyHeader Title="Home" isBackButton /> */}
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -635,12 +646,23 @@ const Home = ({navigation, dispatch}) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
+          // onScrollBeginDrag={() => {
+          //   setscrolling(true);
+          // }}
+          // onMomentumScrollEnd={() => {
+          //   setscrolling(false);
+          // }}
+          onScroll={handleScroll}
           style={styles.mainView}>
-          <SearchWithIconDummy
-            icon={<Image source={require('assets/images/yellow-seach.png')} />}
-            placeholder="Search by Course, Creator or Product name"
-            onPress={gotoSearchAllType}
-          />
+          {!scrolling ? (
+            <SearchWithIconDummy
+              icon={
+                <Image source={require('assets/images/yellow-seach.png')} />
+              }
+              placeholder="Search by Course, Creator or Product name"
+              onPress={gotoSearchAllType}
+            />
+          ) : null}
           <FlatList
             data={homeData?.all_tags || []}
             horizontal

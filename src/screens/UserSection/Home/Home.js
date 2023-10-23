@@ -667,7 +667,7 @@ const Home = ({navigation, dispatch}) => {
             data={homeData?.all_tags || []}
             horizontal
             showsHorizontalScrollIndicator={false}
-            style={{marginTop: 11}}
+            style={{marginTop: !scrolling ? 11 : 60}}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderTags}
           />

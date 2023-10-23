@@ -403,7 +403,7 @@ const MyOrders = ({navigation, dispatch}) => {
     postData.append('id', selectedId);
     postData.append('type', selectedType);
     postData.append('rating', starRating);
-    postData.append('message', review);
+    postData.append('comment', review);
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
@@ -413,11 +413,11 @@ const MyOrders = ({navigation, dispatch}) => {
       );
       console.log('submitReview resp', resp?.data);
       if (resp?.data?.status) {
-        Toast.show({text1: resp?.data?.message});
+        Toast.show({text1: resp?.data?.message || resp?.data?.Message});
         setStarRating(1);
         setReview('');
       } else {
-        Toast.show({text1: resp?.data?.message});
+        Toast.show({text1: resp?.data?.message || resp?.data?.Message});
       }
     } catch (error) {
       console.log('error in submitReview', error);

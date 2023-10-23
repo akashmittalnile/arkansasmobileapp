@@ -402,6 +402,7 @@ const MyOrders = ({navigation, dispatch}) => {
     const postData = new FormData();
     postData.append('id', selectedId);
     postData.append('type', selectedType);
+    postData.append('rating', starRating);
     postData.append('message', review);
     setShowLoader(true);
     try {
@@ -421,6 +422,7 @@ const MyOrders = ({navigation, dispatch}) => {
     } catch (error) {
       console.log('error in submitReview', error);
     }
+    setShowReviewModal(false)
     setShowLoader(false);
   };
   const gotoCourseDetails = (id, type) => {

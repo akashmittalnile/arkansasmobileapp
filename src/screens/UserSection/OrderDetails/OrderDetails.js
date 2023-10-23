@@ -369,13 +369,13 @@ const OrderDetails = ({navigation, dispatch, route}) => {
         Toast.show({text1: resp?.data?.message || resp?.data?.Message});
         setStarRating(1);
         setReview('');
-        setShowReviewModal(false)
       } else {
         Toast.show({text1: resp?.data?.message || resp?.data?.Message});
       }
     } catch (error) {
       console.log('error in submitReview', error);
     }
+    setShowReviewModal(false)
     setShowLoader(false);
   };
   //UI

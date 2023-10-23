@@ -48,6 +48,7 @@ import {
 } from '@stripe/stripe-react-native';
 import {clearCart} from 'src/reduxToolkit/reducer/user';
 import { setCartCount } from '../../../reduxToolkit/reducer/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProceedToPayment = ({navigation, dispatch}) => {
   //variables
@@ -124,6 +125,10 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       if (resp?.data?.status) {
         setMadePayment(true);
         dispatch(setCartCount(resp?.data?.cart_count))
+        await AsyncStorage.setItem(
+          'cart_count',
+          JSON.stringify(resp?.data?.cart_count),
+        );
         Toast.show(resp?.data?.message, Toast.SHORT);
         openSuccessfulyPurchasedModal();
         dispatch(clearCart());

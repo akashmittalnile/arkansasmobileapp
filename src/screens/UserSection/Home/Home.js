@@ -43,6 +43,7 @@ import {
 } from 'src/reduxToolkit/reducer/user';
 import SearchWithIconDummy from '../../../components/SearchWithIconDummy/SearchWithIconDummy';
 import VideoModal from '../../../components/VideoModal/VideoModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({navigation, dispatch}) => {
   //variables
@@ -278,7 +279,11 @@ const Home = ({navigation, dispatch}) => {
       );
       console.log('addToCart resp', resp?.data);
       if (resp?.data?.status) {
-        dispatch(setCartCount(resp?.data?.cart_count))
+        dispatch(setCartCount(resp?.data?.cart_count));
+        await AsyncStorage.setItem(
+          'cart_count',
+          JSON.stringify(resp?.data?.cart_count),
+        );
         Toast.show(resp?.data?.message, Toast.SHORT);
         gotoCart();
       } else {

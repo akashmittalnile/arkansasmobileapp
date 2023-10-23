@@ -46,12 +46,12 @@ const Splash = ({navigation}) => {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userInfo) {
         const notifications = await AsyncStorage.getItem('userNotifications');
-        const cartCount = await AsyncStorage.getItem('cartCount');
+        const cartCount = await AsyncStorage.getItem('cart_count');
         // console.log('User notifications', notifications);
         if (notifications) {
           dispatch(setUserNotifications(JSON.parse(notifications)));
         }
-        if (typeof cartCount === 'number') {
+        if (cartCount) {
           dispatch(setCartCount(JSON.parse(cartCount)));
         }
       }

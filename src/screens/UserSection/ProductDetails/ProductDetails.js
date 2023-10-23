@@ -48,6 +48,7 @@ import VideoModal from '../../../components/VideoModal/VideoModal';
 import Carousel from '../../../components/Carousel/Carousel';
 import {setCartCount} from 'src/reduxToolkit/reducer/user';
 import {ImageSlider, ImageCarousel} from 'react-native-image-slider-banner';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const data = [
   {
@@ -327,6 +328,10 @@ const ProductDetails = ({navigation, dispatch, route}) => {
       console.log('addToCart resp', resp?.data);
       if (resp?.data?.status) {
         dispatch(setCartCount(resp?.data?.cart_count))
+        await AsyncStorage.setItem(
+          'cart_count',
+          JSON.stringify(resp?.data?.cart_count),
+        );
         Toast.show(resp?.data?.message, Toast.SHORT);
         gotoCart();
       } else {

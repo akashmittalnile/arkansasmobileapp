@@ -90,7 +90,7 @@ const Home = ({navigation, dispatch}) => {
         if (data?.special_course && Array.isArray(data?.special_course)) {
           data.special_course = resp?.data?.data?.special_course?.slice(0, 2);
         }
-        console.log('remaining data', data);
+        console.log('remaining data', JSON.stringify(data));
         const dataWithThumb = await generateThumb(data);
         setHomeData(dataWithThumb);
       } else {
@@ -169,7 +169,8 @@ const Home = ({navigation, dispatch}) => {
           // console.log('el.introduction_video trending', el.introduction_video);
           const thumb = await createThumbnail({
             url: el.introduction_video,
-            timeStamp: 1000,
+            // timeStamp: 1000,
+            timeStamp: 200,
           });
           return {
             ...el,

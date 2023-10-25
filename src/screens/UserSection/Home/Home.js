@@ -72,6 +72,7 @@ const Home = ({navigation, dispatch}) => {
     });
     return unsubscribe;
   }, [navigation]);
+  // console.log('useefect', originalHomeData?.trending_course);
   const getHomeData = async () => {
     !showLoader && setShowLoader(true);
     try {
@@ -79,18 +80,19 @@ const Home = ({navigation, dispatch}) => {
       // console.log('getHomeData resp', JSON.stringify(resp?.data?.data));
       console.log('getHomeData trending_course?.length', JSON.stringify(resp?.data?.data?.trending_course?.length));
       if (resp?.data?.status) {
-        setOriginalHomeData(resp?.data?.data);
+        setOriginalHomeData({...resp?.data?.data});
         const data = {...resp?.data?.data};
         // get first 2 trending and special courses
         if (data?.trending_course && Array.isArray(data?.trending_course)) {
-          data.trending_course = resp?.data?.data?.trending_course?.splice(
+          data.trending_course = resp?.data?.data?.trending_course?.slice(
             0,
             2,
           );
         }
         if (data?.special_course && Array.isArray(data?.special_course)) {
-          data.special_course = resp?.data?.data?.special_course?.splice(0, 2);
+          data.special_course = resp?.data?.data?.special_course?.slice(0, 2);
         }
+        console.log('remaining data', data);
         const dataWithThumb = await generateThumb(data);
         setHomeData(dataWithThumb);
       } else {
@@ -249,7 +251,7 @@ const Home = ({navigation, dispatch}) => {
     return trending_course_data;
   };
   const fetchMoreTrendingCourses = async () => {
-    console.log('fetchMoreTrendingCourses', originalHomeData);
+    console.log('original trending', originalHomeData?.trending_course?.length);
     // if (
     //   homeData?.trending_course?.length ===
     //   originalHomeData?.trending_course?.length
@@ -258,21 +260,23 @@ const Home = ({navigation, dispatch}) => {
     // }
     setShowTrendingLoader(true);
     try {
-      const data = originalHomeData?.trending_course?.splice(
+      const data = originalHomeData?.trending_course?.slice(
         homeData?.trending_course?.length,
         2,
-      );
-      console.log(
-        'fetchMoreTrendingCourses',
-        JSON.stringify(originalHomeData?.trending_course),
-      );
+        );
+        // console.log(
+      //   'fetchMoreTrendingCourses',
+      //   JSON.stringify(originalHomeData?.trending_course),
+      // );
       const updatedData = await generateTrendingThumb(data);
-      const localHomeData = [...homeData];
+      const localHomeData = deepCopy(homeData);
+      // console.log('here3', localHomeData);
       localHomeData.trending_course = [
         ...homeData?.trending_course,
         ...updatedData,
       ];
-      setHomeData(localHomeData);
+      console.log('here4', localHomeData);
+      setHomeData(deepCopy(localHomeData));
     } catch (error) {
       console.log('cannot fetchMoreTrendingCourses');
     }
@@ -952,3 +956,33 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 export default connect(null, mapDispatchToProps)(Home);
+
+function deepCopy(obj, copies = new WeakMap()) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj; // Return non-objects as is
+  }
+
+  // Check if the object has already been copied
+  if (copies.has(obj)) {
+    return copies.get(obj);
+  }
+
+  // Create a new object of the same type as obj
+  const copy = Array.isArray(obj) ? [] : {};
+
+  // Add this object to the copies map
+  copies.set(obj, copy);
+
+  // Recursively deep copy all properties
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      copy[key] = deepCopy(obj[key], copies);
+    }
+  }
+
+  return copy;
+}
+
+// Usage
+const originalObject = { a: 1, b: { c: 2 } };
+const copiedObject = deepCopy(originalObject);

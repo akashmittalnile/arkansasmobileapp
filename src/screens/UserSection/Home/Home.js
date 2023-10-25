@@ -54,7 +54,9 @@ const Home = ({navigation, dispatch}) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
   const [showLoader2, setShowLoader2] = useState(false);
+  const [showTrendingLoader, setShowTrendingLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [originalHomeData, setOriginalHomeData] = useState({});
   const [homeData, setHomeData] = useState({});
   const [selectedTag, setSelectedTag] = useState('1');
   const [trendingCourses, setTrendingCourses] = useState([]);
@@ -74,11 +76,23 @@ const Home = ({navigation, dispatch}) => {
     !showLoader && setShowLoader(true);
     try {
       const resp = await Service.getApiWithToken(userToken, Service.HOME);
-      // console.log('getHomeData resp', JSON.stringify(resp?.data));
+      // console.log('getHomeData resp', JSON.stringify(resp?.data?.data));
+      console.log('getHomeData trending_course?.length', JSON.stringify(resp?.data?.data?.trending_course?.length));
       if (resp?.data?.status) {
-        const dataWithThumb = await generateThumb(resp?.data?.data);
+        setOriginalHomeData(resp?.data?.data);
+        const data = {...resp?.data?.data};
+        // get first 2 trending and special courses
+        if (data?.trending_course && Array.isArray(data?.trending_course)) {
+          data.trending_course = resp?.data?.data?.trending_course?.splice(
+            0,
+            2,
+          );
+        }
+        if (data?.special_course && Array.isArray(data?.special_course)) {
+          data.special_course = resp?.data?.data?.special_course?.splice(0, 2);
+        }
+        const dataWithThumb = await generateThumb(data);
         setHomeData(dataWithThumb);
-        // setHomeData(resp?.data?.data);
       } else {
         Toast.show({text1: resp.data.message});
       }
@@ -209,6 +223,66 @@ const Home = ({navigation, dispatch}) => {
     // console.log('thumb data', data);
     // const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
     return data;
+  };
+  const generateTrendingThumb = async data => {
+    // console.log('generateThumb');
+    let trending_course_data = [...data];
+    try {
+      trending_course_data = await Promise.all(
+        data?.map?.(async el => {
+          // console.log('el.introduction_video trending', el.introduction_video);
+          const thumb = await createThumbnail({
+            url: el.introduction_video,
+            timeStamp: 1000,
+          });
+          return {
+            ...el,
+            thumb,
+          };
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+    console.log('thumb trending data', trending_course_data);
+    // const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
+    return trending_course_data;
+  };
+  const fetchMoreTrendingCourses = async () => {
+    console.log('fetchMoreTrendingCourses', originalHomeData);
+    // if (
+    //   homeData?.trending_course?.length ===
+    //   originalHomeData?.trending_course?.length
+    // ) {
+    //   return;
+    // }
+    setShowTrendingLoader(true);
+    try {
+      const data = originalHomeData?.trending_course?.splice(
+        homeData?.trending_course?.length,
+        2,
+      );
+      console.log(
+        'fetchMoreTrendingCourses',
+        JSON.stringify(originalHomeData?.trending_course),
+      );
+      const updatedData = await generateTrendingThumb(data);
+      const localHomeData = [...homeData];
+      localHomeData.trending_course = [
+        ...homeData?.trending_course,
+        ...updatedData,
+      ];
+      setHomeData(localHomeData);
+    } catch (error) {
+      console.log('cannot fetchMoreTrendingCourses');
+    }
+    setShowTrendingLoader(false);
+  };
+  const renderTrendingFooter = () => {
+    console.log('renderTrendingFooter');
+    return showTrendingLoader ? (
+      <ActivityIndicator size="large" color="#0000ff" />
+    ) : null;
   };
   const toggleModal = state => {
     setShowModal({
@@ -638,7 +712,11 @@ const Home = ({navigation, dispatch}) => {
     <SafeAreaView style={{flex: 1}}>
       <StatusBar backgroundColor={Colors.THEME_BROWN} />
       <View style={styles.container}>
-        <MyHeader Title="Home" scrolling={scrolling} style={scrolling ? {zIndex: 99} : null} />
+        <MyHeader
+          Title="Home"
+          scrolling={scrolling}
+          style={scrolling ? {zIndex: 99} : null}
+        />
         {/* <MyHeader Title="Home" isBackButton /> */}
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -685,6 +763,9 @@ const Home = ({navigation, dispatch}) => {
                 style={{marginTop: 15}}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderCourse}
+                onEndReached={fetchMoreTrendingCourses}
+                onEndReachedThreshold={0.1}
+                ListFooterComponent={renderTrendingFooter}
               />
             </View>
           ) : (

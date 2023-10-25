@@ -78,16 +78,13 @@ const Home = ({navigation, dispatch}) => {
     try {
       const resp = await Service.getApiWithToken(userToken, Service.HOME);
       // console.log('getHomeData resp', JSON.stringify(resp?.data?.data));
-      console.log('getHomeData trending_course?.length', JSON.stringify(resp?.data?.data?.trending_course?.length));
+      // console.log('getHomeData trending_course?.length', JSON.stringify(resp?.data?.data?.trending_course?.length));
       if (resp?.data?.status) {
         setOriginalHomeData({...resp?.data?.data});
         const data = {...resp?.data?.data};
         // get first 2 trending and special courses
         if (data?.trending_course && Array.isArray(data?.trending_course)) {
-          data.trending_course = resp?.data?.data?.trending_course?.slice(
-            0,
-            2,
-          );
+          data.trending_course = resp?.data?.data?.trending_course?.slice(0, 2);
         }
         if (data?.special_course && Array.isArray(data?.special_course)) {
           data.special_course = resp?.data?.data?.special_course?.slice(0, 2);
@@ -252,30 +249,32 @@ const Home = ({navigation, dispatch}) => {
   };
   const fetchMoreTrendingCourses = async () => {
     console.log('original trending', originalHomeData?.trending_course?.length);
-    // if (
-    //   homeData?.trending_course?.length ===
-    //   originalHomeData?.trending_course?.length
-    // ) {
-    //   return;
-    // }
+    if (
+      homeData?.trending_course?.length ===
+      originalHomeData?.trending_course?.length
+    ) {
+      return;
+    }
     setShowTrendingLoader(true);
     try {
       const data = originalHomeData?.trending_course?.slice(
         homeData?.trending_course?.length,
-        2,
-        );
-        // console.log(
+        homeData?.trending_course?.length + 2,
+      );
+      console.log('data', data);
+      // console.log(
       //   'fetchMoreTrendingCourses',
       //   JSON.stringify(originalHomeData?.trending_course),
       // );
       const updatedData = await generateTrendingThumb(data);
+      // console.log('here3', updatedData);
       const localHomeData = deepCopy(homeData);
       // console.log('here3', localHomeData);
       localHomeData.trending_course = [
         ...homeData?.trending_course,
         ...updatedData,
       ];
-      console.log('here4', localHomeData);
+      // console.log('here4', JSON.stringify(localHomeData));
       setHomeData(deepCopy(localHomeData));
     } catch (error) {
       console.log('cannot fetchMoreTrendingCourses');
@@ -285,7 +284,9 @@ const Home = ({navigation, dispatch}) => {
   const renderTrendingFooter = () => {
     console.log('renderTrendingFooter');
     return showTrendingLoader ? (
-      <ActivityIndicator size="large" color="#0000ff" />
+      <View style={{flex: 1, justifyContent:'center'}} >
+        <ActivityIndicator size="large" color={Colors.THEME_GOLD} />
+      </View>
     ) : null;
   };
   const toggleModal = state => {
@@ -984,5 +985,5 @@ function deepCopy(obj, copies = new WeakMap()) {
 }
 
 // Usage
-const originalObject = { a: 1, b: { c: 2 } };
+const originalObject = {a: 1, b: {c: 2}};
 const copiedObject = deepCopy(originalObject);

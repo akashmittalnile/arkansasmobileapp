@@ -55,6 +55,7 @@ const Home = ({navigation, dispatch}) => {
   const [showLoader, setShowLoader] = useState(false);
   const [showLoader2, setShowLoader2] = useState(false);
   const [showTrendingLoader, setShowTrendingLoader] = useState(false);
+  const [showSpecialLoader, setShowSpecialLoader] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [originalHomeData, setOriginalHomeData] = useState({});
   const [homeData, setHomeData] = useState({});
@@ -247,6 +248,29 @@ const Home = ({navigation, dispatch}) => {
     // const updatedData = {...data, suggested_course: suggested_course_data, trending_course: trending_course_data}
     return trending_course_data;
   };
+  const generateSpecialThumb = async data => {
+    // console.log('generateThumb');
+    let special_course_data = [...data];
+    try {
+      special_course_data = await Promise.all(
+        data?.map?.(async el => {
+          // console.log('el.introduction_video trending', el.introduction_video);
+          const thumb = await createThumbnail({
+            url: el.introduction_video,
+            timeStamp: 1000,
+          });
+          return {
+            ...el,
+            thumb,
+          };
+        }),
+      );
+    } catch (error) {
+      console.error('Error generating thumbnails:', error);
+    }
+    console.log('thumb trending data', special_course_data);
+    return special_course_data;
+  };
   const fetchMoreTrendingCourses = async () => {
     console.log('original trending', originalHomeData?.trending_course?.length);
     if (
@@ -281,9 +305,51 @@ const Home = ({navigation, dispatch}) => {
     }
     setShowTrendingLoader(false);
   };
+  const fetchMoreSpecialCourses = async () => {
+    console.log('original trending', originalHomeData?.special_course?.length);
+    if (
+      homeData?.special_course?.length ===
+      originalHomeData?.special_course?.length
+    ) {
+      return;
+    }
+    setShowSpecialLoader(true);
+    try {
+      const data = originalHomeData?.special_course?.slice(
+        homeData?.special_course?.length,
+        homeData?.special_course?.length + 2,
+      );
+      console.log('data', data);
+      // console.log(
+      //   'fetchMoreTrendingCourses',
+      //   JSON.stringify(originalHomeData?.special_course),
+      // );
+      const updatedData = await generateSpecialThumb(data);
+      // console.log('here3', updatedData);
+      const localHomeData = deepCopy(homeData);
+      // console.log('here3', localHomeData);
+      localHomeData.special_course = [
+        ...homeData?.special_course,
+        ...updatedData,
+      ];
+      // console.log('here4', JSON.stringify(localHomeData));
+      setHomeData(deepCopy(localHomeData));
+    } catch (error) {
+      console.log('cannot fetchMoreTrendingCourses');
+    }
+    setShowSpecialLoader(false);
+  };
   const renderTrendingFooter = () => {
     console.log('renderTrendingFooter');
     return showTrendingLoader ? (
+      <View style={{flex: 1, justifyContent:'center'}} >
+        <ActivityIndicator size="large" color={Colors.THEME_GOLD} />
+      </View>
+    ) : null;
+  };
+  const renderSpecialFooter = () => {
+    console.log('renderTrendingFooter');
+    return showSpecialLoader ? (
       <View style={{flex: 1, justifyContent:'center'}} >
         <ActivityIndicator size="large" color={Colors.THEME_GOLD} />
       </View>
@@ -822,6 +888,9 @@ const Home = ({navigation, dispatch}) => {
                 style={{marginTop: 15}}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderCourse}
+                onEndReached={fetchMoreSpecialCourses}
+                onEndReachedThreshold={0.1}
+                ListFooterComponent={renderSpecialFooter}
               />
             </View>
           ) : (

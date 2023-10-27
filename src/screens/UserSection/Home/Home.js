@@ -45,6 +45,7 @@ import {
 import SearchWithIconDummy from '../../../components/SearchWithIconDummy/SearchWithIconDummy';
 import VideoModal from '../../../components/VideoModal/VideoModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSharedValue, useDerivedValue, withSpring } from 'react-native-reanimated';
 
 const Home = ({navigation, dispatch}) => {
   //variables
@@ -64,6 +65,7 @@ const Home = ({navigation, dispatch}) => {
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
   const [refreshing, setRefreshing] = useState(false);
   const [scrolling, setscrolling] = useState(false);
+  const scrollY = useSharedValue(0);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -770,6 +772,7 @@ const Home = ({navigation, dispatch}) => {
   };
   const handleScroll = event => {
     const yOffset = event.nativeEvent.contentOffset.y;
+    scrollY.value = event.nativeEvent.contentOffset.y;
     if (yOffset === 0) {
       // Your code to handle reaching the top of the scroll view
       console.log('Reached the top');
@@ -787,6 +790,7 @@ const Home = ({navigation, dispatch}) => {
         <MyHeader
           Title="Home"
           scrolling={scrolling}
+          scrollY={scrollY}
           style={scrolling ? {zIndex: 99} : null}
         />
         {/* <MyHeader Title="Home" isBackButton /> */}
@@ -803,6 +807,7 @@ const Home = ({navigation, dispatch}) => {
           //   setscrolling(false);
           // }}
           onScroll={handleScroll}
+          scrollEventThrottle={16}
           style={styles.mainView}>
           {!scrolling ? (
             <SearchWithIconDummy

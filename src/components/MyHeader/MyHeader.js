@@ -31,6 +31,8 @@ import Animated, {
   useSharedValue,
   withTiming,
   Easing,
+  useDerivedValue,
+  withSpring,
 } from 'react-native-reanimated';
 
 const personImg = `https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=60`;
@@ -43,6 +45,7 @@ const MyHeader = ({
   IsNotificationIcon = true,
   style = {},
   scrolling,
+  scrollY = {value: 1},
 }) => {
   //variables
   const navigation = useNavigation();
@@ -81,28 +84,40 @@ const MyHeader = ({
   useEffect(() => {
     getGreetingMessage();
   }, []);
-  useEffect(() => {
-    if (scrolling) {
-      setHeaderPaddingBottom(20);
-      setHeaderBorderRadius(0);
-    } else {
-      setHeaderPaddingBottom(isBorderRadius ? 30 : 0);
-      setHeaderBorderRadius(30);
-    }
-    if (shareValue.value === 0) {
-      shareValue.value = withTiming(1, {
-        // duration: 500,
-        duration: 400,
-        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
-      });
-    } else {
-      shareValue.value = withTiming(0, {
-        // duration: 500,
-        duration: 400,
-        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
-      });
-    }
-  }, [scrolling]);
+  const headerRadius = useDerivedValue(() => {
+    console.log('scrollY.value', scrollY.value, scrollY.value === 0 ? 30 : 0);
+    return withSpring(scrollY.value === 0 ? 0 : 30);
+  });
+  const headerPaddingBottom2 = useDerivedValue(() => {
+    return withSpring(scrollY.value === 0 ? 63: 20);
+  });
+  const headerStyle = {
+    borderBottomLeftRadius: headerRadius.value,
+    borderBottomRightRadius: headerRadius.value,
+    paddingBottom: headerPaddingBottom2,
+  };
+  // useEffect(() => {
+  //   if (scrolling) {
+  //     setHeaderPaddingBottom(20);
+  //     setHeaderBorderRadius(0);
+  //   } else {
+  //     setHeaderPaddingBottom(isBorderRadius ? 30 : 0);
+  //     setHeaderBorderRadius(30);
+  //   }
+  //   if (shareValue.value === 0) {
+  //     shareValue.value = withTiming(1, {
+  //       // duration: 500,
+  //       duration: 400,
+  //       easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+  //     });
+  //   } else {
+  //     shareValue.value = withTiming(0, {
+  //       // duration: 500,
+  //       duration: 400,
+  //       easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+  //     });
+  //   }
+  // }, [scrolling]);
 
   const getGreetingMessage = () => {
     const now = new Date();
@@ -138,7 +153,7 @@ const MyHeader = ({
         //   paddingBottom: isBackButton ? 73 : 63,
         //   borderBottomRightRadius: isBorderRadius ? 30 : 0,
         // },
-        headerAnimatedStyle,
+        headerStyle
       ]}>
       {/* section first drawer and back icon  */}
       <TouchableOpacity onPress={isBackButton ? goBack : openDrawer}>

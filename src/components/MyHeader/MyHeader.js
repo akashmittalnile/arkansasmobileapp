@@ -56,31 +56,7 @@ const MyHeader = ({
   const userNotifications = useSelector(state => state.user.userNotifications);
   const [greetingMsg, setGreetingMsg] = useState('');
   // animated code
-  const shareValue = useSharedValue(0);
-  const [headerPaddingBottom, setHeaderPaddingBottom] = useState(
-    isBackButton ? 73 : 63,
-  );
-  const [headerBorderRadius, setHeaderBorderRadius] = useState(
-    isBorderRadius ? 30 : 0,
-  );
-  const headerAnimatedStyle = useAnimatedStyle(() => ({
-    paddingBottom: interpolate(
-      shareValue.value,
-      [0, 1],
-      [isBackButton ? 73 : 63, headerPaddingBottom],
-    ),
-    borderBottomLeftRadius: interpolate(
-      shareValue.value,
-      [0, 1],
-      [isBorderRadius ? 30 : 0, headerBorderRadius],
-    ),
-    borderBottomRightRadius: interpolate(
-      shareValue.value,
-      [0, 1],
-      [isBorderRadius ? 30 : 0, headerBorderRadius],
-    ),
-  }));
-
+  
   useEffect(() => {
     getGreetingMessage();
   }, []);
@@ -96,29 +72,7 @@ const MyHeader = ({
     borderBottomRightRadius: headerRadius.value,
     paddingBottom: headerPaddingBottom2,
   };
-  // useEffect(() => {
-  //   if (scrolling) {
-  //     setHeaderPaddingBottom(20);
-  //     setHeaderBorderRadius(0);
-  //   } else {
-  //     setHeaderPaddingBottom(isBorderRadius ? 30 : 0);
-  //     setHeaderBorderRadius(30);
-  //   }
-  //   if (shareValue.value === 0) {
-  //     shareValue.value = withTiming(1, {
-  //       // duration: 500,
-  //       duration: 400,
-  //       easing: Easing.bezier(0.4, 0.0, 0.2, 1),
-  //     });
-  //   } else {
-  //     shareValue.value = withTiming(0, {
-  //       // duration: 500,
-  //       duration: 400,
-  //       easing: Easing.bezier(0.4, 0.0, 0.2, 1),
-  //     });
-  //   }
-  // }, [scrolling]);
-
+  
   const getGreetingMessage = () => {
     const now = new Date();
     const hrs = now.getHours();

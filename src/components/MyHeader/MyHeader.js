@@ -61,7 +61,7 @@ const MyHeader = ({
     getGreetingMessage();
   }, []);
   const headerRadius = useDerivedValue(() => {
-    console.log('scrollY.value', scrollY.value, scrollY.value === 0 ? 30 : 0);
+    // console.log('scrollY.value', scrollY.value, scrollY.value === 0 ? 30 : 0);
     return withSpring(scrollY.value === 0 ? 0 : 30);
   });
   const headerPaddingBottom2 = useDerivedValue(() => {

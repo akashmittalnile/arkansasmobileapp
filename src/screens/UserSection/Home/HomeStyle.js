@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
   },
   crseImg: {
     height: 167,
-    width: '100%',
+    width: (width - 40) * 0.66,
     justifyContent: 'center',
     alignItems: 'center',
   },

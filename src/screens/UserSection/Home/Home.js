@@ -954,7 +954,7 @@ const Home = ({navigation, dispatch}) => {
               icon={
                 <Image source={require('assets/images/yellow-seach.png')} />
               }
-              placeholder="Search by Course, Creator or Product name"
+              placeholder="Search by Course or Product name"
               onPress={gotoSearchAllType}
             />
           ) : null}

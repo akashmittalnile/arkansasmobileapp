@@ -840,7 +840,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     <SafeAreaView style={{flex: 1}}>
       <StatusBar backgroundColor={Colors.THEME_BROWN} />
       <View style={styles.container}>
-        <MyHeader />
+        <MyHeader Title="Search by Title" isBackButton />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}

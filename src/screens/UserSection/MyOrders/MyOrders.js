@@ -383,6 +383,7 @@ const MyOrders = ({navigation, dispatch}) => {
 
   const changeSelectedTab = id => {
     setSelectedTab(id);
+    setSearchValue('')
     getMyOrders(id);
   };
 

@@ -178,6 +178,7 @@ const SearchAllType = ({navigation, dispatch}) => {
 
   const changeSelectedTab = id => {
     setSelectedTab(id);
+    setSearchValue('')
     getAllType(id);
   };
 

@@ -32,7 +32,7 @@ const SuccessfulyPurchased = ({visible, setVisibility, gotoMyCourses}) => {
   return (
     <Modal
       isVisible={visible}
-      swipeDirection="down"
+      // swipeDirection="down"
       // onBackdropPress={() => setVisibility(false)}
       onSwipeComplete={e => {
         setVisibility(false);

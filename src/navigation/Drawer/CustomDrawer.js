@@ -45,6 +45,9 @@ const CustomDrawer = ({navigation}) => {
     closeDrawer();
     navigation.dispatch(resetIndexGoToSignup);
   };
+  const gotoHome = () => {
+    navigation.navigate(ScreenNames.BOTTOM_TAB, {screen: ScreenNames.HOME});
+  };
   const gotoSuperAdminCourses = () => {
     navigation.navigate(ScreenNames.SUPER_ADMIN_COURSES);
   };
@@ -108,6 +111,7 @@ const CustomDrawer = ({navigation}) => {
           <DrawerItemList
             Title="Home"
             image={require('assets/images/home-sb.png')}
+            onPress={gotoHome}
           />
           <DrawerItemList
             Title="My Wishlist"

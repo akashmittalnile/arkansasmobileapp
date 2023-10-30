@@ -86,7 +86,7 @@ const Review = ({
           style={{marginBottom: 20}}
         />
         <MyText
-          text="Select Starts According To You Overall Experience"
+          text="Select stars according to your overall experience"
           textColor={Colors.LIGHT_GREY}
           fontSize={14}
           fontFamily="regular"

@@ -33,7 +33,9 @@ const SuccessfulSignup = ({visible, setVisibility, gotoLogin}) => {
     <Modal
       isVisible={visible}
       swipeDirection="down"
-      onBackdropPress={() => setVisibility(false)}
+      onBackdropPress={() => {
+        // setVisibility(false)
+      }}
       onSwipeComplete={e => {
         setVisibility(false);
       }}

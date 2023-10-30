@@ -109,7 +109,7 @@ useEffect(() => {
   });
   const Validation = () => {
     if (filePath == '') {
-      Toast.show({text1: 'Please add Profile Image'});
+      Toast.show({text1: 'Please upload Profile Image'});
       return;
     } else if (firstName == '') {
       Toast.show({text1: 'Please enter First Name'});

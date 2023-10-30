@@ -37,7 +37,6 @@ import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import SearchProductByCategoryFiltersModal from './components/SearchProductByCategoryFiltersModal/SearchProductByCategoryFiltersModal';
 import {createThumbnail} from 'react-native-create-thumbnail';
 
-
 const SearchProductByCategory = ({navigation, dispatch, route}) => {
   //variables
   const LINE_HEIGTH = 25;
@@ -69,7 +68,7 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
   const getCourses = async () => {
     const postData = new FormData();
     postData.append('type', 2);
-    postData.append('category[]', route?.params?.id)
+    postData.append('category[]', route?.params?.id);
     console.log('getCourses postData', postData);
     setShowLoader(true);
     try {
@@ -383,6 +382,35 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
     setShowLoader(false);
   };
 
+  const onLike = async (type, id, status) => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append('type', type);
+    formdata.append('id', id);
+    formdata.append('status', status == '1' ? '0' : '1');
+    console.log('onLike formdata', formdata);
+    const endPoint =
+      status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE;
+    console.log('onLike endPoint', endPoint);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        endPoint,
+        formdata,
+      );
+      console.log('onLike resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show({text1: resp.data.message});
+        getCourses();
+      } else {
+        Toast.show({text1: resp.data.message});
+      }
+    } catch (error) {
+      console.log('error in onLike', error);
+    }
+    showLoader && setShowLoader(false);
+  };
+
   const renderProduct = ({item}) => {
     return (
       <TouchableOpacity
@@ -422,9 +450,9 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
                 // style={styles.crtrImg}
               /> */}
               <Image
-                  source={{uri: item?.creator_image}}
-                  style={styles.createImgStyle}
-                />
+                source={{uri: item?.creator_image}}
+                style={styles.createImgStyle}
+              />
               <MyText
                 text={item?.creator_name}
                 fontFamily="regular"
@@ -445,7 +473,18 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image source={require('assets/images/heart-selected.png')} />
+              <TouchableOpacity
+                onPress={() => {
+                  onLike('2', item.id, item?.isWishlist);
+                }}>
+                <Image
+                  source={
+                    item?.isWishlist
+                      ? require('assets/images/heart-selected.png')
+                      : require('assets/images/heart.png')
+                  }
+                />
+              </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}

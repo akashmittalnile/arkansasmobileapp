@@ -38,7 +38,6 @@ import SearchCourseByTagFiltersModal from './components/SearchCourseByTagFilters
 import {createThumbnail} from 'react-native-create-thumbnail';
 import VideoModal from '../../../components/VideoModal/VideoModal';
 
-
 const SearchCourseByTag = ({navigation, dispatch, route}) => {
   //variables
   const LINE_HEIGTH = 25;
@@ -77,14 +76,14 @@ const SearchCourseByTag = ({navigation, dispatch, route}) => {
     postData.append('type', 1);
     postData.append('tag', route?.params?.id);
     console.log('getCourses postData', postData);
-    setShowLoader(true);
+    !showLoader && setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
         Service.ALL_TYPE_LISTING,
         postData,
       );
-      // console.log('getCourses resp', resp?.data);
+      console.log('getCourses resp', JSON.stringify(resp?.data));
       if (resp?.data?.status) {
         if (resp?.data?.category) {
           setCourseCategries(
@@ -490,6 +489,35 @@ const SearchCourseByTag = ({navigation, dispatch, route}) => {
     setShowLoader(false);
   };
 
+  const onLike = async (type, id, status) => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append('type', type);
+    formdata.append('id', id);
+    formdata.append('status', status == '1' ? '0' : '1');
+    console.log('onLike formdata', formdata);
+    const endPoint =
+      status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE;
+    console.log('onLike endPoint', endPoint);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        endPoint,
+        formdata,
+      );
+      console.log('onLike resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show({text1: resp.data.message});
+        getCourses();
+      } else {
+        Toast.show({text1: resp.data.message});
+      }
+    } catch (error) {
+      console.log('error in onLike', error);
+    }
+    showLoader && setShowLoader(false);
+  };
+
   const renderCourse = ({item}) => {
     return (
       <TouchableOpacity
@@ -558,7 +586,18 @@ const SearchCourseByTag = ({navigation, dispatch, route}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image source={require('assets/images/heart-selected.png')} />
+              <TouchableOpacity
+                onPress={() => {
+                  onLike('1', item.id, item?.isWishlist);
+                }}>
+                <Image
+                  source={
+                    item?.isWishlist
+                      ? require('assets/images/heart-selected.png')
+                      : require('assets/images/heart.png')
+                  }
+                />
+              </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}

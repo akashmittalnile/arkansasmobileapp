@@ -38,7 +38,6 @@ import SearchCourseByCategoryFiltersModal from './components/SearchCourseByCateg
 import {createThumbnail} from 'react-native-create-thumbnail';
 import VideoModal from '../../../components/VideoModal/VideoModal';
 
-
 const SearchCourseByCategory = ({navigation, dispatch, route}) => {
   //variables
   const LINE_HEIGTH = 25;
@@ -72,7 +71,7 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
     const postData = new FormData();
     postData.append('type', 1);
     postData.append('category[]', route?.params?.id);
-    setShowLoader(true);
+    !showLoader && setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
         userToken,
@@ -417,6 +416,35 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
     setShowLoader(false);
   };
 
+  const onLike = async (type, id, status) => {
+    setShowLoader(true);
+    const formdata = new FormData();
+    formdata.append('type', type);
+    formdata.append('id', id);
+    formdata.append('status', status == '1' ? '0' : '1');
+    console.log('onLike formdata', formdata);
+    const endPoint =
+      status == '1' ? Service.UNLIKE_OBJECT_TYPE : Service.LIKE_OBJECT_TYPE;
+    console.log('onLike endPoint', endPoint);
+    try {
+      const resp = await Service.postApiWithToken(
+        userToken,
+        endPoint,
+        formdata,
+      );
+      console.log('onLike resp', resp?.data);
+      if (resp?.data?.status) {
+        Toast.show({text1: resp.data.message});
+        getCourses();
+      } else {
+        Toast.show({text1: resp.data.message});
+      }
+    } catch (error) {
+      console.log('error in onLike', error);
+    }
+    showLoader && setShowLoader(false);
+  };
+
   const renderCourse = ({item}) => {
     return (
       <TouchableOpacity
@@ -426,12 +454,13 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
           source={{uri: item?.thumb?.path}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
-          <TouchableOpacity onPress={() => {
+          <TouchableOpacity
+            onPress={() => {
               setShowModal({
                 isVisible: true,
                 data: item,
               });
-            }} >
+            }}>
             <Image source={require('assets/images/play-icon.png')} />
           </TouchableOpacity>
         </ImageBackground>
@@ -484,7 +513,18 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
               style={{}}
             />
             <View style={styles.iconsRow}>
-              <Image source={require('assets/images/heart-selected.png')} />
+              <TouchableOpacity
+                onPress={() => {
+                  onLike('1', item.id, item?.isWishlist);
+                }}>
+                <Image
+                  source={
+                    item?.isWishlist
+                      ? require('assets/images/heart-selected.png')
+                      : require('assets/images/heart.png')
+                  }
+                />
+              </TouchableOpacity>
               <Image
                 source={require('assets/images/share.png')}
                 style={{marginLeft: 10}}
@@ -523,7 +563,10 @@ const SearchCourseByCategory = ({navigation, dispatch, route}) => {
             <VideoModal
               isVisible={showModal.isVisible}
               toggleModal={toggleModal}
-              videoDetail={{...showModal?.data, url: showModal?.data?.introduction_video}}
+              videoDetail={{
+                ...showModal?.data,
+                url: showModal?.data?.introduction_video,
+              }}
               // {...props}
             />
           ) : null}

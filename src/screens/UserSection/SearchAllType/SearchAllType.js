@@ -38,7 +38,6 @@ import FiltersModal from './components/FiltersModal/FiltersModal';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import VideoModal from '../../../components/VideoModal/VideoModal';
 
-
 const SearchAllType = ({navigation, dispatch}) => {
   //variables
   const LINE_HEIGTH = 25;
@@ -85,7 +84,7 @@ const SearchAllType = ({navigation, dispatch}) => {
   const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
-  
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getAllType();
@@ -178,7 +177,7 @@ const SearchAllType = ({navigation, dispatch}) => {
 
   const changeSelectedTab = id => {
     setSelectedTab(id);
-    setSearchValue('')
+    setSearchValue('');
     getAllType(id);
   };
 
@@ -459,6 +458,9 @@ const SearchAllType = ({navigation, dispatch}) => {
   const gotoCourseDetails = (id, type) => {
     navigation.navigate(ScreenNames.COURSE_DETAILS, {id, type});
   };
+  const gotoProductDetails = (id, type) => {
+    navigation.navigate(ScreenNames.PRODUCT_DETAILS, {id, type});
+  };
   const toggleModal = state => {
     setShowModal({
       isVisible: state.isVisible,
@@ -475,12 +477,13 @@ const SearchAllType = ({navigation, dispatch}) => {
           source={{uri: item?.thumb?.path}}
           style={styles.crseImg}
           imageStyle={{borderRadius: 10}}>
-          <TouchableOpacity onPress={() => {
+          <TouchableOpacity
+            onPress={() => {
               setShowModal({
                 isVisible: true,
                 data: item,
               });
-            }} >
+            }}>
             <Image source={require('assets/images/play-icon.png')} />
           </TouchableOpacity>
         </ImageBackground>
@@ -560,7 +563,9 @@ const SearchAllType = ({navigation, dispatch}) => {
   const renderProduct = ({item}) => {
     // console.log('wishlist item.Product_image', item.Product_image);
     return (
-      <View style={styles.courseContainer}>
+      <TouchableOpacity
+        onPress={() => gotoProductDetails(item?.id, '2')}
+        style={styles.courseContainer}>
         <ImageBackground
           source={{uri: item.Product_image[0]}}
           style={styles.crseImg}>
@@ -638,7 +643,7 @@ const SearchAllType = ({navigation, dispatch}) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   const isFilterApplied = () => {
@@ -885,7 +890,10 @@ const SearchAllType = ({navigation, dispatch}) => {
             <VideoModal
               isVisible={showModal.isVisible}
               toggleModal={toggleModal}
-              videoDetail={{...showModal?.data, url: showModal?.data?.introduction_video}}
+              videoDetail={{
+                ...showModal?.data,
+                url: showModal?.data?.introduction_video,
+              }}
               // {...props}
             />
           ) : null}

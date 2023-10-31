@@ -45,7 +45,7 @@ const MyHeader = ({
   IsNotificationIcon = true,
   style = {},
   scrolling,
-  scrollY = {value: 1},
+  scrollY = {"value": 0},
 }) => {
   //variables
   const navigation = useNavigation();

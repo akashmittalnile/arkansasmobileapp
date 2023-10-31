@@ -47,7 +47,7 @@ import {
   StripeContainer,
 } from '@stripe/stripe-react-native';
 import {clearCart} from 'src/reduxToolkit/reducer/user';
-import { setCartCount } from '../../../reduxToolkit/reducer/user';
+import {setCartCount} from '../../../reduxToolkit/reducer/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProceedToPayment = ({navigation, dispatch}) => {
@@ -124,7 +124,7 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       console.log('handlePayClick resp', resp?.data);
       if (resp?.data?.status) {
         setMadePayment(true);
-        dispatch(setCartCount(resp?.data?.cart_count))
+        dispatch(setCartCount(resp?.data?.cart_count));
         await AsyncStorage.setItem(
           'cart_count',
           JSON.stringify(resp?.data?.cart_count),
@@ -151,23 +151,23 @@ const ProceedToPayment = ({navigation, dispatch}) => {
       Toast.show({text1: 'Please complete card details'});
       return;
     }
-    console.log('card', card);
-    const res = await createToken({card, type: 'Card'});
-    console.log('res stripe', res?.token?.id);
-    // return
-    if (res?.error) {
-      if (res?.error?.message) {
-        Toast.show({text1: res?.error?.message});
-      } else {
-        Toast.show({text1: 'Card details incorrect'});
-      }
-      return;
-    }
     const postData = new FormData();
     // postData.append('card_id', 5);
     console.log('onConfirm postData', postData);
     setShowLoader(true);
     try {
+      console.log('card', card);
+      const res = await createToken({card, type: 'Card'});
+      console.log('res stripe', res?.token?.id);
+      // return
+      if (res?.error) {
+        if (res?.error?.message) {
+          Toast.show({text1: res?.error?.message});
+        } else {
+          Toast.show({text1: 'Incorrect Card details'});
+        }
+        return;
+      }
       const resp = await Service.postApiWithToken(
         userToken,
         Service.SAVE_ORDER,

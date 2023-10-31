@@ -342,14 +342,15 @@ const Cart = ({navigation, dispatch}) => {
                     style={{}}
                   />
                   <MyText
-                    text={`$${Number(cartListData?.sub_total).toFixed(2)}`}
+                    // text={`$${Number(cartListData?.sub_total).toFixed(2)}`}
+                    text={'$' + cartListData?.sub_total}
                     fontSize={14}
                     fontFamily="medium"
                     textColor={'#455A64'}
                     style={{}}
                   />
                 </View>
-                <View style={[styles.row, {marginBottom: 19}]}>
+                <View style={[styles.row, {marginBottom: 10}]}>
                   <MyText
                     text={`Discount`}
                     fontSize={14}
@@ -358,7 +359,25 @@ const Cart = ({navigation, dispatch}) => {
                     style={{}}
                   />
                   <MyText
-                    text={`$${Number(cartListData?.discount).toFixed(2)}`}
+                    // text={`$${Number(cartListData?.discount).toFixed(2)}`}
+                    text={'$' + cartListData?.discount}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#8F93A0'}
+                    style={{}}
+                  />
+                </View>
+                <View style={[styles.row, {marginBottom: 19}]}>
+                  <MyText
+                    text={`Tax`}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#8F93A0'}
+                    style={{}}
+                  />
+                  <MyText
+                    // text={`$${Number(cartListData?.discount).toFixed(2)}`}
+                    text={'$' + cartListData?.tax}
                     fontSize={14}
                     fontFamily="medium"
                     textColor={'#8F93A0'}
@@ -391,7 +410,8 @@ const Cart = ({navigation, dispatch}) => {
                     style={{}}
                   />
                   <MyText
-                    text={`$${Number(cartListData?.total).toFixed(2)}`}
+                    // text={`$${Number(cartListData?.total).toFixed(2)}`}
+                    text={'$' + cartListData?.total}
                     fontSize={18}
                     fontFamily="medium"
                     textColor={'#455A64'}

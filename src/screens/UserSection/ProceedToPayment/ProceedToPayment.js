@@ -244,14 +244,15 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                   style={{}}
                 />
                 <MyText
-                  text={`$${Number(screenData?.sub_total).toFixed(2)}`}
+                  // text={`$${Number(screenData?.sub_total).toFixed(2)}`}
+                  text={'$' + screenData?.sub_total}
                   fontSize={14}
                   fontFamily="medium"
                   textColor={'#455A64'}
                   style={{}}
                 />
               </View>
-              <View style={[styles.row, {marginBottom: 19}]}>
+              <View style={[styles.row, {marginBottom: 10}]}>
                 <MyText
                   text={`Discount`}
                   fontSize={14}
@@ -260,7 +261,24 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                   style={{}}
                 />
                 <MyText
-                  text={`$${Number(screenData?.discount).toFixed(2)}`}
+                  // text={`$${Number(screenData?.discount).toFixed(2)}`}
+                  text={'$' + screenData?.discount}
+                  fontSize={14}
+                  fontFamily="medium"
+                  textColor={'#8F93A0'}
+                  style={{}}
+                />
+              </View>
+              <View style={[styles.row, {marginBottom: 19}]}>
+                <MyText
+                  text={`Tax`}
+                  fontSize={14}
+                  fontFamily="medium"
+                  textColor={'#8F93A0'}
+                  style={{}}
+                />
+                <MyText
+                  text={'$' + screenData?.tax}
                   fontSize={14}
                   fontFamily="medium"
                   textColor={'#8F93A0'}
@@ -293,7 +311,8 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                   style={{}}
                 />
                 <MyText
-                  text={`$${Number(screenData?.total).toFixed(2)}`}
+                  // text={`$${Number(screenData?.total).toFixed(2)}`}
+                  text={'$' + screenData?.total}
                   fontSize={18}
                   fontFamily="medium"
                   textColor={'#455A64'}

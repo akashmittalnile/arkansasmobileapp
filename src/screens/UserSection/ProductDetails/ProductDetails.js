@@ -193,6 +193,7 @@ const ProductDetails = ({navigation, dispatch, route}) => {
     navigation.navigate(ScreenNames.ALL_REVIEWS, {
       id: productDetails?.id,
       type: '1',
+      isPurchased: productDetails?.isPurchased
     });
   };
 

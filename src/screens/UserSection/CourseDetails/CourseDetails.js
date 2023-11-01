@@ -53,9 +53,7 @@ import PrerequisiteModal from '../../../modals/PrerequisiteModal/PrerequisiteMod
 import CourseNotPurshasedModal from '../../../modals/CourseNotPurchasedModal/CourseNotPurshasedModal';
 import RNFetchBlob from 'rn-fetch-blob';
 import ViewPdf from '../../../modals/ViewPdf/ViewPdf';
-import {
-  setCartCount,
-} from 'src/reduxToolkit/reducer/user';
+import {setCartCount} from 'src/reduxToolkit/reducer/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const data = [
@@ -252,6 +250,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
     navigation.navigate(ScreenNames.ALL_REVIEWS, {
       id: productDetails?.id,
       type: '1',
+      isPurchased: productDetails?.isPurchased,
     });
   };
   const gotoSideMenuLinks = (name, link) => {
@@ -410,7 +409,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
       );
       console.log('addToCart resp', resp?.data);
       if (resp?.data?.status) {
-        dispatch(setCartCount(resp?.data?.cart_count))
+        dispatch(setCartCount(resp?.data?.cart_count));
         await AsyncStorage.setItem(
           'cart_count',
           JSON.stringify(resp?.data?.cart_count),
@@ -509,7 +508,8 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             // source={require('assets/images/rectangle-1035.png')}
             style={styles.crseImg}
             imageStyle={{borderRadius: 10}}>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity
+              onPress={() => {
                 setShowModal({
                   isVisible: true,
                   data: productDetails,
@@ -614,7 +614,10 @@ const CourseDetails = ({navigation, dispatch, route}) => {
             <VideoModal
               isVisible={showModal.isVisible}
               toggleModal={toggleModal}
-              videoDetail={{...showModal?.data, url: showModal?.data?.introduction_video}}
+              videoDetail={{
+                ...showModal?.data,
+                url: showModal?.data?.introduction_video,
+              }}
               // {...props}
             />
           ) : null}
@@ -828,7 +831,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
               text="View Certificate"
               onPress={() => {
                 setShowViewPdfModal(true);
-                setPdfLink(productDetails?.certificate)
+                setPdfLink(productDetails?.certificate);
                 // openInBrowser(productDetails?.certificate);
               }}
               style={{

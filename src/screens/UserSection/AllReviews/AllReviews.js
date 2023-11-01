@@ -198,8 +198,9 @@ const AllReviews = ({navigation, dispatch, route}) => {
               style={{textAlign: 'center', marginTop: 20}}
             />
           )}
-
-          <FAB_Button onPress={openReviewModal} />
+          {route?.params?.isPurchased ? (
+            <FAB_Button onPress={openReviewModal} />
+          ) : null}
         </ScrollView>
         <CustomLoader showLoader={showLoader} />
         <Review

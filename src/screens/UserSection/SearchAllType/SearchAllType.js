@@ -94,6 +94,16 @@ const SearchAllType = ({navigation, dispatch}) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setSelectedTab('1');
+      setSearchValue('')
+      setTemporarySelectedTab('1');
+      setSelectedCourseCategries([])
+      setTempSelectedCourseCategries([])
+      setSelectedProductCategries([])
+      setTempSelectedProductCategries([])
+      setSelectedPriceFilter('')
+      setTempSelectedPriceFilter('')
+      setSelectedRatingValues('')
+      setTempSelectedRatingValues('')
     });
     return unsubscribe;
   }, [navigation]);

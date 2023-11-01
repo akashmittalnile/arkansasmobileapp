@@ -65,6 +65,16 @@ const SearchProductByCategory = ({navigation, dispatch, route}) => {
   useEffect(() => {
     getCourses();
   }, []);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setSearchValue('')
+      setSelectedPriceFilter('')
+      setTempSelectedPriceFilter('')
+      setSelectedRatingValues('')
+      setTempSelectedRatingValues('')
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getCourses = async () => {
     const postData = new FormData();
     postData.append('type', 2);

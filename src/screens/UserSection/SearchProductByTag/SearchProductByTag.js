@@ -67,6 +67,18 @@ const SearchProductByTag = ({navigation, dispatch, route}) => {
   useEffect(() => {
     getAllProducts();
   }, []);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setSearchValue('')
+      setSelectedProductCategries([])
+      setTempSelectedProductCategries([])
+      setSelectedPriceFilter('')
+      setTempSelectedPriceFilter('')
+      setSelectedRatingValues('')
+      setTempSelectedRatingValues('')
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getAllProducts = async () => {
     const postData = new FormData();
     postData.append('type', 2);

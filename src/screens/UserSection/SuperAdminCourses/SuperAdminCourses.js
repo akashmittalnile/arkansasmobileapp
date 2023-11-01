@@ -74,6 +74,20 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
     getCourses();
     getCategories();
   }, []);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setSelectedTab('1')
+      setSearchValue('')
+      setTemporarySelectedTab('1');
+      setSelectedCourseCategries([])
+      setTempSelectedCourseCategries([])
+      setSelectedPriceFilter('')
+      setTempSelectedPriceFilter('')
+      setSelectedRatingValues('')
+      setTempSelectedRatingValues('')
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getCourses = async () => {
     // const postData = new FormData();
     // postData.append('tag', '')

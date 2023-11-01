@@ -140,6 +140,16 @@ const MyOrders = ({navigation, dispatch}) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setSelectedTab('1')
+      setSearchValue('')
+      setTemporarySelectedTab('1');
+      setSelectedCourseCategries([])
+      setTempSelectedCourseCategries([])
+      setSelectedProductCategries([])
+      setTempSelectedProductCategries([])
+      setStartDate('')
+      setEndDate('')
+      setTempStartDate('')
+      setTempEndDate('')
     });
     return unsubscribe;
   }, [navigation]);

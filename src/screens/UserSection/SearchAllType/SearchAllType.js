@@ -93,12 +93,12 @@ const SearchAllType = ({navigation, dispatch}) => {
   }, [navigation]);
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      setSelectedTab('1')
+      setSelectedTab('1');
     });
     return unsubscribe;
   }, [navigation]);
   const getAllType = async (type = '1') => {
-    setShowLoader(true);
+    !showLoader && setShowLoader(true);
     const formdata = new FormData();
     formdata.append('type', type);
     try {
@@ -178,7 +178,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     } catch (error) {
       console.log('error in onLike', error);
     }
-    setShowLoader(false);
+    showLoader && setShowLoader(false);
   };
 
   const changeSelectedTab = id => {
@@ -261,7 +261,7 @@ const SearchAllType = ({navigation, dispatch}) => {
         Service.ALL_TYPE_LISTING,
         postData,
       );
-      console.log('applyFilters resp', resp?.data);
+      console.log('applyFilters resp', resp?.data?.length);
       if (resp?.data?.status) {
         // tab is not changed when searching
         if (temporarySelectedTab !== selectedTab) {
@@ -335,7 +335,7 @@ const SearchAllType = ({navigation, dispatch}) => {
         }
       }
     }
-    console.log('applyFilters postData', JSON.stringify(postData));
+    console.log('applyFilters2 postData', JSON.stringify(postData));
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
@@ -343,12 +343,19 @@ const SearchAllType = ({navigation, dispatch}) => {
         Service.ALL_TYPE_LISTING,
         postData,
       );
-      console.log('applyFilters resp', resp?.data);
+      console.log(
+        'applyFilters2 resp',
+        JSON.stringify(resp?.data?.data?.length),
+      );
       if (resp?.data?.status) {
         setShowFilterModal(false);
         if (selectedTab === '1') {
-          const updatedData = await generateThumb(resp?.data?.data);
-          setCourseData(updatedData);
+          if (resp?.data?.data?.length === 0) {
+            setCourseData(resp?.data?.data);
+          } else {
+            const updatedData = await generateThumb(resp?.data?.data);
+            setCourseData(updatedData);
+          }
         } else {
           setProductData(resp?.data?.data);
         }
@@ -449,6 +456,7 @@ const SearchAllType = ({navigation, dispatch}) => {
         setShowFilterModal(false);
         if (temporarySelectedTab === '1') {
           const updatedData = await generateThumb(resp?.data?.data);
+          console.log('here');
           setCourseData(updatedData);
         } else {
           setProductData(resp?.data?.data);
@@ -459,6 +467,7 @@ const SearchAllType = ({navigation, dispatch}) => {
     } catch (error) {
       console.log('error in removeFilter', error);
     }
+    console.log('here2');
     setShowLoader(false);
   };
   const gotoCourseDetails = (id, type) => {

@@ -149,23 +149,42 @@ const Notifications = ({navigation, dispatch}) => {
     navigation.navigate(ScreenNames.HOME);
   };
 
-  const Icon = type => {
+  // const Icon = type => {
+  //   let source = '';
+  //   if (type.type === 'purchased') {
+  //     source = require('assets/images/book.png');
+  //   } else if (type.type === 'password-changed') {
+  //     source = require('assets/images/password-changed.png');
+  //   } else if (type.type === 'resume-course') {
+  //     source = require('assets/images/resume-course.png');
+  //   } else if (type.type === 'order-placed') {
+  //     source = require('assets/images/order-placed.png');
+  //   } else if (
+  //     type.type === 'shipped' ||
+  //     type.type === 'out-of-delivery' ||
+  //     type.type === 'delivered'
+  //   ) {
+  //     source = require('assets/images/shipped.png');
+  //   }
+  //   return <Image source={source} />;
+  // };
+  const Icon = ({type}) => {
+    console.log('icon type', type);
     let source = '';
-    if (type.type === 'purchased') {
+    if (type === 'course') {
       source = require('assets/images/book.png');
-    } else if (type.type === 'password-changed') {
+    } else if (type === 'password') {
       source = require('assets/images/password-changed.png');
-    } else if (type.type === 'resume-course') {
-      source = require('assets/images/resume-course.png');
-    } else if (type.type === 'order-placed') {
+    } else if (type === 'order') {
       source = require('assets/images/order-placed.png');
-    } else if (
-      type.type === 'shipped' ||
-      type.type === 'out-of-delivery' ||
-      type.type === 'delivered'
-    ) {
-      source = require('assets/images/shipped.png');
-    }
+    } 
+    // else if (
+    //   type === 'shipped' ||
+    //   type === 'out-of-delivery' ||
+    //   type === 'delivered'
+    // ) {
+    //   source = require('assets/images/shipped.png');
+    // }
     return <Image source={source} />;
   };
   //UI
@@ -207,7 +226,7 @@ const Notifications = ({navigation, dispatch}) => {
             notificationsData?.map(item => {
               return (
                 <View style={styles.notiContainer}>
-                  <Icon type={'purchased'} />
+                  <Icon type={item?.module_name} />
                   <View style={{marginLeft: 12, width: '65%'}}>
                     <MyText
                       text={item?.title}

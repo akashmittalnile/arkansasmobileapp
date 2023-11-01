@@ -91,6 +91,12 @@ const SearchAllType = ({navigation, dispatch}) => {
     });
     return unsubscribe;
   }, [navigation]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setSelectedTab('1')
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getAllType = async (type = '1') => {
     setShowLoader(true);
     const formdata = new FormData();

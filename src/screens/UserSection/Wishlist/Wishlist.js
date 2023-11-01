@@ -94,6 +94,12 @@ const Wishlist = ({navigation, dispatch}) => {
     });
     return unsubscribe;
   }, [navigation]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setSelectedTab('1')
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     setSearchValue('');

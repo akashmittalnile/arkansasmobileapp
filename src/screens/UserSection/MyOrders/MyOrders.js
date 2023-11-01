@@ -519,7 +519,7 @@ const MyOrders = ({navigation, dispatch}) => {
               </View>
             </View>
             <MyText
-              text={'$' + item?.price}
+              text={'$' + item?.total_amout_paid}
               fontFamily="bold"
               fontSize={14}
               textColor={Colors.THEME_GOLD}
@@ -651,7 +651,7 @@ const MyOrders = ({navigation, dispatch}) => {
             </View>
             <View style={styles.bottomRow}>
               <MyText
-                text={'$' + item?.price}
+                text={'$' + item?.total_amout_paid}
                 fontFamily="bold"
                 fontSize={14}
                 textColor={Colors.THEME_GOLD}

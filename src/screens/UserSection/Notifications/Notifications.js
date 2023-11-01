@@ -37,59 +37,9 @@ import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import OrdersFilter from '../../../modals/OrdersFilter/OrdersFilter';
 import Review from '../../../modals/Review/Review';
 import {THEME_BROWN} from '../../../global/Colors';
+import moment from 'moment';
 
-const courseData = [
-  {
-    id: '1',
-    name: 'The Art of Permanent Cosmetics-Graded',
-    totalLessons: 5,
-    completedLessons: 1,
-  },
-  {
-    id: '2',
-    name: 'The Art of Permanent Cosmetics-Graded',
-    totalLessons: 5,
-    completedLessons: 2,
-  },
-  {
-    id: '3',
-    name: 'The Art of Permanent Cosmetics-Graded',
-    totalLessons: 5,
-    completedLessons: 1,
-  },
-  {
-    id: '4',
-    name: 'The Art of Permanent Cosmetics-Graded',
-    totalLessons: 5,
-    completedLessons: 5,
-  },
-  {
-    id: '5',
-    name: 'The Art of Permanent Cosmetics-Graded',
-    totalLessons: 5,
-    completedLessons: 1,
-  },
-  {
-    id: '6',
-    name: 'The Art of Permanent Cosmetics-Graded',
-    totalLessons: 5,
-    completedLessons: 4,
-  },
-  {
-    id: '7',
-    name: 'The Art of Permanent Cosmetics-Graded',
-    totalLessons: 5,
-    completedLessons: 2,
-  },
-  {
-    id: '8',
-    name: 'The Art of Permanent Cosmetics-Graded',
-    totalLessons: 5,
-    completedLessons: 2,
-  },
-];
-
-const notificationsData = [
+const notificationsList = [
   {
     id: '1',
     name: 'Course Successfully Purchased!',
@@ -154,7 +104,47 @@ const Notifications = ({navigation, dispatch}) => {
   const userToken = useSelector(state => state.user.userToken);
   const userInfo = useSelector(state => state.user.userInfo);
   const [showLoader, setShowLoader] = useState(false);
+  const [notificationsData, setNotificationsData] = useState([]);
 
+  useEffect(() => {
+    getNotifications();
+  }, []);
+  const getNotifications = async () => {
+    !showLoader && setShowLoader(true);
+    try {
+      const resp = await Service.getApiWithToken(
+        userToken,
+        Service.NOTIFICATIONS,
+      );
+      console.log('getNotifications resp', JSON.stringify(resp?.data));
+      if (resp?.data?.status) {
+        setNotificationsData(resp?.data?.data);
+      } else {
+        Toast.show({text1: resp.data.message});
+      }
+    } catch (error) {
+      console.log('error in getNotifications', error);
+    }
+    setShowLoader(false);
+  };
+  const clearNotifications = async () => {
+    setShowLoader(true);
+    try {
+      const resp = await Service.getApiWithToken(
+        userToken,
+        Service.CLEAR_NOTIFICATIONS,
+      );
+      console.log('clearNotifications resp', resp?.data);
+      if (resp?.data?.status) {
+        getNotifications();
+      } else {
+        Toast.show({text1: resp.data.message});
+      }
+    } catch (error) {
+      console.log('error in clearNotifications', error);
+    }
+    showLoader && setShowLoader(false);
+  };
   const gotoHome = () => {
     navigation.navigate(ScreenNames.HOME);
   };
@@ -189,21 +179,46 @@ const Notifications = ({navigation, dispatch}) => {
           contentContainerStyle={{paddingBottom: '20%'}}
           style={styles.mainView}>
           {notificationsData?.length > 0 ? (
+            <View style={styles.notificationCountView}>
+              <MyText
+                text={`${notificationsData?.length} ${
+                  notificationsData.length === 1
+                    ? 'unread notification'
+                    : 'unread notifications'
+                }`}
+                marginVertical={20}
+                fontFamily="medium"
+              />
+              <TouchableOpacity onPress={clearNotifications}>
+                <MyText
+                  // text={'Mark all as read'}
+                  text={'Clear All'}
+                  fontSize={16}
+                  textColor={Colors.THEME_BROWN}
+                  fontFamily="medium"
+                  // textColor="white"
+                  textAlign="right"
+                  marginVertical={10}
+                />
+              </TouchableOpacity>
+            </View>
+          ) : null}
+          {notificationsData?.length > 0 ? (
             notificationsData?.map(item => {
               return (
                 <View style={styles.notiContainer}>
-                  <Icon type={item.type} />
+                  <Icon type={'purchased'} />
                   <View style={{marginLeft: 12, width: '65%'}}>
                     <MyText
-                      text={item.name}
+                      text={item?.title}
                       textColor={Colors.LIGHT_GREY}
                       fontSize={14}
                       fontFamily="medium"
                       style={{}}
                     />
-                    {item.subtext ? (
+                    {item?.message ? (
                       <MyText
-                        text={item.subtext}
+                        text={item?.message}
                         textColor={Colors.LIGHT_GREY}
                         fontSise={13}
                         fontFamily="regular"
@@ -212,7 +227,7 @@ const Notifications = ({navigation, dispatch}) => {
                     ) : null}
                   </View>
                   <MyText
-                    text={item.ago}
+                    text={getDiff(item.created_at)}
                     textColor={Colors.LIGHT_GREY}
                     fontSise={14}
                     fontFamily="light"
@@ -267,3 +282,43 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 export default connect(null, mapDispatchToProps)(Notifications);
+
+const getDiff = created_date => {
+  let diff = null;
+  const diffYears = moment().diff(created_date, 'years');
+  if (diffYears > 0) {
+    if (diffYears > 1) {
+      diff = diffYears + ' yrs ago';
+    } else {
+      diff = diffYears + ' yr ago';
+    }
+    return diff;
+  }
+  const diffMonths = moment().diff(created_date, 'months');
+  if (diffMonths > 0) {
+    if (diffMonths > 1) {
+      diff = diffMonths + ' months ago';
+    } else {
+      diff = diffMonths + ' month ago';
+    }
+    return diff;
+  }
+  const diffdays = moment().diff(created_date, 'days');
+  if (diffdays > 0) {
+    if (diffdays > 1) {
+      diff = diffdays + ' days ago';
+    } else {
+      diff = diffdays + ' day ago';
+    }
+    return diff;
+  }
+  const diffHours = moment().diff(created_date, 'hours');
+  const diffMinutes = moment().diff(created_date, 'minutes');
+  const diffOnlyMinutes = diffMinutes % 60;
+  if (diffHours > 0) {
+    let hr = diffHours > 1 ? ' hrs ' : ' hr ';
+    let min = diffOnlyMinutes > 1 ? ' mins' : ' min';
+    diff = diffHours + hr + diffOnlyMinutes + min + ' ago';
+    return diff;
+  }
+};

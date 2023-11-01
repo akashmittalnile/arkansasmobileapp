@@ -35,6 +35,7 @@ export const ADD_CARD = `add-card`;
 export const DELETE_CARD = `delete-card`;
 export const SAVE_CARD_LISTING = `save-card-listing`;
 export const NOTIFICATIONS = `notifications`;
+export const CLEAR_NOTIFICATIONS = `clear-notifications`;
 export const CHANGE_PASSWORD = `change-password`;
 export const CERTIFICATES = `certificates`;
 export const SUBMIT_REVIEW = `submit-review`;

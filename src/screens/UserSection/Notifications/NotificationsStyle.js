@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   mainView: {
     padding: 20,
     paddingTop: 0,
-    marginTop: -30,
+    // marginTop: -30,
   },
   notiContainer: {
     backgroundColor: 'white',
@@ -36,4 +36,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  notificationCountView:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center'
+  }
 });

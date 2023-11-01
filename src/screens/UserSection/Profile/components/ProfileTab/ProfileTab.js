@@ -108,7 +108,7 @@ const ProfileTab = ({
         maxLength={10}
         // onPress={() => setShow(true)}
         onChangeText={text => setPhone(text)}
-        onSubmitEditing={() => passwordRef.current.focus()}
+        onSubmitEditing={() => Keyboard.dismiss()}
       />
       {/* <NameEnterValue
         inputRef={companyRef}

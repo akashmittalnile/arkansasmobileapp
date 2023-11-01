@@ -291,14 +291,14 @@ const OrderDetails = ({navigation, dispatch, route}) => {
         <View style={[styles.row, {marginBottom: 10}]}>
           <MyText
             // text={`Total Amount (1)`}
-            text={`Total Amount`}
+            text={`Subtotal`}
             fontSize={14}
             fontFamily="medium"
             textColor={'#455A64'}
             style={{}}
           />
           <MyText
-            text={'$100'}
+            text={'$' + orderData?.data?.total_amount}
             fontSize={14}
             fontFamily="medium"
             textColor={'#455A64'}
@@ -314,7 +314,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
             style={{}}
           />
           <MyText
-            text={'$100'}
+            text={'$' + orderData?.data?.taxes}
             fontSize={14}
             fontFamily="medium"
             textColor={'#8F93A0'}
@@ -331,7 +331,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
             style={{}}
           />
           <MyText
-            text={'$100'}
+            text={'$00.00'}
             fontSize={18}
             fontFamily="medium"
             textColor={'#455A64'}
@@ -429,7 +429,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
                   style={{}}
                 />
                 <MyText
-                  text={'$' + orderData?.data?.total_amount}
+                  text={'$' + orderData?.data?.total_amount_paid}
                   fontFamily="bold"
                   fontSize={16}
                   textColor={Colors.WHITE}

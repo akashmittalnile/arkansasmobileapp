@@ -91,6 +91,13 @@ const ProfileTab = ({
         setValue={setEmail}
         onSubmitEditing={() => phoneRef.current.focus()}
       />
+      <MyText
+        text="Phone Number"
+        fontSize={14}
+        fontFamily="medium"
+        textColor="black"
+        style={{marginBottom: 5}}
+      />
       <TextInputWithFlag
         inputRef={phoneRef}
         value={phone}
@@ -137,7 +144,7 @@ const ProfileTab = ({
           marginBottom: 10,
           backgroundColor: Colors.THEME_GOLD,
         }}
-        onPress={updateProfileDetails}
+        onPress={() => updateProfileDetails({})}
       />
       {/* <MyButton
         text="CLEAR ALL"

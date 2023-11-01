@@ -169,13 +169,16 @@ const Profile = ({navigation, dispatch}) => {
   const confirmPasswordRef = useRef(null);
 
   useEffect(() => {
-    console.log('userToken', userToken);
-    getProfileData();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('userToken', userToken);
+      getProfileData();
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getProfileData = async (id = '1') => {
     const endPoint = getEndpoint(id);
     console.log('endPoint', endPoint);
-    setShowLoader(true);
+    !showLoader && setShowLoader(true);
     try {
       const resp = await Service.getApiWithToken(userToken, endPoint);
       console.log('getProfileData resp', resp?.data);
@@ -431,12 +434,26 @@ const Profile = ({navigation, dispatch}) => {
     setShowLoader(false);
   };
 
-  const updateProfileDetails = async img => {
+  const updateProfileDetails = async (img = {}) => {
+    if (firstName?.trim()?.length === 0) {
+      Toast.show({text1: `First Name cannot be empty`});
+      return;
+    } else if (lastName?.trim()?.length === 0) {
+      Toast.show({text1: `Last Name cannot be empty`});
+      return;
+    } else if (phone?.trim()?.length === 0) {
+      Toast.show({text1: `Phone cannot be empty`});
+      return;
+    } else if (phone?.trim()?.length < 10) {
+      Toast.show({text1: `Phone Number must be 10 digits long`});
+      return;
+    }
     const postData = new FormData();
     postData.append('first_name', firstName);
     postData.append('last_name', lastName);
     postData.append('phone', phone);
-    if (img) {
+    console.log('Object.keys(img)?.length', Object.keys(img)?.length);
+    if (Object.keys(img)?.length > 0) {
       const imageName = img?.uri?.slice(
         img?.uri?.lastIndexOf('/'),
         img?.uri?.length,
@@ -447,6 +464,7 @@ const Profile = ({navigation, dispatch}) => {
         uri: img?.uri,
       });
     }
+    console.log('updateProfileDetails postData', postData);
     setShowLoader(true);
     try {
       const resp = await Service.postApiWithToken(
@@ -457,17 +475,18 @@ const Profile = ({navigation, dispatch}) => {
       console.log('updateProfileDetails resp', resp?.data);
       if (resp?.data?.status) {
         Toast.show({text1: resp?.data?.message});
-        setProfileImage(resp?.data?.user?.profile_image)
+        setProfileImage(resp?.data?.user?.profile_image);
         const jsonValue = JSON.stringify(resp.data.user);
         await AsyncStorage.setItem('userInfo', jsonValue);
         dispatch(setUser(resp.data.user));
+        getProfileData();
       } else {
         Toast.show({text1: resp?.data?.message});
       }
     } catch (error) {
       console.log('error in updateProfileDetails', error);
     }
-    setShowLoader(false);
+    showLoader && setShowLoader(false);
   };
 
   const changeSelectedTab = id => {

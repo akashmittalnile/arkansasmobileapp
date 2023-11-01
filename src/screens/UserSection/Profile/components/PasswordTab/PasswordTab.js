@@ -89,13 +89,13 @@ const PasswordTab = ({
         }}
         onPress={onPressSave}
       />
-      <MyButton
+      {/* <MyButton
         text="CLEAR ALL"
         style={{
           marginBottom: 10,
           backgroundColor: Colors.THEME_BROWN,
         }}
-      />
+      /> */}
     </View>
   );
 };

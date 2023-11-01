@@ -84,8 +84,8 @@ const ProfileTab = ({
       />
       <NameEnterValue
         inputRef={emailRef}
-        name={'Email id'}
-        placeholder={'Email id'}
+        name={'Email Id'}
+        placeholder={'Email Id'}
         value={email}
         editable={false}
         setValue={setEmail}

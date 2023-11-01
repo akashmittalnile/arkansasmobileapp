@@ -28,7 +28,7 @@ const Review = ({
   setStarRating,
   review,
   setReview,
-  submitReview
+  submitReview,
 }) => {
   //variables : navigation
   const navigation = useNavigation();
@@ -67,6 +67,10 @@ const Review = ({
       onBackdropPress={() => setVisibility(false)}
       onSwipeComplete={e => {
         setVisibility(false);
+      }}
+      onModalWillHide={() => {
+        setStarRating(1);
+        setReview('');
       }}
       scrollTo={() => {}}
       scrollOffset={1}

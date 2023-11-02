@@ -116,7 +116,7 @@ const MyHeader = ({
         ) : (
           <View style={styles.leftContainer}>
             <Image
-              resizeMode="contain"
+              // resizeMode="contain"
               source={
                 userInfo?.profile_image
                   ? {uri: userInfo?.profile_image}

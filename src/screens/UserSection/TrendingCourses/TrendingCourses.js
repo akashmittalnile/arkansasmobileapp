@@ -73,6 +73,18 @@ const TrendingCourses = ({navigation, dispatch}) => {
   useEffect(() => {
     getCourses();
   }, []);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setSearchValue('')
+      setSelectedCourseCategries([])
+      setTempSelectedCourseCategries([])
+      setSelectedPriceFilter('')
+      setTempSelectedPriceFilter('')
+      setSelectedRatingValues('')
+      setTempSelectedRatingValues('')
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getCourses = async () => {
     const postData = new FormData();
     postData.append('limit', 10);
@@ -210,8 +222,8 @@ const TrendingCourses = ({navigation, dispatch}) => {
                     marginTop: 3,
                   }}>
                   <Image
-                    source={require('assets/images/cancelfilter.png')}
-                    style={{height: 10, width: 10}}
+                    source={require('assets/images/trash.png')}
+                    style={{height: 16, width: 16}}
                   />
                 </TouchableOpacity>
               </View>
@@ -253,8 +265,8 @@ const TrendingCourses = ({navigation, dispatch}) => {
                 marginTop: 3,
               }}>
               <Image
-                source={require('assets/images/cancelfilter.png')}
-                style={{height: 10, width: 10}}
+                source={require('assets/images/trash.png')}
+                style={{height: 16, width: 16}}
               />
             </TouchableOpacity>
           </View>
@@ -301,8 +313,8 @@ const TrendingCourses = ({navigation, dispatch}) => {
                     marginTop: 3,
                   }}>
                   <Image
-                    source={require('assets/images/cancelfilter.png')}
-                    style={{height: 10, width: 10}}
+                    source={require('assets/images/trash.png')}
+                    style={{height: 16, width: 16}}
                   />
                 </TouchableOpacity>
               </View>

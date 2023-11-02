@@ -735,8 +735,8 @@ const SearchAllType = ({navigation, dispatch}) => {
                         marginTop: 3,
                       }}>
                       <Image
-                        source={require('assets/images/cancelfilter.png')}
-                        style={{height: 10, width: 10}}
+                        source={require('assets/images/trash.png')}
+                        style={{height: 16, width: 16}}
                       />
                     </TouchableOpacity>
                   </View>
@@ -763,8 +763,8 @@ const SearchAllType = ({navigation, dispatch}) => {
                         marginTop: 3,
                       }}>
                       <Image
-                        source={require('assets/images/cancelfilter.png')}
-                        style={{height: 10, width: 10}}
+                        source={require('assets/images/trash.png')}
+                        style={{height: 16, width: 16}}
                       />
                     </TouchableOpacity>
                   </View>
@@ -806,8 +806,8 @@ const SearchAllType = ({navigation, dispatch}) => {
                 marginTop: 3,
               }}>
               <Image
-                source={require('assets/images/cancelfilter.png')}
-                style={{height: 10, width: 10}}
+                source={require('assets/images/trash.png')}
+                style={{height: 16, width: 16}}
               />
             </TouchableOpacity>
           </View>
@@ -854,8 +854,8 @@ const SearchAllType = ({navigation, dispatch}) => {
                     marginTop: 3,
                   }}>
                   <Image
-                    source={require('assets/images/cancelfilter.png')}
-                    style={{height: 10, width: 10}}
+                    source={require('assets/images/trash.png')}
+                    style={{height: 16, width: 16}}
                   />
                 </TouchableOpacity>
               </View>

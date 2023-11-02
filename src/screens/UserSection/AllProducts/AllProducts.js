@@ -68,6 +68,18 @@ const AllProducts = ({navigation, dispatch}) => {
   useEffect(() => {
     getAllProducts();
   }, []);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setSearchValue('')
+      setSelectedProductCategries([])
+      setTempSelectedProductCategries([])
+      setSelectedPriceFilter('')
+      setTempSelectedPriceFilter('')
+      setSelectedRatingValues('')
+      setTempSelectedRatingValues('')
+    });
+    return unsubscribe;
+  }, [navigation]);
   const getAllProducts = async () => {
     const postData = new FormData();
     postData.append('type', 2);
@@ -476,8 +488,8 @@ const AllProducts = ({navigation, dispatch}) => {
                   onPress={() => removeFilter('cat', el)}
                   style={{marginLeft: 5, marginTop: 3}}>
                   <Image
-                    source={require('assets/images/cancelfilter.png')}
-                    style={{height: 10, width: 10}}
+                    source={require('assets/images/trash.png')}
+                    style={{height: 16, width: 16}}
                   />
                 </TouchableOpacity>
               </View>
@@ -516,8 +528,8 @@ const AllProducts = ({navigation, dispatch}) => {
               onPress={() => removeFilter('price', selectedPriceFilter)}
               style={{marginLeft: 5, marginTop: 3}}>
               <Image
-                source={require('assets/images/cancelfilter.png')}
-                style={{height: 10, width: 10}}
+                source={require('assets/images/trash.png')}
+                style={{height: 16, width: 16}}
               />
             </TouchableOpacity>
           </View>
@@ -565,8 +577,8 @@ const AllProducts = ({navigation, dispatch}) => {
                     marginTop: 3,
                   }}>
                   <Image
-                    source={require('assets/images/cancelfilter.png')}
-                    style={{height: 10, width: 10}}
+                    source={require('assets/images/trash.png')}
+                    style={{height: 16, width: 16}}
                   />
                 </TouchableOpacity>
               </View>

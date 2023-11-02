@@ -38,7 +38,6 @@ import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import ViewAll from '../../../components/ViewAll/ViewAll';
 import {createThumbnail} from 'react-native-create-thumbnail';
 
-
 const Cart = ({navigation, dispatch}) => {
   //variables
   const LINE_HEIGTH = 25;
@@ -361,6 +360,22 @@ const Cart = ({navigation, dispatch}) => {
                   <MyText
                     // text={`$${Number(cartListData?.discount).toFixed(2)}`}
                     text={'$' + cartListData?.discount}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#8F93A0'}
+                    style={{}}
+                  />
+                </View>
+                <View style={[styles.row, {marginBottom: 10}]}>
+                  <MyText
+                    text={`Shipping Cost`}
+                    fontSize={14}
+                    fontFamily="medium"
+                    textColor={'#8F93A0'}
+                    style={{}}
+                  />
+                  <MyText
+                    text={'$' + cartListData?.shipping_cost}
                     fontSize={14}
                     fontFamily="medium"
                     textColor={'#8F93A0'}

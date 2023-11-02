@@ -305,6 +305,22 @@ const OrderDetails = ({navigation, dispatch, route}) => {
             style={{}}
           />
         </View>
+        <View style={[styles.row, {marginBottom: 10}]}>
+          <MyText
+            text={`Shipping Cost`}
+            fontSize={14}
+            fontFamily="medium"
+            textColor={'#8F93A0'}
+            style={{}}
+          />
+          <MyText
+            text={'$' + orderData?.data?.shipping_cost}
+            fontSize={14}
+            fontFamily="medium"
+            textColor={'#8F93A0'}
+            style={{}}
+          />
+        </View>
         <View style={[styles.row, {marginBottom: 19}]}>
           <MyText
             text={`Tax`}
@@ -375,7 +391,7 @@ const OrderDetails = ({navigation, dispatch, route}) => {
     } catch (error) {
       console.log('error in submitReview', error);
     }
-    setShowReviewModal(false)
+    setShowReviewModal(false);
     setShowLoader(false);
   };
   //UI

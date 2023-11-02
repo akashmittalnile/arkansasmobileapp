@@ -269,6 +269,22 @@ const ProceedToPayment = ({navigation, dispatch}) => {
                   style={{}}
                 />
               </View>
+              <View style={[styles.row, {marginBottom: 10}]}>
+                <MyText
+                  text={`Shipping Cost`}
+                  fontSize={14}
+                  fontFamily="medium"
+                  textColor={'#8F93A0'}
+                  style={{}}
+                />
+                <MyText
+                  text={'$' + screenData?.shipping_cost}
+                  fontSize={14}
+                  fontFamily="medium"
+                  textColor={'#8F93A0'}
+                  style={{}}
+                />
+              </View>
               <View style={[styles.row, {marginBottom: 19}]}>
                 <MyText
                   text={`Tax`}

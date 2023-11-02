@@ -45,13 +45,7 @@ import {
 import SearchWithIconDummy from '../../../components/SearchWithIconDummy/SearchWithIconDummy';
 import VideoModal from '../../../components/VideoModal/VideoModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  useSharedValue,
-  useDerivedValue,
-  withSpring,
-} from 'react-native-reanimated';
-import Video from 'react-native-video';
-import Share from 'react-native-share';
+import { useSharedValue, useDerivedValue, withSpring } from 'react-native-reanimated';
 
 const Home = ({navigation, dispatch}) => {
   //variables
@@ -73,9 +67,6 @@ const Home = ({navigation, dispatch}) => {
   const [scrolling, setscrolling] = useState(false);
   const scrollY = useSharedValue(0);
 
-  const trendingRefs = React.createRef([]);
-  const specialRefs = React.createRef([]);
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('userToken', userToken);
@@ -96,14 +87,14 @@ const Home = ({navigation, dispatch}) => {
         const data = {...resp?.data?.data};
         // get first 2 trending and special courses
         if (data?.trending_course && Array.isArray(data?.trending_course)) {
-          data.trending_course = resp?.data?.data?.trending_course;
+          data.trending_course = resp?.data?.data?.trending_course?.slice(0, 2);
         }
         if (data?.special_course && Array.isArray(data?.special_course)) {
-          data.special_course = resp?.data?.data?.special_course;
+          data.special_course = resp?.data?.data?.special_course?.slice(0, 2);
         }
         console.log('remaining data', JSON.stringify(data));
-        // const dataWithThumb = await generateThumb(data);
-        setHomeData(data);
+        const dataWithThumb = await generateThumb(data);
+        setHomeData(dataWithThumb);
       } else {
         Toast.show({text1: resp.data.message});
       }
@@ -177,21 +168,6 @@ const Home = ({navigation, dispatch}) => {
       console.log('error in onLike', error);
     }
     showLoader && setShowLoader(false);
-  };
-  const shareAppLink = async () => {
-    try {
-      const url = 'app://arkansasSaneja'; // Replace with your app's actual URL
-      const options = {
-        title: 'Share App',
-        message: 'Check out our awesome app!',
-        url: url,
-      };
-
-      const resp = await Share.open(options);
-      console.log('Share resp', JSON.stringify(resp));
-    } catch (error) {
-      console.error('Error sharing app link:', error);
-    }
   };
   const generateThumb = async data => {
     // console.log('generateThumb');
@@ -376,17 +352,17 @@ const Home = ({navigation, dispatch}) => {
     setShowSpecialLoader(false);
   };
   const renderTrendingFooter = () => {
-    // console.log('renderTrendingFooter');
+    console.log('renderTrendingFooter');
     return showTrendingLoader ? (
-      <View style={{flex: 1, justifyContent: 'center'}}>
+      <View style={{flex: 1, justifyContent:'center'}} >
         <ActivityIndicator size="large" color={Colors.THEME_GOLD} />
       </View>
     ) : null;
   };
   const renderSpecialFooter = () => {
-    // console.log('renderTrendingFooter');
+    console.log('renderTrendingFooter');
     return showSpecialLoader ? (
-      <View style={{flex: 1, justifyContent: 'center'}}>
+      <View style={{flex: 1, justifyContent:'center'}} >
         <ActivityIndicator size="large" color={Colors.THEME_GOLD} />
       </View>
     ) : null;
@@ -576,131 +552,7 @@ const Home = ({navigation, dispatch}) => {
   //     </TouchableOpacity>
   //   );
   // };
-  const renderTrendingCourse = ({item, index}) => {
-    return (
-      <TouchableOpacity
-        onPress={() => gotoCourseDetails(item?.id, '1')}
-        style={styles.courseContainer}>
-        <View style={styles.topRow}>
-          <View style={styles.topLeftRow}>
-            {item?.content_creator_image ? (
-              <Image
-                source={{uri: item?.content_creator_image}}
-                style={styles.crtrImg}
-              />
-            ) : null}
-            <MyText
-              text={item.content_creator_name}
-              fontFamily="regular"
-              numberOfLines={1}
-              fontSize={13}
-              textColor={Colors.THEME_GOLD}
-              letterSpacing={0.13}
-              style={{marginLeft: 10, width: '60%'}}
-            />
-          </View>
-          <View style={styles.topRightRow}>
-            <TouchableOpacity
-              onPress={() => {
-                onLike('1', item.id, item?.isWishlist);
-              }}>
-              <Image
-                source={
-                  item?.isWishlist
-                    ? require('assets/images/heart-selected.png')
-                    : require('assets/images/heart.png')
-                }
-              />
-            </TouchableOpacity>
-            <Image
-              source={require('assets/images/share.png')}
-              style={{marginLeft: 10}}
-            />
-          </View>
-        </View>
-        {/* {item?.thumb?.path ? (
-          <ImageBackground
-            source={{uri: item?.thumb?.path}}
-            style={styles.crseImg}>
-            <TouchableOpacity
-              onPress={() => {
-                setShowModal({
-                  isVisible: true,
-                  data: item,
-                });
-              }}>
-              <Image source={require('assets/images/play-icon.png')} />
-            </TouchableOpacity>
-          </ImageBackground>
-        ) : null} */}
-        <View style={{flex: 1}}>
-          <Video
-            ref={trendingRefs[index]}
-            source={{
-              uri: `https://nileprojects.in/arkansas/public/upload/disclaimers-introduction/1695287295.mp4`,
-            }}
-            paused
-            muted
-            useTextureView={false}
-            playInBackground={true}
-            disableFocus={true}
-            onLoad={() => {}}
-            onProgress={() => {}}
-            onEnd={() => {}}
-            // resizeMode="contain"
-            style={styles.crseImg}
-          />
-        </View>
-        <View style={styles.bottomRow}>
-          <View style={{width: '60%'}}>
-            <MyText
-              text={item.title}
-              fontFamily="regular"
-              fontSize={13}
-              textColor={Colors.LIGHT_GREY}
-              style={{}}
-            />
-            <View style={styles.courseNameView}>
-              <MyText
-                text={'Course Fee: '}
-                fontFamily="regular"
-                fontSize={13}
-                textColor={Colors.LIGHT_GREY}
-                letterSpacing={0.13}
-                style={{}}
-              />
-              <MyText
-                text={'$' + item.course_fee}
-                fontFamily="bold"
-                fontSize={14}
-                textColor={Colors.THEME_GOLD}
-                letterSpacing={0.14}
-                style={{}}
-              />
-            </View>
-          </View>
-          <View style={styles.bottomRight}>
-            <Image source={require('assets/images/star.png')} />
-            <MyText
-              text={item?.avg_rating}
-              fontFamily="regular"
-              fontSize={13}
-              textColor={Colors.LIGHT_GREY}
-              letterSpacing={0.13}
-              style={{marginLeft: 10}}
-            />
-          </View>
-        </View>
-        {/* <MyText
-          text={item.name}
-          fontFamily="regular"
-          fontSize={14}
-          textColor={'black'}
-        /> */}
-      </TouchableOpacity>
-    );
-  };
-  const renderSpecialCourse = ({item, index}) => {
+  const renderCourse = ({item}) => {
     // console.log('item?.thumb?.path', item?.thumb?.path);
     return (
       <TouchableOpacity
@@ -743,7 +595,7 @@ const Home = ({navigation, dispatch}) => {
             />
           </View>
         </View>
-        {/* {item?.thumb?.path ? (
+        {item?.thumb?.path ? (
           <ImageBackground
             source={{uri: item?.thumb?.path}}
             style={styles.crseImg}>
@@ -757,17 +609,7 @@ const Home = ({navigation, dispatch}) => {
               <Image source={require('assets/images/play-icon.png')} />
             </TouchableOpacity>
           </ImageBackground>
-        ) : null} */}
-        <View style={{flex: 1}}>
-          <Video
-            ref={specialRefs[index]}
-            paused
-            muted
-            source={{uri: item?.introduction_video}}
-            resizeMode="contain"
-            style={styles.crseImg}
-          />
-        </View>
+        ) : null}
         <View style={styles.bottomRow}>
           <View style={{width: '60%'}}>
             <MyText
@@ -981,7 +823,7 @@ const Home = ({navigation, dispatch}) => {
               icon={
                 <Image source={require('assets/images/yellow-seach.png')} />
               }
-              placeholder="Search by Course or Product name"
+              placeholder="Search by Course, Creator or Product name"
               onPress={gotoSearchAllType}
             />
           ) : null}
@@ -997,8 +839,7 @@ const Home = ({navigation, dispatch}) => {
             <View>
               <ViewAll
                 text="Trending Courses"
-                // onPress={gotoTrendingCourses}
-                onPress={() => navigation.navigate(ScreenNames.START_COURSE)}
+                onPress={gotoTrendingCourses}
                 style={{marginTop: 25}}
               />
               <FlatList
@@ -1007,24 +848,20 @@ const Home = ({navigation, dispatch}) => {
                 showsHorizontalScrollIndicator={false}
                 style={{marginTop: 15}}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={renderTrendingCourse}
+                renderItem={renderCourse}
                 onEndReached={fetchMoreTrendingCourses}
                 onEndReachedThreshold={0.1}
                 ListFooterComponent={renderTrendingFooter}
               />
             </View>
           ) : (
-            <TouchableOpacity
-            // onPress={shareAppLink}
-            >
-              <MyText
-                text={`No Trending Courses found`}
-                fontFamily="medium"
-                fontSize={18}
-                textColor={'#455A64'}
-                style={{textAlign: 'center', marginTop: 20}}
-              />
-            </TouchableOpacity>
+            <MyText
+              text={`No Trending Courses found`}
+              fontFamily="medium"
+              fontSize={18}
+              textColor={'#455A64'}
+              style={{textAlign: 'center', marginTop: 20}}
+            />
           )}
           {homeData?.course_category?.length > 0 ? (
             <View>
@@ -1065,7 +902,7 @@ const Home = ({navigation, dispatch}) => {
                 showsHorizontalScrollIndicator={false}
                 style={{marginTop: 15}}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={renderSpecialCourse}
+                renderItem={renderCourse}
                 onEndReached={fetchMoreSpecialCourses}
                 onEndReachedThreshold={0.1}
                 ListFooterComponent={renderSpecialFooter}

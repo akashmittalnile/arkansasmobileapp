@@ -37,6 +37,8 @@ import MyButton from '../../../components/MyButton/MyButton';
 import SearchWithIcon from '../../../components/SearchWithIcon/SearchWithIcon';
 import ViewAll from '../../../components/ViewAll/ViewAll';
 import {createThumbnail} from 'react-native-create-thumbnail';
+import { setCartCount } from '../../../reduxToolkit/reducer/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Cart = ({navigation, dispatch}) => {
   //variables
@@ -62,6 +64,14 @@ const Cart = ({navigation, dispatch}) => {
       );
       console.log('getCartList resp', JSON.stringify(resp?.data));
       if (resp?.data?.status) {
+        // after removing items getCartLit function is called again, checking if no items in data, then set cart count to 0
+        if (resp?.data?.data?.length === 0) {
+          dispatch(setCartCount(resp?.data?.data?.length));
+          await AsyncStorage.setItem(
+            'cart_count',
+            JSON.stringify(resp?.data?.data?.length),
+          );
+        }
         const doCoursesExists = resp?.data?.data?.find(el => el?.type == '1');
         if (!doCoursesExists) {
           setCartListData(resp?.data);

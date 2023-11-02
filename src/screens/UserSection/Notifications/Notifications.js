@@ -38,6 +38,8 @@ import OrdersFilter from '../../../modals/OrdersFilter/OrdersFilter';
 import Review from '../../../modals/Review/Review';
 import {THEME_BROWN} from '../../../global/Colors';
 import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {setUserNotifications} from '../../../reduxToolkit/reducer/user';
 
 const notificationsList = [
   {
@@ -136,6 +138,12 @@ const Notifications = ({navigation, dispatch}) => {
       );
       console.log('clearNotifications resp', resp?.data);
       if (resp?.data?.status) {
+        const isNotificaton = false;
+        dispatch(setUserNotifications(isNotificaton));
+        await AsyncStorage.setItem(
+          'userNotifications',
+          JSON.stringify(isNotificaton),
+        );
         getNotifications();
       } else {
         Toast.show({text1: resp.data.message});
@@ -177,7 +185,7 @@ const Notifications = ({navigation, dispatch}) => {
       source = require('assets/images/password-changed.png');
     } else if (type === 'order') {
       source = require('assets/images/order-placed.png');
-    } 
+    }
     // else if (
     //   type === 'shipped' ||
     //   type === 'out-of-delivery' ||

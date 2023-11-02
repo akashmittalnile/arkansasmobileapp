@@ -26,14 +26,21 @@ export const styles = StyleSheet.create({
   },
   numNotiView: {
     position: 'absolute',
-    top: -10,
-    right: -5,
+    // top: -10,
+    // right: -5,
+    top: -2,
+    right: 0,
     height: 15,
     width: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fe0000',
+    // backgroundColor: '#fe0000',
     borderRadius: 100,
+
+    backgroundColor: Colors.THEME_GOLD,
+    height: 10,
+    width: 10,
+    borderRadius: 10 / 2,
   },
   cartNumView: {
     position: 'absolute',
@@ -45,7 +52,7 @@ export const styles = StyleSheet.create({
     width: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fe0000',
+    // backgroundColor: '#fe0000',
     borderRadius: 100,
 
     backgroundColor: Colors.THEME_GOLD,

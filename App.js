@@ -27,25 +27,25 @@ import {NotificationAndroid} from './NotificationAndroid';
 import {NotificationManagerIOS} from './NotificationManagerIOS';
 
 const App = () => {
-  useEffect(() => {
-    const handleDeepLink = async () => {
-      const initialURL = await Linking.getInitialURL();
+  // useEffect(() => {
+  //   const handleDeepLink = async () => {
+  //     const initialURL = await Linking.getInitialURL();
       
-      if (initialURL) {
-        Alert.alert(initialURL)
-        // Parse the URL and extract parameters
-        // Navigate to the appropriate screen based on the parameters
-      }
-    }
+  //     if (initialURL) {
+  //       Alert.alert(initialURL)
+  //       // Parse the URL and extract parameters
+  //       // Navigate to the appropriate screen based on the parameters
+  //     }
+  //   }
   
-    // Add event listener for deep linking
-    Linking.addEventListener('url', handleDeepLink);
+  //   // Add event listener for deep linking
+  //   Linking.addEventListener('url', handleDeepLink);
   
-    // Clean up the event listener when the component unmounts
-    return () => {
-      Linking.removeEventListener('url', handleDeepLink);
-    };
-  }, []);
+  //   // Clean up the event listener when the component unmounts
+  //   return () => {
+  //     Linking.removeEventListener('url', handleDeepLink);
+  //   };
+  // }, []);
   //function
   const toastConfig = {
     success: props => (

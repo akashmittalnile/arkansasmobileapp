@@ -119,6 +119,15 @@ const Home = ({navigation, dispatch}) => {
       console.log('getCartCount resp', resp?.data);
       if (resp?.data?.status) {
         dispatch(setCartCount(resp?.data?.data));
+        await AsyncStorage.setItem(
+          'cart_count',
+          JSON.stringify(resp?.data?.data),
+        );
+        dispatch(setUserNotifications(resp?.data?.notification));
+        await AsyncStorage.setItem(
+          'userNotifications',
+          JSON.stringify(resp?.data?.notification),
+        );
       } else {
         Toast.show({text1: resp.data.message});
       }

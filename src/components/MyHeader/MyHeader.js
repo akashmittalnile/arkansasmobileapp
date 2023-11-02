@@ -174,16 +174,16 @@ const MyHeader = ({
           <TouchableOpacity
             onPress={gotoNotification}
             style={{marginRight: 10}}>
-            {userNotifications?.length > 0 ? (
+            {userNotifications ? (
               <View style={styles.numNotiView}>
-                <MyText
-                  text={userNotifications?.length}
+                {/* <MyText
+                  text={userNotifications}
                   fontSize={10}
                   textColor="white"
-                />
+                /> */}
               </View>
             ) : null}
-            {/* <MyText text={userNotifications?.length} fontSize={16} textColor="white" style={{position:"absolute", bottom:24, right:5, fontWeight:'bold'}}/> */}
+            {/* <MyText text={userNotifications} fontSize={16} textColor="white" style={{position:"absolute", bottom:24, right:5, fontWeight:'bold'}}/> */}
             {/* <MyIcon.Feather name="bell" size={24} color={Colors.WHITE} /> */}
             <Image source={require('assets/images/notification.png')} />
           </TouchableOpacity>

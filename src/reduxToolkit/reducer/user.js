@@ -3,7 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   userInfo: {},
   userToken: '',
-  userNotifications: [],
+  userNotifications: false,
   cartCount: 0,
 };
 const user = createSlice({

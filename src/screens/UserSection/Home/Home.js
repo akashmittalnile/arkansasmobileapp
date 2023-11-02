@@ -51,6 +51,7 @@ import {
   withSpring,
 } from 'react-native-reanimated';
 import Video from 'react-native-video';
+import Share from 'react-native-share';
 
 const Home = ({navigation, dispatch}) => {
   //variables
@@ -167,6 +168,21 @@ const Home = ({navigation, dispatch}) => {
       console.log('error in onLike', error);
     }
     showLoader && setShowLoader(false);
+  };
+  const shareAppLink = async () => {
+    try {
+      const url = 'app://arkansasSaneja'; // Replace with your app's actual URL
+      const options = {
+        title: 'Share App',
+        message: 'Check out our awesome app!',
+        url: url,
+      };
+
+      const resp = await Share.open(options);
+      console.log('Share resp', JSON.stringify(resp));
+    } catch (error) {
+      console.error('Error sharing app link:', error);
+    }
   };
   const generateThumb = async data => {
     // console.log('generateThumb');
@@ -611,7 +627,9 @@ const Home = ({navigation, dispatch}) => {
         <View style={{flex: 1}}>
           <Video
             ref={trendingRefs[index]}
-            source={{uri: `https://nileprojects.in/arkansas/public/upload/disclaimers-introduction/1695287295.mp4`}}
+            source={{
+              uri: `https://nileprojects.in/arkansas/public/upload/disclaimers-introduction/1695287295.mp4`,
+            }}
             paused
             muted
             useTextureView={false}
@@ -987,13 +1005,17 @@ const Home = ({navigation, dispatch}) => {
               />
             </View>
           ) : (
-            <MyText
-              text={`No Trending Courses found`}
-              fontFamily="medium"
-              fontSize={18}
-              textColor={'#455A64'}
-              style={{textAlign: 'center', marginTop: 20}}
-            />
+            <TouchableOpacity
+            // onPress={shareAppLink}
+            >
+              <MyText
+                text={`No Trending Courses found`}
+                fontFamily="medium"
+                fontSize={18}
+                textColor={'#455A64'}
+                style={{textAlign: 'center', marginTop: 20}}
+              />
+            </TouchableOpacity>
           )}
           {homeData?.course_category?.length > 0 ? (
             <View>

@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -65,6 +66,7 @@ const AllProducts = ({navigation, dispatch}) => {
   const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     getAllProducts();
   }, []);
@@ -80,6 +82,18 @@ const AllProducts = ({navigation, dispatch}) => {
     });
     return unsubscribe;
   }, [navigation]);
+  const checkcon = () => {
+    getAllProducts();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
+  }, []);
   const getAllProducts = async () => {
     const postData = new FormData();
     postData.append('type', 2);
@@ -597,6 +611,9 @@ const AllProducts = ({navigation, dispatch}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           <SearchWithIcon
             value={searchValue}

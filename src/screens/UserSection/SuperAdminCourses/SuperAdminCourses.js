@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -69,6 +70,7 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
   const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     getCourses();
@@ -77,7 +79,6 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setSearchValue('')
-      setTemporarySelectedTab('1');
       setSelectedCourseCategries([])
       setTempSelectedCourseCategries([])
       setSelectedPriceFilter('')
@@ -87,6 +88,19 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
     });
     return unsubscribe;
   }, [navigation]);
+  const checkcon = () => {
+    getCourses();
+    getCategories();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
+  }, []);
   const getCourses = async () => {
     // const postData = new FormData();
     // postData.append('tag', '')
@@ -662,6 +676,9 @@ const SuperAdminCourses = ({navigation, dispatch}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           <SearchWithIcon
             value={searchValue}

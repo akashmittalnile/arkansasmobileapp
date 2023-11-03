@@ -16,6 +16,7 @@ import {
   SafeAreaView,
   StatusBar,
   Keyboard,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -79,8 +80,21 @@ const ProceedToPayment = ({navigation, dispatch}) => {
   const [card, setCard] = useState(CardFieldInput.Details | null);
   const {initPaymentSheet, createToken, presentPaymentSheet} = useStripe();
   const [madePayment, setMadePayment] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     getData();
+  }, []);
+  const checkcon = () => {
+    getData();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
   }, []);
   const getData = async () => {
     setShowLoader(true);
@@ -233,6 +247,9 @@ const ProceedToPayment = ({navigation, dispatch}) => {
           <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingBottom: '20%'}}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             style={styles.mainView}>
             <View style={styles.summaryContainer}>
               <View style={[styles.row, {marginBottom: 10}]}>

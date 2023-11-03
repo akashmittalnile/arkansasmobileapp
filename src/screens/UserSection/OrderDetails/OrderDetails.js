@@ -15,6 +15,7 @@ import {
   SafeAreaView,
   StatusBar,
   Platform,
+  RefreshControl,
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -53,9 +54,21 @@ const OrderDetails = ({navigation, dispatch, route}) => {
   const [starRating, setStarRating] = useState(1);
   const [selectedId, setSelectedId] = useState('1');
   const [selectedType, setSelectedType] = useState(null);
-
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     getOrderDetail();
+  }, []);
+  const checkcon = () => {
+    getOrderDetail();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
   }, []);
   const getOrderDetail = async () => {
     setShowLoader(true);
@@ -403,6 +416,9 @@ const OrderDetails = ({navigation, dispatch, route}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           {orderData?.items && Array.isArray(orderData?.items) ? (
             <>

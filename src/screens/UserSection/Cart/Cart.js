@@ -15,6 +15,7 @@ import {
   TextInput,
   SafeAreaView,
   StatusBar,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -50,9 +51,22 @@ const Cart = ({navigation, dispatch}) => {
   const [searchValue, setSearchValue] = useState('');
   const [promoCode, setPromoCode] = useState('');
   const [cartListData, setCartListData] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     getCartList();
+  }, []);
+  const checkcon = () => {
+    getCartList();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
   }, []);
   const getCartList = async () => {
     setShowLoader(true);
@@ -295,6 +309,9 @@ const Cart = ({navigation, dispatch}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           {cartListData?.data?.length === 0 ? (
             <View style={{alignItems: 'center', marginTop: 50}}>

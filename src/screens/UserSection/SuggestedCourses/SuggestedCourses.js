@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -69,6 +70,7 @@ const SuggestedCourses = ({navigation, dispatch}) => {
   const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     getSuggestedCourses();
@@ -85,6 +87,18 @@ const SuggestedCourses = ({navigation, dispatch}) => {
     });
     return unsubscribe;
   }, [navigation]);
+  const checkcon = () => {
+    getSuggestedCourses();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
+  }, []);
   const getSuggestedCourses = async () => {
     const postData = new FormData();
     postData.append('type', 1);
@@ -637,6 +651,9 @@ const SuggestedCourses = ({navigation, dispatch}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           <SearchWithIcon
             value={searchValue}

@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -84,6 +85,7 @@ const SearchAllType = ({navigation, dispatch}) => {
   const [selectedRatingValues, setSelectedRatingValues] = useState([]);
   const [tempSelectedRatingValues, setTempSelectedRatingValues] = useState([]);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -107,6 +109,18 @@ const SearchAllType = ({navigation, dispatch}) => {
     });
     return unsubscribe;
   }, [navigation]);
+  const checkcon = () => {
+    getAllType();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
+  }, []);
   const getAllType = async (type = '1') => {
     !showLoader && setShowLoader(true);
     const formdata = new FormData();
@@ -875,6 +889,9 @@ const SearchAllType = ({navigation, dispatch}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           <View style={styles.tabsContainer}>
             {tabs?.map(item => (

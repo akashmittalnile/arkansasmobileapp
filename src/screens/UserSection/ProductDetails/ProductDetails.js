@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -129,9 +130,22 @@ const ProductDetails = ({navigation, dispatch, route}) => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showModal, setShowModal] = useState({isVisible: false, data: null});
   const [documents, setDocuments] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     getProductDetails();
+  }, []);
+  const checkcon = () => {
+    getProductDetails();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
   }, []);
   const getProductDetails = async () => {
     const postData = new FormData();
@@ -352,6 +366,9 @@ const ProductDetails = ({navigation, dispatch, route}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           {typeof productDetails === 'object' ? (
             sliderData?.length > 0 ? (

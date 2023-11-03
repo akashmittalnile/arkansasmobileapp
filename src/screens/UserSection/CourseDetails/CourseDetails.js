@@ -16,6 +16,7 @@ import {
   StatusBar,
   Linking,
   Platform,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -139,6 +140,7 @@ const CourseDetails = ({navigation, dispatch, route}) => {
   const [showNotPurchasedModal, setShowNotPurchasedModal] = useState(false);
   const [showViewPdfModal, setShowViewPdfModal] = useState(false);
   const [pdfLink, setPdfLink] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -147,6 +149,18 @@ const CourseDetails = ({navigation, dispatch, route}) => {
     });
     return unsubscribe;
   }, [navigation]);
+  const checkcon = () => {
+    getProductDetails();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
+  }, []);
   const getProductDetails = async () => {
     const postData = new FormData();
     postData.append('type', route?.params?.type);
@@ -502,6 +516,9 @@ const CourseDetails = ({navigation, dispatch, route}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           <ImageBackground
             source={{uri: productDetails?.thumb?.path}}

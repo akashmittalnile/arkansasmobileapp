@@ -14,6 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   StatusBar,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -45,9 +46,21 @@ const TopCategory = ({navigation, dispatch, route}) => {
   const [searchValue, setSearchValue] = useState('');
   const [categoriesData, setCategoriesData] = useState([]);
   const [filteredcategoryData, setFilteredcategoryData] = useState([]);
-
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     getCategories();
+  }, []);
+  const checkcon = () => {
+    getCategories();
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
   }, []);
   const getCategories = async () => {
     setShowLoader(true);
@@ -128,6 +141,9 @@ const TopCategory = ({navigation, dispatch, route}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '20%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.mainView}>
           <SearchWithIcon
             value={searchValue}

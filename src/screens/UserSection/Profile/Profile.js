@@ -17,6 +17,7 @@ import {
   Platform,
   Linking,
   PermissionsAndroid,
+  RefreshControl
 } from 'react-native';
 //import : custom components
 import MyHeader from 'components/MyHeader/MyHeader';
@@ -157,6 +158,7 @@ const Profile = ({navigation, dispatch}) => {
   const [show, setShow] = useState(false);
   const [showImageSourceModal, setShowImageSourceModal] = useState(false);
   const [profileImage, setProfileImage] = useState(userInfo?.profile_image);
+  const [refreshing, setRefreshing] = useState(false);
   // profile tab refs
   const lastNameRef = useRef(null);
   const phoneRef = useRef(null);
@@ -171,10 +173,25 @@ const Profile = ({navigation, dispatch}) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('userToken', userToken);
+      // setSelectedTab('1')
       getProfileData();
     });
     return unsubscribe;
   }, [navigation]);
+  const checkcon = () => {
+    setSelectedTab('1')
+    getProfileData(selectedTab);
+  };
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    checkcon();
+    wait(2000).then(() => {
+      setRefreshing(false);
+    });
+  }, []);
   const getProfileData = async (id = '1') => {
     const endPoint = getEndpoint(id);
     console.log('endPoint', endPoint);
@@ -581,6 +598,9 @@ const Profile = ({navigation, dispatch}) => {
           <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingBottom: '20%'}}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             style={styles.mainView}>
             <View style={styles.contactContainer}>
               <View>
